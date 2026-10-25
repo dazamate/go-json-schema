@@ -36,15 +36,17 @@ type fakeWiki struct {
 	fetches   int
 
 	articleLinks     map[string][]string        // page -> pages it links to, answered for prop=links
+	linksHere        map[string][]string        // page -> pages that link to it, answered for prop=linkshere
 	linksPerResponse int                        // when above 0, prop=links answers are cut here with a continue
 	genPerResponse   int                        // the same for generator=links answers
 	rawItems         map[string]json.RawMessage // returned as is by wbgetentities
 }
 
 // linksJSON answers prop=links, listing for each requested page only the
-// links that are among pltitles.
+// links that are among pltitles, or every link when pltitles is empty.
 func (w *fakeWiki) linksJSON(v url.Values) map[string]any {
 	want := map[string]bool{}
+	all := v.Get("pltitles") == ""
 	for _, t := range strings.Split(v.Get("pltitles"), "|") {
 		want[t] = true
 	}
@@ -58,7 +60,7 @@ func (w *fakeWiki) linksJSON(v url.Values) map[string]any {
 		}
 		order = append(order, n)
 		for _, l := range w.articleLinks[n] {
-			if want[l] {
+			if all || want[l] {
 				pairs = append(pairs, pair{n, l})
 			}
 		}
@@ -85,6 +87,33 @@ func (w *fakeWiki) linksJSON(v url.Values) map[string]any {
 	out := map[string]any{"query": map[string]any{"pages": pages}}
 	if more {
 		out["continue"] = map[string]any{"plcontinue": strconv.Itoa(end), "continue": "||"}
+	}
+	return out
+}
+
+// linksHereJSON answers prop=linkshere for the first requested title.
+func (w *fakeWiki) linksHereJSON(v url.Values) map[string]any {
+	n := ucfirst(v.Get("titles"))
+	if r, ok := w.redirects[n]; ok && v.Get("redirects") == "1" {
+		n = r[0]
+	}
+	list := w.linksHere[n]
+	start, _ := strconv.Atoi(v.Get("lhcontinue"))
+	end := len(list)
+	if w.linksPerResponse > 0 && start+w.linksPerResponse < end {
+		end = start + w.linksPerResponse
+	}
+	pg := map[string]any{"ns": 0, "title": n}
+	var here []map[string]any
+	for _, t := range list[start:end] {
+		here = append(here, map[string]any{"ns": 0, "title": t})
+	}
+	if here != nil {
+		pg["linkshere"] = here
+	}
+	out := map[string]any{"query": map[string]any{"pages": []map[string]any{pg}}}
+	if end < len(list) {
+		out["continue"] = map[string]any{"lhcontinue": strconv.Itoa(end), "continue": "||"}
 	}
 	return out
 }
@@ -178,6 +207,8 @@ func (w *fakeWiki) answer(raw string) (any, error) {
 		return map[string]any{"entities": ents}, nil
 	case u.Host == "en.wikipedia.org" && v.Get("prop") == "links":
 		return w.linksJSON(v), nil
+	case u.Host == "en.wikipedia.org" && v.Get("prop") == "linkshere":
+		return w.linksHereJSON(v), nil
 	case u.Host == "en.wikipedia.org" && v.Get("list") == "search":
 		var hits []any
 		for _, t := range w.search[v.Get("srsearch")] {

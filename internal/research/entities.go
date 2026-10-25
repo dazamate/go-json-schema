@@ -247,6 +247,9 @@ type wikiRespPage struct {
 	Links []struct {
 		Title string `json:"title"`
 	} `json:"links"`
+	LinksHere []struct {
+		Title string `json:"title"`
+	} `json:"linkshere"`
 	Missing     bool              `json:"missing"`
 	Invalid     bool              `json:"invalid"`
 	Description string            `json:"description"`
