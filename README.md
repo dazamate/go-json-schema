@@ -361,11 +361,13 @@ entity that qualifies on its own needs to join `about`), `min_graph_links_ungate
 not link; both 1 or more), `min_mention_graph_links` 2 (0 or more, to stay in
 `mentions`) and `max_graph_neighbours` 30 (0 or more; the owner set this cap).
 
-All of these are our judgement, set by eye
-from one calibration page (the Lift My Boxes moving cost calculator page,
-keyword "moving cost calculator", 2026-10-25), not from any Google source.
-They still need checking on a second page. The calibration data is in
-[`docs/superpowers/specs/2026-10-25-own-page-entities/`](docs/superpowers/specs/2026-10-25-own-page-entities/).
+All of these are our judgement, set by eye, not from any Google source. The
+base settings came from the Lift My Boxes moving cost calculator page
+(keyword "moving cost calculator", 2026-10-25). The five graph settings came
+from the forex page theforexguy.com (keyword "price action trading"). The
+owner set the `max_graph_neighbours` cap. The calibration data is in
+[`internal/research/testdata/select`](internal/research/testdata/select) and
+[`internal/research/testdata/select-forex`](internal/research/testdata/select-forex).
 
 **IDs it emits:** the Wikipedia URL, Wikidata QID, Google Knowledge Graph
 IDs (`/m/` from P646, `/g/` from P2671, linked as
@@ -381,9 +383,11 @@ the rest keeps working. Without the settings, `note` says no Bing IDs were added
 
 **Themes (local model):** similarity uses BAAI/bge-base-en-v1.5 (quantized
 ONNX) and ONNX Runtime, downloaded on first use (about 220 MB, pinned by
-SHA-256) under `~/.cache/go-json-schema/models`. This is linux/amd64 only
+SHA-256) under `~/.cache/go-json-schema/models`. The model scores the page's
+themes and also the graph's neighbours. This is linux/amd64 only
 and needs cgo and gcc. Without them, or without the download, the tool still
-runs with no themes and `note` says why. `CGO_ENABLED=0 go build ./...`
+runs with no themes, the graph keeps only the neighbours the page names, and
+`note` says why. A keyword article's graph neighbourhood is cached for 30 days. `CGO_ENABLED=0 go build ./...`
 works.
 
 **Tests:** the default `go test ./...` makes no live calls.

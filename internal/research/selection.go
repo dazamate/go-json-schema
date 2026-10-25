@@ -41,8 +41,9 @@ const (
 	ReasonBelowGraphSimilarity = "below_graph_similarity" // a neighbour far from the keyword that the page doesn't name
 )
 
-// SelectSettings are the cutoffs select_entities applies, each 0 to 1 except
-// MinLinkConfidence.
+// SelectSettings are the cutoffs select_entities applies. The floats are each
+// 0 to 1 except MinLinkConfidence. The counts are whole numbers: 1 or more
+// for MinGraphLinks and MinGraphLinksUngated, 0 or more for the other two.
 type SelectSettings struct {
 	MinRelevance         float64 `json:"min_relevance"`           // lowest TextRazor relevance for a page entity
 	MinTopic             float64 `json:"min_topic"`               // lowest topic score for a page entity

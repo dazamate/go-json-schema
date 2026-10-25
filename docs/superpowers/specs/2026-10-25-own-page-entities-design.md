@@ -496,7 +496,8 @@ owner's five families, and no others:
   mentions: [ Selected ],
   keyword_lookups: [ { phrase, result, title?, chosen? [], links? } ],
   dropped:  [ { name, qid, source, relevance?, topic?, confidence?,
-                keyword_similarity?, page_similarity?, reason } ],
+                keyword_similarity?, page_similarity?, graph_similarity?,
+                graph_links?, reason } ],
   graph: { centres, out_links, in_links, in_links_cut, neighbours, kept,
            cut, capped }?,
   settings: { min_relevance, min_topic, min_keyword_similarity, min_page_similarity,
@@ -519,14 +520,21 @@ Selected = { name, qid, source, wikipedia, kgmid?, google_kg_id?,
   - for a page entity: `scores`, `link` or both, plus `keyword` when it is
     a keyword entity;
   - for a lookup: `exact`, `disambiguation` or `redirect`;
-  - for a theme: `similarity`.
+  - for a theme: `similarity`;
+  - for the graph: `centre` (the keyword's own article, after a page
+    entity's own qualifiers when TextRazor linked it), `out_link` and
+    `in_link` (a neighbour the centre links to, or that links to it) and
+    `named` (a neighbour the page names);
+  - `graph_links` is added to a page entity or lookup hit that joins
+    `about` or `mentions` by its links into the graph.
 - `keyword_lookups` records each word or phrase looked up: `exact`,
   `missing`, `disambiguation` or `redirect`, with the options chosen and
   their link counts.
 - `reason` is `below_relevance`, `below_topic`, `below_confidence` (an
   own-site link under `min_link_confidence` and scores under the cutoffs),
   `below_similarity`, `off_graph` (a page entity with too few links into the
-  graph), `below_graph_similarity` (a linked article under
+  graph; it also applies to themes and keyword lookup hits),
+  `below_graph_similarity` (a linked article under
   `min_graph_similarity`), `not_in_page_text` (a would-be mention named only in
   the title), `identity_mismatch` or `not_an_article`.
 - `model` names the embedding model that ran.

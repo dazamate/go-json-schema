@@ -409,7 +409,7 @@ func TestSelectEntitiesToolDescriptionSaysTheDefaultsAreJudgement(t *testing.T) 
 		if tool.Name != "select_entities" {
 			continue
 		}
-		for _, want := range []string{"our judgement", "one calibration page"} {
+		for _, want := range []string{"our judgement", "two calibration pages"} {
 			if !strings.Contains(tool.Description, want) {
 				t.Errorf("description does not contain %q", want)
 			}
