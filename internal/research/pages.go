@@ -82,18 +82,21 @@ type rawPage struct {
 	LD          []string   `json:"ld"`
 	Text        string     `json:"text"`
 	Links       []pageLink `json:"links"`
+	Status      int        `json:"status"` // the navigation's HTTP status; 0 when unknown
 }
 
 type cachedPage struct {
-	Page  Page       `json:"page"`
-	Text  string     `json:"text"`
-	Links []pageLink `json:"links,omitempty"`
+	Page   Page       `json:"page"`
+	Text   string     `json:"text"`
+	Links  []pageLink `json:"links,omitempty"`
+	Status int        `json:"status,omitempty"` // HTTP status; 0 when unknown
 }
 
-// pageJS reads the page's facts, then its main text with navigation,
-// footers, sidebars and comments hidden. Hidden chrome is skipped when it
-// holds most of the text, as with pages wrapped in one big form. The links
-// are the ones still rendered after that, so the hidden chrome's are left out.
+// pageJS reads the page's facts and HTTP status, then its main text with
+// navigation, footers, sidebars and comments hidden. Hidden chrome is
+// skipped when it holds most of the text, as with pages wrapped in one big
+// form. The links are the ones still rendered after that, so the hidden
+// chrome's are left out.
 const pageJS = `(() => {
   const meta = n => { const m = document.querySelector('meta[name="' + n + '"], meta[property="' + n + '"]'); return m ? (m.content || '') : ''; };
   const chrome = 'nav, footer, aside, [role=navigation], [role=contentinfo], [role=complementary], #comments, .comments, .comment-list, script, style, noscript, iframe, form, template';
@@ -113,7 +116,8 @@ const pageJS = `(() => {
     title: document.title, description: meta('description') || meta('og:description'), lang: document.documentElement.lang || '',
     headings, ld, text: (root.innerText || '').slice(0, 150000),
     links: [...root.querySelectorAll('a[href]')].filter(a => a.getClientRects().length > 0)
-      .map(a => ({href: a.href, text: (a.innerText || '').trim().replace(/\s+/g, ' ')})).filter(l => l.text).slice(0, 500)};
+      .map(a => ({href: a.href, text: (a.innerText || '').trim().replace(/\s+/g, ' ')})).filter(l => l.text).slice(0, 500),
+    status: (performance.getEntriesByType('navigation')[0] || {}).responseStatus || 0};
 })()`
 
 // PageTerms reads each page and ranks the words and phrases they share,
@@ -219,6 +223,7 @@ func (r *Researcher) fetchPage(ctx context.Context, p browser.Page, link, prev s
 	}
 	c.Text = raw.Text
 	c.Links = raw.Links
+	c.Status = raw.Status
 	return c
 }
 

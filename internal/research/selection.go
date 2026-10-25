@@ -159,6 +159,14 @@ func (r *Researcher) SelectEntities(ctx context.Context, q SelectQuery) (SelectR
 	if page.Page.Error != "" {
 		return SelectReport{}, fmt.Errorf("reading %s: %s", q.URL, page.Page.Error)
 	}
+	// A stopped dev server or a missing page still renders a page with
+	// text, so the browser's error page and HTTP errors are not read as ours.
+	if u, err := url.Parse(page.Page.URL); err != nil || (u.Scheme != "http" && u.Scheme != "https") {
+		return SelectReport{}, fmt.Errorf("%s did not load (browser ended on %s)", q.URL, page.Page.URL)
+	}
+	if page.Status >= 400 {
+		return SelectReport{}, fmt.Errorf("%s returned HTTP %d", q.URL, page.Status)
+	}
 	if strings.TrimSpace(page.Text) == "" {
 		return SelectReport{}, fmt.Errorf("no main text on %s", q.URL)
 	}

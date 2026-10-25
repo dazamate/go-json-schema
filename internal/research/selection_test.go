@@ -583,6 +583,31 @@ func TestSelectEntitiesRejectsAPageWithNoText(t *testing.T) {
 	}
 }
 
+func TestSelectEntitiesRejectsAnErrorPage(t *testing.T) {
+	f := newSelectFixture()
+	f.raw.Status = 404
+	_, err := f.researcher().SelectEntities(context.Background(), selectQuery())
+	if err == nil || err.Error() != selectURL+" returned HTTP 404" {
+		t.Errorf("status 404: err = %v", err)
+	}
+	f = newSelectFixture()
+	f.moved = map[string]string{selectURL: "chrome-error://chromewebdata/"}
+	_, err = f.researcher().SelectEntities(context.Background(), selectQuery())
+	if err == nil || err.Error() != selectURL+" did not load (browser ended on chrome-error://chromewebdata/)" {
+		t.Errorf("chrome error page: err = %v", err)
+	}
+}
+
+func TestSelectEntitiesAcceptsAnUnknownOrOKStatus(t *testing.T) {
+	for _, status := range []int{0, 200} {
+		f := newSelectFixture()
+		f.raw.Status = status
+		if rep := runSelect(t, f.researcher(), selectQuery()); len(rep.About) == 0 {
+			t.Errorf("status %d: nothing selected", status)
+		}
+	}
+}
+
 func TestSelectEntitiesUsesTheTextRazorCache(t *testing.T) {
 	f := newSelectFixture()
 	r := f.researcher()
