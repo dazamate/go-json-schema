@@ -1,7 +1,9 @@
 package research
 
 import (
+	"cmp"
 	"net/url"
+	"regexp"
 	"slices"
 	"strings"
 )
@@ -214,4 +216,89 @@ func centreCandidates(looks []KeywordLookup, contentWords int) [][]titleQID {
 		}
 	}
 	return out
+}
+
+// graphText is what a neighbour is embedded as: its title and Wikipedia's
+// short description.
+func graphText(n neighbour) string {
+	if n.Desc == "" {
+		return n.Title
+	}
+	return n.Title + ": " + n.Desc
+}
+
+var titleBracket = regexp.MustCompile(` \([^()]*\)$`)
+
+// namedForms returns the page's spellings of title, without a trailing
+// " (...)", in its plain form or with s or es: whole words, ignoring case,
+// the first spelling of each form, in form order. A title of one word once
+// the bracket goes returns nil: one-word titles are named only by TextRazor.
+func namedForms(title, text string) []string {
+	bare := titleBracket.ReplaceAllString(title, "")
+	if len(strings.Fields(bare)) < 2 {
+		return nil
+	}
+	var out []string
+	for _, form := range []string{bare, bare + "s", bare + "es"} {
+		re := regexp.MustCompile(`(?i)(?:^|[^\p{L}\p{N}])(` + regexp.QuoteMeta(form) + `)(?:[^\p{L}\p{N}]|$)`)
+		if m := re.FindStringSubmatch(text); m != nil {
+			out = append(out, m[1])
+		}
+	}
+	return out
+}
+
+// graphNeighbour is a neighbour with what pruning found.
+type graphNeighbour struct {
+	neighbour
+	Sim   *float64 // nil without a score
+	Named []string // the page's spellings, or TextRazor's matched forms; nil when unnamed
+}
+
+type pruned struct {
+	Kept    []graphNeighbour // by similarity, highest first, then the unscored named ones by title
+	Dropped []Dropped        // scored neighbours cut: below_graph_similarity, source graph
+	Cut     int              // len(Dropped) plus the neighbours left unscored
+	Capped  int              // unnamed neighbours past max_graph_neighbours
+}
+
+// pruneNeighbours keeps the named neighbours, and the highest-scoring
+// MaxGraphNeighbours unnamed ones at MinGraphSimilarity or more (compared
+// unrounded). sims is by title; nil means there is no model.
+func pruneNeighbours(ns []neighbour, sims map[string]float64, named map[string][]string, set SelectSettings) pruned {
+	var p pruned
+	var scored, unscored, open []graphNeighbour
+	for _, n := range ns {
+		g := graphNeighbour{neighbour: n, Named: named[n.Title]}
+		sim, ok := sims[n.Title]
+		if ok {
+			g.Sim = f64(sim)
+		}
+		switch {
+		case g.Named != nil && ok:
+			scored = append(scored, g)
+		case g.Named != nil:
+			unscored = append(unscored, g)
+		case !ok:
+			p.Cut++
+		case sim < set.MinGraphSimilarity:
+			p.Cut++
+			p.Dropped = append(p.Dropped, Dropped{Name: n.Title, QID: n.QID, Source: SourceGraph, GraphSimilarity: f64(round3(sim)), Reason: ReasonBelowGraphSimilarity})
+		default:
+			open = append(open, g)
+		}
+	}
+	byScore := func(a, b graphNeighbour) int {
+		return cmp.Or(cmp.Compare(*b.Sim, *a.Sim), strings.Compare(a.Title, b.Title))
+	}
+	slices.SortFunc(open, byScore)
+	if len(open) > set.MaxGraphNeighbours {
+		p.Capped = len(open) - set.MaxGraphNeighbours
+		open = open[:set.MaxGraphNeighbours]
+	}
+	scored = append(scored, open...)
+	slices.SortFunc(scored, byScore)
+	slices.SortFunc(unscored, func(a, b graphNeighbour) int { return strings.Compare(a.Title, b.Title) })
+	p.Kept = append(scored, unscored...)
+	return p
 }

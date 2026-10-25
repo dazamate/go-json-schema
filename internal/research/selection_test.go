@@ -483,6 +483,19 @@ func TestSelectEntitiesRejectsBadQueries(t *testing.T) {
 		"min_link_confidence is -1: want 0 or more": func(q *SelectQuery) {
 			q.Settings.MinLinkConfidence = -1
 		},
+		"min_graph_similarity is 1.5": func(q *SelectQuery) { q.Settings.MinGraphSimilarity = 1.5 },
+		"min_graph_links is 0: want 1 or more": func(q *SelectQuery) {
+			q.Settings.MinGraphLinks = 0
+		},
+		"min_graph_links_ungated is 0: want 1 or more": func(q *SelectQuery) {
+			q.Settings.MinGraphLinksUngated = 0
+		},
+		"min_mention_graph_links is -1: want 0 or more": func(q *SelectQuery) {
+			q.Settings.MinMentionGraphLinks = -1
+		},
+		"max_graph_neighbours is -1: want 0 or more": func(q *SelectQuery) {
+			q.Settings.MaxGraphNeighbours = -1
+		},
 	} {
 		query := selectQuery()
 		q(&query)
@@ -739,7 +752,7 @@ func TestSelectReportJSONKeys(t *testing.T) {
 			t.Errorf("%s is not a list: %v", k, m[k])
 		}
 	}
-	if s := m["settings"].(map[string]any); s["min_relevance"] != 0.3 || s["min_page_similarity"] != 0.55 || s["min_link_confidence"] != 1.5 {
+	if s := m["settings"].(map[string]any); s["min_relevance"] != 0.3 || s["min_page_similarity"] != 0.55 || s["min_link_confidence"] != 1.5 || s["min_graph_similarity"] != 0.4 || s["max_graph_neighbours"] != float64(30) {
 		t.Errorf("settings = %v", s)
 	}
 }

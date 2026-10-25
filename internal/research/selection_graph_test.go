@@ -216,3 +216,97 @@ func TestKeywordLookupsKeepCentreQIDs(t *testing.T) {
 		t.Errorf("hits = %+v", hits)
 	}
 }
+
+func TestNamedForms(t *testing.T) {
+	for _, c := range []struct {
+		title, text string
+		want        []string
+	}{
+		{"Island reversal", "Two island reversals formed.", []string{"island reversals"}},
+		{"Market reversal", "market reversals and a Market Reversal", []string{"Market Reversal", "market reversals"}},
+		{"Head and shoulders (chart pattern)", "a head and shoulders top", []string{"head and shoulders"}},
+		{"Bull market", "A bull marketing push", nil},
+		{"Gap (chart pattern)", "Trade the Gap today.", nil}, // one word once the bracket goes
+		{"Doji", "doji and DOJI", nil},                       // one-word titles are named only by TextRazor
+	} {
+		if got := namedForms(c.title, c.text); !slices.Equal(got, c.want) {
+			t.Errorf("namedForms(%q, %q) = %q, want %q", c.title, c.text, got, c.want)
+		}
+	}
+}
+
+func pruneNs() []neighbour {
+	return []neighbour{{Title: "A"}, {Title: "B"}, {Title: "C"}, {Title: "D"}}
+}
+
+func keptTitles(p pruned) []string {
+	var out []string
+	for _, k := range p.Kept {
+		out = append(out, k.Title)
+	}
+	return out
+}
+
+func TestPruneKeepsNamedAndCuts(t *testing.T) {
+	sims := map[string]float64{"A": .6, "B": .39, "C": .30, "D": .45}
+	p := pruneNeighbours(pruneNs(), sims, map[string][]string{"B": {"b"}}, DefaultSelectSettings)
+	if got := keptTitles(p); !slices.Equal(got, []string{"A", "D", "B"}) {
+		t.Errorf("kept = %v", got)
+	}
+	want := []Dropped{{Name: "C", Source: SourceGraph, GraphSimilarity: f64(0.3), Reason: ReasonBelowGraphSimilarity}}
+	if !reflect.DeepEqual(p.Dropped, want) {
+		t.Errorf("dropped = %+v", p.Dropped)
+	}
+	if p.Cut != 1 || p.Capped != 0 {
+		t.Errorf("cut %d capped %d", p.Cut, p.Capped)
+	}
+	if p.Kept[2].Sim == nil || *p.Kept[2].Sim != .39 || !slices.Equal(p.Kept[2].Named, []string{"b"}) || p.Kept[0].Named != nil {
+		t.Errorf("kept = %+v", p.Kept)
+	}
+}
+
+func TestPruneCapsUnnamed(t *testing.T) {
+	set := DefaultSelectSettings
+	set.MaxGraphNeighbours = 2
+	sims := map[string]float64{"A": .6, "D": .45, "E": .5, "B": .2}
+	ns := append(pruneNs(), neighbour{Title: "E"})
+	p := pruneNeighbours(ns, sims, map[string][]string{"B": {"b"}}, set)
+	if got := keptTitles(p); !slices.Equal(got, []string{"A", "E", "B"}) {
+		t.Errorf("kept = %v", got)
+	}
+	if p.Capped != 1 || len(p.Dropped) != 0 {
+		t.Errorf("capped %d dropped %+v", p.Capped, p.Dropped)
+	}
+}
+
+func TestPruneWithoutModel(t *testing.T) {
+	p := pruneNeighbours(pruneNs(), nil, map[string][]string{"B": {"b"}}, DefaultSelectSettings)
+	if got := keptTitles(p); !slices.Equal(got, []string{"B"}) {
+		t.Errorf("kept = %v", got)
+	}
+	if len(p.Dropped) != 0 || p.Cut != 3 || p.Capped != 0 {
+		t.Errorf("dropped %+v cut %d capped %d", p.Dropped, p.Cut, p.Capped)
+	}
+}
+
+func TestPruneZeroCap(t *testing.T) {
+	set := DefaultSelectSettings
+	set.MaxGraphNeighbours = 0
+	sims := map[string]float64{"A": .6, "B": .2, "C": .3, "D": .45}
+	p := pruneNeighbours(pruneNs(), sims, map[string][]string{"B": {"b"}}, set)
+	if got := keptTitles(p); !slices.Equal(got, []string{"B"}) {
+		t.Errorf("kept = %v", got)
+	}
+	if p.Capped != 2 {
+		t.Errorf("capped %d", p.Capped)
+	}
+}
+
+func TestGraphText(t *testing.T) {
+	if got := graphText(neighbour{Title: "Gap", Desc: "A concept"}); got != "Gap: A concept" {
+		t.Errorf("got %q", got)
+	}
+	if got := graphText(neighbour{Title: "Gap"}); got != "Gap" {
+		t.Errorf("got %q", got)
+	}
+}

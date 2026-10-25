@@ -26,6 +26,7 @@ const (
 	SourcePage    = "page"    // linked on our page by TextRazor
 	SourceKeyword = "keyword" // a keyword word or phrase looked up as a Wikipedia title
 	SourceTheme   = "theme"   // a TextRazor topic of the page
+	SourceGraph   = "graph"   // an article linked to or from the keyword's centre
 )
 
 // Reasons an entity is dropped, besides the identity reasons.
@@ -35,22 +36,31 @@ const (
 	ReasonBelowSimilarity = "below_similarity"
 	ReasonNotInPageText   = "not_in_page_text" // a mentions entity named only in the title
 	ReasonBelowConfidence = "below_confidence" // kept only by a link, which TextRazor was unsure of
+
+	ReasonOffGraph             = "off_graph"              // too few links into the keyword's graph
+	ReasonBelowGraphSimilarity = "below_graph_similarity" // a neighbour far from the keyword that the page doesn't name
 )
 
 // SelectSettings are the cutoffs select_entities applies, each 0 to 1 except
 // MinLinkConfidence.
 type SelectSettings struct {
-	MinRelevance         float64 `json:"min_relevance"`          // lowest TextRazor relevance for a page entity
-	MinTopic             float64 `json:"min_topic"`              // lowest topic score for a page entity
-	MinKeywordSimilarity float64 `json:"min_keyword_similarity"` // lowest theme-to-keyword cosine
-	MinPageSimilarity    float64 `json:"min_page_similarity"`    // lowest theme-to-page cosine
-	MinLinkConfidence    float64 `json:"min_link_confidence"`    // lowest TextRazor confidence for the link path, 0 or more
+	MinRelevance         float64 `json:"min_relevance"`           // lowest TextRazor relevance for a page entity
+	MinTopic             float64 `json:"min_topic"`               // lowest topic score for a page entity
+	MinKeywordSimilarity float64 `json:"min_keyword_similarity"`  // lowest theme-to-keyword cosine
+	MinPageSimilarity    float64 `json:"min_page_similarity"`     // lowest theme-to-page cosine
+	MinLinkConfidence    float64 `json:"min_link_confidence"`     // lowest TextRazor confidence for the link path, 0 or more
+	MinGraphSimilarity   float64 `json:"min_graph_similarity"`    // lowest neighbour-to-keyword cosine, for neighbours the page doesn't name
+	MinGraphLinks        int     `json:"min_graph_links"`         // graph members a gated page entity links with to join about
+	MinGraphLinksUngated int     `json:"min_graph_links_ungated"` // the same for a page entity failing the gate
+	MinMentionGraphLinks int     `json:"min_mention_graph_links"` // graph members a mention links with
+	MaxGraphNeighbours   int     `json:"max_graph_neighbours"`    // most kept neighbours the page doesn't name
 }
 
 // DefaultSelectSettings are our judgement, set by eye from one calibration
 // page, not from any Google source. The link confidence floor keeps out
 // mislinks such as "slate" read as Slate (magazine) at 1.08.
-var DefaultSelectSettings = SelectSettings{MinRelevance: 0.3, MinTopic: 0.5, MinKeywordSimilarity: 0.40, MinPageSimilarity: 0.55, MinLinkConfidence: 1.5}
+var DefaultSelectSettings = SelectSettings{MinRelevance: 0.3, MinTopic: 0.5, MinKeywordSimilarity: 0.40, MinPageSimilarity: 0.55, MinLinkConfidence: 1.5,
+	MinGraphSimilarity: 0.40, MinGraphLinks: 3, MinGraphLinksUngated: 10, MinMentionGraphLinks: 2, MaxGraphNeighbours: 30}
 
 // SelectQuery is our page and its target keyword.
 type SelectQuery struct {
@@ -105,6 +115,8 @@ type Dropped struct {
 	Confidence        *float64 `json:"confidence,omitempty"`
 	KeywordSimilarity *float64 `json:"keyword_similarity,omitempty"`
 	PageSimilarity    *float64 `json:"page_similarity,omitempty"`
+	GraphSimilarity   *float64 `json:"graph_similarity,omitempty"`
+	GraphLinks        *int     `json:"graph_links,omitempty"`
 	Reason            string   `json:"reason"`
 }
 
@@ -308,13 +320,25 @@ func (q SelectQuery) check() error {
 	for _, v := range []struct {
 		name string
 		v    float64
-	}{{"min_relevance", s.MinRelevance}, {"min_topic", s.MinTopic}, {"min_keyword_similarity", s.MinKeywordSimilarity}, {"min_page_similarity", s.MinPageSimilarity}} {
+	}{{"min_relevance", s.MinRelevance}, {"min_topic", s.MinTopic}, {"min_keyword_similarity", s.MinKeywordSimilarity}, {"min_page_similarity", s.MinPageSimilarity}, {"min_graph_similarity", s.MinGraphSimilarity}} {
 		if !(v.v >= 0 && v.v <= 1) {
 			return fmt.Errorf("%s is %v: want 0 to 1", v.name, v.v)
 		}
 	}
 	if !(s.MinLinkConfidence >= 0) {
 		return fmt.Errorf("min_link_confidence is %v: want 0 or more", s.MinLinkConfidence)
+	}
+	if s.MinGraphLinks < 1 {
+		return fmt.Errorf("min_graph_links is %d: want 1 or more", s.MinGraphLinks)
+	}
+	if s.MinGraphLinksUngated < 1 {
+		return fmt.Errorf("min_graph_links_ungated is %d: want 1 or more", s.MinGraphLinksUngated)
+	}
+	if s.MinMentionGraphLinks < 0 {
+		return fmt.Errorf("min_mention_graph_links is %d: want 0 or more", s.MinMentionGraphLinks)
+	}
+	if s.MaxGraphNeighbours < 0 {
+		return fmt.Errorf("max_graph_neighbours is %d: want 0 or more", s.MaxGraphNeighbours)
 	}
 	return nil
 }
