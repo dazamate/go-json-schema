@@ -273,6 +273,27 @@ func TestSelectEntitiesOwnHostForms(t *testing.T) {
 	}
 }
 
+func TestSelectEntitiesLinkedToIgnoresFragments(t *testing.T) {
+	f := newSelectFixture()
+	f.raw.Links = []pageLink{
+		{Href: "https://a.example/pool/#calculator", Text: "Pool table"}, // a fragment first
+		{Href: "https://a.example/pool/", Text: "pool table"},
+		{Href: "https://a.example/q/", Text: "Pool table"}, // the bare URL first
+		{Href: "https://a.example/q/#cost", Text: "pool table"},
+		{Href: "https://a.example/r/#a", Text: "Pool table"}, // only fragments
+		{Href: "https://a.example/r/#b", Text: "pool table"},
+	}
+	rep := runSelect(t, f.researcher(), selectQuery())
+	i := slices.IndexFunc(rep.Mentions, func(s Selected) bool { return s.Name == "Billiard table" })
+	if i < 0 {
+		t.Fatalf("mentions = %v", selNames(rep.Mentions))
+	}
+	want := []string{"https://a.example/pool/", "https://a.example/q/", "https://a.example/r/#a"}
+	if got := rep.Mentions[i].LinkedTo; !slices.Equal(got, want) {
+		t.Errorf("linked_to = %q, want %q", got, want)
+	}
+}
+
 // themeFixture adds the themes T1 to T5 (Q11 to Q15, named "Theme 1" to
 // "Theme 5" on Wikipedia) with topic scores falling from 0.5.
 func themeFixture(f *selectFixture) {

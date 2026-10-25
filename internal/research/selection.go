@@ -523,12 +523,15 @@ func (e *pageEntity) selected(source string) Selected {
 func f64(v float64) *float64 { return &v }
 
 // ownLinks returns the hrefs of links to other pages of our site, not its
-// root, whose text holds one of forms as whole words, sorted.
+// root, whose text holds one of forms as whole words, sorted. Hrefs that
+// differ only in their fragment are one page, listed by the first href
+// without a fragment, else the first seen.
 func ownLinks(links []pageLink, page *url.URL, forms []string) []string {
 	out := []string{}
 	if page == nil {
 		return out
 	}
+	at := map[string]int{} // a listed page, without its fragment, to its place in out
 	site := func(u *url.URL) string { return strings.TrimPrefix(strings.ToLower(u.Host), "www.") }
 	self := strings.TrimSuffix(page.Path, "/")
 	for _, l := range links {
@@ -539,8 +542,15 @@ func ownLinks(links []pageLink, page *url.URL, forms []string) []string {
 		if p := strings.TrimSuffix(u.Path, "/"); p == self || p == "" {
 			continue
 		}
-		if slices.ContainsFunc(forms, func(f string) bool { return hasWords(l.Text, f) }) && !slices.Contains(out, l.Href) {
+		if !slices.ContainsFunc(forms, func(f string) bool { return hasWords(l.Text, f) }) {
+			continue
+		}
+		key, _, frag := strings.Cut(l.Href, "#")
+		if i, ok := at[key]; !ok {
+			at[key] = len(out)
 			out = append(out, l.Href)
+		} else if !frag {
+			out[i] = l.Href
 		}
 	}
 	slices.Sort(out)
