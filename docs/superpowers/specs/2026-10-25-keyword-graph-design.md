@@ -95,6 +95,12 @@ entities").
    (`prop=links`, `plnamespace=0`), plus those that link to it
    (`prop=linkshere`, `lhnamespace=0`, `lhshow=!redirect`), resolved
    through redirects.
+   - Only the first 500 in-links are read, which is one page of
+     `linkshere`. `graph.in_links_cut` and `note` say so when more exist.
+   - Out-links are read in full. *(My call: on "technical analysis" the
+     in-links held most of the companies, people and lists, and a broad
+     article can have tens of thousands, each resolved and embedded
+     before pruning.)*
    - Disambiguation pages and articles with no Wikidata item are skipped.
    - Pages that link only to one of the centre's redirects are not
      followed. *(My call: this matches the calibration run.)*
@@ -122,9 +128,17 @@ entities").
      they could not be scored. *(My call: no padding without a score.)*
 3. **Named on the page** means either:
    - TextRazor linked the same Wikidata item on our page, at any score; or
-   - the neighbour's title, without a trailing bracketed part ("Gap (chart
-     pattern)" counts as "gap"), appears in the page's main text as whole
-     words, ignoring case, in its plain form or with "s" or "es" added.
+   - the neighbour's title, without a trailing bracketed part, has 2 or
+     more words and appears in the page's main text as whole words,
+     ignoring case, in its plain form or with "s" or "es" added. For
+     example, "Head and shoulders (chart pattern)" counts as "head and
+     shoulders".
+
+   One-word titles ("Gap (chart pattern)", "Stock", "Analysis") are named
+   only through TextRazor. *(My call, after a broad check: against the
+   Technical analysis article, single words and stripped brackets matched
+   Analysis, Position (finance), Rally (stock market) and Market
+   (economics) in the forex text, and named neighbours are never capped.)*
 4. The **graph members** are the centre plus the kept neighbours. Each
    still goes through the base spec's Identity checks, so a list article
    or category page is dropped as `not_an_article`.
@@ -190,7 +204,7 @@ for the existing cutoffs.
 - **`dropped`:** reasons `off_graph` and `below_graph_similarity`, and a
   new field `graph_similarity`.
 - **New top-level `graph`:**
-  `{ centres: [title], out_links, in_links, neighbours, kept, cut, capped }`
+  `{ centres: [title], out_links, in_links, in_links_cut?, neighbours, kept, cut, capped }`
   holds the centre titles and the counts. It is absent when there is no
   centre.
 - **`note`:**

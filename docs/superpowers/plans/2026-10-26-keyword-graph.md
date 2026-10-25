@@ -135,8 +135,11 @@ type neighbour struct {
 type graphHood struct {
 	OutLinks   int         `json:"out_links"`
 	InLinks    int         `json:"in_links"`
-	Neighbours []neighbour `json:"neighbours"` // sorted by title
+	InLinksCut bool        `json:"in_links_cut,omitempty"` // more than maxInLinks link here
+	Neighbours []neighbour `json:"neighbours"`             // sorted by title
 }
+
+const maxInLinks = 500 // one linkshere page: the rest of a broad article's in-links are not read
 
 func (r *resolver) graphHood(centre string) (graphHood, error)
 func (r *Researcher) cachedHood(wr *resolver, centre string) (graphHood, error) // bucket "graph", key wr.lang+"|"+centre, TTL entityTTL
@@ -146,7 +149,9 @@ func (r *Researcher) cachedHood(wr *resolver, centre string) (graphHood, error) 
   - out-links: `action=query&prop=links&titles=<centre>&plnamespace=0&pllimit=max&redirects=1`;
   - in-links: `action=query&prop=linkshere&titles=<centre>&lhnamespace=0&lhshow=!redirect&lhlimit=max&redirects=1`.
 
-  Follow `continue` on both, then resolve every title with `r.titles`.
+  Follow `continue` on the out-links. On the in-links, stop once
+  `maxInLinks` titles are read and set `InLinksCut` if a `continue` remains.
+  Then resolve every title with `r.titles`.
 - **What is skipped:** missing, invalid and disambiguation pages, pages with
   no `wikibase_item`, and the centre itself. Flags merge by resolved title.
 - **Counts:** `OutLinks` and `InLinks` count the titles as listed, before
@@ -171,6 +176,11 @@ func TestGraphHoodLinksBothWays(t *testing.T) {
 	// want h.OutLinks == 6, h.InLinks == 2, and h.Neighbours ==
 	// [{Chart pattern Q7 "" Out In} {Day trading Q6 "" In} {Gap (chart pattern) Q3 "Price chart analysis concept" Out}
 	//  {Technical analysis Q2 "Security analysis methodology" Out}]
+}
+
+func TestGraphHoodStopsAtMaxInLinks(t *testing.T) {
+	// 501 titles L000..L500 link here, each with a QID; linksPerResponse 500.
+	// h.InLinks == 500, h.InLinksCut, and len(h.Neighbours) == 500.
 }
 
 func TestCachedHoodFetchesOnce(t *testing.T) {
@@ -324,7 +334,8 @@ func graphText(n neighbour) string // "<title>: <desc>", or the title when desc 
 
 // namedForms returns the page's spellings of title, without a trailing
 // " (...)", in its plain form or with s or es: whole words, ignoring case,
-// the first spelling of each form, in form order.
+// the first spelling of each form, in form order. A title of one word once
+// the bracket goes returns nil: one-word titles are named only by TextRazor.
 func namedForms(title, text string) []string
 
 // graphNeighbour is a neighbour with what pruning found.
@@ -362,11 +373,12 @@ func pruneNeighbours(ns []neighbour, sims map[string]float64, named map[string][
 ```go
 func TestNamedForms(t *testing.T) {
 	for _, c := range []struct{ title, text string; want []string }{
-		{"Gap (chart pattern)", "Trade the Gap today.", []string{"Gap"}},
 		{"Island reversal", "Two island reversals formed.", []string{"island reversals"}},
-		{"Bull", "A bullish week", nil},
-		{"Box", "Moving boxes", []string{"boxes"}},
-		{"Doji", "doji and DOJI", []string{"doji"}},
+		{"Market reversal", "market reversals and a Market Reversal", []string{"Market Reversal", "market reversals"}},
+		{"Head and shoulders (chart pattern)", "a head and shoulders top", []string{"head and shoulders"}},
+		{"Bull market", "A bull marketing push", nil},
+		{"Gap (chart pattern)", "Trade the Gap today.", nil}, // one word once the bracket goes
+		{"Doji", "doji and DOJI", nil},                      // one-word titles are named only by TextRazor
 	} { /* namedForms(c.title, c.text) == c.want */ }
 }
 
@@ -431,6 +443,7 @@ type GraphReport struct {
 	Centres    []string `json:"centres"`
 	OutLinks   int      `json:"out_links"`
 	InLinks    int      `json:"in_links"`
+	InLinksCut bool     `json:"in_links_cut,omitempty"`
 	Neighbours int      `json:"neighbours"` // resolved articles linked to or from the centres
 	Kept       int      `json:"kept"`       // neighbours kept after pruning and identity
 	Cut        int      `json:"cut"`
@@ -449,6 +462,7 @@ type builtGraph struct {
 	Links   map[string][]string // a page entity or extra title -> the distinct members it links with
 	Dropped []Dropped           // neighbours cut by score or failing identity
 	Report  GraphReport
+	Scored  bool // the model scored the neighbours
 }
 
 // buildGraph builds the keyword's graph from the centre groups. It returns
@@ -492,13 +506,15 @@ func (r *Researcher) buildGraph(ctx context.Context, wr *resolver, keyword strin
    titles, against the member titles.
 10. When `Cut + Capped > 0`, add the note `graph of <centres>: <Cut> cut
     below min_graph_similarity, <Capped> over max_graph_neighbours`.
+11. When a centre's in-links were cut, add the note `graph of <centre>:
+    only its first 500 in-links were read`.
 
 **The pat fixture** (keyword `price action trading`, URL
 `https://forex.example/price-action-trading/`):
 - **Page:**
   - title `Price Action Trading`, lang `en`, H1 `Price action trading`;
   - text `Price action trading reads every candle. Technical analysis and
-    forex go together. An island reversal is rare, so trade the gap.`
+    forex go together. Island reversals are rare, so trade the gap.`
 - **Wikipedia pages:**
   - Price action trading Q1;
   - Technical analysis Q2, "Security analysis methodology";
@@ -514,7 +530,8 @@ func (r *Researcher) buildGraph(ctx context.Context, wr *resolver, keyword strin
 - **Links:**
   - Price action trading links to Technical analysis, Gap (chart pattern),
     ISBN, Island reversal, Action and Orphan;
-  - Day trading and Chart pattern link to Price action trading;
+  - Day trading and Chart pattern link to Price action trading, in both
+    `linksHere` and their own `articleLinks`;
   - Foreign exchange market links to Technical analysis and Gap (chart
     pattern);
   - Chart pattern links to Foreign exchange market;
@@ -551,7 +568,8 @@ func (r *Researcher) buildGraph(ctx context.Context, wr *resolver, keyword strin
 ```go
 func TestBuildGraphKeepsNamedAndScored(t *testing.T) {
 	// Members titles: [Price action trading, Day trading, Gap (chart pattern), Chart pattern, Technical analysis, Island reversal].
-	// Members[0].Centre; Gap's Named == ["gap"]; Technical analysis's Named == ["technical analysis"].
+	// Members[0].Centre; Gap's Named == nil (one word); Island reversal's Named == ["Island reversals"];
+	// Technical analysis's Named == ["technical analysis"] (TextRazor's form).
 	// Report == {Centres: [Price action trading], OutLinks: 6, InLinks: 2, Neighbours: 6, Kept: 5, Cut: 1, Capped: 0}.
 	// Dropped == [{Name: ISBN, QID: Q4, Source: graph, GraphSimilarity: 0.299, Reason: below_graph_similarity}].
 	// Links["Foreign exchange market"] == [Chart pattern, Gap (chart pattern), Technical analysis]; Links["Candle"] == [Chart pattern];
@@ -574,7 +592,8 @@ func TestBuildGraphTooFewNeighbours(t *testing.T) {
 }
 
 func TestBuildGraphWithoutModel(t *testing.T) {
-	// r.Themes == nil. Members: centre, Gap (chart pattern), Technical analysis and Island reversal (the named ones);
+	// r.Themes == nil, and " A chart pattern helps." appended to the text.
+	// Members: centre, Technical analysis, Island reversal and Chart pattern (the named ones);
 	// Report.Cut 3; Dropped has no ISBN; a note contains "graph not scored: no embedding model is set up".
 }
 ```
@@ -618,7 +637,7 @@ func TestBuildGraphWithoutModel(t *testing.T) {
   and are not page entities.
 - If it returns nil, add its notes and use the base path.
 - Otherwise set `rep.Graph`, add its notes, use `graphCandidates`, and skip
-  theme scoring.
+  theme scoring. Set `rep.Model` to `r.Themes.Model()` when `g.Scored`.
 - The identity loop, Bing and `thing` building stay shared.
 
 **`graphCandidates`:**
@@ -666,11 +685,13 @@ func TestBuildGraphWithoutModel(t *testing.T) {
 func TestSelectEntitiesGraphRoles(t *testing.T) {
 	// about == [Price action trading, Technical analysis, Foreign exchange market, Day trading, Gap (chart pattern), Chart pattern, Island reversal]
 	// Price action trading: source keyword, qualified_by [centre], no graph_links key in its JSON.
-	// Technical analysis: source page, qualified_by [out_link named], graph_links 1.
+	// Technical analysis: source page, qualified_by [out_link named], graph_links 2 (Gap, and the centre's link to it).
 	// Foreign exchange market: source page, qualified_by [scores graph_links], graph_links 3.
 	// Day trading: source graph, qualified_by [in_link], graph_similarity 0.576, matched [].
-	// Gap (chart pattern): source graph, qualified_by [out_link named], matched [gap]; its thing's alternateName is ["gap"].
-	// Island reversal: qualified_by [out_link named], graph_similarity 0.325.
+	// Gap (chart pattern): source graph, qualified_by [out_link], matched [], no alternateName.
+	// Island reversal: qualified_by [out_link named], graph_similarity 0.325, matched [Island reversals];
+	// its thing's alternateName is ["Island reversals"].
+	// rep.Model == "fake-bge": the model scored the graph.
 	// mentions == [Trade], qualified_by [scores graph_links], graph_links 2.
 	// dropped holds ISBN (below_graph_similarity, graph), Candle (off_graph, page, graph_links 1),
 	// Swing trading (off_graph, page, graph_links 3) and Microeconomics (off_graph, theme).
