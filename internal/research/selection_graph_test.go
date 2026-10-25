@@ -541,8 +541,13 @@ func TestBuildGraphWithoutModel(t *testing.T) {
 // scored by scorer.
 func patResearcher(t *testing.T, raw rawPage, ents []textrazor.Entity, topics []textrazor.Topic, scorer ThemeScorer) *Researcher {
 	t.Helper()
+	return patResearcherWiki(t, patWiki(), raw, ents, topics, scorer)
+}
+
+func patResearcherWiki(t *testing.T, w *fakeWiki, raw rawPage, ents []textrazor.Entity, topics []textrazor.Topic, scorer ThemeScorer) *Researcher {
+	t.Helper()
 	return &Researcher{
-		Browser: fakeBrowser{selectPage(patWiki(), raw, nil)},
+		Browser: fakeBrowser{selectPage(w, raw, nil)},
 		Linker: &fakeLinker{link: func(string) (textrazor.Result, error) {
 			return textrazor.Result{Entities: ents, Topics: topics, Units: 1}, nil
 		}},
@@ -709,5 +714,45 @@ func TestSelectEntitiesNoCentreNote(t *testing.T) {
 	}
 	if b, _ := json.Marshal(rep); strings.Contains(string(b), `"graph"`) {
 		t.Errorf("report has a graph key: %s", b)
+	}
+}
+
+// patWithLookupHits adds two keyword lookup hits that no page entity or
+// member is: "Action trading", a 2-word centre candidate of a group that
+// loses to the 3-word one, linking to Technical analysis and Gap, and
+// "Trading", a 1-word hit linking to those and Chart pattern.
+func patWithLookupHits() *fakeWiki {
+	w := patWiki()
+	w.pages["Action trading"], w.pages["Trading"] = wikiPage{qid: "Q30"}, wikiPage{qid: "Q31"}
+	w.items["Q30"] = wikiItem{sitelink: "Action trading"}
+	w.items["Q31"] = wikiItem{sitelink: "Trading"}
+	w.articleLinks["Action trading"] = []string{"Technical analysis", "Gap (chart pattern)"}
+	w.articleLinks["Trading"] = []string{"Technical analysis", "Gap (chart pattern)", "Chart pattern"}
+	return w
+}
+
+func TestSelectEntitiesLookupHitJoinsAboutByGraphLinks(t *testing.T) {
+	set := DefaultSelectSettings
+	set.MinGraphLinksUngated = 2
+	rep := runSelect(t, patResearcherWiki(t, patWithLookupHits(), patRaw(), patEntities(), patTopics(), &fakeScorer{sim: patSims()}), patQuery(set))
+	for name, links := range map[string]int{"Action trading": 2, "Trading": 3} {
+		i := slices.IndexFunc(rep.About, func(s Selected) bool { return s.Name == name })
+		if i < 0 {
+			t.Errorf("%s not in about: %v", name, selNames(rep.About))
+			continue
+		}
+		if s := rep.About[i]; s.Source != SourceKeyword || !slices.Equal(s.QualifiedBy, []string{"exact", "graph_links"}) || s.GraphLinks != links {
+			t.Errorf("%s = %+v", name, s)
+		}
+	}
+}
+
+func TestSelectEntitiesLookupHitBelowThresholdDropped(t *testing.T) {
+	rep := runSelect(t, patResearcherWiki(t, patWithLookupHits(), patRaw(), patEntities(), patTopics(), &fakeScorer{sim: patSims()}), patQuery(DefaultSelectSettings))
+	for name, links := range map[string]int{"Action trading": 2, "Trading": 3} {
+		d, ok := findDropped(rep, name)
+		if !ok || d.Reason != ReasonOffGraph || d.Source != SourceKeyword || d.GraphLinks == nil || *d.GraphLinks != links {
+			t.Errorf("dropped %s = %+v, want off_graph keyword with %d links", name, d, links)
+		}
 	}
 }

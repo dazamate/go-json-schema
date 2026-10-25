@@ -242,17 +242,13 @@ func (r *Researcher) SelectEntities(ctx context.Context, q SelectQuery) (SelectR
 		if len(groups) == 0 {
 			notes = append(notes, "no Wikipedia article for the keyword: about uses the page's themes")
 		} else {
-			// The hits that are neither centre candidates nor linked on the
-			// page are counted by their links into the graph.
-			inGroup := map[string]bool{}
-			for _, grp := range groups {
-				for _, c := range grp {
-					inGroup[c.QID] = true
-				}
-			}
+			// Every hit not linked on the page is counted by its links into
+			// the graph; hits repeat no QID, but one is kept once anyway.
 			var extra []titleQID
+			seenHit := map[string]bool{}
 			for _, h := range hits {
-				if !inGroup[h.QID] && s.byQID[h.QID] == nil {
+				if s.byQID[h.QID] == nil && !seenHit[h.QID] {
+					seenHit[h.QID] = true
 					extra = append(extra, titleQID{h.Title, h.QID})
 				}
 			}

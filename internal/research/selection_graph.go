@@ -488,7 +488,7 @@ func (r *Researcher) buildGraph(ctx context.Context, wr *resolver, keyword strin
 		}
 	}
 	for _, x := range extra {
-		if !seen[x.Title] {
+		if !seen[x.Title] && !isCentre[x.Title] {
 			seen[x.Title] = true
 			titles = append(titles, x.Title)
 		}
