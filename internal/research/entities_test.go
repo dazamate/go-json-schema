@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/url"
 	"slices"
+	"strconv"
 	"strings"
 	"testing"
 	"unicode"
@@ -22,6 +23,7 @@ type wikiItem struct {
 	label, desc string
 	aliases     []string
 	claims      map[string][]string // P646 -> ["/m/.."], P31 -> ["Q5"]
+	sitelink    string              // English Wikipedia title, emitted as sitelinks.enwiki
 }
 
 // fakeWiki answers the Wikipedia and Wikidata API calls that resolve
@@ -32,6 +34,58 @@ type fakeWiki struct {
 	search    map[string][]string
 	items     map[string]wikiItem
 	fetches   int
+
+	articleLinks     map[string][]string        // page -> pages it links to, answered for prop=links
+	linksPerResponse int                        // when above 0, prop=links answers are cut here with a continue
+	rawItems         map[string]json.RawMessage // returned as is by wbgetentities
+}
+
+// linksJSON answers prop=links, listing for each requested page only the
+// links that are among pltitles.
+func (w *fakeWiki) linksJSON(v url.Values) map[string]any {
+	want := map[string]bool{}
+	for _, t := range strings.Split(v.Get("pltitles"), "|") {
+		want[t] = true
+	}
+	type pair struct{ from, to string }
+	var order []string
+	var pairs []pair
+	for _, t := range strings.Split(v.Get("titles"), "|") {
+		n := ucfirst(t)
+		if r, ok := w.redirects[n]; ok && v.Get("redirects") == "1" {
+			n = r[0]
+		}
+		order = append(order, n)
+		for _, l := range w.articleLinks[n] {
+			if want[l] {
+				pairs = append(pairs, pair{n, l})
+			}
+		}
+	}
+	start, _ := strconv.Atoi(v.Get("plcontinue"))
+	end, more := len(pairs), false
+	if w.linksPerResponse > 0 && start+w.linksPerResponse < end {
+		end, more = start+w.linksPerResponse, true
+	}
+	var pages []map[string]any
+	for _, n := range order {
+		pg := map[string]any{"ns": 0, "title": n}
+		var links []map[string]any
+		for _, p := range pairs[start:end] {
+			if p.from == n {
+				links = append(links, map[string]any{"ns": 0, "title": p.to})
+			}
+		}
+		if links != nil {
+			pg["links"] = links
+		}
+		pages = append(pages, pg)
+	}
+	out := map[string]any{"query": map[string]any{"pages": pages}}
+	if more {
+		out["continue"] = map[string]any{"plcontinue": strconv.Itoa(end), "continue": "||"}
+	}
+	return out
 }
 
 func ucfirst(s string) string {
@@ -83,6 +137,10 @@ func (w *fakeWiki) answer(raw string) (any, error) {
 	case u.Host == "www.wikidata.org" && v.Get("action") == "wbgetentities":
 		ents := map[string]any{}
 		for _, id := range strings.Split(v.Get("ids"), "|") {
+			if raw, ok := w.rawItems[id]; ok {
+				ents[id] = raw
+				continue
+			}
 			it, ok := w.items[id]
 			if !ok {
 				ents[id] = map[string]any{"id": id, "missing": ""}
@@ -104,15 +162,21 @@ func (w *fakeWiki) answer(raw string) (any, error) {
 			for _, a := range it.aliases {
 				aliases = append(aliases, map[string]any{"language": "en", "value": a})
 			}
-			ents[id] = map[string]any{
+			ent := map[string]any{
 				"id":           id,
 				"labels":       map[string]any{"en": map[string]any{"value": it.label}},
 				"descriptions": map[string]any{"en": map[string]any{"value": it.desc}},
 				"aliases":      map[string]any{"en": aliases},
 				"claims":       claims,
 			}
+			if it.sitelink != "" {
+				ent["sitelinks"] = map[string]any{"enwiki": map[string]any{"site": "enwiki", "title": it.sitelink}}
+			}
+			ents[id] = ent
 		}
 		return map[string]any{"entities": ents}, nil
+	case u.Host == "en.wikipedia.org" && v.Get("prop") == "links":
+		return w.linksJSON(v), nil
 	case u.Host == "en.wikipedia.org" && v.Get("list") == "search":
 		var hits []any
 		for _, t := range w.search[v.Get("srsearch")] {

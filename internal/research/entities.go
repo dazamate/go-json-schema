@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/url"
 	"regexp"
+	"slices"
 	"strings"
 
 	"github.com/dazamate/go-json-schema/internal/browser"
@@ -238,10 +239,14 @@ type wikiResp struct {
 			Title string `json:"title"`
 		} `json:"search"`
 	} `json:"query"`
+	Continue map[string]string `json:"continue"`
 }
 
 type wikiRespPage struct {
-	Title       string            `json:"title"`
+	Title string `json:"title"`
+	Links []struct {
+		Title string `json:"title"`
+	} `json:"links"`
 	Missing     bool              `json:"missing"`
 	Invalid     bool              `json:"invalid"`
 	Description string            `json:"description"`
@@ -261,7 +266,9 @@ type lookup struct {
 }
 
 // titles looks titles up, following redirects, keyed by the input title.
+// Titles go out sorted, so the same set always makes the same requests.
 func (r *resolver) titles(titles []string) (map[string]lookup, error) {
+	titles = slices.Sorted(slices.Values(titles))
 	var urls []string
 	var batches [][]string
 	for start := 0; start < len(titles); start += batchSize {
