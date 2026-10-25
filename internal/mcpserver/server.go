@@ -28,11 +28,11 @@ const instructions = `Builds entity-stuffed schema.org JSON-LD for a keyword, Zi
 Workflow:
 1. serp(keyword, country, language, near for a city, and any other Google params): top Google results, People also ask, related searches, autocomplete, and bold_terms: the words Google bolds in snippets as matches for the keyword (variants, synonyms, entity names).
 2. page_terms(each result's url, or its link where serp gave no url, in rank order, junk such as videos or forums dropped): words and 2-3 word phrases ranked across the pages, the entities competitors already put in their schema, and, when a TextRazor key is configured, the pages' entities and topics linked to Wikipedia in context. rho is each term's rank correlation, as in Cora SEO Software: negative means higher-ranked pages use it more; significant marks the ones that pass the 95% test.
-3. resolve_entities(candidates): page_terms entities by their exact name (already disambiguated in context), then bold_terms, phrases, schema_terms and related searches. Returns Wikipedia, Wikidata and Google Knowledge Graph IDs. Use each entity's "thing" node: topics and the top entities for about, the rest for mentions. Choose among candidates for ambiguous and missing phrases.
+3. select_entities(page_url, keyword): the about and mentions entities for our page, each with a ready thing node. Use them as given: add none, drop none. page_terms entities and resolve_entities lookups no longer feed about or mentions; use resolve_entities for other entity properties such as areaServed.
 4. type_properties, enum_values, property_info: every property a type takes, so nothing applicable is left out.
 5. build_jsonld(draft): errors to fix and the final script tag.
 
-serp, page_terms and resolve_entities fetch through the ChromiumFish browser and fail with install steps if it is missing. The only call outside it is page_terms sending page text it already fetched to TextRazor. Every request to Google (a search, or a Google redirect link that is followed) waits for a cooldown since the previous one, shared by all schema-mcp processes, so Google is never hit in bursts. Cached results skip it. The vocabulary tools work offline. The stuffing guide is the stuffing_guide prompt.`
+serp, page_terms, resolve_entities and select_entities fetch through the ChromiumFish browser and fail with install steps if it is missing. The only calls outside it are page_terms and select_entities sending page text they already fetched to TextRazor, and select_entities sending it to Azure AI Language when that is configured. Every request to Google (a search, or a Google redirect link that is followed) waits for a cooldown since the previous one, shared by all schema-mcp processes, so Google is never hit in bursts. Cached results skip it. The vocabulary tools work offline. The stuffing guide is the stuffing_guide prompt.`
 
 // New returns the MCP server. A nil researcher leaves the web tools out.
 func New(vocab *vocabtool.Tool, res *research.Researcher, version string) *mcp.Server {
@@ -151,6 +151,30 @@ type entityArgs struct {
 	Language string   `json:"language,omitempty" jsonschema:"Wikipedia edition, e.g. en, de; default en"`
 }
 
+type selectArgs struct {
+	URL                  string   `json:"url" jsonschema:"our page: any URL the browser can load, including localhost"`
+	Keyword              string   `json:"keyword" jsonschema:"the page's target keyword"`
+	Language             string   `json:"language,omitempty" jsonschema:"Wikipedia edition for titles and sitelinks; default the page's lang, else en"`
+	MinRelevance         *float64 `json:"min_relevance,omitempty" jsonschema:"lowest TextRazor relevance for a page entity, 0 to 1; default 0.3"`
+	MinTopic             *float64 `json:"min_topic,omitempty" jsonschema:"lowest topic score for a page entity, 0 to 1; default 0.5"`
+	MinKeywordSimilarity *float64 `json:"min_keyword_similarity,omitempty" jsonschema:"lowest similarity between a theme and the keyword, 0 to 1; default 0.40"`
+	MinPageSimilarity    *float64 `json:"min_page_similarity,omitempty" jsonschema:"lowest similarity between a theme and the page, 0 to 1; default 0.55"`
+}
+
+// settings applies the cutoffs that were passed over the defaults.
+func (a selectArgs) settings() research.SelectSettings {
+	st := research.DefaultSelectSettings
+	for _, c := range []struct {
+		in  *float64
+		out *float64
+	}{{a.MinRelevance, &st.MinRelevance}, {a.MinTopic, &st.MinTopic}, {a.MinKeywordSimilarity, &st.MinKeywordSimilarity}, {a.MinPageSimilarity, &st.MinPageSimilarity}} {
+		if c.in != nil {
+			*c.out = *c.in
+		}
+	}
+	return st
+}
+
 func addResearchTools(s *mcp.Server, r *research.Researcher) {
 	wait := cooldownNote(r.Google.Interval())
 	mcp.AddTool(s, &mcp.Tool{
@@ -188,6 +212,20 @@ func addResearchTools(s *mcp.Server, r *research.Researcher) {
 		Annotations: readOnly(true),
 	}, func(ctx context.Context, _ *mcp.CallToolRequest, in entityArgs) (*mcp.CallToolResult, research.EntityReport, error) {
 		out, err := r.ResolveEntities(ctx, research.EntityQuery{Phrases: in.Phrases, Language: in.Language})
+		return nil, out, err
+	})
+	mcp.AddTool(s, &mcp.Tool{
+		Name:         "select_entities",
+		OutputSchema: outputSchema[research.SelectReport](),
+		Description: "Choose the about and mentions entities for OUR page and its target keyword. The page is read through the browser (localhost works), its title and text are linked to Wikipedia and Wikidata by TextRazor in context, and every entity is checked by its Wikidata item. " +
+			"about is the keyword's own entities (found on the page, and looked up as exact Wikipedia titles from the keyword's words and phrases) plus the page's themes, which the page may not name. mentions holds only entities the page names. There are no caps on either. " +
+			"Each entry comes with its ready schema.org thing node (Wikipedia, Wikidata and Google kgmid sameAs, Bing ID, alternateName from the words the page uses, additionalType): use it as given. dropped lists what was rejected and why, so a looser cutoff can be judged. " +
+			"The four defaults (min_relevance 0.3, min_topic 0.5, min_keyword_similarity 0.40, min_page_similarity 0.55) are our judgement, set by eye from one calibration page, not from any Google source; each is a number from 0 to 1. " +
+			"It needs a TextRazor key (textrazor.api_key; free plan: 500 requests a day) and fails without one. An Azure AI Language key (Bing IDs) and the local embedding model (themes; about 220 MB downloaded on first use) are optional, and note says which are missing and why. " +
+			"The page text goes to TextRazor and, when configured, Azure; Wikipedia and Wikidata calls go through the browser. Results are cached for a week by the text sent, but the page itself is always read fresh.",
+		Annotations: readOnly(true),
+	}, func(ctx context.Context, req *mcp.CallToolRequest, in selectArgs) (*mcp.CallToolResult, research.SelectReport, error) {
+		out, err := r.SelectEntities(withProgress(ctx, req), research.SelectQuery{URL: in.URL, Keyword: in.Keyword, Language: in.Language, Settings: in.settings()})
 		return nil, out, err
 	})
 }
@@ -251,19 +289,21 @@ func addPrompts(s *mcp.Server) {
 		if strings.TrimSpace(a["keyword"]) == "" {
 			return nil, errors.New("keyword is required")
 		}
+		if strings.TrimSpace(a["page_url"]) == "" {
+			return nil, errors.New("page_url is required: select_entities reads our page for about and mentions")
+		}
 		pageType := orDefault(a["page_type"], "WebPage")
 		country, lang := orDefault(a["country"], "us"), orDefault(a["language"], "en")
 		wiki, _, _ := strings.Cut(strings.ToLower(lang), "-")
 		text := fmt.Sprintf(`Build over-the-top schema.org JSON-LD for a page targeting %q (main type %s, country %s, language %s).
 
 1. Call serp with keyword %[1]q, country %[3]s and language %[4]s (add near for a city when the page is local). Note People also ask questions for an FAQ, related searches as keywords, and bold_terms as the variants Google matches for the keyword.
-2. Call page_terms with each organic result's url, or its link where serp gave no url, in rank order, leaving out videos, forums and other junk. Favour terms whose rho is negative and significant: higher-ranked pages use them more.
-3. Call resolve_entities with language %[5]s with page_terms entities by exact name and topics by label first, then candidates from bold_terms, phrases, words, schema_terms, related searches and questions.
-4. Choose 3-10 core entities for about (topics and the highest-scoring entities) and 10-40 supporting ones for mentions, using each entity's thing node. For ambiguous or missing phrases, pick a candidate and resolve it again, or keep the phrase as a keyword only.
-5. Call type_properties for %s and fill every property that fits: keywords, knowsAbout, alternateName, additionalType, disambiguatingDescription and the type's own properties.
-6. Call build_jsonld with the draft, fix every error, and return the script tag.
+2. Call page_terms with each organic result's url, or its link where serp gave no url, in rank order, leaving out videos, forums and other junk. Favour terms whose rho is negative and significant: higher-ranked pages use them more. Its entities and topics show what competitors cover: use them for keywords and the page's copy, not for about or mentions.
+3. Call select_entities with url %[6]q, keyword %[1]q and language %[5]s. Put its about and mentions in the graph as given.
+4. Call type_properties for %[2]s and fill every property that fits: keywords, knowsAbout, alternateName, additionalType, disambiguatingDescription and the type's own properties. Use resolve_entities for other entity properties such as areaServed.
+5. Call build_jsonld with the draft, fix every error, and return the script tag.
 
-%[7]s`, a["keyword"], pageType, country, lang, wiki, pageType, guide)
+%[7]s`, a["keyword"], pageType, country, lang, wiki, strings.TrimSpace(a["page_url"]), guide)
 		return &mcp.GetPromptResult{Messages: []*mcp.PromptMessage{{Role: "user", Content: &mcp.TextContent{Text: text}}}}, nil
 	})
 }

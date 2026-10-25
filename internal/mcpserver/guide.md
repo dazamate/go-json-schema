@@ -1,35 +1,34 @@
 # Entity schema stuffing guide
 
-<!-- Adapted from SEO_FIELD_GUIDE in recipe-create-pipeline/scripts/lib/pipeline_common.py (2026-10-24). Update both together. -->
+<!-- Adapted from SEO_FIELD_GUIDE in recipe-create-pipeline/scripts/lib/pipeline_common.py (2026-10-24). Update both together, except the about, mentions, alternateName and additionalType rules, which are schema-mcp's own since 2026-10-25. -->
 
 Pump these properties hard for knowledge-graph and topical coverage. Prefer real,
 authoritative URLs: Wikidata, Wikipedia, Google KG machine-ID search links, DBpedia,
 ProductOntology, USDA FDC for foods. Never invent kgmid IDs: use the ones
-resolve_entities returns, or leave them out.
+select_entities or resolve_entities returns, or leave them out.
 
 ## Properties
 
 | schema.org | shape | what to put |
 |------------|-------|-------------|
 | sameAs | URL[] | Identity links for THIS entity (Wikidata, Wikipedia, KG search link, DBpedia, FDC) |
-| alternateName | Text[] | Aliases, translations, synonyms and misspellings people search for |
-| additionalType | URL[] | Class URIs: Wikidata class, productontology, schema.org types, Wikipedia |
+| alternateName | Text[] | On about/mentions entities: only words the page uses (select_entities sets them). Elsewhere: aliases, translations, synonyms and misspellings people search for |
+| additionalType | URL[] | On about/mentions entities: at most 2 Wikidata classes (select_entities sets them). Elsewhere: class URIs (Wikidata class, productontology, schema.org types, Wikipedia) |
 | disambiguatingDescription | Text | 1–2 sentences telling it apart from lookalikes |
 | keywords | Text[] | Dense topical keyword dump |
 | knowsAbout | Text[] or Thing[] | Topics this entity is authoritative on |
-| about | Thing[] | PRIMARY subjects: core entities, each with sameAs |
-| mentions | Thing[] | Secondary entities: techniques, related foods, tools, places |
+| about | Thing[] | The keyword's topic family from select_entities, as given: the keyword's own entities and the page's themes |
+| mentions | Thing[] | Entities the page names, from select_entities, as given |
 | mainEntity / FAQPage | Question[] | Real Q&A, e.g. from People also ask |
 
 ## Volume targets (be extreme)
 
 - sameAs: 4–12 URLs when the entity is well known
-- alternateName: 8–25 aliases
-- additionalType: 4–15 type URLs
+- alternateName: 8–25 aliases (not about/mentions entities)
+- additionalType: 4–15 type URLs (not about/mentions entities)
 - keywords: 15–40
 - knowsAbout: 15–40
-- about: 3–10 primary Things
-- mentions: 10–40 Things, with real sameAs whenever resolve_entities found them
+- about, mentions: no targets; select_entities decides
 - FAQ: 5–12 questions
 
 ## about vs mentions vs knowsAbout vs keywords

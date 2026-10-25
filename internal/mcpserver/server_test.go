@@ -80,7 +80,7 @@ func TestServerListsAllTools(t *testing.T) {
 		got = append(got, tool.Name)
 	}
 	slices.Sort(got)
-	want := []string{"build_jsonld", "enum_values", "page_terms", "property_info", "resolve_entities", "serp", "type_properties"}
+	want := []string{"build_jsonld", "enum_values", "page_terms", "property_info", "resolve_entities", "select_entities", "serp", "type_properties"}
 	if !slices.Equal(got, want) {
 		t.Fatalf("tools = %v, want %v", got, want)
 	}
@@ -146,7 +146,7 @@ func TestSerpToolReturnsResults(t *testing.T) {
 
 func TestEntitySchemaPromptEmbedsGuide(t *testing.T) {
 	cs := connect(t, nil)
-	res, err := cs.GetPrompt(context.Background(), &mcp.GetPromptParams{Name: "entity_schema", Arguments: map[string]string{"keyword": "lemon herb chicken", "page_type": "Recipe"}})
+	res, err := cs.GetPrompt(context.Background(), &mcp.GetPromptParams{Name: "entity_schema", Arguments: map[string]string{"keyword": "lemon herb chicken", "page_type": "Recipe", "page_url": "http://localhost:8080/p/"}})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -306,19 +306,19 @@ func TestSerpToolReportsTheCooldownAsProgress(t *testing.T) {
 
 func TestEntitySchemaPromptPassesCountryAndLanguage(t *testing.T) {
 	cs := connect(t, nil)
-	res, err := cs.GetPrompt(context.Background(), &mcp.GetPromptParams{Name: "entity_schema", Arguments: map[string]string{"keyword": "plumber", "country": "au", "language": "en-GB"}})
+	res, err := cs.GetPrompt(context.Background(), &mcp.GetPromptParams{Name: "entity_schema", Arguments: map[string]string{"keyword": "plumber", "page_url": "http://localhost:8080/p/", "country": "au", "language": "en-GB"}})
 	if err != nil {
 		t.Fatal(err)
 	}
 	text := res.Messages[0].Content.(*mcp.TextContent).Text
-	if !strings.Contains(text, `serp with keyword "plumber", country au and language en-GB`) || !strings.Contains(text, "resolve_entities with language en") {
+	if !strings.Contains(text, `serp with keyword "plumber", country au and language en-GB`) || !strings.Contains(text, "select_entities with url") || !strings.Contains(text, "language en") {
 		t.Fatalf("prompt = %s", text)
 	}
 }
 
 func TestEntitySchemaPromptUsesLinkedEntitiesAndBoldTerms(t *testing.T) {
 	cs := connect(t, nil)
-	res, err := cs.GetPrompt(context.Background(), &mcp.GetPromptParams{Name: "entity_schema", Arguments: map[string]string{"keyword": "plumber"}})
+	res, err := cs.GetPrompt(context.Background(), &mcp.GetPromptParams{Name: "entity_schema", Arguments: map[string]string{"keyword": "plumber", "page_url": "http://localhost:8080/p/"}})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -327,5 +327,80 @@ func TestEntitySchemaPromptUsesLinkedEntitiesAndBoldTerms(t *testing.T) {
 		if !strings.Contains(text, want) {
 			t.Errorf("prompt does not mention %s", want)
 		}
+	}
+}
+
+func TestSelectEntitiesToolWithoutTextRazorIsAToolError(t *testing.T) {
+	cs := connect(t, &research.Researcher{})
+	out, isErr := callText(t, cs, "select_entities", map[string]any{"url": "http://localhost:8080/p/", "keyword": "plumber"})
+	if !isErr || !strings.Contains(out, "textrazor.api_key") {
+		t.Fatalf("out = %s, isErr = %v", out, isErr)
+	}
+}
+
+func TestSelectEntitiesToolRejectsACutoffAboveOne(t *testing.T) {
+	cs := connect(t, &research.Researcher{})
+	out, isErr := callText(t, cs, "select_entities", map[string]any{"url": "http://localhost:8080/p/", "keyword": "plumber", "min_topic": 2})
+	if !isErr {
+		t.Fatalf("out = %s, want a tool error", out)
+	}
+}
+
+func TestSelectEntitiesToolDescriptionSaysTheDefaultsAreJudgement(t *testing.T) {
+	cs := connect(t, &research.Researcher{})
+	res, err := cs.ListTools(context.Background(), nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, tool := range res.Tools {
+		if tool.Name != "select_entities" {
+			continue
+		}
+		for _, want := range []string{"our judgement", "one calibration page"} {
+			if !strings.Contains(tool.Description, want) {
+				t.Errorf("description does not contain %q", want)
+			}
+		}
+		return
+	}
+	t.Fatal("no select_entities tool")
+}
+
+func TestEntitySchemaPromptRequiresPageURL(t *testing.T) {
+	cs := connect(t, nil)
+	_, err := cs.GetPrompt(context.Background(), &mcp.GetPromptParams{Name: "entity_schema", Arguments: map[string]string{"keyword": "plumber"}})
+	if err == nil || !strings.Contains(err.Error(), "page_url is required") {
+		t.Fatalf("err = %v", err)
+	}
+}
+
+func TestEntitySchemaPromptCallsSelectEntities(t *testing.T) {
+	cs := connect(t, nil)
+	res, err := cs.GetPrompt(context.Background(), &mcp.GetPromptParams{Name: "entity_schema", Arguments: map[string]string{"keyword": "plumber", "page_url": "http://localhost:8080/p/"}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	text := res.Messages[0].Content.(*mcp.TextContent).Text
+	if !strings.Contains(text, `select_entities with url "http://localhost:8080/p/", keyword "plumber"`) || !strings.Contains(text, "as given") {
+		t.Fatalf("prompt = %s", text)
+	}
+	if strings.Contains(text, "Choose 3-10 core entities") {
+		t.Fatalf("prompt still has the old about/mentions step: %s", text)
+	}
+}
+
+func TestGuideEntityRows(t *testing.T) {
+	for _, row := range []string{"| about |", "| mentions |"} {
+		i := strings.Index(guide, row)
+		if i < 0 {
+			t.Fatalf("guide has no %s row", row)
+		}
+		line, _, _ := strings.Cut(guide[i:], "\n")
+		if !strings.Contains(line, "select_entities") {
+			t.Errorf("row %q does not mention select_entities", line)
+		}
+	}
+	if strings.Contains(guide, "about: 3–10") {
+		t.Error("guide still has the about volume target")
 	}
 }

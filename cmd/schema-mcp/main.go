@@ -29,8 +29,10 @@ import (
 
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 
+	"github.com/dazamate/go-json-schema/internal/azurelang"
 	"github.com/dazamate/go-json-schema/internal/browser"
 	"github.com/dazamate/go-json-schema/internal/cooldown"
+	"github.com/dazamate/go-json-schema/internal/embed"
 	"github.com/dazamate/go-json-schema/internal/mcpserver"
 	"github.com/dazamate/go-json-schema/internal/research"
 	"github.com/dazamate/go-json-schema/internal/textrazor"
@@ -78,6 +80,15 @@ func run(httpAddr, seed, cacheDir string, googleWait time.Duration, cfg Config) 
 	if cfg.TextRazor.APIKey != "" {
 		res.Linker = &textrazor.Client{Key: cfg.TextRazor.APIKey}
 		res.LinkMaxBytes = cfg.TextRazor.MaxKBPerPage * 1024
+	}
+	if cfg.AzureLanguage.Endpoint != "" {
+		res.Bing = &azurelang.Client{Endpoint: cfg.AzureLanguage.Endpoint, Key: cfg.AzureLanguage.APIKey}
+	}
+	// The local model is fetched into the user cache dir on first use.
+	if dir := defaultCacheDir(); dir != "" {
+		enc := embed.NewONNX(filepath.Join(dir, "models"), research.Progress)
+		defer enc.Close()
+		res.Themes = &embed.Scorer{Enc: enc}
 	}
 	if cacheDir != "" {
 		res.Cache = research.NewCache(cacheDir)
