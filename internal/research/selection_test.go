@@ -222,6 +222,22 @@ func TestSelectEntitiesGateAndRoles(t *testing.T) {
 	}
 }
 
+func TestSelectEntitiesMentionNamedOnlyInTheTitleDropped(t *testing.T) {
+	f := newSelectFixture()
+	f.raw.Title = "Moving Cost Calculator | Acme Movers"
+	f.ents = append(f.ents, pageMention("Acme Corporation", "Q9", "/m/9", "Acme", 0.9))
+	f.topics = append(f.topics, textrazor.Topic{Label: "Acme Corporation", WikidataID: "Q9", Score: 1})
+	f.wiki.items["Q9"] = wikiItem{sitelink: "Acme Corporation", claims: map[string][]string{"P646": {"/m/9"}}}
+	rep := runSelect(t, f.researcher(), selectQuery())
+	if got := selNames(rep.Mentions); !slices.Equal(got, []string{"Truck", "Billiard table"}) {
+		t.Errorf("mentions = %v", got)
+	}
+	d, ok := findDropped(rep, "Acme Corporation")
+	if !ok || d.Reason != ReasonNotInPageText || d.Source != SourcePage || d.QID != "Q9" || num(d.Relevance) != 0.9 || num(d.Topic) != 1 {
+		t.Errorf("dropped = %+v", rep.Dropped)
+	}
+}
+
 func TestSelectEntitiesLinkToAnotherHostDoesNotCount(t *testing.T) {
 	f := newSelectFixture()
 	f.raw.Links = []pageLink{{Href: "https://other.example/x", Text: "Moving a pool table"}}
@@ -467,6 +483,7 @@ func deItem(title, freebase string) json.RawMessage {
 func TestSelectEntitiesBingNotForGerman(t *testing.T) {
 	f := newSelectFixture()
 	f.raw.Lang = "de"
+	f.raw.Text = "Die Umzugsfirma fährt den LKW."
 	f.ents = []textrazor.Entity{pageMention("Umzugsunternehmen", "Q1", "/m/a", "Umzugsfirma", 0.8), pageMention("Lastkraftwagen", "Q2", "/m/b", "LKW", 0.6)}
 	f.topics = []textrazor.Topic{{Label: "Umzug", WikidataID: "Q1", Score: 1}, {Label: "LKW", WikidataID: "Q2", Score: 0.9}}
 	f.wiki = &fakeWiki{pages: map[string]wikiPage{}, rawItems: map[string]json.RawMessage{

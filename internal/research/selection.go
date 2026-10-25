@@ -28,11 +28,12 @@ const (
 	SourceTheme   = "theme"   // a TextRazor topic of the page
 )
 
-// Reasons an entity is dropped before its identity is checked.
+// Reasons an entity is dropped, besides the identity reasons.
 const (
 	ReasonBelowRelevance  = "below_relevance"
 	ReasonBelowTopic      = "below_topic"
 	ReasonBelowSimilarity = "below_similarity"
+	ReasonNotInPageText   = "not_in_page_text" // a mentions entity named only in the title
 )
 
 // SelectSettings are the cutoffs select_entities applies, each 0 to 1.
@@ -192,7 +193,7 @@ func (r *Researcher) SelectEntities(ctx context.Context, q SelectQuery) (SelectR
 	if !hit {
 		rep.TextRazor.Units = res.Units
 	}
-	s := newSelection(res, page.Links, page.Page.URL, words, q.Settings)
+	s := newSelection(res, page.Text, page.Links, page.Page.URL, words, q.Settings)
 
 	grams := keywordGrams(keyword)
 	var cands []*candidate
@@ -380,6 +381,7 @@ func (c *candidate) drop(reason string) Dropped {
 // selection is the page's entities and topics as TextRazor linked them.
 type selection struct {
 	set     SelectSettings
+	text    string // the page's main text, without its title
 	ents    []*pageEntity
 	byQID   map[string]*pageEntity
 	topics  map[string]textrazor.Topic // the best-scored topic per Wikidata item
@@ -390,8 +392,8 @@ type selection struct {
 // newSelection groups the mentions by Wikidata item, finds each one's
 // own-site links and puts it through the gate. Mentions with no item
 // (numbers, dates, e-mail addresses) are left out unlisted.
-func newSelection(res textrazor.Result, links []pageLink, finalURL string, words []string, set SelectSettings) *selection {
-	s := &selection{set: set, byQID: map[string]*pageEntity{}, topics: map[string]textrazor.Topic{}}
+func newSelection(res textrazor.Result, text string, links []pageLink, finalURL string, words []string, set SelectSettings) *selection {
+	s := &selection{set: set, text: text, byQID: map[string]*pageEntity{}, topics: map[string]textrazor.Topic{}}
 	for _, t := range res.Topics {
 		if t.WikidataID == "" {
 			continue
@@ -444,7 +446,8 @@ func (s *selection) known() []titleQID {
 // candidates turns the gated page entities, the lookup hits and the topics
 // into one candidate per Wikidata item. A hit on a page entity's item moves
 // that entity to the lookups, so no item is chosen twice. Page entities
-// failing the gate go to s.dropped.
+// failing the gate, and would-be mentions not named in the main text, go to
+// s.dropped.
 func (s *selection) candidates(hits []lookupHit, grams []string) []*candidate {
 	var out []*candidate
 	hitQIDs := map[string]bool{}
@@ -476,12 +479,17 @@ func (s *selection) candidates(hits []lookupHit, grams []string) []*candidate {
 			if e.rel < s.set.MinRelevance {
 				reason = ReasonBelowRelevance
 			}
-			s.dropped = append(s.dropped, Dropped{Name: e.title, QID: e.qid, Source: SourcePage, Relevance: f64(e.rel), Topic: f64(e.topic), Reason: reason})
+			s.dropped = append(s.dropped, e.drop(reason))
 			continue
 		}
 		role := roleMention
 		if e.keyword {
 			role, by = roleKeyword, append(by, "keyword")
+		} else if !slices.ContainsFunc(e.matched, func(f string) bool { return hasWords(s.text, f) }) {
+			// Every mentions entity is named in the main text, not only in
+			// the title TextRazor also read.
+			s.dropped = append(s.dropped, e.drop(ReasonNotInPageText))
+			continue
 		}
 		c := &candidate{role: role, title: e.title, freebase: e.freebase, Selected: e.selected(SourcePage)}
 		c.QualifiedBy = by
@@ -496,6 +504,10 @@ func (s *selection) candidates(hits []lookupHit, grams []string) []*candidate {
 			Matched: []string{}, LinkedTo: []string{}, QualifiedBy: []string{"similarity"}}})
 	}
 	return out
+}
+
+func (e *pageEntity) drop(reason string) Dropped {
+	return Dropped{Name: e.title, QID: e.qid, Source: SourcePage, Relevance: f64(e.rel), Topic: f64(e.topic), Reason: reason}
 }
 
 func (e *pageEntity) selected(source string) Selected {
