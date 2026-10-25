@@ -122,6 +122,49 @@ func (r *resolver) graphHood(centre string) (graphHood, error) {
 	return h, nil
 }
 
+// linkedMembers returns, for each title, the sorted distinct members it
+// links to or that link to it, itself excluded. Titles with none are left
+// out.
+func (r *resolver) linkedMembers(titles, members []string) (map[string][]string, error) {
+	pairs, err := r.linkPairs(titles, members)
+	if err != nil {
+		return nil, err
+	}
+	isTitle, isMember := map[string]bool{}, map[string]bool{}
+	for _, t := range titles {
+		isTitle[t] = true
+	}
+	for _, m := range members {
+		isMember[m] = true
+	}
+	sets := map[string]map[string]bool{}
+	add := func(title, member string) {
+		if title == member {
+			return
+		}
+		if sets[title] == nil {
+			sets[title] = map[string]bool{}
+		}
+		sets[title][member] = true
+	}
+	for p := range pairs {
+		if isTitle[p[0]] && isMember[p[1]] {
+			add(p[0], p[1])
+		}
+		if isTitle[p[1]] && isMember[p[0]] {
+			add(p[1], p[0])
+		}
+	}
+	out := map[string][]string{}
+	for title, set := range sets {
+		for m := range set {
+			out[title] = append(out[title], m)
+		}
+		slices.Sort(out[title])
+	}
+	return out, nil
+}
+
 // cachedHood is graphHood behind the cache.
 func (r *Researcher) cachedHood(wr *resolver, centre string) (graphHood, error) {
 	key := wr.lang + "|" + centre

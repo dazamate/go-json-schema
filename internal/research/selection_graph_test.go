@@ -79,3 +79,48 @@ func TestCachedHoodFetchesOnce(t *testing.T) {
 		t.Errorf("hoods differ: %+v vs %+v", first, second)
 	}
 }
+
+func TestLinkedMembersBothDirections(t *testing.T) {
+	w := &fakeWiki{articleLinks: map[string][]string{
+		"Foreign exchange market": {"Technical analysis", "Gap (chart pattern)"},
+		"Chart pattern":           {"Foreign exchange market"},
+		"Candle":                  {"Chart pattern"},
+		"Technical analysis":      {"Technical analysis", "Gap (chart pattern)"},
+	}}
+	got, err := kwResolver(t, w).linkedMembers(
+		[]string{"Foreign exchange market", "Candle", "Technical analysis"},
+		[]string{"Technical analysis", "Gap (chart pattern)", "Chart pattern"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := map[string][]string{
+		"Foreign exchange market": {"Chart pattern", "Gap (chart pattern)", "Technical analysis"},
+		"Candle":                  {"Chart pattern"},
+		"Technical analysis":      {"Gap (chart pattern)"},
+	}
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("linkedMembers = %v, want %v", got, want)
+	}
+}
+
+func TestLinkedMembersBatchesAndContinues(t *testing.T) {
+	w := &fakeWiki{articleLinks: map[string][]string{}, linksPerResponse: 1}
+	var titles []string
+	for i := 0; i < 60; i++ {
+		title := fmt.Sprintf("T%02d", i)
+		titles = append(titles, title)
+		w.articleLinks[title] = []string{"M1"}
+	}
+	got, err := kwResolver(t, w).linkedMembers(titles, []string{"M1"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(got) != 60 {
+		t.Fatalf("%d titles linked, want 60", len(got))
+	}
+	for _, title := range titles {
+		if !reflect.DeepEqual(got[title], []string{"M1"}) {
+			t.Errorf("%s = %v, want [M1]", title, got[title])
+		}
+	}
+}
