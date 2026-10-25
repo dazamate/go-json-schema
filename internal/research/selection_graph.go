@@ -2,6 +2,8 @@ package research
 
 import (
 	"cmp"
+	"context"
+	"fmt"
 	"net/url"
 	"regexp"
 	"slices"
@@ -301,4 +303,205 @@ func pruneNeighbours(ns []neighbour, sims map[string]float64, named map[string][
 	slices.SortFunc(unscored, func(a, b graphNeighbour) int { return strings.Compare(a.Title, b.Title) })
 	p.Kept = append(scored, unscored...)
 	return p
+}
+
+// GraphReport is the keyword's graph as select_entities built it.
+type GraphReport struct {
+	Centres    []string `json:"centres"`
+	OutLinks   int      `json:"out_links"`
+	InLinks    int      `json:"in_links"`
+	InLinksCut bool     `json:"in_links_cut,omitempty"`
+	Neighbours int      `json:"neighbours"` // resolved articles linked to or from the centres
+	Kept       int      `json:"kept"`       // neighbours kept after pruning and identity
+	Cut        int      `json:"cut"`
+	Capped     int      `json:"capped"`
+}
+
+// graphMember is a centre or a kept neighbour, its identity checked.
+type graphMember struct {
+	graphNeighbour
+	Centre bool
+	id     identity
+}
+
+type builtGraph struct {
+	Members []graphMember       // centres in candidate order, then kept neighbours in pruned order
+	Links   map[string][]string // a page entity or extra title -> the distinct members it links with
+	Dropped []Dropped           // neighbours cut by score or failing identity
+	Report  GraphReport
+	Scored  bool // the model scored the neighbours
+}
+
+const minGraphNeighbours = 3
+
+// buildGraph builds the keyword's graph from the centre groups. It returns
+// nil and a note when no group's centre passes identity, or when fewer than
+// 3 neighbours are kept after identity. extra is the lookup hits that
+// TextRazor did not link on the page.
+func (r *Researcher) buildGraph(ctx context.Context, wr *resolver, keyword string, s *selection, extra []titleQID, groups [][]titleQID, set SelectSettings) (*builtGraph, []string, error) {
+	if len(groups) == 0 {
+		return nil, nil, nil
+	}
+	var centres []graphMember
+	var firstReason string
+	for i, g := range groups {
+		var qids []string
+		for _, c := range g {
+			qids = append(qids, c.QID)
+		}
+		items, err := wr.articleItems(qids)
+		if err != nil {
+			return nil, nil, err
+		}
+		for j, c := range g {
+			it, found := items[c.QID]
+			id, reason := checkIdentity(it, found, wr.lang, c.Title, "")
+			if reason != "" {
+				if i == 0 && j == 0 {
+					firstReason = reason
+				}
+				continue
+			}
+			centres = append(centres, graphMember{graphNeighbour: graphNeighbour{neighbour: neighbour{Title: c.Title, QID: c.QID}}, Centre: true, id: id})
+		}
+		if centres != nil {
+			break
+		}
+	}
+	if centres == nil {
+		return nil, []string{fmt.Sprintf("no centre: %s failed its identity check (%s): about uses the page's themes", groups[0][0].Title, firstReason)}, nil
+	}
+
+	var notes []string
+	var names []string
+	isCentre := map[string]bool{}
+	for _, c := range centres {
+		names = append(names, c.Title)
+		isCentre[c.Title] = true
+	}
+	joined := strings.Join(names, " and ")
+	rep := GraphReport{Centres: names}
+	merged := map[string]*neighbour{}
+	for _, c := range centres {
+		h, err := r.cachedHood(wr, c.Title)
+		if err != nil {
+			return nil, nil, err
+		}
+		rep.OutLinks += h.OutLinks
+		rep.InLinks += h.InLinks
+		if h.InLinksCut {
+			rep.InLinksCut = true
+			notes = append(notes, fmt.Sprintf("graph of %s: only its first %d in-links were read", c.Title, maxInLinks))
+		}
+		for _, n := range h.Neighbours {
+			if isCentre[n.Title] {
+				continue
+			}
+			m := merged[n.Title]
+			if m == nil {
+				cp := n
+				m = &cp
+				merged[n.Title] = m
+			}
+			m.Out, m.In = m.Out || n.Out, m.In || n.In
+		}
+	}
+	var ns []neighbour
+	for _, n := range merged {
+		ns = append(ns, *n)
+	}
+	slices.SortFunc(ns, func(a, b neighbour) int { return strings.Compare(a.Title, b.Title) })
+	rep.Neighbours = len(ns)
+
+	named := map[string][]string{}
+	for _, n := range ns {
+		if e := s.byQID[n.QID]; e != nil && len(e.matched) > 0 {
+			named[n.Title] = e.matched
+		} else if f := namedForms(n.Title, s.text); f != nil {
+			named[n.Title] = f
+		}
+	}
+
+	var sims map[string]float64
+	scored := false
+	switch {
+	case len(ns) == 0:
+	case r.Themes == nil:
+		notes = append(notes, "graph not scored: no embedding model is set up: only the neighbours the page names are kept")
+	default:
+		texts := make([]string, len(ns))
+		for i, n := range ns {
+			texts[i] = graphText(n)
+		}
+		got, err := r.Themes.Similarity(ctx, keyword, texts)
+		if err != nil {
+			notes = append(notes, fmt.Sprintf("graph not scored: %v: only the neighbours the page names are kept", err))
+			break
+		}
+		sims, scored = map[string]float64{}, true
+		for i, n := range ns {
+			sims[n.Title] = got[i]
+		}
+	}
+	p := pruneNeighbours(ns, sims, named, set)
+	rep.Cut, rep.Capped = p.Cut, p.Capped
+	dropped := p.Dropped
+
+	var qids []string
+	for _, k := range p.Kept {
+		qids = append(qids, k.QID)
+	}
+	items, err := wr.articleItems(qids)
+	if err != nil {
+		return nil, nil, err
+	}
+	members := centres
+	for _, k := range p.Kept {
+		freebase, source := "", SourceGraph
+		if e := s.byQID[k.QID]; e != nil {
+			freebase, source = e.freebase, SourcePage
+		}
+		it, found := items[k.QID]
+		id, reason := checkIdentity(it, found, wr.lang, k.Title, freebase)
+		if reason != "" {
+			d := Dropped{Name: k.Title, QID: k.QID, Source: source, Reason: reason}
+			if k.Sim != nil {
+				d.GraphSimilarity = f64(round3(*k.Sim))
+			}
+			dropped = append(dropped, d)
+			continue
+		}
+		members = append(members, graphMember{graphNeighbour: k, id: id})
+	}
+	rep.Kept = len(members) - len(centres)
+	if rep.Kept < minGraphNeighbours {
+		notes = append(notes, fmt.Sprintf("%s has %d kept neighbours (fewer than %d): about uses the page's themes", joined, rep.Kept, minGraphNeighbours))
+		return nil, notes, nil
+	}
+
+	var titles, memberTitles []string
+	seen := map[string]bool{}
+	for _, e := range s.ents {
+		if !seen[e.title] {
+			seen[e.title] = true
+			titles = append(titles, e.title)
+		}
+	}
+	for _, x := range extra {
+		if !seen[x.Title] {
+			seen[x.Title] = true
+			titles = append(titles, x.Title)
+		}
+	}
+	for _, m := range members {
+		memberTitles = append(memberTitles, m.Title)
+	}
+	links, err := wr.linkedMembers(titles, memberTitles)
+	if err != nil {
+		return nil, nil, err
+	}
+	if rep.Cut+rep.Capped > 0 {
+		notes = append(notes, fmt.Sprintf("graph of %s: %d cut below min_graph_similarity, %d over max_graph_neighbours", joined, rep.Cut, rep.Capped))
+	}
+	return &builtGraph{Members: members, Links: links, Dropped: dropped, Report: rep, Scored: scored}, notes, nil
 }

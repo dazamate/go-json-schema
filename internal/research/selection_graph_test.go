@@ -1,7 +1,11 @@
 package research
 
 import (
+	"context"
+	"strings"
+
 	"fmt"
+	"github.com/dazamate/go-json-schema/internal/textrazor"
 	"reflect"
 	"slices"
 	"testing"
@@ -308,5 +312,226 @@ func TestGraphText(t *testing.T) {
 	}
 	if got := graphText(neighbour{Title: "Gap"}); got != "Gap" {
 		t.Errorf("got %q", got)
+	}
+}
+
+const (
+	patKeyword = "price action trading"
+	patURL     = "https://forex.example/price-action-trading/"
+	patText    = "Price action trading reads every candle. Technical analysis and forex go together. Island reversals are rare, so trade the gap."
+)
+
+func patWiki() *fakeWiki {
+	item := func(title string, claims map[string][]string) wikiItem {
+		return wikiItem{sitelink: title, claims: claims}
+	}
+	return &fakeWiki{
+		pages: map[string]wikiPage{
+			"Price action trading": {qid: "Q1"}, "Technical analysis": {qid: "Q2", desc: "Security analysis methodology"},
+			"Gap (chart pattern)": {qid: "Q3", desc: "Price chart analysis concept"}, "ISBN": {qid: "Q4", desc: "Unique numeric book identifier"},
+			"Island reversal": {qid: "Q5"}, "Day trading": {qid: "Q6", desc: "Buying and selling within the same day"},
+			"Chart pattern": {qid: "Q7", desc: "Pattern within a chart"}, "Action": {qid: "Q8", disambig: true}, "Orphan": {},
+			"Foreign exchange market": {qid: "Q10"}, "Candle": {qid: "Q11"}, "Trade": {qid: "Q12"}, "Swing trading": {qid: "Q13"},
+			"Microeconomics": {qid: "Q14"},
+		},
+		redirects: map[string][2]string{"Price action": {"Price action trading", ""}},
+		items: map[string]wikiItem{
+			"Q1": item("Price action trading", nil), "Q2": item("Technical analysis", nil), "Q3": item("Gap (chart pattern)", nil),
+			"Q4": item("ISBN", nil), "Q5": item("Island reversal", nil), "Q6": item("Day trading", nil), "Q7": item("Chart pattern", nil),
+			"Q10": item("Foreign exchange market", nil), "Q11": item("Candle", nil), "Q12": item("Trade", nil),
+			"Q13": item("Swing trading", nil), "Q14": item("Microeconomics", nil),
+		},
+		articleLinks: map[string][]string{
+			"Price action trading":    {"Technical analysis", "Gap (chart pattern)", "ISBN", "Island reversal", "Action", "Orphan"},
+			"Day trading":             {"Price action trading"},
+			"Chart pattern":           {"Price action trading", "Foreign exchange market"},
+			"Foreign exchange market": {"Technical analysis", "Gap (chart pattern)"},
+			"Candle":                  {"Chart pattern"},
+			"Trade":                   {"Technical analysis", "Day trading"},
+			"Swing trading":           {"Technical analysis", "Gap (chart pattern)", "Chart pattern"},
+			"Technical analysis":      {"Gap (chart pattern)"},
+		},
+		linksHere: map[string][]string{"Price action trading": {"Day trading", "Chart pattern"}},
+	}
+}
+
+func patRaw() rawPage {
+	return rawPage{Title: "Price Action Trading", Lang: "en", Headings: []string{"h1: Price action trading"}, Text: patText}
+}
+
+func patEntities() []textrazor.Entity {
+	return []textrazor.Entity{
+		pageMention("Technical analysis", "Q2", "", "technical analysis", 0.5),
+		pageMention("Foreign exchange market", "Q10", "", "forex", 0.7),
+		pageMention("Candle", "Q11", "", "candle", 0.58),
+		pageMention("Trade", "Q12", "", "trade", 0.87),
+		pageMention("Swing trading", "Q13", "", "swing trading", 0.12),
+	}
+}
+
+func patTopics() []textrazor.Topic {
+	return []textrazor.Topic{
+		{Label: "Technical analysis", WikidataID: "Q2", Score: 0.9}, {Label: "Foreign exchange market", WikidataID: "Q10", Score: 1},
+		{Label: "Candle", WikidataID: "Q11", Score: 1}, {Label: "Trade", WikidataID: "Q12", Score: 1},
+		{Label: "Microeconomics", WikidataID: "Q14", Score: 0.5},
+	}
+}
+
+func patSims() map[string]float64 {
+	return map[string]float64{
+		"Technical analysis: Security analysis methodology": 0.42, "Gap (chart pattern): Price chart analysis concept": 0.548,
+		"ISBN: Unique numeric book identifier": 0.299, "Island reversal": 0.325,
+		"Day trading: Buying and selling within the same day": 0.576, "Chart pattern: Pattern within a chart": 0.542,
+	}
+}
+
+var patGroups = [][]titleQID{{{"Price action trading", "Q1"}}}
+
+// patGraph builds the pat graph over w with text as the page's main text.
+func patGraph(t *testing.T, w *fakeWiki, themes ThemeScorer, text string, ents []textrazor.Entity, groups [][]titleQID) (*builtGraph, []string) {
+	t.Helper()
+	r := &Researcher{Cache: NewCache(t.TempDir()), Themes: themes}
+	s := newSelection(textrazor.Result{Entities: ents, Topics: patTopics()}, text, nil, patURL, wordsOf(patKeyword), DefaultSelectSettings)
+	g, notes, err := r.buildGraph(context.Background(), kwResolver(t, w), patKeyword, s, nil, groups, DefaultSelectSettings)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return g, notes
+}
+
+func memberTitles(g *builtGraph) []string {
+	var out []string
+	for _, m := range g.Members {
+		out = append(out, m.Title)
+	}
+	return out
+}
+
+func hasNote(notes []string, sub string) bool {
+	return slices.ContainsFunc(notes, func(n string) bool { return strings.Contains(n, sub) })
+}
+
+func TestBuildGraphKeepsNamedAndScored(t *testing.T) {
+	g, notes := patGraph(t, patWiki(), &fakeScorer{sim: patSims()}, patText, patEntities(), patGroups)
+	if g == nil {
+		t.Fatalf("nil graph, notes %v", notes)
+	}
+	want := []string{"Price action trading", "Day trading", "Gap (chart pattern)", "Chart pattern", "Technical analysis", "Island reversal"}
+	if got := memberTitles(g); !slices.Equal(got, want) {
+		t.Errorf("members = %v, want %v", got, want)
+	}
+	named := map[string][]string{}
+	for _, m := range g.Members {
+		named[m.Title] = m.Named
+	}
+	if !g.Members[0].Centre || named["Gap (chart pattern)"] != nil ||
+		!slices.Equal(named["Island reversal"], []string{"Island reversals"}) || !slices.Equal(named["Technical analysis"], []string{"technical analysis"}) {
+		t.Errorf("centre %v named %v", g.Members[0].Centre, named)
+	}
+	wantRep := GraphReport{Centres: []string{"Price action trading"}, OutLinks: 6, InLinks: 2, Neighbours: 6, Kept: 5, Cut: 1}
+	if !reflect.DeepEqual(g.Report, wantRep) || !g.Scored {
+		t.Errorf("report = %+v scored %v, want %+v", g.Report, g.Scored, wantRep)
+	}
+	wantDropped := []Dropped{{Name: "ISBN", QID: "Q4", Source: SourceGraph, GraphSimilarity: f64(0.299), Reason: ReasonBelowGraphSimilarity}}
+	if !reflect.DeepEqual(g.Dropped, wantDropped) {
+		t.Errorf("dropped = %+v", g.Dropped)
+	}
+	for title, want := range map[string][]string{
+		"Foreign exchange market": {"Chart pattern", "Gap (chart pattern)", "Technical analysis"},
+		"Candle":                  {"Chart pattern"},
+		"Trade":                   {"Day trading", "Technical analysis"},
+		"Swing trading":           {"Chart pattern", "Gap (chart pattern)", "Technical analysis"},
+	} {
+		if !slices.Equal(g.Links[title], want) {
+			t.Errorf("links[%s] = %v, want %v", title, g.Links[title], want)
+		}
+	}
+	if !hasNote(notes, "graph of Price action trading: 1 cut below min_graph_similarity, 0 over max_graph_neighbours") {
+		t.Errorf("notes = %v", notes)
+	}
+}
+
+func TestBuildGraphDropsAListNeighbour(t *testing.T) {
+	w := patWiki()
+	w.pages["List of chart patterns"] = wikiPage{qid: "Q15"}
+	w.items["Q15"] = wikiItem{sitelink: "List of chart patterns", claims: map[string][]string{"P31": {"Q13406463"}}}
+	w.articleLinks["Price action trading"] = append(w.articleLinks["Price action trading"], "List of chart patterns")
+	sims := patSims()
+	sims["List of chart patterns"] = 0.6
+	g, notes := patGraph(t, w, &fakeScorer{sim: sims}, patText, patEntities(), patGroups)
+	if g == nil {
+		t.Fatalf("nil graph, notes %v", notes)
+	}
+	var found *Dropped
+	for i, d := range g.Dropped {
+		if d.Name == "List of chart patterns" {
+			found = &g.Dropped[i]
+		}
+	}
+	if found == nil || found.Reason != ReasonNotAnArticle || found.Source != SourceGraph || found.QID != "Q15" {
+		t.Errorf("dropped = %+v", g.Dropped)
+	}
+	if slices.Contains(memberTitles(g), "List of chart patterns") || g.Report.Kept != 5 {
+		t.Errorf("members %v kept %d", memberTitles(g), g.Report.Kept)
+	}
+}
+
+func TestBuildGraphTriesTheNextCentre(t *testing.T) {
+	w := patWiki()
+	w.pages["XY"] = wikiPage{qid: "Q22"}
+	w.items["Q21"] = wikiItem{sitelink: "Category:XYZ"}
+	w.items["Q22"] = wikiItem{sitelink: "XY"}
+	w.articleLinks["XY"] = []string{"Technical analysis", "Gap (chart pattern)", "Day trading"}
+	groups := [][]titleQID{{{"XYZ", "Q21"}}, {{"XY", "Q22"}}}
+	g, notes := patGraph(t, w, &fakeScorer{sim: patSims()}, patText, patEntities(), groups)
+	if g == nil {
+		t.Fatalf("nil graph, notes %v", notes)
+	}
+	if want := []string{"XY", "Day trading", "Gap (chart pattern)", "Technical analysis"}; !slices.Equal(memberTitles(g), want) {
+		t.Errorf("members = %v, want %v", memberTitles(g), want)
+	}
+	if !slices.Equal(g.Report.Centres, []string{"XY"}) {
+		t.Errorf("centres = %v", g.Report.Centres)
+	}
+}
+
+func TestBuildGraphNoCentre(t *testing.T) {
+	w := patWiki()
+	w.items["Q21"] = wikiItem{sitelink: "Category:XYZ"}
+	g, notes := patGraph(t, w, &fakeScorer{sim: patSims()}, patText, patEntities(), [][]titleQID{{{"XYZ", "Q21"}}})
+	if g != nil || !hasNote(notes, "no centre: XYZ failed its identity check (identity_mismatch): about uses the page's themes") {
+		t.Errorf("graph %v notes %v", g, notes)
+	}
+}
+
+func TestBuildGraphTooFewNeighbours(t *testing.T) {
+	sims := map[string]float64{}
+	for k := range patSims() {
+		sims[k] = 0.1
+	}
+	g, notes := patGraph(t, patWiki(), &fakeScorer{sim: sims}, "Candles form over time.", nil, patGroups)
+	if g != nil || !hasNote(notes, "Price action trading has 0 kept neighbours (fewer than 3)") {
+		t.Errorf("graph %v notes %v", g, notes)
+	}
+}
+
+func TestBuildGraphWithoutModel(t *testing.T) {
+	g, notes := patGraph(t, patWiki(), nil, patText+" A chart pattern helps.", patEntities(), patGroups)
+	if g == nil {
+		t.Fatalf("nil graph, notes %v", notes)
+	}
+	if want := []string{"Price action trading", "Chart pattern", "Island reversal", "Technical analysis"}; !slices.Equal(memberTitles(g), want) {
+		t.Errorf("members = %v, want %v", memberTitles(g), want)
+	}
+	if g.Report.Cut != 3 || g.Scored {
+		t.Errorf("cut %d scored %v", g.Report.Cut, g.Scored)
+	}
+	for _, d := range g.Dropped {
+		if d.Name == "ISBN" {
+			t.Errorf("ISBN dropped: %+v", d)
+		}
+	}
+	if !hasNote(notes, "graph not scored: no embedding model is set up") {
+		t.Errorf("notes = %v", notes)
 	}
 }
