@@ -75,7 +75,7 @@ func calibrationPage(t *testing.T, base string) rawPage {
 // calibration run, by QID and title. Its fields are in key order, so the
 // file's keys are sorted.
 type wikiFixture struct {
-	Items     map[string]json.RawMessage `json:"items"`     // wbgetentities entity by QID, as returned
+	Items     map[string]json.RawMessage `json:"items"`     // wbgetentities entity by QID, trimmed to what is read
 	Links     map[string][]string        `json:"links"`     // page -> pages it links to, among those asked about
 	Options   map[string][]string        `json:"options"`   // disambiguation page -> the pages it links to
 	Pages     map[string]fixturePage     `json:"pages"`     // title -> what a title lookup found

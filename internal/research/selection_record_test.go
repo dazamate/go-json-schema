@@ -131,13 +131,17 @@ func (r *wikiRecorder) add(raw, body string) {
 	v := u.Query()
 	if u.Host == "www.wikidata.org" && v.Get("action") == "wbgetentities" {
 		var resp struct {
-			Entities map[string]json.RawMessage `json:"entities"`
+			Entities map[string]recordedItem `json:"entities"`
 		}
 		if err := json.Unmarshal([]byte(body), &resp); err != nil {
 			t.Fatalf("GET %s: %v", raw, err)
 		}
 		for id, e := range resp.Entities {
-			r.fx.Items[id] = sortedJSON(t, e)
+			b, err := json.Marshal(e.trim(v.Get("sitefilter")))
+			if err != nil {
+				t.Fatal(err)
+			}
+			r.fx.Items[id] = sortedJSON(t, b)
 		}
 		return
 	}
@@ -175,6 +179,52 @@ func (r *wikiRecorder) add(raw, body string) {
 	default:
 		t.Fatalf("unexpected API call %s", raw)
 	}
+}
+
+// recordedItem is the part of a wbgetentities item that select_entities
+// reads, in the same shape.
+type recordedItem struct {
+	Claims    map[string][]recordedClaim `json:"claims,omitempty"`
+	ID        string                     `json:"id"`
+	Missing   *string                    `json:"missing,omitempty"`
+	Sitelinks map[string]struct {
+		Site  string `json:"site"`
+		Title string `json:"title"`
+	} `json:"sitelinks,omitempty"`
+}
+
+type recordedClaim struct {
+	Mainsnak struct {
+		Datavalue *struct {
+			Type  string          `json:"type"`
+			Value json.RawMessage `json:"value"`
+		} `json:"datavalue,omitempty"`
+		Snaktype string `json:"snaktype"`
+	} `json:"mainsnak"`
+	Rank string `json:"rank"`
+}
+
+// recordedProps are the claims select_entities reads.
+var recordedProps = []string{"P31", "P279", "P646", "P2671", "P9885"}
+
+// trim keeps the item's id, its sitelink to wiki and the recordedProps
+// claims. A missing item keeps only its id.
+func (it recordedItem) trim(wiki string) recordedItem {
+	if it.Missing != nil {
+		return recordedItem{ID: it.ID, Missing: it.Missing}
+	}
+	out := recordedItem{ID: it.ID, Claims: map[string][]recordedClaim{}, Sitelinks: it.Sitelinks}
+	for site := range out.Sitelinks {
+		if site != wiki {
+			delete(out.Sitelinks, site)
+		}
+	}
+	for _, p := range recordedProps {
+		if c, ok := it.Claims[p]; ok {
+			out.Claims[p] = c
+		}
+	}
+	return out
 }
 
 // addPage keeps what a title lookup found. A page repeated by a continue
