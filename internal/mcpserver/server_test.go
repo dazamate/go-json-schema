@@ -373,6 +373,25 @@ func TestSelectEntitiesToolLinkConfidenceCutoff(t *testing.T) {
 	}
 }
 
+// The graph settings are integers with their own ranges: a neighbour cap may
+// be 0, a link count may not.
+func TestSelectEntitiesToolGraphSettings(t *testing.T) {
+	cs := connect(t, &research.Researcher{})
+	for _, c := range []struct {
+		arg  string
+		val  int
+		want string
+	}{
+		{"max_graph_neighbours", -1, "max_graph_neighbours is -1: want 0 or more"},
+		{"min_graph_links", 0, "min_graph_links is 0: want 1 or more"},
+	} {
+		out, isErr := callText(t, cs, "select_entities", map[string]any{"url": "http://localhost:8080/p/", "keyword": "plumber", c.arg: c.val})
+		if !isErr || !strings.Contains(out, c.want) {
+			t.Errorf("%s: out = %s, isErr = %v, want a tool error containing %q", c.arg, out, isErr, c.want)
+		}
+	}
+}
+
 func TestSelectEntitiesToolDescriptionSaysTheDefaultsAreJudgement(t *testing.T) {
 	cs := connect(t, &research.Researcher{})
 	res, err := cs.ListTools(context.Background(), nil)

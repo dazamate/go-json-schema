@@ -324,7 +324,7 @@ research tools against the live web.
 
 ## Entity selection (`select_entities`)
 
-`select_entities(url, keyword, language?, min_relevance?, min_topic?, min_keyword_similarity?, min_page_similarity?, min_link_confidence?)`
+`select_entities(url, keyword, language?, min_relevance?, min_topic?, min_keyword_similarity?, min_page_similarity?, min_link_confidence?, min_graph_similarity?, min_graph_links?, min_graph_links_ungated?, min_mention_graph_links?, max_graph_neighbours?)`
 reads your own page, `localhost` included, and chooses its `about` and
 `mentions`. The rules in brief (the full design is
 [the spec](docs/superpowers/specs/2026-10-25-own-page-entities-design.md)):
@@ -335,14 +335,27 @@ reads your own page, `localhost` included, and chooses its `about` and
 - `about` is the keyword's own entities (named on the page, or an exact
   title) followed by the page's themes, which the page need not name.
 - `mentions` holds only entities the page names.
-- Neither list has a cap. `dropped` lists what was rejected and why.
+- When the keyword has its own Wikipedia article (the whole keyword, or a
+  phrase of 2 or more of its words), `about` is instead that article, the
+  articles linked to or from it that are close to the keyword or named on
+  the page (at most `max_graph_neighbours` unnamed ones), and the page
+  entities well linked into that graph. `mentions` then holds only page
+  entities linked into it, and `graph` reports its size. With no article,
+  or fewer than 3 kept neighbours, `about` falls back to the page's themes
+  and `note` says so. The design is
+  [the keyword graph](docs/superpowers/specs/2026-10-25-keyword-graph-design.md).
+- Neither list has a cap beyond that one. `dropped` lists what was rejected
+  and why (`off_graph`, `below_graph_similarity`).
 - Each entry has a `thing` node to use as given.
 
 **Defaults:** `min_relevance` 0.3, `min_topic` 0.5, `min_keyword_similarity`
 0.40, `min_page_similarity` 0.55 and `min_link_confidence` 1.5. The first
 four are 0 to 1. `min_link_confidence` is a TextRazor confidence (about 0.5
 to 10) that an entity kept only by a link to another page of your site must
-reach. These are our judgement, set by eye
+reach. The graph settings are `min_graph_similarity` 0.40 (0 to 1, for an
+article the page does not name), `min_graph_links` 3, `min_graph_links_ungated`
+10 and `min_mention_graph_links` 2 (whole numbers of 1 or more) and
+`max_graph_neighbours` 30 (0 or more; the owner set this cap). These are our judgement, set by eye
 from one calibration page (the Lift My Boxes moving cost calculator page,
 keyword "moving cost calculator", 2026-10-25), not from any Google source.
 They still need checking on a second page. The calibration data is in
