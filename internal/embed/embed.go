@@ -121,3 +121,24 @@ func (s *Scorer) Score(ctx context.Context, keyword, page string, labels []strin
 	}
 	return kw, pg, nil
 }
+
+// Similarity returns each text's cosine against the keyword, embedded with
+// QueryInstruction as in Score. Texts are embedded alone, with no instruction.
+func (s *Scorer) Similarity(ctx context.Context, keyword string, texts []string) ([]float64, error) {
+	if len(texts) == 0 {
+		return nil, nil
+	}
+	query, err := s.Enc.Encode(ctx, QueryInstruction+keyword)
+	if err != nil {
+		return nil, err
+	}
+	out := make([]float64, len(texts))
+	for i, text := range texts {
+		v, err := s.Enc.Encode(ctx, text)
+		if err != nil {
+			return nil, err
+		}
+		out[i] = Cosine(v, query)
+	}
+	return out, nil
+}

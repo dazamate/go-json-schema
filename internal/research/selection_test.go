@@ -20,6 +20,9 @@ type fakeScorer struct {
 	err    error
 	labels []string // every label scored
 	pages  []string // every page text scored
+
+	sim      map[string]float64 // graph text to its cosine against the keyword
+	simTexts []string           // every graph text scored
 }
 
 func (s *fakeScorer) Model() string { return "fake-bge" }
@@ -38,6 +41,22 @@ func (s *fakeScorer) Score(_ context.Context, _, page string, labels []string) (
 		kw[i], pg[i] = c[0], c[1]
 	}
 	return kw, pg, nil
+}
+
+func (s *fakeScorer) Similarity(_ context.Context, _ string, texts []string) ([]float64, error) {
+	if s.err != nil {
+		return nil, s.err
+	}
+	s.simTexts = append(s.simTexts, texts...)
+	out := make([]float64, len(texts))
+	for i, text := range texts {
+		c, ok := s.sim[text]
+		if !ok {
+			return nil, fmt.Errorf("no similarity for %q", text)
+		}
+		out[i] = c
+	}
+	return out, nil
 }
 
 // fakeBing links the same entities in any text.
