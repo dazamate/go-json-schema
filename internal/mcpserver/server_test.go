@@ -341,8 +341,8 @@ func TestSelectEntitiesToolWithoutTextRazorIsAToolError(t *testing.T) {
 func TestSelectEntitiesToolRejectsACutoffAboveOne(t *testing.T) {
 	cs := connect(t, &research.Researcher{})
 	out, isErr := callText(t, cs, "select_entities", map[string]any{"url": "http://localhost:8080/p/", "keyword": "plumber", "min_topic": 2})
-	if !isErr {
-		t.Fatalf("out = %s, want a tool error", out)
+	if !isErr || !strings.Contains(out, "min_topic is 2: want 0 to 1") {
+		t.Fatalf("out = %s, isErr = %v, want a tool error naming min_topic", out, isErr)
 	}
 }
 
