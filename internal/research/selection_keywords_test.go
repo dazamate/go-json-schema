@@ -216,6 +216,46 @@ func TestLinkCountsBatchesFiftyTitles(t *testing.T) {
 	}
 }
 
+// bigDisambigWiki has a "Moving" page of 30 options, O00 to O29, where only
+// the options at positions 26 and up (O25 to O29) link to a known title.
+func bigDisambigWiki() *fakeWiki {
+	w := &fakeWiki{pages: map[string]wikiPage{}, articleLinks: map[string][]string{}}
+	var opts []string
+	for i := range 30 {
+		o := "O" + strconv.Itoa(100 + i)[1:]
+		opts = append(opts, o)
+		w.pages[o] = wikiPage{qid: "Q" + strconv.Itoa(200+i)}
+		if i >= 25 {
+			w.articleLinks[o] = []string{"K1"}
+		}
+	}
+	w.pages["Moving"] = wikiPage{qid: "Q9", disambig: true, links: opts}
+	return w
+}
+
+func TestKeywordLookupsCountsEveryDisambiguationOption(t *testing.T) {
+	looks, hits, err := kwResolver(t, bigDisambigWiki()).keywordLookups([]string{"moving"}, kwKnown)
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := []string{"O25", "O26", "O27", "O28", "O29"}
+	if len(looks) != 1 || !slices.Equal(looks[0].Chosen, want) || looks[0].Links != 1 || len(hits) != 5 {
+		t.Errorf("lookups = %+v hits = %+v", looks, hits)
+	}
+}
+
+func TestKeywordLookupsFollowsDisambiguationContinue(t *testing.T) {
+	w := bigDisambigWiki()
+	w.genPerResponse = 7
+	looks, hits, err := kwResolver(t, w).keywordLookups([]string{"moving"}, kwKnown)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(looks) != 1 || len(looks[0].Chosen) != 5 || len(hits) != 5 {
+		t.Errorf("lookups = %+v hits = %+v", looks, hits)
+	}
+}
+
 func TestKeywordLookupsNeverSearch(t *testing.T) {
 	// kwResolver fails the test on any search call; a missing phrase would
 	// trigger one in resolve.

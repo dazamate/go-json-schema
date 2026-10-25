@@ -37,6 +37,7 @@ type fakeWiki struct {
 
 	articleLinks     map[string][]string        // page -> pages it links to, answered for prop=links
 	linksPerResponse int                        // when above 0, prop=links answers are cut here with a continue
+	genPerResponse   int                        // the same for generator=links answers
 	rawItems         map[string]json.RawMessage // returned as is by wbgetentities
 }
 
@@ -184,7 +185,17 @@ func (w *fakeWiki) answer(raw string) (any, error) {
 		}
 		return map[string]any{"query": map[string]any{"search": hits}}, nil
 	case u.Host == "en.wikipedia.org" && v.Get("generator") == "links":
-		return w.pagesJSON(w.pages[v.Get("titles")].links, true), nil
+		links := w.pages[v.Get("titles")].links
+		start, _ := strconv.Atoi(v.Get("gplcontinue"))
+		end := len(links)
+		if w.genPerResponse > 0 && start+w.genPerResponse < end {
+			end = start + w.genPerResponse
+		}
+		out := w.pagesJSON(links[start:end], true)
+		if end < len(links) {
+			out["continue"] = map[string]any{"gplcontinue": strconv.Itoa(end), "continue": "gplcontinue||"}
+		}
+		return out, nil
 	case u.Host == "en.wikipedia.org" && v.Get("titles") != "":
 		return w.pagesJSON(strings.Split(v.Get("titles"), "|"), v.Get("redirects") == "1"), nil
 	}

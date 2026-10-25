@@ -190,16 +190,35 @@ func (r *resolver) keywordLookups(grams []string, known []titleQID) ([]KeywordLo
 			}
 		}
 	}
-	resps := make([]wikiResp, len(urls))
-	if err := r.fetch(urls, ptrs(resps)); err != nil {
-		return nil, nil, err
-	}
-	for k, resp := range resps {
-		for _, pg := range resp.Query.Pages {
-			if !pg.Missing && !pg.Invalid && !pg.disambiguation() && len(options[owners[k]]) < maxCandidates {
-				options[owners[k]] = append(options[owners[k]], option{pg.Title, pg.PageProps["wikibase_item"]})
+	// Every option on a disambiguation page counts, so follow the links
+	// query's continue until it ends.
+	for len(urls) > 0 {
+		resps := make([]wikiResp, len(urls))
+		if err := r.fetch(urls, ptrs(resps)); err != nil {
+			return nil, nil, err
+		}
+		var nextURLs []string
+		var nextOwners []int
+		for k, resp := range resps {
+			for _, pg := range resp.Query.Pages {
+				if !pg.Missing && !pg.Invalid && !pg.disambiguation() {
+					options[owners[k]] = append(options[owners[k]], option{pg.Title, pg.PageProps["wikibase_item"]})
+				}
+			}
+			if len(resp.Continue) > 0 {
+				u, err := url.Parse(urls[k])
+				if err != nil {
+					return nil, nil, err
+				}
+				q := u.Query()
+				for key, v := range resp.Continue {
+					q.Set(key, v)
+				}
+				u.RawQuery = q.Encode()
+				nextURLs, nextOwners = append(nextURLs, u.String()), append(nextOwners, owners[k])
 			}
 		}
+		urls, owners = nextURLs, nextOwners
 	}
 	var all []string
 	for _, opts := range options {
