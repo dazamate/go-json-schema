@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
+	"errors"
 	"fmt"
 	"math"
 	"net/url"
@@ -81,27 +82,22 @@ func (r *Researcher) linkEntities(ctx context.Context, docs []Doc, minPages int)
 	var wg sync.WaitGroup
 	for i, d := range docs {
 		text := textrazor.Clip(strings.TrimSpace(d.Title+"\n\n"+d.Text), max)
-		sum := sha256.Sum256([]byte(text))
-		key := hex.EncodeToString(sum[:])
-		var res textrazor.Result
-		if r.Cache.Get("textrazor", key, pageTTL, &res) {
-			results[i] = &res
-			cached++
-			continue
-		}
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
 			sem <- struct{}{}
 			defer func() { <-sem }()
-			res, err := r.Linker.Analyze(ctx, text)
+			res, hit, err := r.analyze(ctx, text)
 			if err != nil {
 				errs[i] = err
 				return
 			}
-			r.Cache.Put("textrazor", key, res)
 			mu.Lock()
-			units += res.Units
+			if hit {
+				cached++
+			} else {
+				units += res.Units
+			}
 			mu.Unlock()
 			results[i] = &res
 		}()
@@ -127,6 +123,25 @@ func (r *Researcher) linkEntities(ctx context.Context, docs []Doc, minPages int)
 	}
 	ents, topics := mergeLinked(results, minPages)
 	return ents, topics, strings.Join(notes, "; ")
+}
+
+// analyze sends text to the linker, or returns the cached result for the
+// same text. A failed call is not cached.
+func (r *Researcher) analyze(ctx context.Context, text string) (res textrazor.Result, cached bool, err error) {
+	sum := sha256.Sum256([]byte(text))
+	key := hex.EncodeToString(sum[:])
+	if r.Cache.Get("textrazor", key, pageTTL, &res) {
+		return res, true, nil
+	}
+	if r.Linker == nil {
+		return textrazor.Result{}, false, errors.New("no entity linker configured")
+	}
+	res, err = r.Linker.Analyze(ctx, text)
+	if err != nil {
+		return textrazor.Result{}, false, err
+	}
+	r.Cache.Put("textrazor", key, res)
+	return res, false, nil
 }
 
 // mergeLinked merges the per-page results, given in rank order, into one

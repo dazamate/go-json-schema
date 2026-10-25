@@ -132,3 +132,13 @@ func TestPageTermsCachesPages(t *testing.T) {
 		t.Fatalf("fetched %d times, want 1", n)
 	}
 }
+
+func TestFetchPageKeepsMainLinks(t *testing.T) {
+	links := []pageLink{{Href: "https://a.example/pool", Text: "Pool table"}, {Href: "https://a.example/piano", Text: "Piano"}}
+	page := pageFake(map[string]rawPage{"https://a.example/1": {Title: "A", Text: "alpha", Links: links}})
+	r := &Researcher{}
+	c := r.fetchPage(context.Background(), page, "https://a.example/1", "")
+	if !slices.Equal(c.Links, links) {
+		t.Fatalf("links = %+v", c.Links)
+	}
+}

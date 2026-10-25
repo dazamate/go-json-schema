@@ -66,25 +66,34 @@ type SchemaTerm struct {
 
 const maxLinks = 20
 
+// pageLink is a link in the page's main content.
+type pageLink struct {
+	Href string `json:"href"`
+	Text string `json:"text"`
+}
+
 type rawPage struct {
-	Href        string   `json:"href"`
-	Canonical   string   `json:"canonical"`
-	Title       string   `json:"title"`
-	Description string   `json:"description"`
-	Lang        string   `json:"lang"`
-	Headings    []string `json:"headings"`
-	LD          []string `json:"ld"`
-	Text        string   `json:"text"`
+	Href        string     `json:"href"`
+	Canonical   string     `json:"canonical"`
+	Title       string     `json:"title"`
+	Description string     `json:"description"`
+	Lang        string     `json:"lang"`
+	Headings    []string   `json:"headings"`
+	LD          []string   `json:"ld"`
+	Text        string     `json:"text"`
+	Links       []pageLink `json:"links"`
 }
 
 type cachedPage struct {
-	Page Page   `json:"page"`
-	Text string `json:"text"`
+	Page  Page       `json:"page"`
+	Text  string     `json:"text"`
+	Links []pageLink `json:"links,omitempty"`
 }
 
 // pageJS reads the page's facts, then its main text with navigation,
 // footers, sidebars and comments hidden. Hidden chrome is skipped when it
-// holds most of the text, as with pages wrapped in one big form.
+// holds most of the text, as with pages wrapped in one big form. The links
+// are the ones still rendered after that, so the hidden chrome's are left out.
 const pageJS = `(() => {
   const meta = n => { const m = document.querySelector('meta[name="' + n + '"], meta[property="' + n + '"]'); return m ? (m.content || '') : ''; };
   const chrome = 'nav, footer, aside, [role=navigation], [role=contentinfo], [role=complementary], #comments, .comments, .comment-list, script, style, noscript, iframe, form, template';
@@ -102,7 +111,9 @@ const pageJS = `(() => {
   document.querySelectorAll('header').forEach(el => { if (!root.contains(el)) hide(el); });
   return {href: location.href, canonical: (document.querySelector('link[rel=canonical]') || {}).href || '',
     title: document.title, description: meta('description') || meta('og:description'), lang: document.documentElement.lang || '',
-    headings, ld, text: (root.innerText || '').slice(0, 150000)};
+    headings, ld, text: (root.innerText || '').slice(0, 150000),
+    links: [...root.querySelectorAll('a[href]')].filter(a => a.getClientRects().length > 0)
+      .map(a => ({href: a.href, text: (a.innerText || '').trim().replace(/\s+/g, ' ')})).filter(l => l.text).slice(0, 500)};
 })()`
 
 // PageTerms reads each page and ranks the words and phrases they share,
@@ -207,6 +218,7 @@ func (r *Researcher) fetchPage(ctx context.Context, p browser.Page, link, prev s
 		c.Page.Schema = summarizeJSONLD(raw.LD)
 	}
 	c.Text = raw.Text
+	c.Links = raw.Links
 	return c
 }
 

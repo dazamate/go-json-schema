@@ -178,3 +178,19 @@ func TestPageTermsLeavesFailedPagesOutOfEntityStats(t *testing.T) {
 		t.Fatalf("topics = %+v, want the mean over the 5 linked pages", rep.Topics)
 	}
 }
+
+func TestAnalyzeCachesByTextHash(t *testing.T) {
+	linker := movingLinker()
+	r := &Researcher{Linker: linker, Cache: NewCache(t.TempDir())}
+	first, cached, err := r.analyze(context.Background(), "page one text")
+	if err != nil || cached {
+		t.Fatalf("first: cached=%v err=%v", cached, err)
+	}
+	second, cached, err := r.analyze(context.Background(), "page one text")
+	if err != nil || !cached {
+		t.Fatalf("second: cached=%v err=%v", cached, err)
+	}
+	if len(linker.texts) != 1 || len(second.Entities) != len(first.Entities) {
+		t.Errorf("linker calls = %d, entities %d vs %d", len(linker.texts), len(second.Entities), len(first.Entities))
+	}
+}

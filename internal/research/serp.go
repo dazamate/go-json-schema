@@ -19,6 +19,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/dazamate/go-json-schema/internal/azurelang"
 	"github.com/dazamate/go-json-schema/internal/browser"
 	"github.com/dazamate/go-json-schema/internal/cooldown"
 )
@@ -36,6 +37,21 @@ type Researcher struct {
 	// Linker links the ranking pages' entities in page_terms; nil skips it.
 	Linker       EntityLinker
 	LinkMaxBytes int // text sent to Linker per page; default DefaultLinkMaxBytes
+	// Bing adds Bing IDs and Themes scores themes in select_entities; nil skips each.
+	Bing   BingLinker
+	Themes ThemeScorer
+}
+
+// BingLinker links the entities in a text to Bing IDs. azurelang.Client is one.
+type BingLinker interface {
+	Link(ctx context.Context, text, language string) (azurelang.Result, error)
+}
+
+// ThemeScorer scores a keyword and a page against theme labels. embed.Scorer
+// is one; research does not import embed.
+type ThemeScorer interface {
+	Model() string
+	Score(ctx context.Context, keyword, page string, labels []string) (kw, pg []float64, err error)
 }
 
 const (

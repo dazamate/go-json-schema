@@ -45,6 +45,9 @@ func WithProgress(ctx context.Context, report func(msg string)) context.Context 
 	return context.WithValue(ctx, progressKey{}, report)
 }
 
+// Progress reports msg to the function WithProgress set on ctx, if any.
+func Progress(ctx context.Context, msg string) { progress(ctx, msg) }
+
 func progress(ctx context.Context, msg string) {
 	if report, ok := ctx.Value(progressKey{}).(func(string)); ok {
 		report(msg)

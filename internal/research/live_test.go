@@ -2,8 +2,12 @@ package research
 
 import (
 	"context"
+	"net/http"
+	"net/http/httptest"
+	"net/url"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 	"time"
 
@@ -70,4 +74,67 @@ func TestLive(t *testing.T) {
 	if ents.Entities[0].KGMID == "" {
 		t.Fatal("lemon has no kgmid")
 	}
+}
+
+// TestLivePageJSReadsMainLinks serves the calibration page locally and reads
+// it with the real browser: pageJS keeps the links in <main> and drops the
+// ones in the hidden header and footer.
+//
+//	SCHEMA_MCP_LIVE=1 go test ./internal/research -run LivePageJS -v
+func TestLivePageJSReadsMainLinks(t *testing.T) {
+	if os.Getenv("SCHEMA_MCP_LIVE") == "" {
+		t.Skip("set SCHEMA_MCP_LIVE=1 to run against the real browser")
+	}
+	html, err := os.ReadFile(filepath.Join("testdata", "select", "page.html"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	mux := http.NewServeMux()
+	mux.HandleFunc("/moving-cost-calculator/", func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		w.Write(html)
+	})
+	srv := httptest.NewServer(mux)
+	defer srv.Close()
+	host := strings.TrimPrefix(srv.URL, "http://")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
+	defer cancel()
+	b := browser.New("go-json-schema-test")
+	defer b.Close()
+	r := &Researcher{Browser: b}
+	var c cachedPage
+	err = b.Use(ctx, func(p browser.Page) error {
+		c = r.fetchPage(ctx, p, srv.URL+"/moving-cost-calculator/", "")
+		return nil
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if c.Page.Error != "" {
+		t.Fatalf("fetchPage: %s", c.Page.Error)
+	}
+	has := func(suffix string) *pageLink {
+		for i, l := range c.Links {
+			u, err := url.Parse(l.Href)
+			if err == nil && u.Host == host && strings.HasSuffix(u.Path, suffix) {
+				return &c.Links[i]
+			}
+		}
+		return nil
+	}
+	for _, s := range []string{"/cost-to-move-a-pool-table/", "/cost-to-move-a-piano/", "/cost-to-move-a-hot-tub/"} {
+		if has(s) == nil {
+			t.Errorf("missing main link %s in %+v", s, c.Links)
+		}
+	}
+	if l := has("/cost-to-move-a-pool-table/"); l != nil && !strings.Contains(l.Text, "Pool table") {
+		t.Errorf("pool table link text = %q", l.Text)
+	}
+	for _, s := range []string{"/privacy-policy/", "/about-us/", "/terms-and-conditions/"} {
+		if has(s) != nil {
+			t.Errorf("chrome link %s kept", s)
+		}
+	}
+	t.Logf("links: %+v", c.Links)
 }
