@@ -23,6 +23,7 @@ type KeywordLookup struct {
 	Title  string   `json:"title,omitempty"`
 	Chosen []string `json:"chosen,omitempty"` // options kept by their links to known entities
 	Links  int      `json:"links,omitempty"`  // the top link count
+	qid    string   // the Wikidata item of an exact or redirect result
 }
 
 // titleQID is an article and its Wikidata item.
@@ -178,11 +179,12 @@ func (r *resolver) keywordLookups(grams []string, known []titleQID) ([]KeywordLo
 			}))
 			owners = append(owners, i)
 		case l.redirected:
-			out[i].Result, out[i].Title = "redirect", l.page.Title
+			out[i].Result, out[i].Title, out[i].qid = "redirect", l.page.Title, l.page.PageProps["wikibase_item"]
 			options[i] = []option{{l.page.Title, l.page.PageProps["wikibase_item"]}}
 		default:
 			out[i].Result, out[i].Title = "exact", l.page.Title
 			qid := l.page.PageProps["wikibase_item"]
+			out[i].qid = qid
 			if qid != "" && !seen[qid] {
 				seen[qid] = true
 				hits = append(hits, lookupHit{Phrase: g, Title: l.page.Title, QID: qid, How: "exact"})

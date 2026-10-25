@@ -3,6 +3,7 @@ package research
 import (
 	"fmt"
 	"reflect"
+	"slices"
 	"testing"
 )
 
@@ -151,5 +152,67 @@ func TestLinkedMembersBatchesAndContinues(t *testing.T) {
 		if !reflect.DeepEqual(got[title], []string{"M1"}) {
 			t.Errorf("%s = %v, want [M1]", title, got[title])
 		}
+	}
+}
+
+func TestCentreCandidates(t *testing.T) {
+	lk := func(phrase, result, title, qid string) KeywordLookup {
+		return KeywordLookup{Phrase: phrase, Result: result, Title: title, qid: qid}
+	}
+	for _, c := range []struct {
+		name         string
+		looks        []KeywordLookup
+		contentWords int
+		want         [][]titleQID
+	}{
+		{"whole phrase", []KeywordLookup{
+			lk("price", "exact", "Price", "Q8"), lk("price action", "redirect", "Price action trading", "Q1"),
+			lk("price action trading", "exact", "Price action trading", "Q1"), lk("action", "disambiguation", "Action", ""),
+			lk("action trading", "missing", "", ""), lk("trading", "redirect", "Trade", "Q5"),
+		}, 3, [][]titleQID{{{"Price action trading", "Q1"}}}},
+		{"moving", []KeywordLookup{
+			lk("moving", "disambiguation", "Moving", ""), lk("moving cost", "missing", "", ""),
+			lk("moving cost calculator", "missing", "", ""), lk("cost", "exact", "Cost", "Q2"),
+			lk("cost calculator", "missing", "", ""), lk("calculator", "exact", "Calculator", "Q3"),
+		}, 3, nil},
+		{"one word", []KeywordLookup{lk("plumber", "exact", "Plumber", "Q4")}, 1, [][]titleQID{{{"Plumber", "Q4"}}}},
+		{"redirect, no confirmation", []KeywordLookup{
+			lk("price", "exact", "Price", "Q8"), lk("price action", "redirect", "Price action trading", "Q1"),
+			lk("price action strategy", "missing", "", ""), lk("strategy", "exact", "Strategy", "Q9"),
+		}, 3, [][]titleQID{{{"Price action trading", "Q1"}}}},
+		{"tie", []KeywordLookup{
+			lk("foo bar", "exact", "A", "Q11"), lk("bar baz", "missing", "", ""), lk("baz qux", "exact", "B", "Q12"),
+		}, 4, [][]titleQID{{{"A", "Q11"}, {"B", "Q12"}}}},
+		{"fallback group", []KeywordLookup{
+			lk("x y z", "exact", "XYZ", "Q21"), lk("x y", "exact", "XY", "Q22"), lk("y z", "redirect", "XYZ", "Q21"),
+		}, 3, [][]titleQID{{{"XYZ", "Q21"}}, {{"XY", "Q22"}}}},
+		{"stop words", []KeywordLookup{
+			lk("trade", "exact", "Trade", "Q5"), lk("trade price", "missing", "", ""), lk("trade price action", "missing", "", ""),
+			lk("price", "exact", "Price", "Q8"), lk("price action", "redirect", "Price action trading", "Q1"),
+			lk("action", "disambiguation", "Action", ""),
+		}, 3, [][]titleQID{{{"Price action trading", "Q1"}}}},
+	} {
+		t.Run(c.name, func(t *testing.T) {
+			if got := centreCandidates(c.looks, c.contentWords); !reflect.DeepEqual(got, c.want) {
+				t.Errorf("centreCandidates = %v, want %v", got, c.want)
+			}
+		})
+	}
+}
+
+func TestKeywordLookupsKeepCentreQIDs(t *testing.T) {
+	w := &fakeWiki{
+		pages:     map[string]wikiPage{"Price action trading": {qid: "Q1"}},
+		redirects: map[string][2]string{"Price action": {"Price action trading", ""}},
+	}
+	looks, hits, err := kwResolver(t, w).keywordLookups([]string{"price action trading", "price action"}, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(looks) != 2 || looks[0].Result != "exact" || looks[1].Result != "redirect" || looks[0].qid != "Q1" || looks[1].qid != "Q1" {
+		t.Errorf("lookups = %+v", looks)
+	}
+	if want := []lookupHit{{"price action trading", "Price action trading", "Q1", "exact"}}; !slices.Equal(hits, want) {
+		t.Errorf("hits = %+v", hits)
 	}
 }

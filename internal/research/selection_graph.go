@@ -179,3 +179,39 @@ func (r *Researcher) cachedHood(wr *resolver, centre string) (graphHood, error) 
 	r.Cache.Put("graph", key, h)
 	return h, nil
 }
+
+// centreCandidates returns the lookups that can be the keyword's centre,
+// grouped by phrase length, longest first: exact or redirect results with
+// a QID whose phrase has 2 or more words, or any word of a one-word
+// keyword. A title appears once, in its longest group. Within a group,
+// lookup order is kept.
+func centreCandidates(looks []KeywordLookup, contentWords int) [][]titleQID {
+	byLen := map[int][]titleQID{}
+	seen := map[string]bool{}
+	var lens []int
+	for _, l := range looks {
+		n := len(wordsOf(l.Phrase))
+		if (l.Result != "exact" && l.Result != "redirect") || l.qid == "" || (n < 2 && contentWords != 1) {
+			continue
+		}
+		if _, ok := byLen[n]; !ok {
+			lens = append(lens, n)
+		}
+		byLen[n] = append(byLen[n], titleQID{l.Title, l.qid})
+	}
+	slices.SortFunc(lens, func(a, b int) int { return b - a })
+	var out [][]titleQID
+	for _, n := range lens {
+		var group []titleQID
+		for _, c := range byLen[n] {
+			if !seen[c.Title] {
+				seen[c.Title] = true
+				group = append(group, c)
+			}
+		}
+		if group != nil {
+			out = append(out, group)
+		}
+	}
+	return out
+}
