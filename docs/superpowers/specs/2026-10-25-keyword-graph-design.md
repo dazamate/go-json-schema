@@ -214,7 +214,7 @@ for the existing cutoffs.
 
 ## Calibration (2026-10-25)
 
-Recorded on https://www.theforexguy.com/price-action-trading/ (2,406 words),
+Recorded on https://www.theforexguy.com/price-action-trading/ (2,406 words at the spike; 2,393 in the recording, which counts words by whitespace),
 keyword "price action trading", with the defaults above. Price action
 trading has 40 links out and 6 in. 35 neighbours pass at similarity ≥ 0.40,
 and none of the low scorers is named on the page, so 9 are cut.
@@ -269,23 +269,31 @@ Signal 0, Skill 0. The owner accepted an empty `mentions` here.
 **The moving calculator page has no centre,** so its golden lists are
 unchanged.
 
-The spike's data is in the session scratchpad and is not committed. The
-builder records fixtures for a second golden test with the existing
-recorder pattern (`selection_record_test.go`, Task 11 of the first plan):
-- our page's main text and links;
-- TextRazor's response. It is cached from the 2026-10-25 run, so if the
-  page text is unchanged the recording costs 0 units;
-- the Wikipedia responses, trimmed to the fields read;
-- the embedding scores.
+The spike's data is in the session scratchpad and is not committed.
+`TestRecordForexFixtures` (`selection_forex_test.go`) re-recorded the page on
+2026-10-26 into `internal/research/testdata/select-forex`:
+- `page.json`: our page's text and links (2,393 words, split on whitespace);
+- `textrazor.json`: TextRazor's response, read from the cache of the
+  2026-10-25 run, so the page text was unchanged and the recording cost 0
+  units;
+- `wiki.json`: the Wikipedia and Wikidata responses, trimmed to the fields
+  read, including each page's short description and the in-links of the
+  centre;
+- `cosines.json`: the keyword's cosine against each of the 44 graph texts.
 
-The golden test asserts the recorded result. The page and Wikipedia's
-links may have changed since 2026-10-25, so the lists above are the
-expected shape, not a binding transcript. The builder updates this section
-to the recording and reports every difference from it.
-- These must still hold:
-  - Foreign exchange market is in `about`;
+`TestSelectEntitiesForexCalibration` replays the recording offline and
+asserts `about`, `mentions` and the `graph` counts exactly. The recording
+agrees with the lists above: the same 42 `about` entities, no `mentions`, the
+same 9 cut neighbours with the same similarities, and the same link counts
+(40 out, 6 in, 44 neighbours, 35 kept, 0 capped). Only the order differs: the
+lists above group `about` by role, while the report lists it in rank order,
+with Stock, Trader (finance) and Stock market, then Foreign exchange market,
+in that order, and Triangle (chart pattern) after Open-high-low-close chart.
+- These hold in the golden test whatever the recording says:
+  - Foreign exchange market, Technical analysis, Market trend and Candlestick
+    pattern are in `about`;
   - Candle, Candlestick and Signal are dropped as `off_graph`;
-  - ISBN and One Direction are cut;
+  - neither ISBN nor One Direction is in `about` or `mentions`;
   - the moving golden lists are unchanged.
 
 The repository is private, so storing theforexguy.com's text as a test

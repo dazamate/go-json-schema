@@ -125,11 +125,16 @@ func (r *Researcher) linkEntities(ctx context.Context, docs []Doc, minPages int)
 	return ents, topics, strings.Join(notes, "; ")
 }
 
+// textrazorKey is the cache key of text's TextRazor answer.
+func textrazorKey(text string) string {
+	sum := sha256.Sum256([]byte(text))
+	return hex.EncodeToString(sum[:])
+}
+
 // analyze sends text to the linker, or returns the cached result for the
 // same text. A failed call is not cached.
 func (r *Researcher) analyze(ctx context.Context, text string) (res textrazor.Result, cached bool, err error) {
-	sum := sha256.Sum256([]byte(text))
-	key := hex.EncodeToString(sum[:])
+	key := textrazorKey(text)
 	if r.Cache.Get("textrazor", key, pageTTL, &res) {
 		return res, true, nil
 	}
