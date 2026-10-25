@@ -1,0 +1,298 @@
+{
+ "keyword": "moving cost calculator",
+ "model": "BAAI/bge-base-en-v1.5",
+ "themes": {
+  "Accounting": {
+   "keyword": 0.4095072516706848,
+   "page": 0.5518657267090685
+  },
+  "Applied mathematics": {
+   "keyword": 0.4364007409383849,
+   "page": 0.51874454905555
+  },
+  "Business": {
+   "keyword": 0.35537847025879404,
+   "page": 0.5143748426209153
+  },
+  "Business economics": {
+   "keyword": 0.4044458397575131,
+   "page": 0.5522088863896458
+  },
+  "Business processes": {
+   "keyword": 0.38812446313727894,
+   "page": 0.5299103059334184
+  },
+  "Calculator": {
+   "keyword": 0.6388672907064953,
+   "page": 0.5920883520188261
+  },
+  "Calculator technologies": {
+   "keyword": 0.6062885655963657,
+   "page": 0.5686259552375953
+  },
+  "Calculators": {
+   "keyword": 0.6128966713325369,
+   "page": 0.6053929248927133
+  },
+  "Classes of computers": {
+   "keyword": 0.41647718090009095,
+   "page": 0.5015388344668654
+  },
+  "Commercial vehicles": {
+   "keyword": 0.313955393716653,
+   "page": 0.5110313390329717
+  },
+  "Computer engineering": {
+   "keyword": 0.3764123287725551,
+   "page": 0.4605815849017004
+  },
+  "Computer hardware": {
+   "keyword": 0.3836494358807843,
+   "page": 0.4989376148258111
+  },
+  "Computer science": {
+   "keyword": 0.4096633321846079,
+   "page": 0.47320308035368447
+  },
+  "Computers": {
+   "keyword": 0.4060935451620399,
+   "page": 0.49572306381892517
+  },
+  "Computing": {
+   "keyword": 0.4094466950706799,
+   "page": 0.49248513485646267
+  },
+  "Consumer electronics": {
+   "keyword": 0.39164885774678315,
+   "page": 0.5323306697425716
+  },
+  "Consumer goods": {
+   "keyword": 0.3743510965092486,
+   "page": 0.5406383367006115
+  },
+  "Corporate finance": {
+   "keyword": 0.38804192475697247,
+   "page": 0.526374573716532
+  },
+  "Cost": {
+   "keyword": 0.5403291444222129,
+   "page": 0.6182267945520848
+  },
+  "Costs": {
+   "keyword": 0.5408145506634945,
+   "page": 0.6270877072920147
+  },
+  "Economics": {
+   "keyword": 0.42553089143071543,
+   "page": 0.5437583486822539
+  },
+  "Economy": {
+   "keyword": 0.3556719990815447,
+   "page": 0.507361535404021
+  },
+  "Electronic calculators": {
+   "keyword": 0.5843462444254914,
+   "page": 0.5554075351586615
+  },
+  "Electronic engineering": {
+   "keyword": 0.3326036056840552,
+   "page": 0.427702095174485
+  },
+  "Electronics": {
+   "keyword": 0.38256605113593534,
+   "page": 0.4985258048119291
+  },
+  "Electronics industry": {
+   "keyword": 0.34396314409124706,
+   "page": 0.47185077700318473
+  },
+  "Email": {
+   "keyword": 0.35330076744544886,
+   "page": 0.5248454597035755
+  },
+  "Energy": {
+   "keyword": 0.3873959252471772,
+   "page": 0.507082102295943
+  },
+  "Equipment": {
+   "keyword": 0.40441215019271193,
+   "page": 0.5467685060533476
+  },
+  "Federal Motor Carrier Safety Administration": {
+   "keyword": 0.3375018268718871,
+   "page": 0.5172641406524832
+  },
+  "Financial accounting": {
+   "keyword": 0.42658716670013475,
+   "page": 0.5443996677023092
+  },
+  "Financial management": {
+   "keyword": 0.39252483951743905,
+   "page": 0.5232108711281038
+  },
+  "Freight transport": {
+   "keyword": 0.4000980964207821,
+   "page": 0.595260540421231
+  },
+  "Health": {
+   "keyword": 0.2806724349376675,
+   "page": 0.4489100641249694
+  },
+  "Hot tub": {
+   "keyword": 0.3679987154605471,
+   "page": 0.5289045061755437
+  },
+  "Information appliances": {
+   "keyword": 0.44679625611405616,
+   "page": 0.527613764422437
+  },
+  "Information technology": {
+   "keyword": 0.3876472840979886,
+   "page": 0.47654838153685747
+  },
+  "Land transport": {
+   "keyword": 0.4110632931063834,
+   "page": 0.5803960040965735
+  },
+  "Land vehicles": {
+   "keyword": 0.3779775827636281,
+   "page": 0.548650190061043
+  },
+  "Logistics industry": {
+   "keyword": 0.37520714806239225,
+   "page": 0.5413487480438174
+  },
+  "Management": {
+   "keyword": 0.318944234710405,
+   "page": 0.4956100479358879
+  },
+  "Management accounting": {
+   "keyword": 0.4045333664148278,
+   "page": 0.5267896067012733
+  },
+  "Marketing": {
+   "keyword": 0.3338364910184531,
+   "page": 0.5375625103219326
+  },
+  "Mathematical tools": {
+   "keyword": 0.48926097775086014,
+   "page": 0.5410625924668139
+  },
+  "Mathematics": {
+   "keyword": 0.40802845197837356,
+   "page": 0.49733000729503407
+  },
+  "Mobile businesses": {
+   "keyword": 0.4099253825556146,
+   "page": 0.5676101417840056
+  },
+  "Motor vehicles": {
+   "keyword": 0.3138956647455716,
+   "page": 0.4980669979569091
+  },
+  "Moving companies": {
+   "keyword": 0.5358999691908468,
+   "page": 0.6759325767351676
+  },
+  "Moving company": {
+   "keyword": 0.562711461533253,
+   "page": 0.6990648700443318
+  },
+  "Office equipment": {
+   "keyword": 0.40785860400818263,
+   "page": 0.5405570278978137
+  },
+  "Office work": {
+   "keyword": 0.3274139921519047,
+   "page": 0.5386185164771757
+  },
+  "Personal computing": {
+   "keyword": 0.3955529728091055,
+   "page": 0.4957536750267821
+  },
+  "Piano": {
+   "keyword": 0.41277380533930313,
+   "page": 0.5501642467744489
+  },
+  "Pricing": {
+   "keyword": 0.4606424199262603,
+   "page": 0.6431080610431543
+  },
+  "Private sector": {
+   "keyword": 0.3223371459386944,
+   "page": 0.4934972437976209
+  },
+  "Public sphere": {
+   "keyword": 0.28328938761495365,
+   "page": 0.4113923403317473
+  },
+  "Road haulage": {
+   "keyword": 0.35923823663668747,
+   "page": 0.5447482407812093
+  },
+  "Road transport": {
+   "keyword": 0.3741953631633265,
+   "page": 0.5544850894037214
+  },
+  "Safety": {
+   "keyword": 0.34351672729413796,
+   "page": 0.5499867948963617
+  },
+  "Service industries": {
+   "keyword": 0.3353604756657792,
+   "page": 0.5073873784977371
+  },
+  "Stairs": {
+   "keyword": 0.4049908063678812,
+   "page": 0.5357618814019843
+  },
+  "Supply chain management": {
+   "keyword": 0.33097005031954474,
+   "page": 0.5178236149729397
+  },
+  "Technology": {
+   "keyword": 0.39243618244584927,
+   "page": 0.4972547534942894
+  },
+  "Tools": {
+   "keyword": 0.4131739981339018,
+   "page": 0.5271406333732843
+  },
+  "Transport": {
+   "keyword": 0.4037846718744323,
+   "page": 0.57546936757742
+  },
+  "Truck": {
+   "keyword": 0.35833975784848526,
+   "page": 0.537682947219092
+  },
+  "Truck rental": {
+   "keyword": 0.39662485972925593,
+   "page": 0.6071115855794142
+  },
+  "Trucks": {
+   "keyword": 0.33786946227865877,
+   "page": 0.5197905837257779
+  },
+  "Vehicle technology": {
+   "keyword": 0.342704518060483,
+   "page": 0.48225631998755564
+  },
+  "Vehicles": {
+   "keyword": 0.34775829640139444,
+   "page": 0.5300154513576495
+  },
+  "Weight": {
+   "keyword": 0.44170274985394853,
+   "page": 0.5672656116413314
+  },
+  "Wheeled vehicles": {
+   "keyword": 0.3830853602171414,
+   "page": 0.4951332628560539
+  },
+  "ZIP Code": {
+   "keyword": 0.4430547731286719,
+   "page": 0.5791888437601491
+  }
+ }
+}
