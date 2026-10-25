@@ -328,6 +328,7 @@ type builtGraph struct {
 	Members []graphMember       // centres in candidate order, then kept neighbours in pruned order
 	Links   map[string][]string // a page entity or extra title -> the distinct members it links with
 	Dropped []Dropped           // neighbours cut by score or failing identity
+	Failed  map[string]bool     // the QIDs of kept neighbours that failed identity, already in Dropped
 	Report  GraphReport
 	Scored  bool // the model scored the neighbours
 }
@@ -433,7 +434,11 @@ func (r *Researcher) buildGraph(ctx context.Context, wr *resolver, keyword strin
 		for i, n := range ns {
 			texts[i] = graphText(n)
 		}
+		progress(ctx, fmt.Sprintf("scoring %d neighbours against the keyword", len(texts)))
 		got, err := r.Themes.Similarity(ctx, keyword, texts)
+		if err == nil && len(got) != len(texts) {
+			err = fmt.Errorf("%d similarities for %d neighbours", len(got), len(texts))
+		}
 		if err != nil {
 			notes = append(notes, fmt.Sprintf("graph not scored: %v: only the neighbours the page names are kept", err))
 			break
@@ -456,6 +461,7 @@ func (r *Researcher) buildGraph(ctx context.Context, wr *resolver, keyword strin
 		return nil, nil, err
 	}
 	members := centres
+	failed := map[string]bool{}
 	for _, k := range p.Kept {
 		freebase, source := "", SourceGraph
 		if e := s.byQID[k.QID]; e != nil {
@@ -469,6 +475,7 @@ func (r *Researcher) buildGraph(ctx context.Context, wr *resolver, keyword strin
 				d.GraphSimilarity = f64(round3(*k.Sim))
 			}
 			dropped = append(dropped, d)
+			failed[k.QID] = true
 			continue
 		}
 		members = append(members, graphMember{graphNeighbour: k, id: id})
@@ -503,7 +510,7 @@ func (r *Researcher) buildGraph(ctx context.Context, wr *resolver, keyword strin
 	if rep.Cut+rep.Capped > 0 {
 		notes = append(notes, fmt.Sprintf("graph of %s: %d cut below min_graph_similarity, %d over max_graph_neighbours", joined, rep.Cut, rep.Capped))
 	}
-	return &builtGraph{Members: members, Links: links, Dropped: dropped, Report: rep, Scored: scored}, notes, nil
+	return &builtGraph{Members: members, Links: links, Dropped: dropped, Failed: failed, Report: rep, Scored: scored}, notes, nil
 }
 
 // graphCandidates turns a built graph into candidates: the centres, the
@@ -527,11 +534,14 @@ func (s *selection) graphCandidates(g *builtGraph, hits []lookupHit, set SelectS
 				id.KGMIDChecked = id.KGMIDChecked || (e.freebase != "" && id.KGMID == e.freebase)
 			}
 			c.QualifiedBy = []string{"centre"}
+			if e != nil {
+				c.QualifiedBy = append(e.qualifiers(set), "centre")
+			}
 			out = append(out, c)
 			continue
 		case e != nil:
 			c.role, c.Selected, c.freebase = roleGraphPage, e.selected(SourcePage), e.freebase
-			c.GraphLinks = len(g.Links[m.Title])
+			c.GraphLinks = len(g.Links[e.title])
 		default:
 			c.role, c.Selected = roleNeighbour, Selected{QID: m.QID, Source: SourceGraph, Matched: append([]string{}, m.Named...), LinkedTo: []string{}}
 			if m.Sim != nil {
@@ -551,7 +561,7 @@ func (s *selection) graphCandidates(g *builtGraph, hits []lookupHit, set SelectS
 	}
 
 	for _, e := range s.ents {
-		if member[e.qid] {
+		if member[e.qid] || g.Failed[e.qid] {
 			continue
 		}
 		by := e.qualifiers(set)
@@ -579,7 +589,7 @@ func (s *selection) graphCandidates(g *builtGraph, hits []lookupHit, set SelectS
 	hitQIDs := map[string]bool{}
 	for _, h := range hits {
 		hitQIDs[h.QID] = true
-		if member[h.QID] || s.byQID[h.QID] != nil {
+		if member[h.QID] || g.Failed[h.QID] || s.byQID[h.QID] != nil {
 			continue
 		}
 		n := len(g.Links[h.Title])
@@ -593,7 +603,7 @@ func (s *selection) graphCandidates(g *builtGraph, hits []lookupHit, set SelectS
 	}
 
 	for _, qid := range s.order {
-		if member[qid] || hitQIDs[qid] || s.byQID[qid] != nil {
+		if member[qid] || g.Failed[qid] || hitQIDs[qid] || s.byQID[qid] != nil {
 			continue
 		}
 		t := s.topics[qid]

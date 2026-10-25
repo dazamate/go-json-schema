@@ -3,13 +3,13 @@ package research
 import (
 	"context"
 	"encoding/json"
-	"strings"
-
 	"fmt"
-	"github.com/dazamate/go-json-schema/internal/textrazor"
 	"reflect"
 	"slices"
+	"strings"
 	"testing"
+
+	"github.com/dazamate/go-json-schema/internal/textrazor"
 )
 
 func hoodWiki() *fakeWiki {
@@ -537,6 +537,50 @@ func TestBuildGraphWithoutModel(t *testing.T) {
 	}
 }
 
+// shortScorer returns one similarity fewer than the texts it is given.
+type shortScorer struct{ fakeScorer }
+
+func (s *shortScorer) Similarity(ctx context.Context, keyword string, texts []string) ([]float64, error) {
+	got, err := s.fakeScorer.Similarity(ctx, keyword, texts)
+	if err != nil {
+		return nil, err
+	}
+	return got[:len(got)-1], nil
+}
+
+func TestBuildGraphShortScorerResult(t *testing.T) {
+	g, notes := patGraph(t, patWiki(), &shortScorer{fakeScorer{sim: patSims()}}, patText+" A chart pattern helps.", patEntities(), patGroups)
+	if g == nil {
+		t.Fatalf("nil graph, notes %v", notes)
+	}
+	if !hasNote(notes, "graph not scored: 5 similarities for 6 neighbours: only the neighbours the page names are kept") || g.Scored {
+		t.Errorf("scored %v notes %v", g.Scored, notes)
+	}
+}
+
+func TestBuildGraphScoringError(t *testing.T) {
+	g, notes := patGraph(t, patWiki(), &fakeScorer{err: fmt.Errorf("model down")}, patText+" A chart pattern helps.", patEntities(), patGroups)
+	if g == nil {
+		t.Fatalf("nil graph, notes %v", notes)
+	}
+	if !hasNote(notes, "graph not scored: model down: only the neighbours the page names are kept") || g.Scored {
+		t.Errorf("scored %v notes %v", g.Scored, notes)
+	}
+}
+
+func TestBuildGraphReportsScoringProgress(t *testing.T) {
+	var msgs []string
+	ctx := WithProgress(context.Background(), func(msg string) { msgs = append(msgs, msg) })
+	r := &Researcher{Cache: NewCache(t.TempDir()), Themes: &fakeScorer{sim: patSims()}}
+	s := newSelection(textrazor.Result{Entities: patEntities(), Topics: patTopics()}, patText, nil, patURL, wordsOf(patKeyword), DefaultSelectSettings)
+	if _, _, err := r.buildGraph(ctx, kwResolver(t, patWiki()), patKeyword, s, nil, patGroups, DefaultSelectSettings); err != nil {
+		t.Fatal(err)
+	}
+	if !slices.Contains(msgs, "scoring 6 neighbours against the keyword") {
+		t.Errorf("progress = %v", msgs)
+	}
+}
+
 // patResearcher is a Researcher on the pat page, linked as ents and topics,
 // scored by scorer.
 func patResearcher(t *testing.T, raw rawPage, ents []textrazor.Entity, topics []textrazor.Topic, scorer ThemeScorer) *Researcher {
@@ -683,6 +727,67 @@ func TestSelectEntitiesCentreLinkedOnThePage(t *testing.T) {
 	}
 	if _, ok := findDropped(rep, "Price action trading"); ok {
 		t.Errorf("centre dropped: %+v", rep.Dropped)
+	}
+	// TextRazor's own qualifiers first, then centre
+	if want := []string{"scores", "centre"}; !slices.Equal(c.QualifiedBy, want) {
+		t.Errorf("centre qualified_by = %v, want %v", c.QualifiedBy, want)
+	}
+}
+
+func TestSelectEntitiesListNeighbourDroppedOnce(t *testing.T) {
+	w := patWiki()
+	w.pages["List of chart patterns"] = wikiPage{qid: "Q15"}
+	w.items["Q15"] = wikiItem{sitelink: "List of chart patterns", claims: map[string][]string{"P31": {"Q13406463"}}}
+	w.articleLinks["Price action trading"] = append(w.articleLinks["Price action trading"], "List of chart patterns")
+	w.articleLinks["List of chart patterns"] = []string{"Technical analysis", "Gap (chart pattern)", "Chart pattern", "Day trading"}
+	sims := patSims()
+	sims["List of chart patterns"] = 0.6
+	ents := append(patEntities(), pageMention("List of chart patterns", "Q15", "", "list of chart patterns", 0.9))
+	rep := runSelect(t, patResearcherWiki(t, w, patRaw(), ents, patTopics(), &fakeScorer{sim: sims}), patQuery(DefaultSelectSettings))
+	n := 0
+	for _, d := range rep.Dropped {
+		if d.Name == "List of chart patterns" {
+			n++
+			if d.Reason != ReasonNotAnArticle {
+				t.Errorf("dropped = %+v", d)
+			}
+		}
+	}
+	if n != 1 {
+		t.Errorf("dropped %d times: %+v", n, rep.Dropped)
+	}
+	if slices.Contains(selNames(rep.About), "List of chart patterns") || slices.Contains(selNames(rep.Mentions), "List of chart patterns") {
+		t.Errorf("selected: about %v mentions %v", selNames(rep.About), selNames(rep.Mentions))
+	}
+}
+
+func TestSelectEntitiesGraphLinksUsesTextRazorTitle(t *testing.T) {
+	ents := patEntities()
+	ents[0] = pageMention("Technical Analysis", "Q2", "", "technical analysis", 0.5)
+	w := patWiki()
+	w.redirects["Technical Analysis"] = [2]string{"Technical analysis", ""}
+	w.articleLinks["Price action trading"] = append(w.articleLinks["Price action trading"], "Technical Analysis")
+	rep := runSelect(t, patResearcherWiki(t, w, patRaw(), ents, patTopics(), &fakeScorer{sim: patSims()}), patQuery(DefaultSelectSettings))
+	for _, s := range rep.About {
+		if s.QID == "Q2" {
+			if s.GraphLinks != 2 {
+				t.Errorf("Technical Analysis graph_links = %d, want 2", s.GraphLinks)
+			}
+			return
+		}
+	}
+	t.Errorf("Q2 not in about: %v", selNames(rep.About))
+}
+
+func TestSelectEntitiesGraphMentionNotInPageText(t *testing.T) {
+	ents := patEntities()
+	ents[3] = pageMention("Trade", "Q12", "", "tradez", 0.87)
+	rep := runSelect(t, patResearcher(t, patRaw(), ents, patTopics(), &fakeScorer{sim: patSims()}), patQuery(DefaultSelectSettings))
+	if slices.Contains(selNames(rep.Mentions), "Trade") {
+		t.Errorf("mentions = %v", selNames(rep.Mentions))
+	}
+	if d, ok := findDropped(rep, "Trade"); !ok || d.Reason != ReasonNotInPageText {
+		t.Errorf("dropped Trade = %+v, %v", d, ok)
 	}
 }
 
