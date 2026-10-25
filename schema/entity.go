@@ -1,9 +1,6 @@
 package schema
 
-import (
-	"net/url"
-	"strings"
-)
+import "strings"
 
 // Wikipedia returns the English Wikipedia URL for an article title.
 func Wikipedia(title string) URL { return WikipediaLang("en", title) }
@@ -28,8 +25,8 @@ func ProductOntology(term string) URL {
 
 // KGSearch returns a Google search URL pinned to a Knowledge Graph entity by
 // its machine ID, e.g. /m/019qb_ or /g/122hcnps.
-func KGSearch(query, mid string) URL {
-	return URL("https://www.google.com/search?q=" + url.QueryEscape(query) + "&kponly&kgmid=" + mid)
+func KGSearch(mid string) URL {
+	return URL("https://www.google.com/search?kgmid=" + mid)
 }
 
 // GoogleMachineID returns an identifier naming a Google Knowledge Graph
@@ -41,6 +38,24 @@ func GoogleMachineID(mid string) *PropertyValue {
 	return pv
 }
 
+// WikidataID returns an identifier naming a Wikidata item, encoded as
+// {"propertyID":"Wikidata","value":"<qid>"}.
+func WikidataID(qid string) *PropertyValue {
+	pv := &PropertyValue{}
+	pv.PropertyID = Texts("Wikidata")
+	pv.Value = Texts(qid)
+	return pv
+}
+
+// BingEntityID returns an identifier naming a Bing entity, encoded as
+// {"propertyID":"BingEntityID","value":"<id>"}.
+func BingEntityID(id string) *PropertyValue {
+	pv := &PropertyValue{}
+	pv.PropertyID = Texts("BingEntityID")
+	pv.Value = Texts(id)
+	return pv
+}
+
 // Entity describes a real-world thing by every identity source known for
 // it. Thing and PerSource turn it into nodes for about, mentions,
 // knowsAbout, areaServed and similar properties.
@@ -49,11 +64,12 @@ type Entity struct {
 	ID   string // @id; often a Wikipedia URL
 	Name string
 
-	Wikipedia       string // article title
-	Wikidata        string // item ID, e.g. Q180711
-	KGMID           string // Knowledge Graph machine ID, e.g. /m/019qb_
-	DBpedia         string // resource title
-	ProductOntology string // term
+	Wikipedia       string   // article title
+	Wikidata        string   // item ID, e.g. Q180711
+	KGMID           string   // Knowledge Graph machine ID, e.g. /m/019qb_
+	KGMIDs          []string // more Knowledge Graph IDs, after KGMID
+	DBpedia         string   // resource title
+	ProductOntology string   // term
 	SameAs          []string
 }
 
@@ -67,8 +83,8 @@ func (e Entity) SameAsURLs() Values {
 	if e.Wikidata != "" {
 		out = append(out, Wikidata(e.Wikidata))
 	}
-	if e.KGMID != "" {
-		out = append(out, KGSearch(e.Name, e.KGMID))
+	for _, mid := range e.kgmids() {
+		out = append(out, KGSearch(mid))
 	}
 	if e.DBpedia != "" {
 		out = append(out, DBpedia(e.DBpedia))
@@ -83,14 +99,23 @@ func (e Entity) SameAsURLs() Values {
 }
 
 // Thing returns e as one node carrying every sameAs URL, plus a
-// GoogleMachineID identifier when the KG machine ID is known.
+// GoogleMachineID identifier for each known KG machine ID.
 func (e Entity) Thing() *Thing {
 	t := e.base()
 	t.SameAs = e.SameAsURLs()
-	if e.KGMID != "" {
-		t.Identifier = Vals(GoogleMachineID(e.KGMID))
+	for _, mid := range e.kgmids() {
+		t.Identifier = append(t.Identifier, GoogleMachineID(mid))
 	}
 	return t
+}
+
+// kgmids returns KGMID, when set, followed by KGMIDs.
+func (e Entity) kgmids() []string {
+	var out []string
+	if e.KGMID != "" {
+		out = append(out, e.KGMID)
+	}
+	return append(out, e.KGMIDs...)
 }
 
 // PerSource returns one node per sameAs URL, each with the same name, so

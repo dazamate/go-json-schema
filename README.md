@@ -147,7 +147,7 @@ schema.Entities(a, b, c) // Values of Things, for about / mentions / knowsAbout
 
 schema.Entity{Type: "State", ID: string(schema.Wikipedia("Arizona")), Name: "Arizona"} // areaServed by Wikipedia @id
 schema.GoogleMachineID("/m/0f1w9")  // {"@type":"PropertyValue","propertyID":"GoogleMachineID","value":"kg:/m/0f1w9"}
-schema.KGSearch("seo", "/m/019qb_") // https://www.google.com/search?q=seo&kponly&kgmid=/m/019qb_
+schema.KGSearch("/m/019qb_") // https://www.google.com/search?kgmid=/m/019qb_
 schema.Wikipedia, schema.WikipediaLang, schema.Wikidata, schema.DBpedia, schema.ProductOntology
 ```
 

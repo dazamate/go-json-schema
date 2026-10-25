@@ -207,7 +207,7 @@ func Example_localBusiness() {
 	//         "sameAs": [
 	//           "https://en.wikipedia.org/wiki/Search_engine_optimization",
 	//           "https://www.wikidata.org/wiki/Q180711",
-	//           "https://www.google.com/search?q=Search+engine+optimization&kponly&kgmid=/m/019qb_"
+	//           "https://www.google.com/search?kgmid=/m/019qb_"
 	//         ]
 	//       }
 	//     },
@@ -242,7 +242,7 @@ func Example_localBusiness() {
 	//         {
 	//           "@type": "Thing",
 	//           "name": "seo",
-	//           "sameAs": "https://www.google.com/search?q=seo&kponly&kgmid=/m/019qb_"
+	//           "sameAs": "https://www.google.com/search?kgmid=/m/019qb_"
 	//         }
 	//       ],
 	//       "about": {
