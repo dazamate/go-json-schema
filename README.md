@@ -384,11 +384,11 @@ the rest keeps working. Without the settings, `note` says no Bing IDs were added
 **Themes (local model):** similarity uses BAAI/bge-base-en-v1.5 (quantized
 ONNX) and ONNX Runtime, downloaded on first use (about 220 MB, pinned by
 SHA-256) under `~/.cache/go-json-schema/models`. The model scores the page's
-themes and also the graph's neighbours. This is linux/amd64 only
-and needs cgo and gcc. Without them, or without the download, the tool still
-runs with no themes, the graph keeps only the neighbours the page names, and
-`note` says why. A keyword article's graph neighbourhood is cached for 30 days. `CGO_ENABLED=0 go build ./...`
-works.
+themes and also the graph's neighbours. This is linux/amd64 only and needs
+cgo and gcc. Without them, or without the download, the tool still runs with
+no themes, the graph keeps only the neighbours the page names, and `note`
+says why. `CGO_ENABLED=0 go build ./...` works. A keyword article's graph
+neighbourhood is cached for 30 days.
 
 **Tests:** the default `go test ./...` makes no live calls.
 - `SCHEMA_MCP_MODEL=1 go test ./internal/embed` runs the real model.
