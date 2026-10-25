@@ -18,8 +18,9 @@ const (
 )
 
 // notArticleClasses are the Wikidata classes of pages that are not subjects:
-// Wikimedia disambiguation page, list article and category.
-var notArticleClasses = []string{"Q4167410", "Q4167836", "Q13406463"}
+// Wikimedia disambiguation page, category, list article, and the category
+// class some category items have instead.
+var notArticleClasses = []string{"Q4167410", "Q4167836", "Q13406463", "Q59541917"}
 
 const maxClasses = 2
 
@@ -104,7 +105,7 @@ func checkIdentity(it wdEntity, found bool, lang, title, freebase string) (ident
 		return identity{}, ReasonIdentityMismatch
 	}
 	p31 := it.ranked("P31")
-	if slices.ContainsFunc(p31, func(c string) bool { return slices.Contains(notArticleClasses, c) }) {
+	if strings.HasPrefix(sitelink, "Category:") || slices.ContainsFunc(p31, func(c string) bool { return slices.Contains(notArticleClasses, c) }) {
 		return identity{}, ReasonNotAnArticle
 	}
 	p646 := it.ranked("P646")

@@ -95,6 +95,19 @@ func TestCheckIdentityRejectsNonArticles(t *testing.T) {
 	}
 }
 
+// Some category items, such as Q7012234 (Category:Marketing), are an
+// instance of Q59541917 rather than Q4167836.
+func TestCheckIdentityRejectsCategoryPages(t *testing.T) {
+	it := wdItem(t, "Marketing", map[string][]string{"P31": {"Q59541917"}})
+	if _, reason := checkIdentity(it, true, "en", "", ""); reason != ReasonNotAnArticle {
+		t.Errorf("Q59541917: reason = %q", reason)
+	}
+	it = wdItem(t, "Category:Marketing", nil)
+	if _, reason := checkIdentity(it, true, "en", "", ""); reason != ReasonNotAnArticle {
+		t.Errorf("Category: sitelink: reason = %q", reason)
+	}
+}
+
 func TestCheckIdentityNoSitelink(t *testing.T) {
 	if _, reason := checkIdentity(wdItem(t, "", nil), true, "en", "A", ""); reason != ReasonIdentityMismatch {
 		t.Errorf("no sitelink: reason = %q", reason)

@@ -204,6 +204,15 @@ func TestSelectEntitiesCalibration(t *testing.T) {
 	if d, ok := findDropped(rep, "Computing"); !ok || d.Reason != ReasonBelowSimilarity || num(d.KeywordSimilarity) != 0.409 || num(d.PageSimilarity) != 0.492 {
 		t.Errorf("computing dropped = %+v", d)
 	}
+	// Category items whose class is Q59541917, not Q4167836.
+	for _, qid := range []string{"Q7012234", "Q5460952", "Q4619"} {
+		i := slices.IndexFunc(rep.Dropped, func(d Dropped) bool { return d.QID == qid })
+		if i < 0 {
+			t.Errorf("%s not dropped", qid)
+		} else if d := rep.Dropped[i]; d.Reason != ReasonNotAnArticle || d.Source != SourceTheme {
+			t.Errorf("%s dropped = %+v", qid, d)
+		}
+	}
 
 	for _, s := range slices.Concat(rep.About, rep.Mentions) {
 		if want := s.Source == SourcePage; s.KGMIDChecked != want {
