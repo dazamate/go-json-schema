@@ -431,6 +431,7 @@ type wdEntity struct {
 	Labels       map[string]struct{ Value string }   `json:"labels"`
 	Descriptions map[string]struct{ Value string }   `json:"descriptions"`
 	Aliases      map[string][]struct{ Value string } `json:"aliases"`
+	Sitelinks    map[string]struct{ Title string }   `json:"sitelinks"`
 	Claims       map[string][]struct {
 		Mainsnak struct {
 			Datavalue struct {
