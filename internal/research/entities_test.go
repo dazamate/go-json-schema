@@ -359,6 +359,19 @@ func TestResolveDedupesAndCaches(t *testing.T) {
 	}
 }
 
+func TestResolveSkipsOldEntityCacheEntries(t *testing.T) {
+	r := &Researcher{Cache: NewCache(t.TempDir())}
+	old := Entity{Phrase: "lemon", Status: StatusExact, Title: "Lemon", QID: "Q500",
+		Thing: json.RawMessage(`{"@type":"Thing","name":"Lemon","sameAs":["https://www.google.com/search?q=Lemon&kponly&kgmid=/m/09k_b"]}`)}
+	if err := r.Cache.Put("entity", "en|lemon", old); err != nil {
+		t.Fatal(err)
+	}
+	e := resolve(t, newFakeWiki(), r, "lemon")["lemon"]
+	if e.Cached || strings.Contains(string(e.Thing), "kponly") || !strings.Contains(string(e.Thing), "https://www.google.com/search?kgmid=/m/09k_b") {
+		t.Errorf("old cache entry served: cached %v, thing %s", e.Cached, e.Thing)
+	}
+}
+
 func TestResolveRejectsBadLanguage(t *testing.T) {
 	r := &Researcher{Browser: fakeBrowser{newFakeWiki().page()}}
 	if _, err := r.ResolveEntities(context.Background(), EntityQuery{Phrases: []string{"x"}, Language: "en.evil.com/"}); err == nil {

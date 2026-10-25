@@ -61,6 +61,9 @@ const (
 	serpBucket = "serp2"
 	pageTTL    = 7 * 24 * time.Hour
 	entityTTL  = 30 * 24 * time.Hour
+	// entityBucket changes when the cached Thing node changes, as when the
+	// Google link became ?kgmid= alone, so older nodes are not served.
+	entityBucket = "entity2"
 )
 
 // SERPQuery is one keyword search. Every field but Keyword is optional.

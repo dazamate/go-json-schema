@@ -107,7 +107,7 @@ func (r *Researcher) ResolveEntities(ctx context.Context, q EntityQuery) (Entity
 	var todoIdx []int
 	for i, p := range phrases {
 		var e Entity
-		if r.Cache.Get("entity", lang+"|"+strings.ToLower(p), entityTTL, &e) {
+		if r.Cache.Get(entityBucket, lang+"|"+strings.ToLower(p), entityTTL, &e) {
 			e.Phrase, e.Cached = p, true
 			rep.Entities[i] = e
 			continue
@@ -129,7 +129,7 @@ func (r *Researcher) ResolveEntities(ctx context.Context, q EntityQuery) (Entity
 		}
 		for k, e := range ents {
 			rep.Entities[todoIdx[k]] = e
-			r.Cache.Put("entity", lang+"|"+strings.ToLower(e.Phrase), e)
+			r.Cache.Put(entityBucket, lang+"|"+strings.ToLower(e.Phrase), e)
 		}
 		return nil
 	})
