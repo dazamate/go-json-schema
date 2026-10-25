@@ -1,0 +1,1098 @@
+{
+ "P213": {
+  "label": "ISNI",
+  "classes": [
+   "Wikidata property for authority control by VIAF member",
+   "Wikidata property for an international standard identifier",
+   "Wikidata property for authority control for people",
+   "Wikidata property to identify organizations",
+   "Wikidata property for an identifier that does not imply notability",
+   "Wikidata property widely reused by third-party entities"
+  ]
+ },
+ "P214": {
+  "label": "VIAF cluster ID",
+  "classes": [
+   "Wikidata property for a cluster",
+   "Wikidata property for authority control for people",
+   "Wikidata property to identify organizations",
+   "Wikidata property for authority control for works",
+   "Wikidata property for authority control for places",
+   "Wikidata property for authority control, with reciprocal use of Wikidata",
+   "Wikidata property for an identifier that does not imply notability",
+   "Wikidata property for authority control by VIAF member",
+   "Wikidata property widely reused by third-party entities",
+   "Wikidata property for an identifier that generally has just one value, but rarely can have two or more values for the same entity"
+  ]
+ },
+ "P227": {
+  "label": "GND ID",
+  "classes": [
+   "Wikidata property for authority control by VIAF member",
+   "Wikidata property for authority control for people",
+   "Wikidata property to identify organizations",
+   "Wikidata property for authority control for places",
+   "Wikidata property for authority control for works",
+   "Wikidata property for an identifier that suggests notability",
+   "Wikidata property widely reused by third-party entities",
+   "Wikidata property related to mines and mining"
+  ]
+ },
+ "P244": {
+  "label": "Library of Congress Authorities ID",
+  "classes": [
+   "Wikidata property for authority control",
+   "Wikidata property for authority control for people",
+   "Wikidata property to identify organizations",
+   "Wikidata property for authority control by VIAF member",
+   "Wikidata property for an identifier that suggests notability"
+  ]
+ },
+ "P268": {
+  "label": "Biblioth\u00e8que nationale de France ID",
+  "classes": [
+   "Wikidata property for authority control by VIAF member",
+   "Wikidata property for authority control for people",
+   "Wikidata property to identify organizations",
+   "Wikidata property for authority control for places",
+   "Wikidata property for authority control for works",
+   "Wikidata property for an identifier that suggests notability"
+  ]
+ },
+ "P349": {
+  "label": "NDL Authority ID",
+  "classes": [
+   "Wikidata property for authority control for people",
+   "Wikidata property to identify organizations",
+   "Wikidata property for authority control by VIAF member",
+   "Wikidata property for an identifier that suggests notability"
+  ]
+ },
+ "P508": {
+  "label": "BNCF Thesaurus ID",
+  "classes": [
+   "Wikidata property related to a thesaurus",
+   "Wikidata property for an identifier that suggests notability",
+   "Wikidata property for authority control, with reciprocal use of Wikidata"
+  ]
+ },
+ "P646": {
+  "label": "Freebase ID",
+  "classes": [
+   "Wikidata property for authority control",
+   "Wikidata property for an identifier that does not imply notability"
+  ]
+ },
+ "P691": {
+  "label": "NL CR AUT ID",
+  "classes": [
+   "Wikidata property for authority control by VIAF member",
+   "Wikidata property for an identifier that suggests notability",
+   "Wikidata property for authority control for people",
+   "Wikidata property to identify organizations"
+  ]
+ },
+ "P920": {
+  "label": "LEM ID",
+  "classes": [
+   "Wikidata property related to a thesaurus"
+  ]
+ },
+ "P950": {
+  "label": "National Library of Spain SpMaBN ID",
+  "classes": [
+   "Wikidata property for authority control by VIAF member",
+   "Wikidata property for authority control for people",
+   "Wikidata property for authority control for places",
+   "Wikidata property for an identifier that suggests notability"
+  ]
+ },
+ "P1014": {
+  "label": "Art & Architecture Thesaurus ID",
+  "classes": [
+   "Wikidata property related to a thesaurus",
+   "Wikidata property related to art",
+   "Wikidata property related to architecture",
+   "Wikidata property related to archaeology"
+  ]
+ },
+ "P1015": {
+  "label": "BIBSYS ID",
+  "classes": [
+   "Wikidata property for authority control by VIAF member",
+   "Wikidata property for authority control for people",
+   "Wikidata property for authority control for works"
+  ]
+ },
+ "P1036": {
+  "label": "Dewey Decimal Classification",
+  "classes": [
+   "Wikidata property related to a library classification (topics)"
+  ]
+ },
+ "P1051": {
+  "label": "PSH ID",
+  "classes": [
+   "Wikidata property for authority control"
+  ]
+ },
+ "P1225": {
+  "label": "U.S. National Archives Identifier",
+  "classes": [
+   "Wikidata property for an identifier",
+   "Wikidata property related to archives"
+  ]
+ },
+ "P1245": {
+  "label": "OmegaWiki Defined Meaning",
+  "classes": [
+   "Wikidata property linking to articles in MediaWiki websites"
+  ]
+ },
+ "P1256": {
+  "label": "Iconclass notation",
+  "classes": [
+   "Wikidata property related to creative works",
+   "Wikidata property related to art",
+   "Wikidata property for authority control",
+   "Wikidata property for an identifier that suggests notability"
+  ]
+ },
+ "P1296": {
+  "label": "Gran Enciclop\u00e8dia Catalana ID (former scheme)",
+  "classes": [
+   "Wikidata property related to encyclopedias",
+   "Wikidata property for an identifier",
+   "Wikidata property for a former identification scheme"
+  ]
+ },
+ "P1330": {
+  "label": "MusicBrainz instrument ID",
+  "classes": [
+   "Wikidata property for authority control, with reciprocal use of Wikidata",
+   "Wikidata property related to musical instruments"
+  ]
+ },
+ "P1368": {
+  "label": "National Library of Latvia ID",
+  "classes": [
+   "Wikidata property for authority control for people",
+   "Wikidata property for authority control by VIAF member",
+   "Wikidata property for an identifier that suggests notability"
+  ]
+ },
+ "P1417": {
+  "label": "Encyclop\u00e6dia Britannica Online ID",
+  "classes": [
+   "Wikidata property related to encyclopedias",
+   "Wikidata property for an identifier that suggests notability",
+   "Wikidata property for lexicographical data"
+  ]
+ },
+ "P1617": {
+  "label": "BBC Things ID",
+  "classes": [
+   "Wikidata property for authority control, with reciprocal use of Wikidata"
+  ]
+ },
+ "P1807": {
+  "label": "Great Aragonese Encyclopedia ID",
+  "classes": [
+   "Wikidata property related to encyclopedias",
+   "Wikidata property for a discontinued website"
+  ]
+ },
+ "P2004": {
+  "label": "NALT ID",
+  "classes": [
+   "Wikidata property for authority control",
+   "Wikidata property related to a thesaurus",
+   "Wikidata property related to agriculture",
+   "Wikidata property related to natural science"
+  ]
+ },
+ "P2167": {
+  "label": "UNSPSC code",
+  "classes": [
+   "Wikidata property for identifiers in registers of goods and services",
+   "Wikidata property related to the United Nations"
+  ]
+ },
+ "P2263": {
+  "label": "ISOCAT ID",
+  "classes": [
+   "Wikidata property for authority control",
+   "Wikidata property for an international standard identifier"
+  ]
+ },
+ "P2347": {
+  "label": "YSO ID",
+  "classes": [
+   "Wikidata property related to a thesaurus"
+  ]
+ },
+ "P2452": {
+  "label": "GeoNames feature code",
+  "classes": [
+   "Wikidata property for authority control",
+   "Wikidata property for ontology mapping"
+  ]
+ },
+ "P2581": {
+  "label": "BabelNet ID",
+  "classes": [
+   "Wikidata property related to encyclopedias",
+   "Wikidata property for an identifier"
+  ]
+ },
+ "P2612": {
+  "label": "TED topic ID",
+  "classes": [
+   "Wikidata property to identify topics"
+  ]
+ },
+ "P2924": {
+  "label": "Great Russian Encyclopedia Online ID (2017)",
+  "classes": [
+   "Wikidata property related to encyclopedias"
+  ]
+ },
+ "P3153": {
+  "label": "Open Funder Registry funder ID",
+  "classes": [
+   "Wikidata property to identify organizations",
+   "Wikidata property related to research"
+  ]
+ },
+ "P3219": {
+  "label": "Encyclop\u00e6dia Universalis ID",
+  "classes": [
+   "Wikidata property for an identifier that suggests notability",
+   "Wikidata property related to encyclopedias"
+  ]
+ },
+ "P3221": {
+  "label": "New York Times topic ID",
+  "classes": [
+   "Wikidata property to identify news website topics",
+   "Wikidata property related to New York City"
+  ]
+ },
+ "P3365": {
+  "label": "Treccani ID",
+  "classes": [
+   "Wikidata property related to encyclopedias",
+   "Wikidata property for an identifier that suggests notability"
+  ]
+ },
+ "P3393": {
+  "label": "LittleSis organization ID",
+  "classes": [
+   "Wikidata property to identify organizations"
+  ]
+ },
+ "P3417": {
+  "label": "Quora topic ID",
+  "classes": [
+   "Wikidata property to identify topics",
+   "Wikidata property related to online communities",
+   "Wikidata property for an identifier that does not imply notability",
+   "Wikidata property for authority control, with reciprocal use of Wikidata"
+  ]
+ },
+ "P3500": {
+  "label": "Ringgold ID",
+  "classes": [
+   "Wikidata property to identify organizations"
+  ]
+ },
+ "P3553": {
+  "label": "Zhihu topic ID",
+  "classes": [
+   "Wikidata property to identify topics"
+  ]
+ },
+ "P3569": {
+  "label": "Cultureel Woordenboek ID",
+  "classes": [
+   "Wikidata property for an identifier",
+   "Wikidata property related to subject dictionaries"
+  ]
+ },
+ "P3763": {
+  "label": "MIMO instrument ID",
+  "classes": [
+   "Wikidata property related to a thesaurus",
+   "Wikidata property related to musical instruments"
+  ]
+ },
+ "P3827": {
+  "label": "JSTOR topic ID (archived)",
+  "classes": [
+   "Wikidata property for authority control",
+   "Wikidata property for a former identification scheme"
+  ]
+ },
+ "P3847": {
+  "label": "Open Library subject ID",
+  "classes": [
+   "Wikidata property to identify topics"
+  ]
+ },
+ "P3859": {
+  "label": "Environment Ontology ID",
+  "classes": [
+   "Wikidata property for authority control"
+  ]
+ },
+ "P3911": {
+  "label": "STW Thesaurus for Economics ID",
+  "classes": [
+   "Wikidata property related to a thesaurus",
+   "Wikidata property related to economics"
+  ]
+ },
+ "P3916": {
+  "label": "UNESCO Thesaurus ID",
+  "classes": [
+   "Wikidata property related to a thesaurus",
+   "Wikidata property related to the United Nations"
+  ]
+ },
+ "P3984": {
+  "label": "subreddit",
+  "classes": [
+   "Wikidata property related to online communities",
+   "Wikidata property to identify topics",
+   "Wikidata property for an identifier with restricted access",
+   "Wikidata property for an identifier that does not imply notability"
+  ]
+ },
+ "P4212": {
+  "label": "PACTOLS thesaurus ID",
+  "classes": [
+   "Wikidata property related to a thesaurus",
+   "Wikidata property related to archaeology",
+   "Wikidata property related to the Ancient World",
+   "Wikidata property for an identifier that suggests notability"
+  ]
+ },
+ "P4223": {
+  "label": "Treccani's Enciclopedia Italiana ID",
+  "classes": [
+   "Wikidata property related to encyclopedias",
+   "Wikidata property for an identifier that suggests notability"
+  ]
+ },
+ "P4235": {
+  "label": "PatientsLikeMe treatment ID",
+  "classes": [
+   "Wikidata property for an identifier",
+   "Wikidata property related to medicine"
+  ]
+ },
+ "P4342": {
+  "label": "Great Norwegian Encyclopedia ID",
+  "classes": [
+   "Wikidata property for an identifier",
+   "Wikidata property related to encyclopedias",
+   "Wikidata property for an identifier that suggests notability"
+  ]
+ },
+ "P4467": {
+  "label": "Twitch category ID",
+  "classes": [
+   "Wikidata property related to video game streaming"
+  ]
+ },
+ "P4527": {
+  "label": "UK Parliament thesaurus ID",
+  "classes": [
+   "Wikidata property related to a thesaurus",
+   "Wikidata property related to politics",
+   "Wikidata property for an identifier that does not imply notability"
+  ]
+ },
+ "P4732": {
+  "label": "IUPAC Gold Book ID",
+  "classes": [
+   "Wikidata property related to chemistry",
+   "Wikidata property for an identifier",
+   "Wikidata property for an identifier that suggests notability"
+  ]
+ },
+ "P4839": {
+  "label": "Wolfram Language entity code",
+  "classes": [
+   "Wikidata property related to software",
+   "Wikidata property related to mathematics",
+   "Wikidata property related to physics",
+   "Wikidata property for an identifier"
+  ]
+ },
+ "P4979": {
+  "label": "Th\u00e9saurus de la d\u00e9signation des objets mobiliers ID",
+  "classes": [
+   "Wikidata property related to a thesaurus"
+  ]
+ },
+ "P5063": {
+  "label": "Interlingual Index ID",
+  "classes": [
+   "Wikidata property for an identifier"
+  ]
+ },
+ "P5064": {
+  "label": "World of Physics ID",
+  "classes": [
+   "Wikidata property for an identifier"
+  ]
+ },
+ "P5160": {
+  "label": "Thesaurus for Graphic Materials ID",
+  "classes": [
+   "Wikidata property related to a thesaurus",
+   "Wikidata property for an identifier that suggests notability"
+  ]
+ },
+ "P5250": {
+  "label": "IAB code",
+  "classes": [
+   "Wikidata property for an identifier",
+   "Wikidata property for an identifier that suggests notability"
+  ]
+ },
+ "P5395": {
+  "label": "Canadian Encyclopedia article ID",
+  "classes": [
+   "Wikidata property for an identifier",
+   "Wikidata property related to encyclopedias",
+   "Wikidata property for an identifier that suggests notability"
+  ]
+ },
+ "P5604": {
+  "label": "archINFORM keyword ID",
+  "classes": [
+   "Wikidata property related to architecture",
+   "Wikidata property for an identifier",
+   "Wikidata property for an identifier that suggests notability",
+   "Wikidata property for authority control, with reciprocal use of Wikidata"
+  ]
+ },
+ "P5844": {
+  "label": "Treccani Vocabulary ID",
+  "classes": [
+   "Wikidata property to identify lexicographical entities"
+  ]
+ },
+ "P6058": {
+  "label": "Larousse ID",
+  "classes": [
+   "Wikidata property related to encyclopedias",
+   "Wikidata property for an identifier that suggests notability"
+  ]
+ },
+ "P6262": {
+  "label": "Fandom article ID",
+  "classes": [
+   "Wikidata property linking to articles in MediaWiki websites",
+   "Wikidata property linking to pages on a wiki farm"
+  ]
+ },
+ "P6293": {
+  "label": "YSA ID",
+  "classes": [
+   "Wikidata property related to a thesaurus"
+  ]
+ },
+ "P6366": {
+  "label": "Microsoft Academic ID (discontinued)",
+  "classes": [
+   "Wikidata property to identify organizations",
+   "Wikidata property for authority control for works",
+   "Wikidata property for authority control for people",
+   "Wikidata property for an identifier",
+   "Wikidata property related to research",
+   "Wikidata property for authority control for academic journals",
+   "Wikidata property for a discontinued website"
+  ]
+ },
+ "P6385": {
+  "label": "Krugosvet article (archived)",
+  "classes": [
+   "Wikidata property related to encyclopedias",
+   "Wikidata property for an identifier that suggests notability",
+   "Wikidata property for authority control for people",
+   "Wikidata property for a discontinued website"
+  ]
+ },
+ "P6412": {
+  "label": "Gran Enciclop\u00e8dia de la M\u00fasica ID",
+  "classes": [
+   "Wikidata property related to subject dictionaries",
+   "Wikidata property related to music",
+   "Wikidata property for an identifier that suggests notability"
+  ]
+ },
+ "P6573": {
+  "label": "Klexikon article ID",
+  "classes": [
+   "Wikidata property related to encyclopedias"
+  ]
+ },
+ "P6706": {
+  "label": "De Agostini ID",
+  "classes": [
+   "Wikidata property related to encyclopedias"
+  ]
+ },
+ "P6782": {
+  "label": "ROR ID",
+  "classes": [
+   "Wikidata property related to science",
+   "Wikidata property to identify organizations",
+   "Wikidata property related to research",
+   "Wikidata property for authority control, with reciprocal use of Wikidata"
+  ]
+ },
+ "P6870": {
+  "label": "Latvian National Encyclopedia Online ID",
+  "classes": [
+   "Wikidata property related to encyclopedias",
+   "Wikidata property for an identifier that suggests notability"
+  ]
+ },
+ "P6900": {
+  "label": "NicoNicoPedia word article ID",
+  "classes": [
+   "Wikidata property for an identifier that does not imply notability",
+   "Wikidata property related to encyclopedias",
+   "Wikidata property related to online communities",
+   "Wikidata property related to subcultures, internet culture and memes"
+  ]
+ },
+ "P7033": {
+  "label": "Australian Educational Vocabulary ID",
+  "classes": [
+   "Wikidata property for an identifier"
+  ]
+ },
+ "P7185": {
+  "label": "eska.pl topic ID",
+  "classes": [
+   "Wikidata property related to music",
+   "Wikidata property to identify news website topics"
+  ]
+ },
+ "P7305": {
+  "label": "Online PWN Encyclopedia ID",
+  "classes": [
+   "Wikidata property related to encyclopedias",
+   "Wikidata property for an identifier that suggests notability"
+  ]
+ },
+ "P7431": {
+  "label": "Wolfram Language quantity ID",
+  "classes": [
+   "Wikidata property for an identifier",
+   "Wikidata property for an identifier that suggests notability"
+  ]
+ },
+ "P7497": {
+  "label": "Wolfram Language entity type",
+  "classes": [
+   "Wikidata property for an identifier"
+  ]
+ },
+ "P7502": {
+  "label": "Golden ID (archived)",
+  "classes": [
+   "Wikidata property for an identifier",
+   "Wikidata property for an identifier that does not imply notability",
+   "Wikidata property for a discontinued website"
+  ]
+ },
+ "P7666": {
+  "label": "article ID in the Lithuanian Universal Encyclopedia Online",
+  "classes": [
+   "Wikidata property related to encyclopedias",
+   "Wikidata property for an identifier that suggests notability"
+  ]
+ },
+ "P7749": {
+  "label": "Nomenclature for Museum Cataloging",
+  "classes": [
+   "Wikidata property for an identifier",
+   "Wikidata property related to classification schemes",
+   "Wikidata property related to museums"
+  ]
+ },
+ "P7775": {
+  "label": "RationalWiki ID",
+  "classes": [
+   "Wikidata property linking to articles in MediaWiki websites",
+   "Wikidata property for an identifier that does not imply notability"
+  ]
+ },
+ "P7844": {
+  "label": "Joconde object type ID",
+  "classes": [
+   "Wikidata property related to a thesaurus",
+   "Wikidata property for an identifier"
+  ]
+ },
+ "P8168": {
+  "label": "FactGrid item ID",
+  "classes": [
+   "Wikidata property linking to external Wikibase item",
+   "Wikidata property for an identifier"
+  ]
+ },
+ "P8189": {
+  "label": "J9U entity ID",
+  "classes": [
+   "Wikidata property for authority control for people",
+   "Wikidata property to identify organizations",
+   "Wikidata property for authority control for places",
+   "Wikidata property for authority control by VIAF member",
+   "Wikidata property for an identifier that suggests notability"
+  ]
+ },
+ "P8248": {
+  "label": "Colon Classification",
+  "classes": [
+   "Wikidata property related to a library classification (topics)"
+  ]
+ },
+ "P8309": {
+  "label": "Yle topic ID",
+  "classes": [
+   "Wikidata property for an identifier",
+   "Wikidata property to identify news website topics"
+  ]
+ },
+ "P8313": {
+  "label": "Lex ID",
+  "classes": [
+   "Wikidata property related to encyclopedias",
+   "Wikidata property for an identifier",
+   "Wikidata property for an identifier that suggests notability"
+  ]
+ },
+ "P8370": {
+  "label": "UN Thesaurus ID",
+  "classes": [
+   "Wikidata property related to a thesaurus",
+   "Wikidata property related to the United Nations"
+  ]
+ },
+ "P8393": {
+  "label": "QUDT quantity kind ID",
+  "classes": [
+   "Wikidata property for quantities",
+   "Wikidata property for an identifier that suggests notability"
+  ]
+ },
+ "P8406": {
+  "label": "Grove Art Online ID",
+  "classes": [
+   "Wikidata property related to encyclopedias",
+   "Wikidata property related to art",
+   "Wikidata property for an identifier that suggests notability"
+  ]
+ },
+ "P8408": {
+  "label": "KBpedia ID",
+  "classes": [
+   "Wikidata property for an identifier",
+   "Wikidata property related to data communication, storage, and retrieval"
+  ]
+ },
+ "P8514": {
+  "label": "TOPCMB ID",
+  "classes": [
+   "Wikidata property related to a thesaurus"
+  ]
+ },
+ "P8516": {
+  "label": "Library of Congress Medium of Performance Thesaurus ID",
+  "classes": [
+   "Wikidata property related to a thesaurus",
+   "Wikidata property related to musical instruments"
+  ]
+ },
+ "P8519": {
+  "label": "RKD thesaurus ID",
+  "classes": [
+   "Wikidata property related to a thesaurus"
+  ]
+ },
+ "P8814": {
+  "label": "WordNet 3.1 Synset ID",
+  "classes": [
+   "Wikidata property for an identifier"
+  ]
+ },
+ "P8834": {
+  "label": "MetaSat ID",
+  "classes": [
+   "Wikidata property for an identifier"
+  ]
+ },
+ "P8855": {
+  "label": "IEV number",
+  "classes": [
+   "Wikidata property related to physics",
+   "Wikidata property for an identifier",
+   "Wikidata property for an identifier that suggests notability"
+  ]
+ },
+ "P9100": {
+  "label": "GitHub topic",
+  "classes": [
+   "Wikidata property for an identifier",
+   "Wikidata property for an identifier that does not imply notability"
+  ]
+ },
+ "P9294": {
+  "label": "AIATSIS Subject Thesaurus ID",
+  "classes": [
+   "Wikidata property to identify topics",
+   "Wikidata property related to a thesaurus"
+  ]
+ },
+ "P9318": {
+  "label": "\u00c1vvir topic ID",
+  "classes": [
+   "Wikidata property to identify news website topics",
+   "Wikidata property related to the Sami people"
+  ]
+ },
+ "P9322": {
+  "label": "SVKKL authority ID",
+  "classes": [
+   "Wikidata property for authority control (libraries)"
+  ]
+ },
+ "P9346": {
+  "label": "France 24 topic ID (French)",
+  "classes": [
+   "Wikidata property to identify news website topics"
+  ]
+ },
+ "P9475": {
+  "label": "Encyclopedia of Korean Culture ID",
+  "classes": [
+   "Wikidata property related to encyclopedias"
+  ]
+ },
+ "P9495": {
+  "label": "National Historical Museums of Sweden ID",
+  "classes": [
+   "Wikidata property for authority control for people",
+   "Wikidata property to identify organizations",
+   "Wikidata property for authority control for cultural heritage",
+   "Wikidata property related to genealogy"
+  ]
+ },
+ "P9497": {
+  "label": "Australian Thesaurus of Education Descriptors ID",
+  "classes": [
+   "Wikidata property related to a thesaurus",
+   "Wikidata property related to education"
+  ]
+ },
+ "P9545": {
+  "label": "Encyclopedia of China (Second Edition) ID",
+  "classes": [
+   "Wikidata property related to encyclopedias",
+   "Wikidata property for an identifier that suggests notability"
+  ]
+ },
+ "P9621": {
+  "label": "Treccani's Enciclopedia della Matematica ID",
+  "classes": [
+   "Wikidata property related to encyclopedias",
+   "Wikidata property related to mathematics"
+  ]
+ },
+ "P9955": {
+  "label": "SAM ID",
+  "classes": [
+   "Wikidata property to identify organizations",
+   "Wikidata property for an identifier with restricted access"
+  ]
+ },
+ "P10017": {
+  "label": "Treccani's Dizionario delle Scienze Fisiche ID",
+  "classes": [
+   "Wikidata property related to encyclopedias",
+   "Wikidata property related to physics"
+  ]
+ },
+ "P10063": {
+  "label": "SEKO ID",
+  "classes": [
+   "Wikidata property related to a thesaurus",
+   "Wikidata property related to music",
+   "Wikidata property related to musical instruments"
+  ]
+ },
+ "P10283": {
+  "label": "OpenAlex ID",
+  "classes": [
+   "Wikidata property to identify organizations",
+   "Wikidata property for authority control for works",
+   "Wikidata property for authority control for people",
+   "Wikidata property related to research",
+   "Wikidata property for authority control for academic journals",
+   "Wikidata property for authority control, with reciprocal use of Wikidata"
+  ]
+ },
+ "P10329": {
+  "label": "ICPSR Subject Thesaurus ID",
+  "classes": [
+   "Wikidata property related to a thesaurus",
+   "Wikidata property to identify topics"
+  ]
+ },
+ "P10376": {
+  "label": "ScienceDirect topic ID",
+  "classes": [
+   "Wikidata property to identify topics",
+   "Wikidata property related to science"
+  ]
+ },
+ "P10381": {
+  "label": "VerbaAlpina ID",
+  "classes": [
+   "Wikidata property to identify lexicographical entities",
+   "Wikidata property related to linguistics"
+  ]
+ },
+ "P10674": {
+  "label": "FISH Archaeological Objects Thesaurus ID",
+  "classes": [
+   "Wikidata property related to archaeology",
+   "Wikidata property for an identifier",
+   "Wikidata property related to a thesaurus"
+  ]
+ },
+ "P10757": {
+  "label": "Personality Database profile ID",
+  "classes": [
+   "Wikidata property for authority control for people",
+   "Wikidata property to identify fictional characters",
+   "Wikidata property for an identifier that does not imply notability",
+   "Wikidata property for an identifier that generally has just one value, but rarely can have two or more values for the same entity"
+  ]
+ },
+ "P10890": {
+  "label": "PM20 ware ID",
+  "classes": [
+   "Wikidata property for authority control"
+  ]
+ },
+ "P11137": {
+  "label": "Reddit topic ID (obsolete)",
+  "classes": [
+   "Wikidata property related to websites",
+   "Wikidata property to identify topics",
+   "Wikidata property for an identifier",
+   "Wikidata property related to online communities",
+   "Wikidata property for a former identification scheme"
+  ]
+ },
+ "P11196": {
+  "label": "Baidu Tieba name",
+  "classes": [
+   "Wikidata property related to websites",
+   "Wikidata property related to online communities",
+   "Wikidata property for authority control",
+   "Wikidata property for an identifier that does not imply notability"
+  ]
+ },
+ "P11214": {
+  "label": "UNIMARC: Medium of Performance ID",
+  "classes": [
+   "Wikidata property for an identifier",
+   "Wikidata property related to musical instruments"
+  ]
+ },
+ "P11302": {
+  "label": "Google Product Taxonomy ID",
+  "classes": [
+   "Wikidata property for an identifier"
+  ]
+ },
+ "P11408": {
+  "label": "Pixiv Encyclopedia ID",
+  "classes": [
+   "Wikidata property for an identifier that does not imply notability",
+   "Wikidata property for authority control",
+   "Wikidata property related to creative works",
+   "Wikidata property related to subcultures, internet culture and memes"
+  ]
+ },
+ "P11473": {
+  "label": "Concepticon concept set ID",
+  "classes": [
+   "Wikidata property for authority control"
+  ]
+ },
+ "P11493": {
+  "label": "Biblissima authority ID",
+  "classes": [
+   "Wikidata property to identify organizations",
+   "Wikidata property linking to external Wikibase item",
+   "Wikidata property for authority control for manuscripts",
+   "Wikidata property for authority control for works",
+   "Wikidata property for authority control for places",
+   "Wikidata property for authority control for people",
+   "Wikidata property for authority control, with reciprocal use of Wikidata",
+   "Wikidata property for an identifier that suggests notability"
+  ]
+ },
+ "P11514": {
+  "label": "Great Russian Encyclopedia portal ID",
+  "classes": [
+   "Wikidata property for authority control for works",
+   "Wikidata property related to encyclopedias"
+  ]
+ },
+ "P11924": {
+  "label": "IMDb keyword",
+  "classes": [
+   "Wikidata property related to movies and television shows",
+   "Wikidata property for an identifier"
+  ]
+ },
+ "P11947": {
+  "label": "Lemmy community ID",
+  "classes": [
+   "Wikidata property related to online communities",
+   "Wikidata property for an identifier that does not imply notability"
+  ]
+ },
+ "P12086": {
+  "label": "WikiKids ID",
+  "classes": [
+   "Wikidata property linking to articles in MediaWiki websites",
+   "Wikidata property for an identifier that does not imply notability"
+  ]
+ },
+ "P12187": {
+  "label": "Thesaurus Linguae Aegyptiae ID",
+  "classes": [
+   "Wikidata property related to a thesaurus",
+   "Wikidata property related to the Ancient World",
+   "Wikidata property related to linguistics",
+   "Wikidata property for an identifier that suggests notability"
+  ]
+ },
+ "P12385": {
+  "label": "Gran Enciclop\u00e8dia Catalana ID",
+  "classes": [
+   "Wikidata property related to encyclopedias",
+   "Wikidata property for an identifier that suggests notability"
+  ]
+ },
+ "P12596": {
+  "label": "museum-digital tag ID",
+  "classes": [
+   "Wikidata property related to museums",
+   "Wikidata property for an identifier"
+  ]
+ },
+ "P12705": {
+  "label": "The Law Dictionary entry",
+  "classes": [
+   "Wikidata property to identify lexicographical entities",
+   "Wikidata property for lexemes",
+   "Wikidata property related to law and justice"
+  ]
+ },
+ "P12721": {
+  "label": "Lille norske leksikon ID",
+  "classes": [
+   "Wikidata property for an identifier",
+   "Wikidata property related to encyclopedias",
+   "Wikidata property for an identifier that suggests notability"
+  ]
+ },
+ "P12800": {
+  "label": "Vikidia article ID",
+  "classes": [
+   "Wikidata property linking to articles in MediaWiki websites",
+   "Wikidata property linking to pages on a wiki farm"
+  ]
+ },
+ "P13204": {
+  "label": "Wellcome Collection concept ID",
+  "classes": [
+   "Wikidata property for an identifier that does not imply notability"
+  ]
+ },
+ "P13591": {
+  "label": "\u200eYale LUX ID",
+  "classes": [
+   "Wikidata property for authority control (libraries)",
+   "Wikidata property for authority control, with reciprocal use of Wikidata",
+   "Wikidata property for an identifier that does not imply notability"
+  ]
+ },
+ "P13613": {
+  "label": "Enciclopedia Galega Universal ID",
+  "classes": [
+   "Wikidata property related to encyclopedias",
+   "Wikidata property for an identifier that suggests notability"
+  ]
+ },
+ "P13625": {
+  "label": "QUDT dimension ID",
+  "classes": [
+   "Wikidata property for an identifier"
+  ]
+ },
+ "P13750": {
+  "label": "Arab Encyclopedia concept ID",
+  "classes": [
+   "Wikidata property for an identifier",
+   "Wikidata property for an identifier that suggests notability",
+   "Wikidata property related to encyclopedias"
+  ]
+ },
+ "P13772": {
+  "label": "Harper's tag",
+  "classes": [
+   "Wikidata property to identify news website topics"
+  ]
+ },
+ "P14075": {
+  "label": "\u200eScilit organization ID",
+  "classes": [
+   "Wikidata property to identify organizations"
+  ]
+ },
+ "P14692": {
+  "label": "\u200eOpenStreetMap Wiki item ID",
+  "classes": [
+   "Wikidata property for authority control for places",
+   "Wikidata property linking to external Wikibase item"
+  ]
+ },
+ "P14870": {
+  "label": "\u200eCommon Core Ontologies concept ID",
+  "classes": [
+   "Wikidata property for ontology mapping",
+   "Wikidata property related to classification schemes",
+   "Wikidata property for properties"
+  ]
+ },
+ "P14884": {
+  "label": "\u200ePhenotype and Trait Ontology ID",
+  "classes": [
+   "Wikidata property for ontology mapping"
+  ]
+ }
+}

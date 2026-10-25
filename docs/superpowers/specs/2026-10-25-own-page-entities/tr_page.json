@@ -1,0 +1,2655 @@
+{
+ "response": {
+  "coarseTopics": [
+   {
+    "id": 0,
+    "label": "Technology",
+    "wikiLink": "http://en.wikipedia.org/Category:Technology",
+    "score": 1
+   },
+   {
+    "id": 1,
+    "label": "Business",
+    "wikiLink": "http://en.wikipedia.org/Category:Business",
+    "score": 0.9449
+   },
+   {
+    "id": 2,
+    "label": "Science",
+    "wikiLink": "http://en.wikipedia.org/Category:Science",
+    "score": 0.3919
+   },
+   {
+    "id": 3,
+    "label": "Politics",
+    "wikiLink": "http://en.wikipedia.org/Category:Politics",
+    "score": 0.2491
+   },
+   {
+    "id": 4,
+    "label": "Health",
+    "wikiLink": "http://en.wikipedia.org/Category:Health",
+    "score": 0.2416
+   },
+   {
+    "id": 5,
+    "label": "Mathematics",
+    "wikiLink": "http://en.wikipedia.org/Category:Mathematics",
+    "score": 0.2017
+   }
+  ],
+  "language": "eng",
+  "languageIsReliable": true,
+  "topics": [
+   {
+    "id": 0,
+    "label": "Calculator",
+    "wikiLink": "http://en.wikipedia.org/Calculator",
+    "score": 1,
+    "wikidataId": "Q31087"
+   },
+   {
+    "id": 1,
+    "label": "Cost",
+    "wikiLink": "http://en.wikipedia.org/Cost",
+    "score": 1,
+    "wikidataId": "Q240673"
+   },
+   {
+    "id": 2,
+    "label": "Moving company",
+    "wikiLink": "http://en.wikipedia.org/Moving_company",
+    "score": 1,
+    "wikidataId": "Q1757263"
+   },
+   {
+    "id": 3,
+    "label": "Truck",
+    "wikiLink": "http://en.wikipedia.org/Truck",
+    "score": 1,
+    "wikidataId": "Q43193"
+   },
+   {
+    "id": 4,
+    "label": "Stairs",
+    "wikiLink": "http://en.wikipedia.org/Stairs",
+    "score": 0.9046,
+    "wikidataId": "Q12511"
+   },
+   {
+    "id": 5,
+    "label": "Weight",
+    "wikiLink": "http://en.wikipedia.org/Weight",
+    "score": 0.7568,
+    "wikidataId": "Q25288"
+   },
+   {
+    "id": 6,
+    "label": "ZIP Code",
+    "wikiLink": "http://en.wikipedia.org/ZIP_Code",
+    "score": 0.7328,
+    "wikidataId": "Q136208"
+   },
+   {
+    "id": 7,
+    "label": "Piano",
+    "wikiLink": "http://en.wikipedia.org/Piano",
+    "score": 0.6874,
+    "wikidataId": "Q5994"
+   },
+   {
+    "id": 8,
+    "label": "Federal Motor Carrier Safety Administration",
+    "wikiLink": "http://en.wikipedia.org/Federal_Motor_Carrier_Safety_Administration",
+    "score": 0.6164,
+    "wikidataId": "Q5440305"
+   },
+   {
+    "id": 9,
+    "label": "Hot tub",
+    "wikiLink": "http://en.wikipedia.org/Hot_tub",
+    "score": 0.5905,
+    "wikidataId": "Q1936429"
+   },
+   {
+    "id": 10,
+    "label": "Marketing",
+    "wikiLink": "http://en.wikipedia.org/Category:Marketing",
+    "score": 0.5265,
+    "wikidataId": "Q7012234"
+   },
+   {
+    "id": 11,
+    "label": "Business",
+    "wikiLink": "http://en.wikipedia.org/Category:Business",
+    "score": 0.4583,
+    "wikidataId": "Q4830453"
+   },
+   {
+    "id": 12,
+    "label": "Mobile businesses",
+    "wikiLink": "http://en.wikipedia.org/Category:Mobile_businesses",
+    "score": 0.3955,
+    "wikidataId": "Q136708593"
+   },
+   {
+    "id": 13,
+    "label": "Road haulage",
+    "wikiLink": "http://en.wikipedia.org/Category:Road_haulage",
+    "score": 0.3835,
+    "wikidataId": "Q83698112"
+   },
+   {
+    "id": 14,
+    "label": "Transport",
+    "wikiLink": "http://en.wikipedia.org/Category:Transport",
+    "score": 0.3753,
+    "wikidataId": "Q7590"
+   },
+   {
+    "id": 15,
+    "label": "Computing",
+    "wikiLink": "http://en.wikipedia.org/Category:Computing",
+    "score": 0.3329,
+    "wikidataId": "Q179310"
+   },
+   {
+    "id": 16,
+    "label": "Freight transport",
+    "wikiLink": "http://en.wikipedia.org/Category:Freight_transport",
+    "score": 0.3199,
+    "wikidataId": "Q651658"
+   },
+   {
+    "id": 17,
+    "label": "Business economics",
+    "wikiLink": "http://en.wikipedia.org/Category:Business_economics",
+    "score": 0.3189,
+    "wikidataId": "Q24208053"
+   },
+   {
+    "id": 18,
+    "label": "Supply chain management",
+    "wikiLink": "http://en.wikipedia.org/Category:Supply_chain_management",
+    "score": 0.3009,
+    "wikidataId": "Q492886"
+   },
+   {
+    "id": 19,
+    "label": "Trucks",
+    "wikiLink": "http://en.wikipedia.org/Category:Trucks",
+    "score": 0.2794,
+    "wikidataId": "Q43193"
+   },
+   {
+    "id": 20,
+    "label": "Management",
+    "wikiLink": "http://en.wikipedia.org/Category:Management",
+    "score": 0.2787,
+    "wikidataId": "Q7012003"
+   },
+   {
+    "id": 21,
+    "label": "Pricing",
+    "wikiLink": "http://en.wikipedia.org/Category:Pricing",
+    "score": 0.2748,
+    "wikidataId": "Q2516951"
+   },
+   {
+    "id": 22,
+    "label": "Computer engineering",
+    "wikiLink": "http://en.wikipedia.org/Category:Computer_engineering",
+    "score": 0.2584,
+    "wikidataId": "Q428691"
+   },
+   {
+    "id": 23,
+    "label": "Computers",
+    "wikiLink": "http://en.wikipedia.org/Category:Computers",
+    "score": 0.254,
+    "wikidataId": "Q68"
+   },
+   {
+    "id": 24,
+    "label": "Calculators",
+    "wikiLink": "http://en.wikipedia.org/Category:Calculators",
+    "score": 0.2498,
+    "wikidataId": "Q31087"
+   },
+   {
+    "id": 25,
+    "label": "Applied mathematics",
+    "wikiLink": "http://en.wikipedia.org/Category:Applied_mathematics",
+    "score": 0.243,
+    "wikidataId": "Q33521"
+   },
+   {
+    "id": 26,
+    "label": "Electronic calculators",
+    "wikiLink": "http://en.wikipedia.org/Category:Electronic_calculators",
+    "score": 0.233,
+    "wikidataId": "Q32593433"
+   },
+   {
+    "id": 27,
+    "label": "Office equipment",
+    "wikiLink": "http://en.wikipedia.org/Category:Office_equipment",
+    "score": 0.2286,
+    "wikidataId": "Q2383811"
+   },
+   {
+    "id": 28,
+    "label": "Calculator technologies",
+    "wikiLink": "http://en.wikipedia.org/Category:Calculator_technologies",
+    "score": 0.2184,
+    "wikidataId": "Q25226391"
+   },
+   {
+    "id": 29,
+    "label": "Economy",
+    "wikiLink": "http://en.wikipedia.org/Category:Economy",
+    "score": 0.2148,
+    "wikidataId": "Q159810"
+   },
+   {
+    "id": 30,
+    "label": "Mathematical tools",
+    "wikiLink": "http://en.wikipedia.org/Category:Mathematical_tools",
+    "score": 0.2054,
+    "wikidataId": "Q1666865"
+   },
+   {
+    "id": 31,
+    "label": "Management accounting",
+    "wikiLink": "http://en.wikipedia.org/Category:Management_accounting",
+    "score": 0.2053,
+    "wikidataId": "Q2990807"
+   },
+   {
+    "id": 32,
+    "label": "Classes of computers",
+    "wikiLink": "http://en.wikipedia.org/Category:Classes_of_computers",
+    "score": 0.2039,
+    "wikidataId": "Q716676"
+   },
+   {
+    "id": 33,
+    "label": "Land transport",
+    "wikiLink": "http://en.wikipedia.org/Category:Land_transport",
+    "score": 0.1986,
+    "wikidataId": "Q4354683"
+   },
+   {
+    "id": 34,
+    "label": "Computer science",
+    "wikiLink": "http://en.wikipedia.org/Category:Computer_science",
+    "score": 0.1972,
+    "wikidataId": "Q6517860"
+   },
+   {
+    "id": 35,
+    "label": "Equipment",
+    "wikiLink": "http://en.wikipedia.org/Category:Equipment",
+    "score": 0.1963,
+    "wikidataId": "Q6063063"
+   },
+   {
+    "id": 36,
+    "label": "Office work",
+    "wikiLink": "http://en.wikipedia.org/Category:Office_work",
+    "score": 0.1963,
+    "wikidataId": "Q11371155"
+   },
+   {
+    "id": 37,
+    "label": "Financial accounting",
+    "wikiLink": "http://en.wikipedia.org/Category:Financial_accounting",
+    "score": 0.1926,
+    "wikidataId": "Q949180"
+   },
+   {
+    "id": 38,
+    "label": "Computer hardware",
+    "wikiLink": "http://en.wikipedia.org/Category:Computer_hardware",
+    "score": 0.1912,
+    "wikidataId": "Q3966"
+   },
+   {
+    "id": 39,
+    "label": "Costs",
+    "wikiLink": "http://en.wikipedia.org/Category:Costs",
+    "score": 0.1898,
+    "wikidataId": "Q240673"
+   },
+   {
+    "id": 40,
+    "label": "Vehicles",
+    "wikiLink": "http://en.wikipedia.org/Category:Vehicles",
+    "score": 0.1887,
+    "wikidataId": "Q42889"
+   },
+   {
+    "id": 41,
+    "label": "Technology",
+    "wikiLink": "http://en.wikipedia.org/Category:Technology",
+    "score": 0.1869,
+    "wikidataId": "Q11016"
+   },
+   {
+    "id": 42,
+    "label": "Consumer electronics",
+    "wikiLink": "http://en.wikipedia.org/Category:Consumer_electronics",
+    "score": 0.1837,
+    "wikidataId": "Q581105"
+   },
+   {
+    "id": 43,
+    "label": "Electronics",
+    "wikiLink": "http://en.wikipedia.org/Category:Electronics",
+    "score": 0.1649,
+    "wikidataId": "Q5460952"
+   },
+   {
+    "id": 44,
+    "label": "Electronics industry",
+    "wikiLink": "http://en.wikipedia.org/Category:Electronics_industry",
+    "score": 0.1646,
+    "wikidataId": "Q5358497"
+   },
+   {
+    "id": 45,
+    "label": "Personal computing",
+    "wikiLink": "http://en.wikipedia.org/Category:Personal_computing",
+    "score": 0.1567,
+    "wikidataId": "Q8758919"
+   },
+   {
+    "id": 46,
+    "label": "Tools",
+    "wikiLink": "http://en.wikipedia.org/Category:Tools",
+    "score": 0.1554,
+    "wikidataId": "Q39546"
+   },
+   {
+    "id": 47,
+    "label": "Service industries",
+    "wikiLink": "http://en.wikipedia.org/Category:Service_industries",
+    "score": 0.1519,
+    "wikidataId": "Q6143409"
+   },
+   {
+    "id": 48,
+    "label": "Logistics industry",
+    "wikiLink": "http://en.wikipedia.org/Category:Logistics_industry",
+    "score": 0.1482,
+    "wikidataId": "Q113025928"
+   },
+   {
+    "id": 49,
+    "label": "Road transport",
+    "wikiLink": "http://en.wikipedia.org/Category:Road_transport",
+    "score": 0.1381,
+    "wikidataId": "Q516739"
+   },
+   {
+    "id": 50,
+    "label": "Email",
+    "wikiLink": "http://en.wikipedia.org/Email",
+    "score": 0.1351,
+    "wikidataId": "Q9158"
+   },
+   {
+    "id": 51,
+    "label": "Accounting",
+    "wikiLink": "http://en.wikipedia.org/Category:Accounting",
+    "score": 0.134,
+    "wikidataId": "Q4116214"
+   },
+   {
+    "id": 52,
+    "label": "Electronic engineering",
+    "wikiLink": "http://en.wikipedia.org/Category:Electronic_engineering",
+    "score": 0.1323,
+    "wikidataId": "Q126095"
+   },
+   {
+    "id": 53,
+    "label": "Moving companies",
+    "wikiLink": "http://en.wikipedia.org/Category:Moving_companies",
+    "score": 0.1292,
+    "wikidataId": "Q1757263"
+   },
+   {
+    "id": 54,
+    "label": "Financial management",
+    "wikiLink": "http://en.wikipedia.org/Category:Financial_management",
+    "score": 0.1253,
+    "wikidataId": "Q4738155"
+   },
+   {
+    "id": 55,
+    "label": "Land vehicles",
+    "wikiLink": "http://en.wikipedia.org/Category:Land_vehicles",
+    "score": 0.124,
+    "wikidataId": "Q1301433"
+   },
+   {
+    "id": 56,
+    "label": "Corporate finance",
+    "wikiLink": "http://en.wikipedia.org/Category:Corporate_finance",
+    "score": 0.1226,
+    "wikidataId": "Q1134763"
+   },
+   {
+    "id": 57,
+    "label": "Mathematics",
+    "wikiLink": "http://en.wikipedia.org/Category:Mathematics",
+    "score": 0.122,
+    "wikidataId": "Q4619"
+   },
+   {
+    "id": 58,
+    "label": "Consumer goods",
+    "wikiLink": "http://en.wikipedia.org/Category:Consumer_goods",
+    "score": 0.1201,
+    "wikidataId": "Q868404"
+   },
+   {
+    "id": 59,
+    "label": "Motor vehicles",
+    "wikiLink": "http://en.wikipedia.org/Category:Motor_vehicles",
+    "score": 0.1192,
+    "wikidataId": "Q752870"
+   },
+   {
+    "id": 60,
+    "label": "Information appliances",
+    "wikiLink": "http://en.wikipedia.org/Category:Information_appliances",
+    "score": 0.1175,
+    "wikidataId": "Q1067263"
+   },
+   {
+    "id": 61,
+    "label": "Wheeled vehicles",
+    "wikiLink": "http://en.wikipedia.org/Category:Wheeled_vehicles",
+    "score": 0.1116,
+    "wikidataId": "Q15618781"
+   },
+   {
+    "id": 62,
+    "label": "Truck rental",
+    "wikiLink": "http://en.wikipedia.org/Category:Truck_rental",
+    "score": 0.1083,
+    "wikidataId": "Q8873817"
+   },
+   {
+    "id": 63,
+    "label": "Economics",
+    "wikiLink": "http://en.wikipedia.org/Category:Economics",
+    "score": 0.09873,
+    "wikidataId": "Q8134"
+   },
+   {
+    "id": 64,
+    "label": "Public sphere",
+    "wikiLink": "http://en.wikipedia.org/Category:Public_sphere",
+    "score": 0.08409,
+    "wikidataId": "Q17945"
+   },
+   {
+    "id": 65,
+    "label": "Vehicle technology",
+    "wikiLink": "http://en.wikipedia.org/Category:Vehicle_technology",
+    "score": 0.08117,
+    "wikidataId": "Q100232465"
+   },
+   {
+    "id": 66,
+    "label": "Information technology",
+    "wikiLink": "http://en.wikipedia.org/Category:Information_technology",
+    "score": 0.08034,
+    "wikidataId": "Q11661"
+   },
+   {
+    "id": 67,
+    "label": "Commercial vehicles",
+    "wikiLink": "http://en.wikipedia.org/Category:Commercial_vehicles",
+    "score": 0.07678,
+    "wikidataId": "Q580939"
+   },
+   {
+    "id": 68,
+    "label": "Energy",
+    "wikiLink": "http://en.wikipedia.org/Category:Energy",
+    "score": 0.07219,
+    "wikidataId": "Q11379"
+   },
+   {
+    "id": 69,
+    "label": "Health",
+    "wikiLink": "http://en.wikipedia.org/Category:Health",
+    "score": 0.06544,
+    "wikidataId": "Q12147"
+   },
+   {
+    "id": 70,
+    "label": "Private sector",
+    "wikiLink": "http://en.wikipedia.org/Category:Private_sector",
+    "score": 0.06402,
+    "wikidataId": "Q591763"
+   },
+   {
+    "id": 71,
+    "label": "Business processes",
+    "wikiLink": "http://en.wikipedia.org/Category:Business_processes",
+    "score": 0.06281,
+    "wikidataId": "Q851587"
+   },
+   {
+    "id": 72,
+    "label": "Safety",
+    "wikiLink": "http://en.wikipedia.org/Category:Safety",
+    "score": 0.05789,
+    "wikidataId": "Q10566551"
+   }
+  ],
+  "entities": [
+   {
+    "id": 0,
+    "matchingTokens": [
+     17
+    ],
+    "entityId": "Cost",
+    "freebaseTypes": [
+     "/book/book_subject",
+     "/media_common/quotation_subject"
+    ],
+    "confidenceScore": 0.9622,
+    "wikiLink": "http://en.wikipedia.org/wiki/Cost",
+    "matchedText": "cost",
+    "freebaseId": "/m/0168hv",
+    "relevanceScore": 0.7542,
+    "entityEnglishId": "Cost",
+    "startingPos": 80,
+    "endingPos": 84,
+    "wikidataId": "Q240673",
+    "wikidataTypes": [
+     "Q131362181/social science concept",
+     "Q29028649/economic concept"
+    ]
+   },
+   {
+    "id": 1,
+    "matchingTokens": [
+     18
+    ],
+    "entityId": "Calculator",
+    "freebaseTypes": [
+     "/law/invention"
+    ],
+    "confidenceScore": 2.268,
+    "wikiLink": "http://en.wikipedia.org/wiki/Calculator",
+    "matchedText": "calculator",
+    "freebaseId": "/m/024d2",
+    "relevanceScore": 0.8889,
+    "entityEnglishId": "Calculator",
+    "startingPos": 85,
+    "endingPos": 95,
+    "wikidataId": "Q31087"
+   },
+   {
+    "id": 2,
+    "matchingTokens": [
+     21
+    ],
+    "entityId": "Cost",
+    "freebaseTypes": [
+     "/book/book_subject",
+     "/media_common/quotation_subject"
+    ],
+    "confidenceScore": 1.021,
+    "wikiLink": "http://en.wikipedia.org/wiki/Cost",
+    "matchedText": "Cost",
+    "freebaseId": "/m/0168hv",
+    "relevanceScore": 0.7542,
+    "entityEnglishId": "Cost",
+    "startingPos": 103,
+    "endingPos": 107,
+    "wikidataId": "Q240673",
+    "wikidataTypes": [
+     "Q131362181/social science concept",
+     "Q29028649/economic concept"
+    ]
+   },
+   {
+    "id": 3,
+    "matchingTokens": [
+     42
+    ],
+    "entityId": "Email",
+    "freebaseTypes": [
+     "/organization/organization_sector",
+     "/internet/website_category",
+     "/organization/contact_category",
+     "/film/film_subject",
+     "/computer/software_genre",
+     "/book/book_subject",
+     "/law/invention"
+    ],
+    "confidenceScore": 3.588,
+    "wikiLink": "http://en.wikipedia.org/wiki/Email",
+    "matchedText": "email",
+    "freebaseId": "/m/02nf_",
+    "relevanceScore": 0.2623,
+    "entityEnglishId": "Email",
+    "startingPos": 212,
+    "endingPos": 217,
+    "wikidataId": "Q9158",
+    "wikidataTypes": [
+     "Q1668024/service on Internet",
+     "Q34104/science and technology",
+     "Q2897903/goods and services",
+     "Q5268834/information and communications technology",
+     "Q1780543/communication technology",
+     "Q1273271/e-service",
+     "Q11016/technology",
+     "Q2424752/product"
+    ]
+   },
+   {
+    "id": 4,
+    "matchingTokens": [
+     135,
+     136
+    ],
+    "entityId": "ZIP Code",
+    "confidenceScore": 5.413,
+    "wikiLink": "http://en.wikipedia.org/wiki/ZIP_Code",
+    "matchedText": "ZIP code",
+    "freebaseId": "/m/0dllr",
+    "relevanceScore": 0.4308,
+    "entityEnglishId": "ZIP Code",
+    "startingPos": 640,
+    "endingPos": 648,
+    "wikidataId": "Q136208",
+    "wikidataTypes": [
+     "Q66746920/jargon term",
+     "Q100792256/identifying artifact",
+     "Q16686448/artificial object",
+     "Q3695082/sign",
+     "Q853614/identifier",
+     "Q126286955/philatelic term",
+     "Q12812139/specialized term",
+     "Q6545185/unique identifier",
+     "Q48937186/word or phrase"
+    ]
+   },
+   {
+    "id": 5,
+    "matchingTokens": [
+     959
+    ],
+    "entityId": "Stairs",
+    "freebaseTypes": [
+     "/book/book_subject",
+     "/visual_art/art_subject",
+     "/people/cause_of_death"
+    ],
+    "confidenceScore": 4.206,
+    "wikiLink": "http://en.wikipedia.org/wiki/Stairs",
+    "matchedText": "stairs",
+    "freebaseId": "/m/01lynh",
+    "relevanceScore": 0.489,
+    "entityEnglishId": "Stairs",
+    "startingPos": 4596,
+    "endingPos": 4602,
+    "wikidataId": "Q12511"
+   },
+   {
+    "id": 6,
+    "type": [
+     "Work",
+     "Website"
+    ],
+    "matchingTokens": [
+     139
+    ],
+    "entityId": "GeoNames",
+    "freebaseTypes": [
+     "/internet/api"
+    ],
+    "confidenceScore": 4.154,
+    "wikiLink": "http://en.wikipedia.org/wiki/GeoNames",
+    "matchedText": "GeoNames",
+    "freebaseId": "/m/02rnzcx",
+    "relevanceScore": 0.07776,
+    "entityEnglishId": "GeoNames",
+    "startingPos": 659,
+    "endingPos": 667,
+    "wikidataId": "Q830106",
+    "wikidataTypes": [
+     "Q212805/digital library",
+     "Q110832782/software resource",
+     "Q16686448/artificial object",
+     "Q15621286/intellectual work",
+     "Q42848/data",
+     "Q2424752/product",
+     "Q37866906/information resource",
+     "Q2668072/collection",
+     "Q5535082/geographical database",
+     "Q494756/data",
+     "Q1172284/data set",
+     "Q11028/information",
+     "Q2302053/spatial database",
+     "Q2221906/geographic location",
+     "Q65269343/geographical names database",
+     "Q286583/manifestation",
+     "Q732577/publication",
+     "Q125294902/geospatial database",
+     "Q3427877/web resource",
+     "Q386724/work",
+     "Q5227240/data library",
+     "Q1554231/resource",
+     "Q8513/database",
+     "Q6423319/knowledge organization system"
+    ]
+   },
+   {
+    "id": 7,
+    "matchingTokens": [
+     141,
+     142,
+     143
+    ],
+    "entityId": "Creative Commons license",
+    "freebaseTypes": [
+     "/computer/software_genre",
+     "/computer/content_license",
+     "/computer/software_license"
+    ],
+    "confidenceScore": 2.292,
+    "wikiLink": "http://en.wikipedia.org/wiki/Creative_Commons_license",
+    "matchedText": "CC BY 4.0",
+    "freebaseId": "/m/01kkml",
+    "relevanceScore": 0.02104,
+    "entityEnglishId": "Creative Commons license",
+    "startingPos": 669,
+    "endingPos": 678,
+    "wikidataId": "Q284742"
+   },
+   {
+    "id": 8,
+    "matchingTokens": [
+     373
+    ],
+    "entityId": "Weight",
+    "confidenceScore": 2.671,
+    "wikiLink": "http://en.wikipedia.org/wiki/Weight",
+    "matchedText": "weight",
+    "freebaseId": "/m/085x_",
+    "relevanceScore": 0.385,
+    "entityEnglishId": "Weight",
+    "startingPos": 1720,
+    "endingPos": 1726,
+    "wikidataId": "Q25288"
+   },
+   {
+    "id": 9,
+    "matchingTokens": [
+     137
+    ],
+    "entityId": "Data",
+    "freebaseTypes": [
+     "/internet/website_category"
+    ],
+    "confidenceScore": 1.104,
+    "wikiLink": "http://en.wikipedia.org/wiki/Data",
+    "matchedText": "data",
+    "freebaseId": "/m/026sq",
+    "relevanceScore": 0.001159,
+    "entityEnglishId": "Data",
+    "startingPos": 649,
+    "endingPos": 653,
+    "wikidataId": "Q42848"
+   },
+   {
+    "id": 10,
+    "matchingTokens": [
+     163
+    ],
+    "entityId": "Moving company",
+    "freebaseTypes": [
+     "/business/product_line",
+     "/organization/contact_category",
+     "/business/advertising_slogan",
+     "/organization/organization_sector",
+     "/business/consumer_product",
+     "/business/industry"
+    ],
+    "confidenceScore": 1.393,
+    "wikiLink": "http://en.wikipedia.org/wiki/Moving_company",
+    "matchedText": "mover",
+    "freebaseId": "/m/07ry5s",
+    "relevanceScore": 0.8271,
+    "entityEnglishId": "Moving company",
+    "startingPos": 762,
+    "endingPos": 767,
+    "wikidataId": "Q1757263",
+    "wikidataTypes": [
+     "Q3778211/legal person",
+     "Q2169973/service provider",
+     "Q106559804/person or organization",
+     "Q1415187/economic agent",
+     "Q783794/company",
+     "Q131085629/collective agent",
+     "Q43229/organization",
+     "Q106668099/corporate body",
+     "Q1639378/social system",
+     "Q134602526/group or class of beings",
+     "Q12569864/economic entity",
+     "Q134601875/group or class of people",
+     "Q13420330/provider"
+    ]
+   },
+   {
+    "id": 11,
+    "matchingTokens": [
+     153
+    ],
+    "entityId": "Cost",
+    "freebaseTypes": [
+     "/book/book_subject",
+     "/media_common/quotation_subject"
+    ],
+    "confidenceScore": 0.9622,
+    "wikiLink": "http://en.wikipedia.org/wiki/Cost",
+    "matchedText": "cost",
+    "freebaseId": "/m/0168hv",
+    "relevanceScore": 0.7542,
+    "entityEnglishId": "Cost",
+    "startingPos": 708,
+    "endingPos": 712,
+    "wikidataId": "Q240673",
+    "wikidataTypes": [
+     "Q131362181/social science concept",
+     "Q29028649/economic concept"
+    ]
+   },
+   {
+    "id": 12,
+    "matchingTokens": [
+     221
+    ],
+    "entityId": "Nothing",
+    "confidenceScore": 1.86,
+    "wikiLink": "http://en.wikipedia.org/wiki/Nothing",
+    "matchedText": "nothing",
+    "freebaseId": "/m/0jh4p",
+    "relevanceScore": 0,
+    "entityEnglishId": "Nothing",
+    "startingPos": 1032,
+    "endingPos": 1039,
+    "wikidataId": "Q154242"
+   },
+   {
+    "id": 13,
+    "type": [
+     "Device",
+     "Instrument"
+    ],
+    "matchingTokens": [
+     239
+    ],
+    "entityId": "Piano",
+    "freebaseTypes": [
+     "/award/award_discipline",
+     "/education/field_of_study",
+     "/music/genre",
+     "/book/book_subject",
+     "/interests/collectable_item",
+     "/music/performance_role",
+     "/law/invention",
+     "/music/instrument"
+    ],
+    "confidenceScore": 1.754,
+    "wikiLink": "http://en.wikipedia.org/wiki/Piano",
+    "matchedText": "piano",
+    "freebaseId": "/m/05r5c",
+    "relevanceScore": 0.3716,
+    "entityEnglishId": "Piano",
+    "startingPos": 1099,
+    "endingPos": 1104,
+    "wikidataId": "Q5994",
+    "wikidataTypes": [
+     "Q110295396/type of musical instrument",
+     "Q5127848/class"
+    ]
+   },
+   {
+    "id": 14,
+    "matchingTokens": [
+     241,
+     242
+    ],
+    "entityId": "Hot tub",
+    "freebaseTypes": [
+     "/travel/accommodation_feature",
+     "/business/product_category"
+    ],
+    "confidenceScore": 2.785,
+    "wikiLink": "http://en.wikipedia.org/wiki/Hot_tub",
+    "matchedText": "hot tub",
+    "freebaseId": "/m/065h6l",
+    "relevanceScore": 0.3192,
+    "entityEnglishId": "Hot tub",
+    "startingPos": 1106,
+    "endingPos": 1113,
+    "wikidataId": "Q1936429"
+   },
+   {
+    "id": 15,
+    "matchingTokens": [
+     272
+    ],
+    "entityId": "Car",
+    "freebaseTypes": [
+     "/radio/radio_subject",
+     "/tv/tv_genre",
+     "/amusement_parks/ride_theme",
+     "/book/periodical_subject",
+     "/internet/website_category",
+     "/media_common/quotation_subject",
+     "/media_common/media_genre",
+     "/law/invention",
+     "/visual_art/visual_art_medium",
+     "/film/film_subject",
+     "/travel/transportation_mode",
+     "/organization/organization_sector",
+     "/book/book_subject",
+     "/business/product_category",
+     "/exhibitions/exhibition_subject",
+     "/interests/collection_category"
+    ],
+    "confidenceScore": 2.023,
+    "wikiLink": "http://en.wikipedia.org/wiki/Car",
+    "matchedText": "car",
+    "freebaseId": "/m/0k4j",
+    "relevanceScore": 0.1741,
+    "entityEnglishId": "Car",
+    "startingPos": 1244,
+    "endingPos": 1247,
+    "wikidataId": "Q1420"
+   },
+   {
+    "id": 16,
+    "matchingTokens": [
+     250,
+     251
+    ],
+    "entityId": "ZIP Code",
+    "confidenceScore": 5.216,
+    "wikiLink": "http://en.wikipedia.org/wiki/ZIP_Code",
+    "matchedText": "ZIP codes",
+    "freebaseId": "/m/0dllr",
+    "relevanceScore": 0.4308,
+    "entityEnglishId": "ZIP Code",
+    "startingPos": 1154,
+    "endingPos": 1163,
+    "wikidataId": "Q136208",
+    "wikidataTypes": [
+     "Q66746920/jargon term",
+     "Q100792256/identifying artifact",
+     "Q16686448/artificial object",
+     "Q3695082/sign",
+     "Q853614/identifier",
+     "Q126286955/philatelic term",
+     "Q12812139/specialized term",
+     "Q6545185/unique identifier",
+     "Q48937186/word or phrase"
+    ]
+   },
+   {
+    "id": 17,
+    "matchingTokens": [
+     329
+    ],
+    "entityId": "Cost",
+    "freebaseTypes": [
+     "/book/book_subject",
+     "/media_common/quotation_subject"
+    ],
+    "confidenceScore": 0.9622,
+    "wikiLink": "http://en.wikipedia.org/wiki/Cost",
+    "matchedText": "cost",
+    "freebaseId": "/m/0168hv",
+    "relevanceScore": 0.7542,
+    "entityEnglishId": "Cost",
+    "startingPos": 1511,
+    "endingPos": 1515,
+    "wikidataId": "Q240673",
+    "wikidataTypes": [
+     "Q131362181/social science concept",
+     "Q29028649/economic concept"
+    ]
+   },
+   {
+    "id": 18,
+    "matchingTokens": [
+     402
+    ],
+    "entityId": "Truck",
+    "freebaseTypes": [
+     "/business/industry",
+     "/automotive/body_style",
+     "/business/product_category",
+     "/automotive/automotive_class",
+     "/book/book_subject"
+    ],
+    "confidenceScore": 2.81,
+    "wikiLink": "http://en.wikipedia.org/wiki/Truck",
+    "matchedText": "truck",
+    "freebaseId": "/m/07r04",
+    "relevanceScore": 0.6104,
+    "entityEnglishId": "Truck",
+    "startingPos": 1859,
+    "endingPos": 1864,
+    "wikidataId": "Q43193"
+   },
+   {
+    "id": 19,
+    "matchingTokens": [
+     477,
+     478
+    ],
+    "entityId": "Billiard table",
+    "freebaseTypes": [
+     "/business/product_category",
+     "/sports/sports_equipment"
+    ],
+    "confidenceScore": 1.732,
+    "wikiLink": "http://en.wikipedia.org/wiki/Billiard_table",
+    "matchedText": "pool tables",
+    "freebaseId": "/m/04p0qw",
+    "relevanceScore": 0.1298,
+    "entityEnglishId": "Billiard table",
+    "startingPos": 2213,
+    "endingPos": 2224,
+    "wikidataId": "Q3500725",
+    "wikidataTypes": [
+     "Q1914636/activity",
+     "Q3341285/cue sports",
+     "Q61788060/human activity",
+     "Q349/sport",
+     "Q747883/physical activity",
+     "Q20478894/table sports"
+    ]
+   },
+   {
+    "id": 20,
+    "matchingTokens": [
+     449,
+     450,
+     451
+    ],
+    "entityId": "Stairs",
+    "freebaseTypes": [
+     "/book/book_subject",
+     "/visual_art/art_subject",
+     "/people/cause_of_death"
+    ],
+    "confidenceScore": 1.014,
+    "wikiLink": "http://en.wikipedia.org/wiki/Stairs",
+    "matchedText": "Flights of stairs",
+    "freebaseId": "/m/01lynh",
+    "relevanceScore": 0.489,
+    "entityEnglishId": "Stairs",
+    "startingPos": 2080,
+    "endingPos": 2097,
+    "wikidataId": "Q12511"
+   },
+   {
+    "id": 21,
+    "matchingTokens": [
+     453
+    ],
+    "entityId": "Elevator",
+    "freebaseTypes": [
+     "/book/book_subject",
+     "/business/product_category",
+     "/business/industry",
+     "/film/film_subject"
+    ],
+    "confidenceScore": 3.146,
+    "wikiLink": "http://en.wikipedia.org/wiki/Elevator",
+    "matchedText": "elevators",
+    "freebaseId": "/m/02r60",
+    "relevanceScore": 0,
+    "entityEnglishId": "Elevator",
+    "startingPos": 2099,
+    "endingPos": 2108,
+    "wikidataId": "Q132911",
+    "wikidataTypes": [
+     "Q1914636/activity",
+     "Q61788060/human activity",
+     "Q5127848/class",
+     "Q12774177/means",
+     "Q7590/transport",
+     "Q334166/mode of transport"
+    ]
+   },
+   {
+    "id": 22,
+    "matchingTokens": [
+     480,
+     481
+    ],
+    "entityId": "Hot tub",
+    "freebaseTypes": [
+     "/travel/accommodation_feature",
+     "/business/product_category"
+    ],
+    "confidenceScore": 2.912,
+    "wikiLink": "http://en.wikipedia.org/wiki/Hot_tub",
+    "matchedText": "hot tubs",
+    "freebaseId": "/m/065h6l",
+    "relevanceScore": 0.3192,
+    "entityEnglishId": "Hot tub",
+    "startingPos": 2226,
+    "endingPos": 2234,
+    "wikidataId": "Q1936429"
+   },
+   {
+    "id": 23,
+    "matchingTokens": [
+     503
+    ],
+    "entityId": "Car",
+    "freebaseTypes": [
+     "/radio/radio_subject",
+     "/tv/tv_genre",
+     "/amusement_parks/ride_theme",
+     "/book/periodical_subject",
+     "/internet/website_category",
+     "/media_common/quotation_subject",
+     "/media_common/media_genre",
+     "/law/invention",
+     "/visual_art/visual_art_medium",
+     "/film/film_subject",
+     "/travel/transportation_mode",
+     "/organization/organization_sector",
+     "/book/book_subject",
+     "/business/product_category",
+     "/exhibitions/exhibition_subject",
+     "/interests/collection_category"
+    ],
+    "confidenceScore": 2.023,
+    "wikiLink": "http://en.wikipedia.org/wiki/Car",
+    "matchedText": "car",
+    "freebaseId": "/m/0k4j",
+    "relevanceScore": 0.1741,
+    "entityEnglishId": "Car",
+    "startingPos": 2337,
+    "endingPos": 2340,
+    "wikidataId": "Q1420"
+   },
+   {
+    "id": 24,
+    "type": [
+     "Device",
+     "Instrument"
+    ],
+    "matchingTokens": [
+     475
+    ],
+    "entityId": "Piano",
+    "freebaseTypes": [
+     "/award/award_discipline",
+     "/education/field_of_study",
+     "/music/genre",
+     "/book/book_subject",
+     "/interests/collectable_item",
+     "/music/performance_role",
+     "/law/invention",
+     "/music/instrument"
+    ],
+    "confidenceScore": 1.458,
+    "wikiLink": "http://en.wikipedia.org/wiki/Piano",
+    "matchedText": "Pianos",
+    "freebaseId": "/m/05r5c",
+    "relevanceScore": 0.3716,
+    "entityEnglishId": "Piano",
+    "startingPos": 2205,
+    "endingPos": 2211,
+    "wikidataId": "Q5994",
+    "wikidataTypes": [
+     "Q110295396/type of musical instrument",
+     "Q5127848/class"
+    ]
+   },
+   {
+    "id": 25,
+    "matchingTokens": [
+     1
+    ],
+    "entityId": "Cost",
+    "freebaseTypes": [
+     "/book/book_subject",
+     "/media_common/quotation_subject"
+    ],
+    "confidenceScore": 1.021,
+    "wikiLink": "http://en.wikipedia.org/wiki/Cost",
+    "matchedText": "Cost",
+    "freebaseId": "/m/0168hv",
+    "relevanceScore": 0.7542,
+    "entityEnglishId": "Cost",
+    "startingPos": 7,
+    "endingPos": 11,
+    "wikidataId": "Q240673",
+    "wikidataTypes": [
+     "Q131362181/social science concept",
+     "Q29028649/economic concept"
+    ]
+   },
+   {
+    "id": 26,
+    "matchingTokens": [
+     626
+    ],
+    "entityId": "Cost",
+    "freebaseTypes": [
+     "/book/book_subject",
+     "/media_common/quotation_subject"
+    ],
+    "confidenceScore": 0.9622,
+    "wikiLink": "http://en.wikipedia.org/wiki/Cost",
+    "matchedText": "cost",
+    "freebaseId": "/m/0168hv",
+    "relevanceScore": 0.7542,
+    "entityEnglishId": "Cost",
+    "startingPos": 2923,
+    "endingPos": 2927,
+    "wikidataId": "Q240673",
+    "wikidataTypes": [
+     "Q131362181/social science concept",
+     "Q29028649/economic concept"
+    ]
+   },
+   {
+    "id": 27,
+    "matchingTokens": [
+     522
+    ],
+    "entityId": "Moving company",
+    "freebaseTypes": [
+     "/business/product_line",
+     "/organization/contact_category",
+     "/business/advertising_slogan",
+     "/organization/organization_sector",
+     "/business/consumer_product",
+     "/business/industry"
+    ],
+    "confidenceScore": 1.761,
+    "wikiLink": "http://en.wikipedia.org/wiki/Moving_company",
+    "matchedText": "movers",
+    "freebaseId": "/m/07ry5s",
+    "relevanceScore": 0.8271,
+    "entityEnglishId": "Moving company",
+    "startingPos": 2424,
+    "endingPos": 2430,
+    "wikidataId": "Q1757263",
+    "wikidataTypes": [
+     "Q3778211/legal person",
+     "Q2169973/service provider",
+     "Q106559804/person or organization",
+     "Q1415187/economic agent",
+     "Q783794/company",
+     "Q131085629/collective agent",
+     "Q43229/organization",
+     "Q106668099/corporate body",
+     "Q1639378/social system",
+     "Q134602526/group or class of beings",
+     "Q12569864/economic entity",
+     "Q134601875/group or class of people",
+     "Q13420330/provider"
+    ]
+   },
+   {
+    "id": 28,
+    "type": [
+     "Agent",
+     "Organisation",
+     "GovernmentAgency"
+    ],
+    "matchingTokens": [
+     684
+    ],
+    "entityId": "Federal Motor Carrier Safety Administration",
+    "freebaseTypes": [
+     "/organization/organization"
+    ],
+    "confidenceScore": 7.637,
+    "wikiLink": "http://en.wikipedia.org/wiki/Federal_Motor_Carrier_Safety_Administration",
+    "matchedText": "FMCSA",
+    "freebaseId": "/m/02wvdh3",
+    "relevanceScore": 0.4133,
+    "entityEnglishId": "Federal Motor Carrier Safety Administration",
+    "startingPos": 3190,
+    "endingPos": 3195,
+    "wikidataId": "Q5440305",
+    "wikidataTypes": [
+     "Q20857065/United States federal agency",
+     "Q10541491/legal form",
+     "Q131085629/collective agent",
+     "Q106559804/person or organization",
+     "Q155076/juridical person",
+     "Q106668099/corporate body",
+     "Q134602526/group or class of beings",
+     "Q2659904/government organization",
+     "Q1549152/public institution",
+     "Q134601875/group or class of people",
+     "Q327333/government agency",
+     "Q1639378/social system",
+     "Q854457/complex system",
+     "Q3778211/legal person",
+     "Q134261520/group or class of humans",
+     "Q20853538/federal authority",
+     "Q43229/organization",
+     "Q1005416/federal agency"
+    ]
+   },
+   {
+    "id": 29,
+    "matchingTokens": [
+     695
+    ],
+    "entityId": "Couch",
+    "freebaseTypes": [
+     "/business/product_category",
+     "/business/consumer_product"
+    ],
+    "confidenceScore": 1.129,
+    "wikiLink": "http://en.wikipedia.org/wiki/Couch",
+    "matchedText": "sofas",
+    "freebaseId": "/m/02crq1",
+    "relevanceScore": 0.09813,
+    "entityEnglishId": "Couch",
+    "startingPos": 3238,
+    "endingPos": 3243,
+    "wikidataId": "Q131514"
+   },
+   {
+    "id": 30,
+    "matchingTokens": [
+     836
+    ],
+    "entityId": "Cost",
+    "freebaseTypes": [
+     "/book/book_subject",
+     "/media_common/quotation_subject"
+    ],
+    "confidenceScore": 0.9622,
+    "wikiLink": "http://en.wikipedia.org/wiki/Cost",
+    "matchedText": "cost",
+    "freebaseId": "/m/0168hv",
+    "relevanceScore": 0.7542,
+    "entityEnglishId": "Cost",
+    "startingPos": 3986,
+    "endingPos": 3990,
+    "wikidataId": "Q240673",
+    "wikidataTypes": [
+     "Q131362181/social science concept",
+     "Q29028649/economic concept"
+    ]
+   },
+   {
+    "id": 31,
+    "matchingTokens": [
+     820,
+     821
+    ],
+    "entityId": "Billiard table",
+    "freebaseTypes": [
+     "/business/product_category",
+     "/sports/sports_equipment"
+    ],
+    "confidenceScore": 1.735,
+    "wikiLink": "http://en.wikipedia.org/wiki/Billiard_table",
+    "matchedText": "Pool table",
+    "freebaseId": "/m/04p0qw",
+    "relevanceScore": 0.1298,
+    "entityEnglishId": "Billiard table",
+    "startingPos": 3905,
+    "endingPos": 3915,
+    "wikidataId": "Q3500725",
+    "wikidataTypes": [
+     "Q1914636/activity",
+     "Q3341285/cue sports",
+     "Q61788060/human activity",
+     "Q349/sport",
+     "Q747883/physical activity",
+     "Q20478894/table sports"
+    ]
+   },
+   {
+    "id": 32,
+    "matchingTokens": [
+     852
+    ],
+    "entityId": "Cost",
+    "freebaseTypes": [
+     "/book/book_subject",
+     "/media_common/quotation_subject"
+    ],
+    "confidenceScore": 0.9622,
+    "wikiLink": "http://en.wikipedia.org/wiki/Cost",
+    "matchedText": "cost",
+    "freebaseId": "/m/0168hv",
+    "relevanceScore": 0.7542,
+    "entityEnglishId": "Cost",
+    "startingPos": 4074,
+    "endingPos": 4078,
+    "wikidataId": "Q240673",
+    "wikidataTypes": [
+     "Q131362181/social science concept",
+     "Q29028649/economic concept"
+    ]
+   },
+   {
+    "id": 33,
+    "matchingTokens": [
+     932
+    ],
+    "entityId": "Cost",
+    "freebaseTypes": [
+     "/book/book_subject",
+     "/media_common/quotation_subject"
+    ],
+    "confidenceScore": 0.9622,
+    "wikiLink": "http://en.wikipedia.org/wiki/Cost",
+    "matchedText": "cost",
+    "freebaseId": "/m/0168hv",
+    "relevanceScore": 0.7542,
+    "entityEnglishId": "Cost",
+    "startingPos": 4457,
+    "endingPos": 4461,
+    "wikidataId": "Q240673",
+    "wikidataTypes": [
+     "Q131362181/social science concept",
+     "Q29028649/economic concept"
+    ]
+   },
+   {
+    "id": 34,
+    "matchingTokens": [
+     837
+    ],
+    "entityId": "Calculator",
+    "freebaseTypes": [
+     "/law/invention"
+    ],
+    "confidenceScore": 2.268,
+    "wikiLink": "http://en.wikipedia.org/wiki/Calculator",
+    "matchedText": "calculator",
+    "freebaseId": "/m/024d2",
+    "relevanceScore": 0.8889,
+    "entityEnglishId": "Calculator",
+    "startingPos": 3991,
+    "endingPos": 4001,
+    "wikidataId": "Q31087"
+   },
+   {
+    "id": 35,
+    "type": [
+     "Duration"
+    ],
+    "matchingTokens": [
+     1152,
+     1153,
+     1154
+    ],
+    "entityId": "60",
+    "confidenceScore": 0.5,
+    "wikiLink": "",
+    "matchedText": "About 60 seconds",
+    "relevanceScore": 0.3115,
+    "entityEnglishId": "",
+    "startingPos": 5523,
+    "endingPos": 5539,
+    "unit": "second"
+   },
+   {
+    "id": 36,
+    "matchingTokens": [
+     1059
+    ],
+    "entityId": "Calculator",
+    "freebaseTypes": [
+     "/law/invention"
+    ],
+    "confidenceScore": 2.268,
+    "wikiLink": "http://en.wikipedia.org/wiki/Calculator",
+    "matchedText": "calculator",
+    "freebaseId": "/m/024d2",
+    "relevanceScore": 0.8889,
+    "entityEnglishId": "Calculator",
+    "startingPos": 5104,
+    "endingPos": 5114,
+    "wikidataId": "Q31087"
+   },
+   {
+    "id": 37,
+    "matchingTokens": [
+     936
+    ],
+    "entityId": "Calculator",
+    "freebaseTypes": [
+     "/law/invention"
+    ],
+    "confidenceScore": 2.268,
+    "wikiLink": "http://en.wikipedia.org/wiki/Calculator",
+    "matchedText": "calculator",
+    "freebaseId": "/m/024d2",
+    "relevanceScore": 0.8889,
+    "entityEnglishId": "Calculator",
+    "startingPos": 4476,
+    "endingPos": 4486,
+    "wikidataId": "Q31087"
+   },
+   {
+    "id": 38,
+    "matchingTokens": [
+     933
+    ],
+    "entityId": "Calculator",
+    "freebaseTypes": [
+     "/law/invention"
+    ],
+    "confidenceScore": 2.268,
+    "wikiLink": "http://en.wikipedia.org/wiki/Calculator",
+    "matchedText": "calculator",
+    "freebaseId": "/m/024d2",
+    "relevanceScore": 0.8889,
+    "entityEnglishId": "Calculator",
+    "startingPos": 4462,
+    "endingPos": 4472,
+    "wikidataId": "Q31087"
+   },
+   {
+    "id": 39,
+    "matchingTokens": [
+     867
+    ],
+    "entityId": "Calculator",
+    "freebaseTypes": [
+     "/law/invention"
+    ],
+    "confidenceScore": 2.268,
+    "wikiLink": "http://en.wikipedia.org/wiki/Calculator",
+    "matchedText": "calculator",
+    "freebaseId": "/m/024d2",
+    "relevanceScore": 0.8889,
+    "entityEnglishId": "Calculator",
+    "startingPos": 4143,
+    "endingPos": 4153,
+    "wikidataId": "Q31087"
+   },
+   {
+    "id": 40,
+    "matchingTokens": [
+     853
+    ],
+    "entityId": "Calculator",
+    "freebaseTypes": [
+     "/law/invention"
+    ],
+    "confidenceScore": 2.268,
+    "wikiLink": "http://en.wikipedia.org/wiki/Calculator",
+    "matchedText": "calculator",
+    "freebaseId": "/m/024d2",
+    "relevanceScore": 0.8889,
+    "entityEnglishId": "Calculator",
+    "startingPos": 4079,
+    "endingPos": 4089,
+    "wikidataId": "Q31087"
+   },
+   {
+    "id": 41,
+    "matchingTokens": [
+     809
+    ],
+    "entityId": "Calculator",
+    "freebaseTypes": [
+     "/law/invention"
+    ],
+    "confidenceScore": 2.268,
+    "wikiLink": "http://en.wikipedia.org/wiki/Calculator",
+    "matchedText": "calculator",
+    "freebaseId": "/m/024d2",
+    "relevanceScore": 0.8889,
+    "entityEnglishId": "Calculator",
+    "startingPos": 3836,
+    "endingPos": 3846,
+    "wikidataId": "Q31087"
+   },
+   {
+    "id": 42,
+    "matchingTokens": [
+     540
+    ],
+    "entityId": "Calculator",
+    "freebaseTypes": [
+     "/law/invention"
+    ],
+    "confidenceScore": 2.268,
+    "wikiLink": "http://en.wikipedia.org/wiki/Calculator",
+    "matchedText": "calculator",
+    "freebaseId": "/m/024d2",
+    "relevanceScore": 0.8889,
+    "entityEnglishId": "Calculator",
+    "startingPos": 2519,
+    "endingPos": 2529,
+    "wikidataId": "Q31087"
+   },
+   {
+    "id": 43,
+    "matchingTokens": [
+     169
+    ],
+    "entityId": "Calculator",
+    "freebaseTypes": [
+     "/law/invention"
+    ],
+    "confidenceScore": 2.268,
+    "wikiLink": "http://en.wikipedia.org/wiki/Calculator",
+    "matchedText": "calculator",
+    "freebaseId": "/m/024d2",
+    "relevanceScore": 0.8889,
+    "entityEnglishId": "Calculator",
+    "startingPos": 789,
+    "endingPos": 799,
+    "wikidataId": "Q31087"
+   },
+   {
+    "id": 44,
+    "matchingTokens": [
+     154
+    ],
+    "entityId": "Calculator",
+    "freebaseTypes": [
+     "/law/invention"
+    ],
+    "confidenceScore": 2.268,
+    "wikiLink": "http://en.wikipedia.org/wiki/Calculator",
+    "matchedText": "calculator",
+    "freebaseId": "/m/024d2",
+    "relevanceScore": 0.8889,
+    "entityEnglishId": "Calculator",
+    "startingPos": 713,
+    "endingPos": 723,
+    "wikidataId": "Q31087"
+   },
+   {
+    "id": 45,
+    "matchingTokens": [
+     22
+    ],
+    "entityId": "Calculator",
+    "freebaseTypes": [
+     "/law/invention"
+    ],
+    "confidenceScore": 2.268,
+    "wikiLink": "http://en.wikipedia.org/wiki/Calculator",
+    "matchedText": "Calculator",
+    "freebaseId": "/m/024d2",
+    "relevanceScore": 0.8889,
+    "entityEnglishId": "Calculator",
+    "startingPos": 108,
+    "endingPos": 118,
+    "wikidataId": "Q31087"
+   },
+   {
+    "id": 46,
+    "matchingTokens": [
+     2
+    ],
+    "entityId": "Calculator",
+    "freebaseTypes": [
+     "/law/invention"
+    ],
+    "confidenceScore": 2.268,
+    "wikiLink": "http://en.wikipedia.org/wiki/Calculator",
+    "matchedText": "Calculator",
+    "freebaseId": "/m/024d2",
+    "relevanceScore": 0.8889,
+    "entityEnglishId": "Calculator",
+    "startingPos": 12,
+    "endingPos": 22,
+    "wikidataId": "Q31087"
+   },
+   {
+    "id": 47,
+    "matchingTokens": [
+     1052
+    ],
+    "entityId": "Car",
+    "freebaseTypes": [
+     "/radio/radio_subject",
+     "/tv/tv_genre",
+     "/amusement_parks/ride_theme",
+     "/book/periodical_subject",
+     "/internet/website_category",
+     "/media_common/quotation_subject",
+     "/media_common/media_genre",
+     "/law/invention",
+     "/visual_art/visual_art_medium",
+     "/film/film_subject",
+     "/travel/transportation_mode",
+     "/organization/organization_sector",
+     "/book/book_subject",
+     "/business/product_category",
+     "/exhibitions/exhibition_subject",
+     "/interests/collection_category"
+    ],
+    "confidenceScore": 2.023,
+    "wikiLink": "http://en.wikipedia.org/wiki/Car",
+    "matchedText": "car",
+    "freebaseId": "/m/0k4j",
+    "relevanceScore": 0.1741,
+    "entityEnglishId": "Car",
+    "startingPos": 5064,
+    "endingPos": 5067,
+    "wikidataId": "Q1420"
+   },
+   {
+    "id": 48,
+    "type": [
+     "Duration"
+    ],
+    "matchingTokens": [
+     7,
+     8
+    ],
+    "entityId": "60",
+    "confidenceScore": 0.5,
+    "wikiLink": "",
+    "matchedText": "60 Seconds",
+    "relevanceScore": 0.3115,
+    "entityEnglishId": "",
+    "startingPos": 41,
+    "endingPos": 51,
+    "unit": "second"
+   },
+   {
+    "id": 49,
+    "type": [
+     "Duration"
+    ],
+    "matchingTokens": [
+     36,
+     37,
+     38
+    ],
+    "entityId": "60",
+    "confidenceScore": 0.5,
+    "wikiLink": "",
+    "matchedText": "about 60 seconds",
+    "relevanceScore": 0.3115,
+    "entityEnglishId": "",
+    "startingPos": 186,
+    "endingPos": 202,
+    "unit": "second"
+   },
+   {
+    "id": 50,
+    "type": [
+     "Number"
+    ],
+    "matchingTokens": [
+     50
+    ],
+    "entityId": "1",
+    "confidenceScore": 0.5,
+    "wikiLink": "",
+    "matchedText": "1",
+    "relevanceScore": 0,
+    "entityEnglishId": "",
+    "startingPos": 252,
+    "endingPos": 253
+   },
+   {
+    "id": 51,
+    "type": [
+     "Number"
+    ],
+    "matchingTokens": [
+     52
+    ],
+    "entityId": "6",
+    "confidenceScore": 0.5,
+    "wikiLink": "",
+    "matchedText": "6",
+    "relevanceScore": 0,
+    "entityEnglishId": "",
+    "startingPos": 257,
+    "endingPos": 258
+   },
+   {
+    "id": 52,
+    "type": [
+     "Duration"
+    ],
+    "matchingTokens": [
+     1124,
+     1125
+    ],
+    "entityId": "1",
+    "confidenceScore": 0.5,
+    "wikiLink": "",
+    "matchedText": "one minute",
+    "relevanceScore": 0,
+    "entityEnglishId": "",
+    "startingPos": 5412,
+    "endingPos": 5422,
+    "unit": "minute"
+   },
+   {
+    "id": 53,
+    "type": [
+     "Distance"
+    ],
+    "matchingTokens": [
+     557,
+     558,
+     559
+    ],
+    "entityId": "50",
+    "confidenceScore": 0.5,
+    "wikiLink": "",
+    "matchedText": "about 50 miles",
+    "relevanceScore": 0.04851,
+    "entityEnglishId": "",
+    "startingPos": 2608,
+    "endingPos": 2622,
+    "unit": "mile"
+   },
+   {
+    "id": 54,
+    "matchingTokens": [
+     723
+    ],
+    "entityId": "Moving company",
+    "freebaseTypes": [
+     "/business/product_line",
+     "/organization/contact_category",
+     "/business/advertising_slogan",
+     "/organization/organization_sector",
+     "/business/consumer_product",
+     "/business/industry"
+    ],
+    "confidenceScore": 1.393,
+    "wikiLink": "http://en.wikipedia.org/wiki/Moving_company",
+    "matchedText": "mover",
+    "freebaseId": "/m/07ry5s",
+    "relevanceScore": 0.8271,
+    "entityEnglishId": "Moving company",
+    "startingPos": 3375,
+    "endingPos": 3380,
+    "wikidataId": "Q1757263",
+    "wikidataTypes": [
+     "Q3778211/legal person",
+     "Q2169973/service provider",
+     "Q106559804/person or organization",
+     "Q1415187/economic agent",
+     "Q783794/company",
+     "Q131085629/collective agent",
+     "Q43229/organization",
+     "Q106668099/corporate body",
+     "Q1639378/social system",
+     "Q134602526/group or class of beings",
+     "Q12569864/economic entity",
+     "Q134601875/group or class of people",
+     "Q13420330/provider"
+    ]
+   },
+   {
+    "id": 55,
+    "matchingTokens": [
+     762
+    ],
+    "entityId": "Moving company",
+    "freebaseTypes": [
+     "/business/product_line",
+     "/organization/contact_category",
+     "/business/advertising_slogan",
+     "/organization/organization_sector",
+     "/business/consumer_product",
+     "/business/industry"
+    ],
+    "confidenceScore": 1.393,
+    "wikiLink": "http://en.wikipedia.org/wiki/Moving_company",
+    "matchedText": "mover",
+    "freebaseId": "/m/07ry5s",
+    "relevanceScore": 0.8271,
+    "entityEnglishId": "Moving company",
+    "startingPos": 3572,
+    "endingPos": 3577,
+    "wikidataId": "Q1757263",
+    "wikidataTypes": [
+     "Q3778211/legal person",
+     "Q2169973/service provider",
+     "Q106559804/person or organization",
+     "Q1415187/economic agent",
+     "Q783794/company",
+     "Q131085629/collective agent",
+     "Q43229/organization",
+     "Q106668099/corporate body",
+     "Q1639378/social system",
+     "Q134602526/group or class of beings",
+     "Q12569864/economic entity",
+     "Q134601875/group or class of people",
+     "Q13420330/provider"
+    ]
+   },
+   {
+    "id": 56,
+    "type": [
+     "Device",
+     "Instrument"
+    ],
+    "matchingTokens": [
+     814
+    ],
+    "entityId": "Piano",
+    "freebaseTypes": [
+     "/award/award_discipline",
+     "/education/field_of_study",
+     "/music/genre",
+     "/book/book_subject",
+     "/interests/collectable_item",
+     "/music/performance_role",
+     "/law/invention",
+     "/music/instrument"
+    ],
+    "confidenceScore": 1.754,
+    "wikiLink": "http://en.wikipedia.org/wiki/Piano",
+    "matchedText": "Piano",
+    "freebaseId": "/m/05r5c",
+    "relevanceScore": 0.3716,
+    "entityEnglishId": "Piano",
+    "startingPos": 3871,
+    "endingPos": 3876,
+    "wikidataId": "Q5994",
+    "wikidataTypes": [
+     "Q110295396/type of musical instrument",
+     "Q5127848/class"
+    ]
+   },
+   {
+    "id": 57,
+    "matchingTokens": [
+     827,
+     828
+    ],
+    "entityId": "Hot tub",
+    "freebaseTypes": [
+     "/travel/accommodation_feature",
+     "/business/product_category"
+    ],
+    "confidenceScore": 2.785,
+    "wikiLink": "http://en.wikipedia.org/wiki/Hot_tub",
+    "matchedText": "Hot tub",
+    "freebaseId": "/m/065h6l",
+    "relevanceScore": 0.3192,
+    "entityEnglishId": "Hot tub",
+    "startingPos": 3941,
+    "endingPos": 3948,
+    "wikidataId": "Q1936429"
+   },
+   {
+    "id": 58,
+    "matchingTokens": [
+     547,
+     548
+    ],
+    "entityId": "ZIP Code",
+    "confidenceScore": 5.216,
+    "wikiLink": "http://en.wikipedia.org/wiki/ZIP_Code",
+    "matchedText": "ZIP codes",
+    "freebaseId": "/m/0dllr",
+    "relevanceScore": 0.4308,
+    "entityEnglishId": "ZIP Code",
+    "startingPos": 2564,
+    "endingPos": 2573,
+    "wikidataId": "Q136208",
+    "wikidataTypes": [
+     "Q66746920/jargon term",
+     "Q100792256/identifying artifact",
+     "Q16686448/artificial object",
+     "Q3695082/sign",
+     "Q853614/identifier",
+     "Q126286955/philatelic term",
+     "Q12812139/specialized term",
+     "Q6545185/unique identifier",
+     "Q48937186/word or phrase"
+    ]
+   },
+   {
+    "id": 59,
+    "matchingTokens": [
+     398
+    ],
+    "entityId": "Weight",
+    "confidenceScore": 2.671,
+    "wikiLink": "http://en.wikipedia.org/wiki/Weight",
+    "matchedText": "weight",
+    "freebaseId": "/m/085x_",
+    "relevanceScore": 0.385,
+    "entityEnglishId": "Weight",
+    "startingPos": 1842,
+    "endingPos": 1848,
+    "wikidataId": "Q25288"
+   },
+   {
+    "id": 60,
+    "matchingTokens": [
+     615
+    ],
+    "entityId": "Weight",
+    "confidenceScore": 2.671,
+    "wikiLink": "http://en.wikipedia.org/wiki/Weight",
+    "matchedText": "weight",
+    "freebaseId": "/m/085x_",
+    "relevanceScore": 0.385,
+    "entityEnglishId": "Weight",
+    "startingPos": 2862,
+    "endingPos": 2868,
+    "wikidataId": "Q25288"
+   },
+   {
+    "id": 61,
+    "matchingTokens": [
+     704
+    ],
+    "entityId": "Weight",
+    "confidenceScore": 2.671,
+    "wikiLink": "http://en.wikipedia.org/wiki/Weight",
+    "matchedText": "weight",
+    "freebaseId": "/m/085x_",
+    "relevanceScore": 0.385,
+    "entityEnglishId": "Weight",
+    "startingPos": 3287,
+    "endingPos": 3293,
+    "wikidataId": "Q25288"
+   },
+   {
+    "id": 62,
+    "matchingTokens": [
+     1015
+    ],
+    "entityId": "Weight",
+    "confidenceScore": 2.671,
+    "wikiLink": "http://en.wikipedia.org/wiki/Weight",
+    "matchedText": "weight",
+    "freebaseId": "/m/085x_",
+    "relevanceScore": 0.385,
+    "entityEnglishId": "Weight",
+    "startingPos": 4879,
+    "endingPos": 4885,
+    "wikidataId": "Q25288"
+   },
+   {
+    "id": 63,
+    "matchingTokens": [
+     459
+    ],
+    "entityId": "Truck",
+    "freebaseTypes": [
+     "/business/industry",
+     "/automotive/body_style",
+     "/business/product_category",
+     "/automotive/automotive_class",
+     "/book/book_subject"
+    ],
+    "confidenceScore": 2.81,
+    "wikiLink": "http://en.wikipedia.org/wiki/Truck",
+    "matchedText": "truck",
+    "freebaseId": "/m/07r04",
+    "relevanceScore": 0.6104,
+    "entityEnglishId": "Truck",
+    "startingPos": 2130,
+    "endingPos": 2135,
+    "wikidataId": "Q43193"
+   },
+   {
+    "id": 64,
+    "matchingTokens": [
+     572
+    ],
+    "entityId": "Truck",
+    "freebaseTypes": [
+     "/business/industry",
+     "/automotive/body_style",
+     "/business/product_category",
+     "/automotive/automotive_class",
+     "/book/book_subject"
+    ],
+    "confidenceScore": 2.81,
+    "wikiLink": "http://en.wikipedia.org/wiki/Truck",
+    "matchedText": "truck",
+    "freebaseId": "/m/07r04",
+    "relevanceScore": 0.6104,
+    "entityEnglishId": "Truck",
+    "startingPos": 2660,
+    "endingPos": 2665,
+    "wikidataId": "Q43193"
+   },
+   {
+    "id": 65,
+    "matchingTokens": [
+     1006
+    ],
+    "entityId": "Truck",
+    "freebaseTypes": [
+     "/business/industry",
+     "/automotive/body_style",
+     "/business/product_category",
+     "/automotive/automotive_class",
+     "/book/book_subject"
+    ],
+    "confidenceScore": 2.81,
+    "wikiLink": "http://en.wikipedia.org/wiki/Truck",
+    "matchedText": "truck",
+    "freebaseId": "/m/07r04",
+    "relevanceScore": 0.6104,
+    "entityEnglishId": "Truck",
+    "startingPos": 4826,
+    "endingPos": 4831,
+    "wikidataId": "Q43193"
+   },
+   {
+    "id": 66,
+    "matchingTokens": [
+     445
+    ],
+    "entityId": "Stairs",
+    "freebaseTypes": [
+     "/book/book_subject",
+     "/visual_art/art_subject",
+     "/people/cause_of_death"
+    ],
+    "confidenceScore": 4.206,
+    "wikiLink": "http://en.wikipedia.org/wiki/Stairs",
+    "matchedText": "Stairs",
+    "freebaseId": "/m/01lynh",
+    "relevanceScore": 0.489,
+    "entityEnglishId": "Stairs",
+    "startingPos": 2062,
+    "endingPos": 2068,
+    "wikidataId": "Q12511"
+   },
+   {
+    "id": 67,
+    "matchingTokens": [
+     1031
+    ],
+    "entityId": "Stairs",
+    "freebaseTypes": [
+     "/book/book_subject",
+     "/visual_art/art_subject",
+     "/people/cause_of_death"
+    ],
+    "confidenceScore": 4.206,
+    "wikiLink": "http://en.wikipedia.org/wiki/Stairs",
+    "matchedText": "stairs",
+    "freebaseId": "/m/01lynh",
+    "relevanceScore": 0.489,
+    "entityEnglishId": "Stairs",
+    "startingPos": 4964,
+    "endingPos": 4970,
+    "wikidataId": "Q12511"
+   },
+   {
+    "id": 68,
+    "type": [
+     "Device",
+     "Instrument"
+    ],
+    "matchingTokens": [
+     795
+    ],
+    "entityId": "Piano",
+    "freebaseTypes": [
+     "/award/award_discipline",
+     "/education/field_of_study",
+     "/music/genre",
+     "/book/book_subject",
+     "/interests/collectable_item",
+     "/music/performance_role",
+     "/law/invention",
+     "/music/instrument"
+    ],
+    "confidenceScore": 1.458,
+    "wikiLink": "http://en.wikipedia.org/wiki/Piano",
+    "matchedText": "Pianos",
+    "freebaseId": "/m/05r5c",
+    "relevanceScore": 0.3716,
+    "entityEnglishId": "Piano",
+    "startingPos": 3762,
+    "endingPos": 3768,
+    "wikidataId": "Q5994",
+    "wikidataTypes": [
+     "Q110295396/type of musical instrument",
+     "Q5127848/class"
+    ]
+   },
+   {
+    "id": 69,
+    "matchingTokens": [
+     797,
+     798
+    ],
+    "entityId": "Billiard table",
+    "freebaseTypes": [
+     "/business/product_category",
+     "/sports/sports_equipment"
+    ],
+    "confidenceScore": 1.732,
+    "wikiLink": "http://en.wikipedia.org/wiki/Billiard_table",
+    "matchedText": "pool tables",
+    "freebaseId": "/m/04p0qw",
+    "relevanceScore": 0.1298,
+    "entityEnglishId": "Billiard table",
+    "startingPos": 3770,
+    "endingPos": 3781,
+    "wikidataId": "Q3500725",
+    "wikidataTypes": [
+     "Q1914636/activity",
+     "Q3341285/cue sports",
+     "Q61788060/human activity",
+     "Q349/sport",
+     "Q747883/physical activity",
+     "Q20478894/table sports"
+    ]
+   },
+   {
+    "id": 70,
+    "matchingTokens": [
+     800,
+     801
+    ],
+    "entityId": "Hot tub",
+    "freebaseTypes": [
+     "/travel/accommodation_feature",
+     "/business/product_category"
+    ],
+    "confidenceScore": 2.912,
+    "wikiLink": "http://en.wikipedia.org/wiki/Hot_tub",
+    "matchedText": "hot tubs",
+    "freebaseId": "/m/065h6l",
+    "relevanceScore": 0.3192,
+    "entityEnglishId": "Hot tub",
+    "startingPos": 3786,
+    "endingPos": 3794,
+    "wikidataId": "Q1936429"
+   },
+   {
+    "id": 71,
+    "matchingTokens": [
+     987
+    ],
+    "entityId": "Moving company",
+    "freebaseTypes": [
+     "/business/product_line",
+     "/organization/contact_category",
+     "/business/advertising_slogan",
+     "/organization/organization_sector",
+     "/business/consumer_product",
+     "/business/industry"
+    ],
+    "confidenceScore": 1.761,
+    "wikiLink": "http://en.wikipedia.org/wiki/Moving_company",
+    "matchedText": "movers",
+    "freebaseId": "/m/07ry5s",
+    "relevanceScore": 0.8271,
+    "entityEnglishId": "Moving company",
+    "startingPos": 4723,
+    "endingPos": 4729,
+    "wikidataId": "Q1757263",
+    "wikidataTypes": [
+     "Q3778211/legal person",
+     "Q2169973/service provider",
+     "Q106559804/person or organization",
+     "Q1415187/economic agent",
+     "Q783794/company",
+     "Q131085629/collective agent",
+     "Q43229/organization",
+     "Q106668099/corporate body",
+     "Q1639378/social system",
+     "Q134602526/group or class of beings",
+     "Q12569864/economic entity",
+     "Q134601875/group or class of people",
+     "Q13420330/provider"
+    ]
+   },
+   {
+    "id": 72,
+    "type": [
+     "Agent",
+     "Organisation",
+     "GovernmentAgency"
+    ],
+    "matchingTokens": [
+     767
+    ],
+    "entityId": "Federal Motor Carrier Safety Administration",
+    "freebaseTypes": [
+     "/organization/organization"
+    ],
+    "confidenceScore": 7.637,
+    "wikiLink": "http://en.wikipedia.org/wiki/Federal_Motor_Carrier_Safety_Administration",
+    "matchedText": "FMCSA",
+    "freebaseId": "/m/02wvdh3",
+    "relevanceScore": 0.4133,
+    "entityEnglishId": "Federal Motor Carrier Safety Administration",
+    "startingPos": 3601,
+    "endingPos": 3606,
+    "wikidataId": "Q5440305",
+    "wikidataTypes": [
+     "Q20857065/United States federal agency",
+     "Q10541491/legal form",
+     "Q131085629/collective agent",
+     "Q106559804/person or organization",
+     "Q155076/juridical person",
+     "Q106668099/corporate body",
+     "Q134602526/group or class of beings",
+     "Q2659904/government organization",
+     "Q1549152/public institution",
+     "Q134601875/group or class of people",
+     "Q327333/government agency",
+     "Q1639378/social system",
+     "Q854457/complex system",
+     "Q3778211/legal person",
+     "Q134261520/group or class of humans",
+     "Q20853538/federal authority",
+     "Q43229/organization",
+     "Q1005416/federal agency"
+    ]
+   },
+   {
+    "id": 73,
+    "matchingTokens": [
+     575
+    ],
+    "entityId": "Cost",
+    "freebaseTypes": [
+     "/book/book_subject",
+     "/media_common/quotation_subject"
+    ],
+    "confidenceScore": 0.9622,
+    "wikiLink": "http://en.wikipedia.org/wiki/Cost",
+    "matchedText": "cost",
+    "freebaseId": "/m/0168hv",
+    "relevanceScore": 0.7542,
+    "entityEnglishId": "Cost",
+    "startingPos": 2674,
+    "endingPos": 2678,
+    "wikidataId": "Q240673",
+    "wikidataTypes": [
+     "Q131362181/social science concept",
+     "Q29028649/economic concept"
+    ]
+   },
+   {
+    "id": 74,
+    "matchingTokens": [
+     846
+    ],
+    "entityId": "Email",
+    "freebaseTypes": [
+     "/organization/organization_sector",
+     "/internet/website_category",
+     "/organization/contact_category",
+     "/film/film_subject",
+     "/computer/software_genre",
+     "/book/book_subject",
+     "/law/invention"
+    ],
+    "confidenceScore": 3.588,
+    "wikiLink": "http://en.wikipedia.org/wiki/Email",
+    "matchedText": "Email",
+    "freebaseId": "/m/02nf_",
+    "relevanceScore": 0.2623,
+    "entityEnglishId": "Email",
+    "startingPos": 4030,
+    "endingPos": 4035,
+    "wikidataId": "Q9158",
+    "wikidataTypes": [
+     "Q1668024/service on Internet",
+     "Q34104/science and technology",
+     "Q2897903/goods and services",
+     "Q5268834/information and communications technology",
+     "Q1780543/communication technology",
+     "Q1273271/e-service",
+     "Q11016/technology",
+     "Q2424752/product"
+    ]
+   },
+   {
+    "id": 75,
+    "matchingTokens": [
+     889
+    ],
+    "entityId": "Email",
+    "freebaseTypes": [
+     "/organization/organization_sector",
+     "/internet/website_category",
+     "/organization/contact_category",
+     "/film/film_subject",
+     "/computer/software_genre",
+     "/book/book_subject",
+     "/law/invention"
+    ],
+    "confidenceScore": 3.588,
+    "wikiLink": "http://en.wikipedia.org/wiki/Email",
+    "matchedText": "email",
+    "freebaseId": "/m/02nf_",
+    "relevanceScore": 0.2623,
+    "entityEnglishId": "Email",
+    "startingPos": 4245,
+    "endingPos": 4250,
+    "wikidataId": "Q9158",
+    "wikidataTypes": [
+     "Q1668024/service on Internet",
+     "Q34104/science and technology",
+     "Q2897903/goods and services",
+     "Q5268834/information and communications technology",
+     "Q1780543/communication technology",
+     "Q1273271/e-service",
+     "Q11016/technology",
+     "Q2424752/product"
+    ]
+   },
+   {
+    "id": 76,
+    "matchingTokens": [
+     913
+    ],
+    "entityId": "Email",
+    "freebaseTypes": [
+     "/organization/organization_sector",
+     "/internet/website_category",
+     "/organization/contact_category",
+     "/film/film_subject",
+     "/computer/software_genre",
+     "/book/book_subject",
+     "/law/invention"
+    ],
+    "confidenceScore": 3.588,
+    "wikiLink": "http://en.wikipedia.org/wiki/Email",
+    "matchedText": "email",
+    "freebaseId": "/m/02nf_",
+    "relevanceScore": 0.2623,
+    "entityEnglishId": "Email",
+    "startingPos": 4362,
+    "endingPos": 4367,
+    "wikidataId": "Q9158",
+    "wikidataTypes": [
+     "Q1668024/service on Internet",
+     "Q34104/science and technology",
+     "Q2897903/goods and services",
+     "Q5268834/information and communications technology",
+     "Q1780543/communication technology",
+     "Q1273271/e-service",
+     "Q11016/technology",
+     "Q2424752/product"
+    ]
+   },
+   {
+    "id": 77,
+    "matchingTokens": [
+     1137
+    ],
+    "entityId": "Email",
+    "freebaseTypes": [
+     "/organization/organization_sector",
+     "/internet/website_category",
+     "/organization/contact_category",
+     "/film/film_subject",
+     "/computer/software_genre",
+     "/book/book_subject",
+     "/law/invention"
+    ],
+    "confidenceScore": 3.588,
+    "wikiLink": "http://en.wikipedia.org/wiki/Email",
+    "matchedText": "email",
+    "freebaseId": "/m/02nf_",
+    "relevanceScore": 0.2623,
+    "entityEnglishId": "Email",
+    "startingPos": 5464,
+    "endingPos": 5469,
+    "wikidataId": "Q9158",
+    "wikidataTypes": [
+     "Q1668024/service on Internet",
+     "Q34104/science and technology",
+     "Q2897903/goods and services",
+     "Q5268834/information and communications technology",
+     "Q1780543/communication technology",
+     "Q1273271/e-service",
+     "Q11016/technology",
+     "Q2424752/product"
+    ]
+   },
+   {
+    "id": 78,
+    "matchingTokens": [
+     187
+    ],
+    "entityId": "Email",
+    "freebaseTypes": [
+     "/organization/organization_sector",
+     "/internet/website_category",
+     "/organization/contact_category",
+     "/film/film_subject",
+     "/computer/software_genre",
+     "/book/book_subject",
+     "/law/invention"
+    ],
+    "confidenceScore": 3.588,
+    "wikiLink": "http://en.wikipedia.org/wiki/Email",
+    "matchedText": "email",
+    "freebaseId": "/m/02nf_",
+    "relevanceScore": 0.2623,
+    "entityEnglishId": "Email",
+    "startingPos": 881,
+    "endingPos": 886,
+    "wikidataId": "Q9158",
+    "wikidataTypes": [
+     "Q1668024/service on Internet",
+     "Q34104/science and technology",
+     "Q2897903/goods and services",
+     "Q5268834/information and communications technology",
+     "Q1780543/communication technology",
+     "Q1273271/e-service",
+     "Q11016/technology",
+     "Q2424752/product"
+    ]
+   },
+   {
+    "id": 79,
+    "type": [
+     "Company"
+    ],
+    "matchingTokens": [
+     753
+    ],
+    "entityId": "USDOT",
+    "freebaseTypes": [
+     "/organization/organization"
+    ],
+    "confidenceScore": 0.5,
+    "wikiLink": "",
+    "matchedText": "USDOT",
+    "relevanceScore": 0.06943,
+    "entityEnglishId": "",
+    "startingPos": 3525,
+    "endingPos": 3530
+   },
+   {
+    "id": 80,
+    "type": [
+     "Email"
+    ],
+    "matchingTokens": [
+     847
+    ],
+    "entityId": "hello@liftmyboxes.com",
+    "freebaseTypes": [
+     ""
+    ],
+    "confidenceScore": 0.5,
+    "wikiLink": "",
+    "matchedText": "hello@liftmyboxes.com",
+    "relevanceScore": 0.1847,
+    "entityEnglishId": "",
+    "startingPos": 4036,
+    "endingPos": 4057
+   },
+   {
+    "id": 81,
+    "type": [
+     "Number"
+    ],
+    "matchingTokens": [
+     143
+    ],
+    "entityId": "4",
+    "confidenceScore": 0.5,
+    "wikiLink": "",
+    "matchedText": "4.0",
+    "relevanceScore": 0,
+    "entityEnglishId": "",
+    "startingPos": 675,
+    "endingPos": 678
+   },
+   {
+    "id": 82,
+    "type": [
+     "Time"
+    ],
+    "matchingTokens": [
+     1103
+    ],
+    "entityId": "2027-09-01T00:00:00.000+00:00",
+    "confidenceScore": 0.5,
+    "wikiLink": "",
+    "matchedText": "September",
+    "relevanceScore": 0,
+    "entityEnglishId": "",
+    "startingPos": 5312,
+    "endingPos": 5321
+   }
+  ]
+ },
+ "time": 0.4501,
+ "ok": true
+}

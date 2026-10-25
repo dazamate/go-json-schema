@@ -1,0 +1,18 @@
+# schema-mcp settings: API keys for the outside APIs schema-mcp can call.
+#
+# Copy this file to ~/.config/go-json-schema/schema-mcp.yml (or pass
+# -config / set SCHEMA_MCP_CONFIG), fill in the keys and keep it private:
+#
+#   chmod 600 ~/.config/go-json-schema/schema-mcp.yml
+#
+# Never commit a copy that holds keys.
+
+textrazor:
+  # Links the entities on the ranking pages in page_terms to Wikipedia and
+  # Wikidata, using each page's context. Free key: https://www.textrazor.com
+  # (500 requests a day; one request per 10 KB of text). Only page text
+  # already fetched through ChromiumFish is sent; TextRazor fetches nothing.
+  # Leave empty to skip entity linking.
+  api_key: ""
+  # Text sent per page, in KB. Default 30 (3 requests per page).
+  max_kb_per_page: 30

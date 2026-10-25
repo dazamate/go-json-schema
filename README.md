@@ -176,6 +176,149 @@ search.Extra = map[string]schema.Values{"query-input": schema.Texts("required na
 - `schema.ScriptTag(v)` gives a `<script type="application/ld+json">`
   element, with `<` and `>` escaped so values can't close the tag.
 
+## MCP server: schema-mcp
+
+`cmd/schema-mcp` is an MCP server that researches a keyword the way Zizta's
+Entity Explorer does, then checks the JSON-LD an AI writes from it. The
+`schema` package doesn't import it, so programs that use only `schema`
+don't compile the MCP SDK.
+
+```sh
+go install ./cmd/schema-mcp                    # from a checkout; installs to $(go env GOPATH)/bin
+claude mcp add schema -- "$(go env GOPATH)/bin/schema-mcp"   # stdio, for Claude Code
+schema-mcp -http 127.0.0.1:8765                # streamable HTTP, e.g. for n8n
+```
+
+Without a checkout, the repo is private, so set
+`GOPRIVATE=github.com/dazamate/*` and run
+`go install github.com/dazamate/go-json-schema/cmd/schema-mcp@latest`.
+
+| Tool | Needs ChromiumFish | Returns |
+|---|---|---|
+| `serp(keyword, country, language, …)` | yes | Top 10 Google results, People also ask, related searches, autocomplete, and `bold_terms`: the words Google bolds in snippets as matches for the keyword. Falls back to DuckDuckGo, then Bing, on a bot wall. |
+| `page_terms(links)` | yes | Words and 2–3 word phrases ranked across the ranking pages, each with its rank correlation `rho`; with a TextRazor key, the pages' `entities` and `topics` linked to Wikipedia in context; each page's title, headings and JSON-LD summary; competitors' about/mentions/knowsAbout/keywords merged. |
+| `resolve_entities(phrases)` | yes | Wikipedia title, Wikidata QID, aliases, types, `/m/` (P646) and `/g/` (P2671) IDs, and a ready `Thing` node. Status: `exact`, `redirect`, `section`, `ambiguous` or `missing`, with candidates for the last two. |
+| `type_properties(type)` | no | Every property a type takes, inherited ones included. |
+| `enum_values(enum)` | no | Members, sub-enumerations included. |
+| `property_info(property)` | no | Domains, expected types, Go field and block. |
+| `build_jsonld(draft)` | no | Errors for unknown types, properties and enum members; info for off-domain properties, which are kept. The draft comes back as a script tag. |
+
+`serp` takes these Google search params. Only `keyword` is required.
+
+| Param | Google | Default |
+|---|---|---|
+| `country` | `gl`, the country searched from | `us` |
+| `language` | `hl`, the interface language, e.g. `en`, `pt-BR` | `en` |
+| `google_domain` | the domain searched, e.g. `google.com.au` | `google.com` |
+| `page` | `start`; ranks continue, so page 2 starts at 11 | `1` |
+| `time_range` | `tbs=qdr:`: `hour`, `day`, `week`, `month` or `year` | any time |
+| `safe_search` | `safe=active` | off |
+| `results_language` | `lr`: only pages in this language | any |
+| `results_country` | `cr`: only pages from this country | any |
+| `no_autocorrect` | `nfpr=1`: no spelling correction | off |
+| `show_omitted` | `filter=0`: include results hidden as very similar | off |
+| `web_only` | `udm=14`: the Web filter, links only | off |
+| `near` | `near=`: localize to a place, e.g. `Austin, TX` (Cora's "near" button) | none |
+| `params` | any other URL params, set last; `q` is reserved | none |
+
+Every search also sends `pws=0` (no personalization) and `num=10`.
+
+A bad value is an error before any request. The DuckDuckGo and Bing
+fallbacks use only country and language, and `note` names the params they
+ignored.
+
+Location, tested live in October 2026:
+- `near` works: `plumber` with `near=Austin, TX` put Austin plumbers at ranks 2 and 3.
+- `uule` is ignored in both its name and its lat/long forms.
+- Without `near`, results follow the IP's area when `country` matches the
+  IP's country. `gl=us` from an Australian IP gave US-wide results.
+- `chromiumfish mcp` can't set the browser's geolocation.
+
+Cora SEO Software's other stability settings no longer do anything:
+- `google.com/ncr` (no country redirect) now just lands on the google.com
+  home page, and google.com didn't redirect anyway.
+- `num=100` returns 10 results; Google dropped it in 2025.
+- `google.com.au` and other country domains still load without
+  redirecting, so `google_domain` stays.
+
+**Google cooldown:** a search, or a Google redirect link followed by
+`page_terms` or `resolve_urls`, waits until 30 s have passed since the
+previous one ended. Cached results skip it. Each search's autocomplete
+lookup runs from the results page as soon as it loads, so it doesn't wait.
+- All schema-mcp processes share the cooldown through a locked file,
+  `~/.cache/go-json-schema/google-cooldown`.
+- A redirect link costs a Google request. So `page_terms` reads other
+  sites first, and the agent is told to pass each result's `url` when
+  `serp` has one. Ten redirect links take about 5 minutes.
+- While a call waits, it sends MCP progress notifications if the client
+  asked for them. They keep a client's idle timeout from ending the call.
+
+Prompts: `entity_schema(keyword, page_type, country, language)` runs the whole workflow, and
+`stuffing_guide` gives the volume targets. The guide is copied from
+`SEO_FIELD_GUIDE` in recipe-create-pipeline, so update both together.
+
+**Fetching** goes only through [ChromiumFish](https://github.com/arman-bd/chromiumfish).
+The server runs `chromiumfish mcp` as a child process, on first use, on a
+free CDP port. It finds the command through `CHROMIUMFISH_CMD`, else
+`chromiumfish` on PATH, and errors with install steps if either the command
+or the downloaded browser is missing. Install it with
+`pip install "chromiumfish[mcp]" && chromiumfish fetch`, or with
+chromium-fish-mcp's `install.sh`. Wikipedia and Wikidata calls run as
+`fetch()` inside a Wikipedia tab: from this machine, direct API requests
+are refused with a 403.
+
+**How entities resolve:**
+- A phrase is looked up as a Wikipedia title, following redirects. Looking
+  up by title instead of searching Wikidata labels keeps "rosemary" from
+  matching people named Rosemary.
+- The Google IDs come from the matching Wikidata item.
+- When that item has no Google ID, the server borrows one from a synonym
+  item (P694, P566, P1403, P1420, P460). For example, rosemary's 2020
+  taxon item Q102240169 takes `/m/06cd7` from Q122679.
+
+**Settings:**
+- `-seed` / `SCHEMA_MCP_PERSONA_SEED`: the browser persona (default `go-json-schema`).
+- `-cache` / `SCHEMA_MCP_CACHE_DIR`: the cache directory (default `~/.cache/go-json-schema`).
+  Results expire after 1 day for searches, 7 days for pages and 30 days
+  for entities. Pass `-cache ''` to turn caching off.
+- `-google-cooldown` / `SCHEMA_MCP_GOOGLE_COOLDOWN`: the least time between
+  Google requests (default `30s`). `0` turns it off.
+- `-config` / `SCHEMA_MCP_CONFIG`: the YAML file of API keys (default
+  `~/.config/go-json-schema/schema-mcp.yml`). Copy
+  [`schema-mcp.yml.dist`](cmd/schema-mcp/schema-mcp.yml.dist) there,
+  then run `chmod 600` on it. The server warns when other users can read
+  it, and a misspelt key name is a startup error. A missing default file
+  just means no keys.
+
+**Entity linking (TextRazor):** with `textrazor.api_key` set, `page_terms`
+sends each loaded page's title and text to [TextRazor](https://www.textrazor.com/docs/rest)
+and merges what comes back:
+- `entities`: each mention linked to its Wikipedia article and Wikidata
+  item using the page's context, so `name` is the exact Wikipedia title to
+  pass to `resolve_entities`.
+- `topics`: the pages' themes. These are about candidates.
+- Sending the text is the one call that bypasses ChromiumFish. Only text
+  ChromiumFish already fetched is sent; the `url` parameter, which would
+  make TextRazor fetch the page itself, is never used.
+- Each page sends at most `max_kb_per_page` (default 30 KB).
+- TextRazor bills one request per 10 KB, and the free plan allows 500 a
+  day, so 10 pages cost about 30 requests. `entity_note` reports how many
+  were used.
+- Results are cached for 7 days by the text sent.
+
+**Rank correlation:** with 5 or more pages loaded, every term and entity
+gets `rho`, Spearman's correlation between its use on each page and the
+page's rank. This is how Cora SEO Software correlates its factors.
+- Negative means higher-ranked pages use it more.
+- `significant` marks |rho| ≥ 1.96/√(n−1), the 95% two-tailed test.
+
+`-http` has no authentication, and the tools drive a browser whose
+sandbox is off (ChromiumFish runs `--no-sandbox`), so bind it to
+localhost.
+
+`SCHEMA_MCP_LIVE=1 go test ./internal/research -run TestLive -v` runs the
+research tools against the live web.
+
 ## Regenerating
 
 The vocabulary is stored in the repo at

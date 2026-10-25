@@ -1,0 +1,1946 @@
+{
+ "per_property": {
+  "P1014": {
+   "label": "Art & Architecture Thesaurus ID",
+   "formatter": "https://www.getty.edu/vow/AATFullDisplay?find=&logic=AND&note=&subjectid=$1",
+   "values": {
+    "Q31087": [
+     "300081382"
+    ],
+    "Q240673": [
+     "300068713"
+    ],
+    "Q12511": [
+     "300003228"
+    ],
+    "Q25288": [
+     "300056240"
+    ],
+    "Q5994": [
+     "300042909"
+    ],
+    "Q1936429": [
+     "300343457"
+    ],
+    "Q3500725": [
+     "300039627"
+    ]
+   }
+  },
+  "P508": {
+   "label": "BNCF Thesaurus ID",
+   "formatter": "https://thes.bncf.firenze.sbn.it/termine.php?id=$1",
+   "values": {
+    "Q31087": [
+     "19244"
+    ],
+    "Q43193": [
+     "615"
+    ],
+    "Q12511": [
+     "3298"
+    ],
+    "Q5994": [
+     "2237"
+    ]
+   }
+  },
+  "P646": {
+   "label": "Freebase ID",
+   "formatter": "https://g.co/kg$1",
+   "values": {
+    "Q31087": [
+     "/m/024d2"
+    ],
+    "Q1757263": [
+     "/m/07ry5s"
+    ],
+    "Q240673": [
+     "/m/0168hv"
+    ],
+    "Q43193": [
+     "/m/07r04"
+    ],
+    "Q12511": [
+     "/m/01lynh"
+    ],
+    "Q136208": [
+     "/m/0dllr"
+    ],
+    "Q5440305": [
+     "/m/02wvdh3"
+    ],
+    "Q25288": [
+     "/m/085x_"
+    ],
+    "Q5994": [
+     "/m/05r5c"
+    ],
+    "Q1936429": [
+     "/m/065h6l"
+    ],
+    "Q3500725": [
+     "/m/04p0qw"
+    ]
+   }
+  },
+  "P1051": {
+   "label": "PSH ID",
+   "formatter": "https://psh.techlib.cz/skos/PSH$1",
+   "values": {
+    "Q31087": [
+     "10319"
+    ],
+    "Q240673": [
+     "1780"
+    ],
+    "Q12511": [
+     "10575"
+    ],
+    "Q25288": [
+     "2979"
+    ]
+   }
+  },
+  "P1417": {
+   "label": "Encyclop\u00e6dia Britannica Online ID",
+   "formatter": "https://www.britannica.com/$1",
+   "values": {
+    "Q31087": [
+     "technology/calculator",
+     "topic/pocket-calculator"
+    ],
+    "Q240673": [
+     "money/cost"
+    ],
+    "Q43193": [
+     "technology/truck-vehicle"
+    ],
+    "Q12511": [
+     "technology/staircase-architecture"
+    ],
+    "Q136208": [
+     "topic/ZIP-Code"
+    ],
+    "Q25288": [
+     "science/weight"
+    ],
+    "Q5994": [
+     "art/piano"
+    ]
+   }
+  },
+  "P227": {
+   "label": "GND ID",
+   "formatter": "https://d-nb.info/gnd/$1",
+   "values": {
+    "Q31087": [
+     "4059093-8"
+    ],
+    "Q240673": [
+     "4032579-9"
+    ],
+    "Q43193": [
+     "4034649-3"
+    ],
+    "Q12511": [
+     "4060816-5"
+    ],
+    "Q5440305": [
+     "6103656-0"
+    ],
+    "Q25288": [
+     "4130657-0"
+    ],
+    "Q5994": [
+     "4030982-4"
+    ],
+    "Q1936429": [
+     "4240058-2"
+    ]
+   }
+  },
+  "P3417": {
+   "label": "Quora topic ID",
+   "formatter": "https://www.quora.com/topic/$1",
+   "values": {
+    "Q31087": [
+     "Calculators"
+    ],
+    "Q1757263": [
+     "Moving-Companies"
+    ],
+    "Q240673": [
+     "Costs"
+    ],
+    "Q43193": [
+     "Trucks-Lorries"
+    ],
+    "Q12511": [
+     "Stairs"
+    ],
+    "Q5440305": [
+     "Federal-Motor-Carrier-Safety-Administration"
+    ],
+    "Q25288": [
+     "Weight-2"
+    ],
+    "Q5994": [
+     "Pianos"
+    ],
+    "Q1936429": [
+     "Hot-Tubs"
+    ],
+    "Q3500725": [
+     "Billiard-Table"
+    ]
+   }
+  },
+  "P3827": {
+   "label": "JSTOR topic ID (archived)",
+   "formatter": "https://web.archive.org/web/*/https://www.jstor.org/topic/$1",
+   "values": {
+    "Q31087": [
+     "calculators"
+    ],
+    "Q240673": [
+     "product-costing"
+    ],
+    "Q43193": [
+     "trucks"
+    ],
+    "Q12511": [
+     "stairways"
+    ],
+    "Q136208": [
+     "zip-codes"
+    ],
+    "Q5994": [
+     "pianos"
+    ],
+    "Q1936429": [
+     "hot-tubs"
+    ],
+    "Q3500725": [
+     "pool-tables"
+    ]
+   }
+  },
+  "P244": {
+   "label": "Library of Congress Authorities ID",
+   "formatter": "https://id.loc.gov/authorities/$1",
+   "values": {
+    "Q31087": [
+     "sh85018798"
+    ],
+    "Q43193": [
+     "sh85138148"
+    ],
+    "Q12511": [
+     "sh85127267"
+    ],
+    "Q136208": [
+     "sh99004092"
+    ],
+    "Q5440305": [
+     "no00017462"
+    ],
+    "Q25288": [
+     "sh85145953"
+    ],
+    "Q5994": [
+     "sh85101722"
+    ]
+   }
+  },
+  "P1245": {
+   "label": "OmegaWiki Defined Meaning",
+   "formatter": "http://www.omegawiki.org/DefinedMeaning:($1)",
+   "values": {
+    "Q31087": [
+     "352179"
+    ],
+    "Q43193": [
+     "412047"
+    ],
+    "Q12511": [
+     "1073134"
+    ],
+    "Q5994": [
+     "344431"
+    ]
+   }
+  },
+  "P7749": {
+   "label": "Nomenclature for Museum Cataloging",
+   "formatter": "https://www.nomenclature.info/nom/$1",
+   "values": {
+    "Q31087": [
+     "10450",
+     "10452"
+    ],
+    "Q43193": [
+     "12213"
+    ],
+    "Q12511": [
+     "341"
+    ],
+    "Q5994": [
+     "10717"
+    ],
+    "Q1936429": [
+     "298"
+    ],
+    "Q3500725": [
+     "14277"
+    ]
+   }
+  },
+  "P6366": {
+   "label": "Microsoft Academic ID (discontinued)",
+   "formatter": "https://web.archive.org/web/https://academic.microsoft.com/v2/detail/$1",
+   "values": {
+    "Q31087": [
+     "2776836400"
+    ],
+    "Q43193": [
+     "52121051"
+    ],
+    "Q12511": [
+     "2777295749"
+    ],
+    "Q5994": [
+     "124086623"
+    ]
+   }
+  },
+  "P7033": {
+   "label": "Australian Educational Vocabulary ID",
+   "formatter": "https://vocabulary.curriculum.edu.au/$1.html",
+   "values": {
+    "Q31087": [
+     "scot/1627"
+    ],
+    "Q240673": [
+     "scot/2084"
+    ],
+    "Q43193": [
+     "scot/7619"
+    ],
+    "Q12511": [
+     "scot/1544"
+    ],
+    "Q5994": [
+     "scot/7320"
+    ]
+   }
+  },
+  "P6900": {
+   "label": "NicoNicoPedia word article ID",
+   "formatter": "https://dic.nicovideo.jp/a/$1",
+   "values": {
+    "Q31087": [
+     "\u96fb\u5353"
+    ],
+    "Q5994": [
+     "\u30d4\u30a2\u30ce"
+    ]
+   }
+  },
+  "P8408": {
+   "label": "KBpedia ID",
+   "formatter": "https://kbpedia.org/knowledge-graph/reference-concept/?uri=$1",
+   "values": {
+    "Q31087": [
+     "Calculator"
+    ],
+    "Q1757263": [
+     "MovingCompany"
+    ],
+    "Q240673": [
+     "Cost"
+    ],
+    "Q43193": [
+     "Truck"
+    ],
+    "Q12511": [
+     "Stairway"
+    ],
+    "Q136208": [
+     "ZipCode"
+    ],
+    "Q5994": [
+     "Piano-Acoustic"
+    ],
+    "Q1936429": [
+     "HotTub"
+    ]
+   }
+  },
+  "P8855": {
+   "label": "IEV number",
+   "formatter": "https://www.electropedia.org/iev/iev.nsf/display?openform&ievref=$1",
+   "values": {
+    "Q31087": [
+     "171-04-12"
+    ],
+    "Q25288": [
+     "113-03-16"
+    ]
+   }
+  },
+  "P4527": {
+   "label": "UK Parliament thesaurus ID",
+   "formatter": "https://lda.data.parliament.uk/terms/$1.html",
+   "values": {
+    "Q31087": [
+     "286698"
+    ],
+    "Q240673": [
+     "90737"
+    ],
+    "Q12511": [
+     "521875"
+    ]
+   }
+  },
+  "P9475": {
+   "label": "Encyclopedia of Korean Culture ID",
+   "formatter": "http://encykorea.aks.ac.kr/Article/$1",
+   "values": {
+    "Q31087": [
+     "E0003158"
+    ],
+    "Q12511": [
+     "E0003067"
+    ],
+    "Q25288": [
+     "E0018917"
+    ]
+   }
+  },
+  "P8514": {
+   "label": "TOPCMB ID",
+   "formatter": "http://www.tesauromuseus.com.br/detalhe-tesauro-ordem-alfabetica/$1",
+   "values": {
+    "Q31087": [
+     "calculadora"
+    ],
+    "Q43193": [
+     "caminhao"
+    ],
+    "Q12511": [
+     "escada"
+    ],
+    "Q5994": [
+     "piano"
+    ]
+   }
+  },
+  "P268": {
+   "label": "Biblioth\u00e8que nationale de France ID",
+   "formatter": "https://catalogue.bnf.fr/ark:/12148/cb$1",
+   "values": {
+    "Q31087": [
+     "119323808"
+    ],
+    "Q43193": [
+     "11931102p"
+    ],
+    "Q5994": [
+     "11932961n"
+    ]
+   }
+  },
+  "P8189": {
+   "label": "J9U entity ID",
+   "formatter": "https://www.nli.org.il/en/authorities/$1",
+   "values": {
+    "Q31087": [
+     "987007293767405171"
+    ],
+    "Q240673": [
+     "987007567987205171"
+    ],
+    "Q43193": [
+     "987007553526205171"
+    ],
+    "Q12511": [
+     "987007531601305171"
+    ],
+    "Q136208": [
+     "987007537227305171"
+    ],
+    "Q5440305": [
+     "987007353341605171"
+    ],
+    "Q25288": [
+     "987007553501805171"
+    ],
+    "Q5994": [
+     "987007546006305171"
+    ]
+   }
+  },
+  "P10283": {
+   "label": "OpenAlex ID",
+   "formatter": "https://openalex.org/$1",
+   "values": {
+    "Q31087": [
+     "C2776836400"
+    ],
+    "Q240673": [
+     "C2991809073"
+    ],
+    "Q43193": [
+     "C52121051"
+    ],
+    "Q12511": [
+     "C2777295749"
+    ],
+    "Q136208": [
+     "C3018590553"
+    ],
+    "Q5994": [
+     "C124086623"
+    ]
+   }
+  },
+  "P8313": {
+   "label": "Lex ID",
+   "formatter": "https://wikidata-externalid-url.toolforge.org/?p=8313&url_prefix=https://lex.dk/&id=$1",
+   "values": {
+    "Q31087": [
+     "lommeregner"
+    ],
+    "Q43193": [
+     "lastbil"
+    ],
+    "Q12511": [
+     "trappe"
+    ],
+    "Q5994": [
+     "klaver"
+    ]
+   }
+  },
+  "P8814": {
+   "label": "WordNet 3.1 Synset ID",
+   "formatter": "https://en-word.net/view/synset/$1",
+   "values": {
+    "Q31087": [
+     "02942270-n"
+    ],
+    "Q1757263": [
+     "08495493-n"
+    ],
+    "Q240673": [
+     "13296870-n"
+    ],
+    "Q43193": [
+     "04497386-n"
+    ],
+    "Q12511": [
+     "04305309-n",
+     "04305446-n"
+    ],
+    "Q25288": [
+     "13610524-n"
+    ],
+    "Q5994": [
+     "03934354-n"
+    ],
+    "Q3500725": [
+     "03988788-n"
+    ]
+   }
+  },
+  "P691": {
+   "label": "NL CR AUT ID",
+   "formatter": "https://aleph.nkp.cz/F/?func=find-c&local_base=aut&ccl_term=ica=$1",
+   "values": {
+    "Q31087": [
+     "ph508944"
+    ],
+    "Q240673": [
+     "ph115498"
+    ],
+    "Q12511": [
+     "ph125440"
+    ],
+    "Q5994": [
+     "ph121605"
+    ]
+   }
+  },
+  "P5160": {
+   "label": "Thesaurus for Graphic Materials ID",
+   "formatter": "https://id.loc.gov/vocabulary/graphicMaterials/$1.html",
+   "values": {
+    "Q31087": [
+     "tgm001549"
+    ],
+    "Q12511": [
+     "tgm010037"
+    ]
+   }
+  },
+  "P11302": {
+   "label": "Google Product Taxonomy ID",
+   "formatter": "https://lubianat.github.io/google_product_taxonomy_reference/$1",
+   "values": {
+    "Q31087": [
+     "333"
+    ],
+    "Q12511": [
+     "7004"
+    ],
+    "Q5994": [
+     "76"
+    ]
+   }
+  },
+  "P9497": {
+   "label": "Australian Thesaurus of Education Descriptors ID",
+   "formatter": "https://cunningham.acer.edu.au/multites2007/mtwdk.exe?k=default&l=60&w=$1&n=1&s=5&t=2",
+   "values": {
+    "Q31087": [
+     "3847"
+    ],
+    "Q240673": [
+     "5048"
+    ],
+    "Q25288": [
+     "576"
+    ]
+   }
+  },
+  "P2347": {
+   "label": "YSO ID",
+   "formatter": "https://www.yso.fi/onto/yso/p$1",
+   "values": {
+    "Q31087": [
+     "10808"
+    ],
+    "Q240673": [
+     "7517"
+    ],
+    "Q43193": [
+     "16426"
+    ],
+    "Q12511": [
+     "10127"
+    ],
+    "Q25288": [
+     "5804"
+    ],
+    "Q5994": [
+     "11690"
+    ],
+    "Q1936429": [
+     "26699"
+    ]
+   }
+  },
+  "P10376": {
+   "label": "ScienceDirect topic ID",
+   "formatter": "https://www.sciencedirect.com/topics/$1",
+   "values": {
+    "Q31087": [
+     "nursing-and-health-professions/pocket-calculator"
+    ],
+    "Q25288": [
+     "earth-and-planetary-sciences/weight-mass",
+     "physics-and-astronomy/weight-mass"
+    ]
+   }
+  },
+  "P12086": {
+   "label": "WikiKids ID",
+   "formatter": "https://wikikids.nl/$1",
+   "values": {
+    "Q31087": [
+     "Rekenmachine"
+    ],
+    "Q25288": [
+     "Gewicht"
+    ],
+    "Q1936429": [
+     "Bubbelbad"
+    ]
+   }
+  },
+  "P9621": {
+   "label": "Treccani's Enciclopedia della Matematica ID",
+   "formatter": "https://www.treccani.it/enciclopedia/$1_(Enciclopedia-della-Matematica)",
+   "values": {
+    "Q31087": [
+     "calcolatrice"
+    ]
+   }
+  },
+  "P5844": {
+   "label": "Treccani Vocabulary ID",
+   "formatter": "https://www.treccani.it/vocabolario/$1",
+   "values": {
+    "Q31087": [
+     "calcolatrice"
+    ]
+   }
+  },
+  "P3365": {
+   "label": "Treccani ID",
+   "formatter": "https://www.treccani.it/enciclopedia/$1",
+   "values": {
+    "Q31087": [
+     "calcolatrice"
+    ],
+    "Q43193": [
+     "autocarro"
+    ]
+   }
+  },
+  "P10017": {
+   "label": "Treccani's Dizionario delle Scienze Fisiche ID",
+   "formatter": "https://www.treccani.it/enciclopedia/$1_(Dizionario-delle-Scienze-Fisiche)",
+   "values": {
+    "Q31087": [
+     "calcolatrice"
+    ]
+   }
+  },
+  "P6706": {
+   "label": "De Agostini ID",
+   "formatter": "https://www.sapere.it/enciclopedia/$1.html",
+   "values": {
+    "Q31087": [
+     "calcolatrice"
+    ]
+   }
+  },
+  "P12596": {
+   "label": "museum-digital tag ID",
+   "formatter": "https://term.museum-digital.de/md-de/tag/$1",
+   "values": {
+    "Q31087": [
+     "6400"
+    ],
+    "Q240673": [
+     "24039"
+    ],
+    "Q43193": [
+     "68208",
+     "6507"
+    ],
+    "Q12511": [
+     "813"
+    ],
+    "Q5994": [
+     "2103",
+     "52941",
+     "8879"
+    ]
+   }
+  },
+  "P12800": {
+   "label": "Vikidia article ID",
+   "formatter": "https://en.vikidia.org/wiki/$1",
+   "values": {
+    "Q31087": [
+     "en:Calculator",
+     "es:Calculadora",
+     "fr:Calculatrice"
+    ],
+    "Q43193": [
+     "fr:Camion"
+    ],
+    "Q12511": [
+     "fr:Escalier"
+    ],
+    "Q25288": [
+     "fr:Poids_(force)"
+    ],
+    "Q5994": [
+     "en:Piano",
+     "it:Pianoforte",
+     "es:Piano",
+     "eu:Piano",
+     "ca:Piano",
+     "fr:Piano"
+    ]
+   }
+  },
+  "P3847": {
+   "label": "Open Library subject ID",
+   "formatter": "https://openlibrary.org/subjects/$1",
+   "values": {
+    "Q31087": [
+     "calculators"
+    ],
+    "Q5994": [
+     "piano",
+     "musical_instruments_-_piano"
+    ]
+   }
+  },
+  "P11947": {
+   "label": "Lemmy community ID",
+   "formatter": "https://lemmy.world/c/$1",
+   "values": {
+    "Q31087": [
+     "calculators@midwest.social"
+    ]
+   }
+  },
+  "P13591": {
+   "label": "\u200eYale LUX ID",
+   "formatter": "https://lux.collections.yale.edu/view/$1",
+   "values": {
+    "Q31087": [
+     "concept/ea1bd8ba-0005-40b3-a022-c5a0bfcea0ec"
+    ],
+    "Q240673": [
+     "concept/208c9622-ec7c-4792-8d80-dfc0ebfc168d"
+    ],
+    "Q43193": [
+     "concept/008817f5-04c6-444e-b0ed-4431fcca333d"
+    ],
+    "Q12511": [
+     "concept/417f652d-201d-4285-b4ae-19e34eb46b6e"
+    ],
+    "Q136208": [
+     "concept/cd339fc2-ee02-46c8-9e0a-320f85ef4bb7"
+    ],
+    "Q5440305": [
+     "group/07f421b4-f33e-41e4-acac-a143d03db122"
+    ],
+    "Q25288": [
+     "concept/12344771-6018-4419-9af8-ce5b03634bd8"
+    ],
+    "Q5994": [
+     "concept/d9b85334-b01c-47c6-a61e-726be05ebd4b"
+    ]
+   }
+  },
+  "P1036": {
+   "label": "Dewey Decimal Classification",
+   "formatter": null,
+   "values": {
+    "Q31087": [
+     "681.145",
+     "510.284"
+    ],
+    "Q43193": [
+     "629.224"
+    ],
+    "Q12511": [
+     "690.1832",
+     "721.832"
+    ],
+    "Q5994": [
+     "786.2"
+    ]
+   }
+  },
+  "P13750": {
+   "label": "Arab Encyclopedia concept ID",
+   "formatter": "https://arab-ency.com.sy/details/$1",
+   "values": {
+    "Q31087": [
+     "3913"
+    ],
+    "Q5994": [
+     "8586"
+    ]
+   }
+  },
+  "P13772": {
+   "label": "Harper's tag",
+   "formatter": "https://harpers.org/tag/$1/",
+   "values": {
+    "Q31087": [
+     "calculators"
+    ],
+    "Q43193": [
+     "trucks"
+    ],
+    "Q12511": [
+     "stairs"
+    ],
+    "Q5994": [
+     "piano"
+    ]
+   }
+  },
+  "P1296": {
+   "label": "Gran Enciclop\u00e8dia Catalana ID (former scheme)",
+   "formatter": "https://www.enciclopedia.cat/ec-gec-$1.xml",
+   "values": {
+    "Q240673": [
+     "0094496"
+    ],
+    "Q43193": [
+     "0087601"
+    ]
+   }
+  },
+  "P3916": {
+   "label": "UNESCO Thesaurus ID",
+   "formatter": "https://vocabularies.unesco.org/thesaurus/$1",
+   "values": {
+    "Q240673": [
+     "concept6700"
+    ]
+   }
+  },
+  "P3911": {
+   "label": "STW Thesaurus for Economics ID",
+   "formatter": "https://zbw.eu/stw/version/latest/descriptor/$1/about",
+   "values": {
+    "Q240673": [
+     "10011-3"
+    ],
+    "Q43193": [
+     "14436-0"
+    ]
+   }
+  },
+  "P2924": {
+   "label": "Great Russian Encyclopedia Online ID (2017)",
+   "formatter": "https://web.archive.org/web/0/old.bigenc.ru/text/$1",
+   "values": {
+    "Q240673": [],
+    "Q43193": [],
+    "Q25288": [],
+    "Q5994": [
+     "4732488"
+    ]
+   }
+  },
+  "P8834": {
+   "label": "MetaSat ID",
+   "formatter": "https://schema.space/metasat/$1",
+   "values": {
+    "Q240673": [
+     "cost"
+    ],
+    "Q25288": [
+     "weight"
+    ]
+   }
+  },
+  "P3553": {
+   "label": "Zhihu topic ID",
+   "formatter": "https://www.zhihu.com/topic/$1",
+   "values": {
+    "Q240673": [
+     "19566795"
+    ],
+    "Q43193": [
+     "19680275"
+    ],
+    "Q12511": [
+     "19601567"
+    ],
+    "Q25288": [
+     "19575738"
+    ],
+    "Q5994": [
+     "19551861"
+    ]
+   }
+  },
+  "P4342": {
+   "label": "Great Norwegian Encyclopedia ID",
+   "formatter": "https://wikidata-externalid-url.toolforge.org/?p=4342&url_prefix=https://snl.no/&id=$1",
+   "values": {
+    "Q240673": [
+     "kostnad"
+    ],
+    "Q12511": [
+     "trapp_-_plat\u00e5basalt"
+    ],
+    "Q25288": [
+     "vekt"
+    ],
+    "Q5994": [
+     "piano"
+    ],
+    "Q1936429": [
+     "boblebad"
+    ]
+   }
+  },
+  "P11514": {
+   "label": "Great Russian Encyclopedia portal ID",
+   "formatter": "https://bigenc.ru/c/$1",
+   "values": {
+    "Q240673": [
+     "zatraty-2c2933"
+    ],
+    "Q43193": [
+     "gruzovoi-avtomobil-3dea60"
+    ],
+    "Q25288": [
+     "ves-8d5682"
+    ]
+   }
+  },
+  "P12385": {
+   "label": "Gran Enciclop\u00e8dia Catalana ID",
+   "formatter": "https://www.enciclopedia.cat/gran-enciclopedia-catalana/$1",
+   "values": {
+    "Q240673": [
+     "cost-0"
+    ],
+    "Q43193": [
+     "camio-0"
+    ]
+   }
+  },
+  "P1368": {
+   "label": "National Library of Latvia ID",
+   "formatter": "https://kopkatalogs.lv/F/?func=direct&local_base=lnc10&doc_number=$1",
+   "values": {
+    "Q240673": [
+     "000115970"
+    ]
+   }
+  },
+  "P9322": {
+   "label": "SVKKL authority ID",
+   "formatter": "https://ipac.svkkl.cz/arl-kl/cs/detail-kl_us_auth-$1",
+   "values": {
+    "Q240673": [
+     "h0000671-naklady"
+    ],
+    "Q12511": [
+     "h0003819-schodiste"
+    ],
+    "Q5994": [
+     "h0010087-klavir"
+    ]
+   }
+  },
+  "P7666": {
+   "label": "article ID in the Lithuanian Universal Encyclopedia Online",
+   "formatter": "https://www.vle.lt/straipsnis/$1/",
+   "values": {
+    "Q240673": [
+     "islaidos"
+    ]
+   }
+  },
+  "P12705": {
+   "label": "The Law Dictionary entry",
+   "formatter": "https://thelawdictionary.org/$1/",
+   "values": {
+    "Q240673": [
+     "cost"
+    ]
+   }
+  },
+  "P349": {
+   "label": "NDL Authority ID",
+   "formatter": "https://id.ndl.go.jp/auth/ndlna/$1",
+   "values": {
+    "Q43193": [
+     "00573289"
+    ],
+    "Q12511": [
+     "00564484"
+    ],
+    "Q5994": [
+     "00569107"
+    ]
+   }
+  },
+  "P1225": {
+   "label": "U.S. National Archives Identifier",
+   "formatter": "https://catalog.archives.gov/id/$1",
+   "values": {
+    "Q43193": [
+     "10641044"
+    ],
+    "Q136208": [
+     "10642613"
+    ]
+   }
+  },
+  "P1256": {
+   "label": "Iconclass notation",
+   "formatter": "https://wikidata-externalid-url.toolforge.org/?url_prefix=http://iconclass.org/&id=$1",
+   "values": {
+    "Q43193": [
+     "46C163"
+    ],
+    "Q12511": [
+     "41A34"
+    ],
+    "Q25288": [
+     "46B33"
+    ],
+    "Q5994": [
+     "48C7333"
+    ]
+   }
+  },
+  "P2581": {
+   "label": "BabelNet ID",
+   "formatter": "https://babelnet.org/synset?id=bn%$1&lang=EN",
+   "values": {
+    "Q43193": [
+     "00056059n"
+    ],
+    "Q5994": [
+     "00035986n"
+    ]
+   }
+  },
+  "P5250": {
+   "label": "IAB code",
+   "formatter": null,
+   "values": {
+    "Q43193": [
+     "3"
+    ]
+   }
+  },
+  "P6573": {
+   "label": "Klexikon article ID",
+   "formatter": "https://klexikon.zum.de/wiki/$1",
+   "values": {
+    "Q43193": [
+     "Lastwagen"
+    ],
+    "Q25288": [
+     "Gewicht"
+    ],
+    "Q5994": [
+     "Klavier"
+    ]
+   }
+  },
+  "P9294": {
+   "label": "AIATSIS Subject Thesaurus ID",
+   "formatter": "https://www1.aiatsis.gov.au/subject/mtw.exe?k=default&l=60&linkType=term&w=$1&n=1&s=5&t=2",
+   "values": {
+    "Q43193": [
+     "4846"
+    ]
+   }
+  },
+  "P9318": {
+   "label": "\u00c1vvir topic ID",
+   "formatter": "https://www.avvir.no/tag/$1/",
+   "values": {
+    "Q43193": [
+     "guorbmebiila",
+     "guorbmebiillat"
+    ]
+   }
+  },
+  "P8309": {
+   "label": "Yle topic ID",
+   "formatter": "https://yle.fi/t/$1/fi",
+   "values": {
+    "Q43193": [
+     "18-214705"
+    ],
+    "Q3500725": [
+     "18-262823"
+    ]
+   }
+  },
+  "P6293": {
+   "label": "YSA ID",
+   "formatter": "https://www.yso.fi/onto/ysa/$1",
+   "values": {
+    "Q43193": [
+     "Y96563"
+    ]
+   }
+  },
+  "P6058": {
+   "label": "Larousse ID",
+   "formatter": "https://www.larousse.fr/encyclopedie/$1",
+   "values": {
+    "Q43193": [
+     "divers/camion/30129"
+    ]
+   }
+  },
+  "P3984": {
+   "label": "subreddit",
+   "formatter": "https://www.reddit.com/r/$1/",
+   "values": {
+    "Q43193": [
+     "Trucks"
+    ],
+    "Q5994": [
+     "piano"
+    ]
+   }
+  },
+  "P2004": {
+   "label": "NALT ID",
+   "formatter": "https://lod.nal.usda.gov/nalt/$1",
+   "values": {
+    "Q43193": [
+     "539"
+    ]
+   }
+  },
+  "P10674": {
+   "label": "FISH Archaeological Objects Thesaurus ID",
+   "formatter": "https://heritagedata.org/live/schemes/mda_obj/concepts/$1.html",
+   "values": {
+    "Q43193": [
+     "167294"
+    ]
+   }
+  },
+  "P3859": {
+   "label": "Environment Ontology ID",
+   "formatter": "https://www.ebi.ac.uk/ols/ontologies/envo/terms?iri=http://purl.obolibrary.org/obo/ENVO_$1",
+   "values": {
+    "Q43193": [
+     "01000602"
+    ],
+    "Q1936429": [
+     "01000938"
+    ]
+   }
+  },
+  "P5395": {
+   "label": "Canadian Encyclopedia article ID",
+   "formatter": "https://www.thecanadianencyclopedia.ca/en/article/$1/",
+   "values": {
+    "Q43193": [
+     "camion"
+    ]
+   }
+  },
+  "P8370": {
+   "label": "UN Thesaurus ID",
+   "formatter": "https://metadata.un.org/thesaurus/$1",
+   "values": {
+    "Q43193": [
+     "1006719"
+    ]
+   }
+  },
+  "P11473": {
+   "label": "Concepticon concept set ID",
+   "formatter": "https://concepticon.clld.org/parameters/$1",
+   "values": {
+    "Q43193": [
+     "4011"
+    ],
+    "Q12511": [
+     "34"
+    ],
+    "Q25288": [
+     "2466"
+    ],
+    "Q5994": [
+     "3994"
+    ]
+   }
+  },
+  "P11924": {
+   "label": "IMDb keyword",
+   "formatter": "https://www.imdb.com/search/title/?keywords=$1",
+   "values": {
+    "Q43193": [
+     "truck"
+    ],
+    "Q12511": [
+     "stairs"
+    ],
+    "Q5994": [
+     "piano"
+    ],
+    "Q1936429": [
+     "hot-tub",
+     "jacuzzi"
+    ]
+   }
+  },
+  "P4223": {
+   "label": "Treccani's Enciclopedia Italiana ID",
+   "formatter": "https://www.treccani.it/enciclopedia/$1_(Enciclopedia-Italiana)",
+   "values": {
+    "Q12511": [
+     "scala"
+    ]
+   }
+  },
+  "P3219": {
+   "label": "Encyclop\u00e6dia Universalis ID",
+   "formatter": "https://www.universalis.fr/encyclopedie/$1/",
+   "values": {
+    "Q12511": [
+     "escalier"
+    ],
+    "Q5994": [
+     "piano",
+     "piano-en-bref"
+    ]
+   }
+  },
+  "P2452": {
+   "label": "GeoNames feature code",
+   "formatter": null,
+   "values": {
+    "Q12511": [
+     "S.STPS"
+    ]
+   }
+  },
+  "P5604": {
+   "label": "archINFORM keyword ID",
+   "formatter": "https://www.archinform.net/stich/$1.htm",
+   "values": {
+    "Q12511": [
+     "1068"
+    ]
+   }
+  },
+  "P8406": {
+   "label": "Grove Art Online ID",
+   "formatter": "https://doi.org/10.1093/gao/9781884446054.article.$1",
+   "values": {
+    "Q12511": [
+     "T080915"
+    ]
+   }
+  },
+  "P8519": {
+   "label": "RKD thesaurus ID",
+   "formatter": "https://rkd.triply.cc/rkd/RKD-Knowledge-Graph/browser?resource=https://data.rkd.nl/thesaurus/$1",
+   "values": {
+    "Q12511": [
+     "65119"
+    ],
+    "Q5994": [
+     "65805"
+    ],
+    "Q3500725": [
+     "66357"
+    ]
+   }
+  },
+  "P4212": {
+   "label": "PACTOLS thesaurus ID",
+   "formatter": "https://ark.frantiq.fr/ark:26678/$1/",
+   "values": {
+    "Q12511": [
+     "pcrt9rY1ZcA6mi"
+    ]
+   }
+  },
+  "P9495": {
+   "label": "National Historical Museums of Sweden ID",
+   "formatter": "https://samlingar.shm.se/$1",
+   "values": {
+    "Q12511": [
+     "term/430884F0-7DB3-4D23-BB1F-FA70AE7E775B"
+    ]
+   }
+  },
+  "P950": {
+   "label": "National Library of Spain SpMaBN ID",
+   "formatter": "https://datos.bne.es/resource/$1",
+   "values": {
+    "Q12511": [
+     "XX527275"
+    ],
+    "Q5994": [
+     "XX530015"
+    ]
+   }
+  },
+  "P12187": {
+   "label": "Thesaurus Linguae Aegyptiae ID",
+   "formatter": "https://thesaurus-linguae-aegyptiae.de/thesaurus/$1",
+   "values": {
+    "Q12511": [
+     "WNN3BAMQYZEGFO3RJXDWY6FHZA"
+    ]
+   }
+  },
+  "P7305": {
+   "label": "Online PWN Encyclopedia ID",
+   "formatter": "https://web.archive.org/web/2/https://encyklopedia.pwn.pl/haslo/;$1.html",
+   "values": {
+    "Q12511": [
+     "3973139"
+    ],
+    "Q5994": [
+     "3902077"
+    ]
+   }
+  },
+  "P11493": {
+   "label": "Biblissima authority ID",
+   "formatter": "https://data.biblissima.fr/w/Item:$1",
+   "values": {
+    "Q12511": [
+     "Q295407"
+    ]
+   }
+  },
+  "P10381": {
+   "label": "VerbaAlpina ID",
+   "formatter": "https://www.verba-alpina.gwi.uni-muenchen.de/?page_id=12180&single=$1",
+   "values": {
+    "Q12511": [
+     "C20029"
+    ]
+   }
+  },
+  "P14692": {
+   "label": "\u200eOpenStreetMap Wiki item ID",
+   "formatter": "https://wiki.openstreetmap.org/wiki/Item:$1",
+   "values": {
+    "Q12511": [
+     "Q4827"
+    ],
+    "Q1936429": [
+     "Q22215"
+    ]
+   }
+  },
+  "P7497": {
+   "label": "Wolfram Language entity type",
+   "formatter": "https://reference.wolfram.com/language/ref/entity/$1",
+   "values": {
+    "Q136208": [
+     "ZIPCode"
+    ]
+   }
+  },
+  "P10329": {
+   "label": "ICPSR Subject Thesaurus ID",
+   "formatter": "https://www.icpsr.umich.edu/web/ICPSR/thesaurus/10001/terms/$1",
+   "values": {
+    "Q136208": [
+     "23807"
+    ]
+   }
+  },
+  "P6262": {
+   "label": "Fandom article ID",
+   "formatter": "https://community.fandom.com/index.php?title=w:c:$1",
+   "values": {
+    "Q136208": [
+     "en.zipcodes:United_States"
+    ],
+    "Q5994": [
+     "memory-alpha:Piano",
+     "de.memory-alpha:Piano",
+     "memory-alpha:piano"
+    ],
+    "Q1936429": [
+     "villains:Hot_Tub"
+    ]
+   }
+  },
+  "P1617": {
+   "label": "BBC Things ID",
+   "formatter": "https://www.bbc.co.uk/things/$1",
+   "values": {
+    "Q136208": [
+     "b0d520bb-7452-4c19-bbf7-1e301674b8fa"
+    ],
+    "Q5994": [
+     "23bf6976-bad2-4ccf-80b6-c382befe12c3"
+    ]
+   }
+  },
+  "P5063": {
+   "label": "Interlingual Index ID",
+   "formatter": "https://globalwordnet.github.io/cili/$1",
+   "values": {
+    "Q136208": [
+     "i69881"
+    ]
+   }
+  },
+  "P3153": {
+   "label": "Open Funder Registry funder ID",
+   "formatter": "https://data.crossref.org/fundingdata/funder/10.13039/$1",
+   "values": {
+    "Q5440305": [
+     "100006286"
+    ]
+   }
+  },
+  "P213": {
+   "label": "ISNI",
+   "formatter": "https://isni.org/isni/$1",
+   "values": {
+    "Q5440305": [
+     "0000000122309621"
+    ]
+   }
+  },
+  "P3500": {
+   "label": "Ringgold ID",
+   "formatter": "https://ido.ringgold.com/search/results?simple=$1",
+   "values": {
+    "Q5440305": [
+     "17280"
+    ]
+   }
+  },
+  "P214": {
+   "label": "VIAF cluster ID",
+   "formatter": "https://viaf.org/en/viaf/$1",
+   "values": {
+    "Q5440305": [
+     "418149294373480522324"
+    ]
+   }
+  },
+  "P3393": {
+   "label": "LittleSis organization ID",
+   "formatter": "https://littlesis.org/org/$1",
+   "values": {
+    "Q5440305": [
+     "21165"
+    ]
+   }
+  },
+  "P1015": {
+   "label": "BIBSYS ID",
+   "formatter": "https://authority.bibsys.no/authority/rest/authorities/html/$1",
+   "values": {
+    "Q5440305": [
+     "6054479"
+    ]
+   }
+  },
+  "P6782": {
+   "label": "ROR ID",
+   "formatter": "https://ror.org/$1",
+   "values": {
+    "Q5440305": [
+     "01jt5mq34"
+    ]
+   }
+  },
+  "P9955": {
+   "label": "SAM ID",
+   "formatter": "https://sam.gov/entities/view/$1/coreData",
+   "values": {
+    "Q5440305": [
+     "YFLCKCJ28NH6"
+    ]
+   }
+  },
+  "P14075": {
+   "label": "\u200eScilit organization ID",
+   "formatter": "https://www.scilit.com/organizations/$1",
+   "values": {
+    "Q5440305": [
+     "106517"
+    ]
+   }
+  },
+  "P7431": {
+   "label": "Wolfram Language quantity ID",
+   "formatter": null,
+   "values": {
+    "Q25288": [
+     "Weight"
+    ]
+   }
+  },
+  "P4732": {
+   "label": "IUPAC Gold Book ID",
+   "formatter": "https://goldbook.iupac.org/terms/view/$1",
+   "values": {
+    "Q25288": [
+     "W06668"
+    ]
+   }
+  },
+  "P8393": {
+   "label": "QUDT quantity kind ID",
+   "formatter": "https://qudt.org/vocab/quantitykind/$1",
+   "values": {
+    "Q25288": [
+     "Weight"
+    ]
+   }
+  },
+  "P5064": {
+   "label": "World of Physics ID",
+   "formatter": "https://scienceworld.wolfram.com/physics/$1.html",
+   "values": {
+    "Q25288": [
+     "Weight"
+    ]
+   }
+  },
+  "P13625": {
+   "label": "QUDT dimension ID",
+   "formatter": "http://qudt.org/vocab/dimensionvector/$1",
+   "values": {
+    "Q25288": [
+     "A0E0L1I0M1H0T-2D0"
+    ]
+   }
+  },
+  "P7775": {
+   "label": "RationalWiki ID",
+   "formatter": "https://rationalwiki.org/wiki/$1",
+   "values": {
+    "Q25288": [
+     "Weight"
+    ]
+   }
+  },
+  "P13204": {
+   "label": "Wellcome Collection concept ID",
+   "formatter": "https://wellcomecollection.org/concepts/$1",
+   "values": {
+    "Q25288": [
+     "udbmxh25"
+    ],
+    "Q5994": [
+     "dmx8eqjw"
+    ]
+   }
+  },
+  "P14870": {
+   "label": "\u200eCommon Core Ontologies concept ID",
+   "formatter": "https://www.commoncoreontologies.org/$1",
+   "values": {
+    "Q25288": [
+     "ont00000633"
+    ]
+   }
+  },
+  "P14884": {
+   "label": "\u200ePhenotype and Trait Ontology ID",
+   "formatter": "http://purl.obolibrary.org/obo/PATO_$1",
+   "values": {
+    "Q25288": [
+     "0000128"
+    ]
+   }
+  },
+  "P2263": {
+   "label": "ISOCAT ID",
+   "formatter": "http://www.isocat.org/rest/dc/$1",
+   "values": {
+    "Q25288": [
+     "4353",
+     "6337"
+    ]
+   }
+  },
+  "P1330": {
+   "label": "MusicBrainz instrument ID",
+   "formatter": "https://musicbrainz.org/instrument/$1",
+   "values": {
+    "Q5994": [
+     "b3eac5f9-7859-4416-ac39-7154e2e8d348"
+    ]
+   }
+  },
+  "P2612": {
+   "label": "TED topic ID",
+   "formatter": "https://www.ted.com/topics/$1",
+   "values": {
+    "Q5994": [
+     "piano"
+    ]
+   }
+  },
+  "P3221": {
+   "label": "New York Times topic ID",
+   "formatter": "https://www.nytimes.com/topic/$1",
+   "values": {
+    "Q5994": [
+     "subject/pianos"
+    ]
+   }
+  },
+  "P3569": {
+   "label": "Cultureel Woordenboek ID",
+   "formatter": "https://www.cultureelwoordenboek.nl/$1",
+   "values": {
+    "Q5994": [
+     "klassieke-muziek/piano-instrument"
+    ]
+   }
+  },
+  "P3763": {
+   "label": "MIMO instrument ID",
+   "formatter": "http://www.mimo-db.eu/InstrumentsKeywords/$1",
+   "values": {
+    "Q5994": [
+     "2299"
+    ]
+   }
+  },
+  "P1807": {
+   "label": "Great Aragonese Encyclopedia ID",
+   "formatter": "https://web.archive.org/web/http://www.enciclopedia-aragonesa.com/voz.asp?voz_id=$1",
+   "values": {
+    "Q5994": [
+     "10159"
+    ]
+   }
+  },
+  "P920": {
+   "label": "LEM ID",
+   "formatter": "http://id.sgcb.mcu.es/Autoridades/$1/concept.html",
+   "values": {
+    "Q5994": [
+     "LEM201007093",
+     "LEM201201381"
+    ]
+   }
+  },
+  "P8516": {
+   "label": "Library of Congress Medium of Performance Thesaurus ID",
+   "formatter": "https://id.loc.gov/authorities/performanceMediums/$1",
+   "values": {
+    "Q5994": [
+     "mp2013015550"
+    ]
+   }
+  },
+  "P8248": {
+   "label": "Colon Classification",
+   "formatter": null,
+   "values": {
+    "Q5994": [
+     "NR;34"
+    ]
+   }
+  },
+  "P9100": {
+   "label": "GitHub topic",
+   "formatter": "https://github.com/topics/$1",
+   "values": {
+    "Q5994": [
+     "piano"
+    ]
+   }
+  },
+  "P6412": {
+   "label": "Gran Enciclop\u00e8dia de la M\u00fasica ID",
+   "formatter": "https://www.enciclopedia.cat/EC-GEM-$1.xml",
+   "values": {
+    "Q5994": [
+     "173"
+    ]
+   }
+  },
+  "P9545": {
+   "label": "Encyclopedia of China (Second Edition) ID",
+   "formatter": "https://h.bkzx.cn/item/$1",
+   "values": {
+    "Q5994": [
+     "203395"
+    ]
+   }
+  },
+  "P6385": {
+   "label": "Krugosvet article (archived)",
+   "formatter": "https://web.archive.org/web/2025/https://www.krugosvet.ru/enc/$1",
+   "values": {
+    "Q5994": [
+     "kultura_i_obrazovanie/muzyka/FORTEPIANO.html"
+    ]
+   }
+  },
+  "P10757": {
+   "label": "Personality Database profile ID",
+   "formatter": "https://personality-database.com/profile/$1",
+   "values": {
+    "Q5994": [
+     "188131"
+    ]
+   }
+  },
+  "P7502": {
+   "label": "Golden ID (archived)",
+   "formatter": "https://web.archive.org/web/0/https://golden.com/wiki/$1",
+   "values": {
+    "Q5994": [
+     "Piano-VWWWN"
+    ]
+   }
+  },
+  "P11137": {
+   "label": "Reddit topic ID (obsolete)",
+   "formatter": "https://web.archive.org/web/20251006030159/https://www.reddit.com/t/$1/",
+   "values": {
+    "Q5994": [
+     "piano"
+    ]
+   }
+  },
+  "P11408": {
+   "label": "Pixiv Encyclopedia ID",
+   "formatter": "https://dic.pixiv.net/a/$1",
+   "values": {
+    "Q5994": [
+     "\u30d4\u30a2\u30ce"
+    ]
+   }
+  },
+  "P10063": {
+   "label": "SEKO ID",
+   "formatter": "https://urn.fi/urn:nbn:fi:au:seko:$1",
+   "values": {
+    "Q5994": [
+     "00763"
+    ]
+   }
+  },
+  "P11196": {
+   "label": "Baidu Tieba name",
+   "formatter": "https://tieba.baidu.com/f?kw=$1",
+   "values": {
+    "Q5994": [
+     "\u94a2\u7434"
+    ]
+   }
+  },
+  "P11214": {
+   "label": "UNIMARC: Medium of Performance ID",
+   "formatter": "http://iflastandards.info/ns/unimarc/terms/mop/$1",
+   "values": {
+    "Q5994": [
+     "kpf"
+    ]
+   }
+  },
+  "P12721": {
+   "label": "Lille norske leksikon ID",
+   "formatter": "https://wikidata-externalid-url.toolforge.org/?p=12721&url_prefix=https://lille.snl.no/&id=$1",
+   "values": {
+    "Q5994": [
+     "piano"
+    ]
+   }
+  },
+  "P9346": {
+   "label": "France 24 topic ID (French)",
+   "formatter": "https://www.france24.com/fr/tag/$1/",
+   "values": {
+    "Q5994": [
+     "piano"
+    ]
+   }
+  },
+  "P10890": {
+   "label": "PM20 ware ID",
+   "formatter": "https://pm20.zbw.eu/category/ware/i/$1",
+   "values": {
+    "Q5994": [
+     "143106",
+     "143634"
+    ]
+   }
+  },
+  "P8168": {
+   "label": "FactGrid item ID",
+   "formatter": "https://database.factgrid.de/wiki/Item:$1",
+   "values": {
+    "Q5994": [
+     "Q1306183"
+    ]
+   }
+  },
+  "P7844": {
+   "label": "Joconde object type ID",
+   "formatter": "http://data.culture.fr/thesaurus/page/ark:/67717/$1",
+   "values": {
+    "Q5994": [
+     "T505-1747"
+    ]
+   }
+  },
+  "P6870": {
+   "label": "Latvian National Encyclopedia Online ID",
+   "formatter": "https://enciklopedija.lv/skirklis/$1",
+   "values": {
+    "Q5994": [
+     "168157"
+    ]
+   }
+  },
+  "P13613": {
+   "label": "Enciclopedia Galega Universal ID",
+   "formatter": "https://egu.xunta.gal/gl/termo/$1",
+   "values": {
+    "Q5994": [
+     "167354"
+    ]
+   }
+  },
+  "P4979": {
+   "label": "Th\u00e9saurus de la d\u00e9signation des objets mobiliers ID",
+   "formatter": "http://data.culture.fr/thesaurus/page/ark:67717/T69-$1",
+   "values": {
+    "Q5994": [
+     "5028"
+    ]
+   }
+  },
+  "P7185": {
+   "label": "eska.pl topic ID",
+   "formatter": "https://www.eska.pl/tag/wd,$1",
+   "values": {
+    "Q5994": [
+     "tg-1C1P-Pw3T-AgNw"
+    ]
+   }
+  },
+  "P2167": {
+   "label": "UNSPSC code",
+   "formatter": null,
+   "values": {
+    "Q1936429": [
+     "49241703"
+    ]
+   }
+  },
+  "P4235": {
+   "label": "PatientsLikeMe treatment ID",
+   "formatter": "https://www.patientslikeme.com/treatments/show/$1",
+   "values": {
+    "Q1936429": [
+     "hot-tub"
+    ]
+   }
+  },
+  "P4467": {
+   "label": "Twitch category ID",
+   "formatter": "https://www.twitch.tv/directory/category/$1",
+   "values": {
+    "Q1936429": [
+     "Pools, Hot Tubs, and Beaches"
+    ]
+   }
+  },
+  "P4839": {
+   "label": "Wolfram Language entity code",
+   "formatter": "https://www.wolframalpha.com/input/?i=$1",
+   "values": {
+    "Q1936429": [
+     "Entity[\"Concept\", \"HotTub::sgf2d\"]"
+    ]
+   }
+  }
+ }
+}

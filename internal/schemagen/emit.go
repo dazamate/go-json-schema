@@ -368,6 +368,9 @@ func handwrittenNames(dir string) ([]string, error) {
 
 var initialisms = map[string]string{"Url": "URL", "Id": "ID"}
 
+// GoName returns the Go field name generated for a schema.org property.
+func GoName(prop string) string { return goName(prop) }
+
 // goName turns a schema.org property name into an exported Go name:
 // sameAs -> SameAs, contentUrl -> ContentURL.
 func goName(s string) string {
@@ -381,6 +384,9 @@ func goName(s string) string {
 	}
 	return fixDigit(strings.Join(words, ""))
 }
+
+// GoType returns the Go type name generated for a schema.org class.
+func GoType(class string) string { return goType(class) }
 
 // goType turns a schema.org class or member name into a Go name. Names
 // keep their schema.org spelling; a leading digit gets an X prefix.

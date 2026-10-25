@@ -1,0 +1,640 @@
+{
+ "about": [
+  {
+   "wp": "Calculator",
+   "qid": "Q31087",
+   "kind": "page",
+   "rel": 0.8889,
+   "topic": 1,
+   "kw_sim": null,
+   "page_sim": null,
+   "kgmid_checked": true
+  },
+  {
+   "wp": "Moving company",
+   "qid": "Q1757263",
+   "kind": "page",
+   "rel": 0.8271,
+   "topic": 1,
+   "kw_sim": null,
+   "page_sim": null,
+   "kgmid_checked": true
+  },
+  {
+   "wp": "Cost",
+   "qid": "Q240673",
+   "kind": "page",
+   "rel": 0.7542,
+   "topic": 1,
+   "kw_sim": null,
+   "page_sim": null,
+   "kgmid_checked": true
+  },
+  {
+   "wp": "Relocation (personal)",
+   "qid": "Q2918584",
+   "kind": "keyword \"moving\" via Moving",
+   "rel": null,
+   "topic": null,
+   "kw_sim": null,
+   "page_sim": null,
+   "kgmid_checked": false
+  },
+  {
+   "wp": "Relocation service",
+   "qid": "Q642121",
+   "kind": "keyword \"moving\" via Moving",
+   "rel": null,
+   "topic": null,
+   "kw_sim": null,
+   "page_sim": null,
+   "kgmid_checked": false
+  },
+  {
+   "wp": "Transport",
+   "qid": "Q7590",
+   "kind": "theme",
+   "rel": null,
+   "topic": 0.3753,
+   "kw_sim": 0.404,
+   "page_sim": 0.576,
+   "kgmid_checked": false
+  },
+  {
+   "wp": "Freight transport",
+   "qid": "Q651658",
+   "kind": "theme",
+   "rel": null,
+   "topic": 0.3199,
+   "kw_sim": 0.4,
+   "page_sim": 0.595,
+   "kgmid_checked": false
+  },
+  {
+   "wp": "Business economics",
+   "qid": "Q24208053",
+   "kind": "theme",
+   "rel": null,
+   "topic": 0.3189,
+   "kw_sim": 0.404,
+   "page_sim": 0.552,
+   "kgmid_checked": false
+  },
+  {
+   "wp": "Pricing",
+   "qid": "Q2516951",
+   "kind": "theme",
+   "rel": null,
+   "topic": 0.2748,
+   "kw_sim": 0.461,
+   "page_sim": 0.643,
+   "kgmid_checked": false
+  },
+  {
+   "wp": "Land transport",
+   "qid": "Q4354683",
+   "kind": "theme",
+   "rel": null,
+   "topic": 0.1986,
+   "kw_sim": 0.411,
+   "page_sim": 0.58,
+   "kgmid_checked": false
+  },
+  {
+   "wp": "Accounting",
+   "qid": "Q4116214",
+   "kind": "theme",
+   "rel": null,
+   "topic": 0.134,
+   "kw_sim": 0.409,
+   "page_sim": 0.552,
+   "kgmid_checked": false
+  }
+ ],
+ "mentions": [
+  {
+   "wp": "Truck",
+   "qid": "Q43193",
+   "rel": 0.6104,
+   "topic": 1,
+   "links": [],
+   "kgmid_checked": true
+  },
+  {
+   "wp": "Stairs",
+   "qid": "Q12511",
+   "rel": 0.489,
+   "topic": 0.9046,
+   "links": [],
+   "kgmid_checked": true
+  },
+  {
+   "wp": "ZIP Code",
+   "qid": "Q136208",
+   "rel": 0.4308,
+   "topic": 0.7328,
+   "links": [],
+   "kgmid_checked": true
+  },
+  {
+   "wp": "Federal Motor Carrier Safety Administration",
+   "qid": "Q5440305",
+   "rel": 0.4133,
+   "topic": 0.6164,
+   "links": [],
+   "kgmid_checked": true
+  },
+  {
+   "wp": "Weight",
+   "qid": "Q25288",
+   "rel": 0.385,
+   "topic": 0.7568,
+   "links": [],
+   "kgmid_checked": true
+  },
+  {
+   "wp": "Piano",
+   "qid": "Q5994",
+   "rel": 0.3716,
+   "topic": 0.6874,
+   "links": [
+    "/cost-to-move-a-piano/"
+   ],
+   "kgmid_checked": true
+  },
+  {
+   "wp": "Hot tub",
+   "qid": "Q1936429",
+   "rel": 0.3192,
+   "topic": 0.5905,
+   "links": [
+    "/cost-to-move-a-hot-tub/"
+   ],
+   "kgmid_checked": true
+  },
+  {
+   "wp": "Billiard table",
+   "qid": "Q3500725",
+   "rel": 0.1298,
+   "topic": 0,
+   "links": [
+    "/cost-to-move-a-pool-table/"
+   ],
+   "kgmid_checked": true
+  }
+ ],
+ "identity_drops": [],
+ "theme_misses": [
+  [
+   "Marketing",
+   "Q7012234",
+   0.5265,
+   null,
+   null,
+   "category, list or disambiguation"
+  ],
+  [
+   "Business",
+   "Q4830453",
+   0.4583,
+   0.355,
+   0.514,
+   "keyword sim 0.355 < 0.4 and page sim 0.514 < 0.55"
+  ],
+  [
+   "Mobile businesses",
+   "Q136708593",
+   0.3955,
+   null,
+   null,
+   "category, list or disambiguation"
+  ],
+  [
+   "Road haulage",
+   "Q83698112",
+   0.3835,
+   null,
+   null,
+   "no English article"
+  ],
+  [
+   "Computing",
+   "Q179310",
+   0.3329,
+   0.409,
+   0.492,
+   "page sim 0.492 < 0.55"
+  ],
+  [
+   "Supply chain management",
+   "Q492886",
+   0.3009,
+   0.331,
+   0.518,
+   "keyword sim 0.331 < 0.4 and page sim 0.518 < 0.55"
+  ],
+  [
+   "Management",
+   "Q7012003",
+   0.2787,
+   null,
+   null,
+   "category, list or disambiguation"
+  ],
+  [
+   "Computer engineering",
+   "Q428691",
+   0.2584,
+   0.376,
+   0.461,
+   "keyword sim 0.376 < 0.4 and page sim 0.461 < 0.55"
+  ],
+  [
+   "Computers",
+   "Q68",
+   0.254,
+   0.406,
+   0.496,
+   "page sim 0.496 < 0.55"
+  ],
+  [
+   "Applied mathematics",
+   "Q33521",
+   0.243,
+   0.436,
+   0.519,
+   "page sim 0.519 < 0.55"
+  ],
+  [
+   "Electronic calculators",
+   "Q32593433",
+   0.233,
+   null,
+   null,
+   "category, list or disambiguation"
+  ],
+  [
+   "Office equipment",
+   "Q2383811",
+   0.2286,
+   0.408,
+   0.541,
+   "page sim 0.541 < 0.55"
+  ],
+  [
+   "Calculator technologies",
+   "Q25226391",
+   0.2184,
+   null,
+   null,
+   "category, list or disambiguation"
+  ],
+  [
+   "Economy",
+   "Q159810",
+   0.2148,
+   0.356,
+   0.507,
+   "keyword sim 0.356 < 0.4 and page sim 0.507 < 0.55"
+  ],
+  [
+   "Mathematical tools",
+   "Q1666865",
+   0.2054,
+   0.489,
+   0.541,
+   "page sim 0.541 < 0.55"
+  ],
+  [
+   "Management accounting",
+   "Q2990807",
+   0.2053,
+   0.405,
+   0.527,
+   "page sim 0.527 < 0.55"
+  ],
+  [
+   "Classes of computers",
+   "Q716676",
+   0.2039,
+   0.416,
+   0.501,
+   "page sim 0.501 < 0.55"
+  ],
+  [
+   "Computer science",
+   "Q6517860",
+   0.1972,
+   null,
+   null,
+   "category, list or disambiguation"
+  ],
+  [
+   "Equipment",
+   "Q6063063",
+   0.1963,
+   null,
+   null,
+   "category, list or disambiguation"
+  ],
+  [
+   "Office work",
+   "Q11371155",
+   0.1963,
+   null,
+   null,
+   "no English article"
+  ],
+  [
+   "Financial accounting",
+   "Q949180",
+   0.1926,
+   0.427,
+   0.544,
+   "page sim 0.544 < 0.55"
+  ],
+  [
+   "Computer hardware",
+   "Q3966",
+   0.1912,
+   0.384,
+   0.499,
+   "keyword sim 0.384 < 0.4 and page sim 0.499 < 0.55"
+  ],
+  [
+   "Vehicles",
+   "Q42889",
+   0.1887,
+   0.348,
+   0.53,
+   "keyword sim 0.348 < 0.4 and page sim 0.53 < 0.55"
+  ],
+  [
+   "Technology",
+   "Q11016",
+   0.1869,
+   0.392,
+   0.497,
+   "keyword sim 0.392 < 0.4 and page sim 0.497 < 0.55"
+  ],
+  [
+   "Consumer electronics",
+   "Q581105",
+   0.1837,
+   0.392,
+   0.532,
+   "keyword sim 0.392 < 0.4 and page sim 0.532 < 0.55"
+  ],
+  [
+   "Electronics",
+   "Q5460952",
+   0.1649,
+   null,
+   null,
+   "category, list or disambiguation"
+  ],
+  [
+   "Electronics industry",
+   "Q5358497",
+   0.1646,
+   0.344,
+   0.472,
+   "keyword sim 0.344 < 0.4 and page sim 0.472 < 0.55"
+  ],
+  [
+   "Personal computing",
+   "Q8758919",
+   0.1567,
+   null,
+   null,
+   "category, list or disambiguation"
+  ],
+  [
+   "Tools",
+   "Q39546",
+   0.1554,
+   0.413,
+   0.527,
+   "page sim 0.527 < 0.55"
+  ],
+  [
+   "Service industries",
+   "Q6143409",
+   0.1519,
+   null,
+   null,
+   "category, list or disambiguation"
+  ],
+  [
+   "Logistics industry",
+   "Q113025928",
+   0.1482,
+   null,
+   null,
+   "category, list or disambiguation"
+  ],
+  [
+   "Road transport",
+   "Q516739",
+   0.1381,
+   0.374,
+   0.554,
+   "keyword sim 0.374 < 0.4"
+  ],
+  [
+   "Electronic engineering",
+   "Q126095",
+   0.1323,
+   0.333,
+   0.428,
+   "keyword sim 0.333 < 0.4 and page sim 0.428 < 0.55"
+  ],
+  [
+   "Financial management",
+   "Q4738155",
+   0.1253,
+   0.393,
+   0.523,
+   "keyword sim 0.393 < 0.4 and page sim 0.523 < 0.55"
+  ],
+  [
+   "Land vehicles",
+   "Q1301433",
+   0.124,
+   0.378,
+   0.549,
+   "keyword sim 0.378 < 0.4 and page sim 0.549 < 0.55"
+  ],
+  [
+   "Corporate finance",
+   "Q1134763",
+   0.1226,
+   0.388,
+   0.526,
+   "keyword sim 0.388 < 0.4 and page sim 0.526 < 0.55"
+  ],
+  [
+   "Mathematics",
+   "Q4619",
+   0.122,
+   null,
+   null,
+   "category, list or disambiguation"
+  ],
+  [
+   "Consumer goods",
+   "Q868404",
+   0.1201,
+   0.374,
+   0.541,
+   "keyword sim 0.374 < 0.4 and page sim 0.541 < 0.55"
+  ],
+  [
+   "Motor vehicles",
+   "Q752870",
+   0.1192,
+   0.314,
+   0.498,
+   "keyword sim 0.314 < 0.4 and page sim 0.498 < 0.55"
+  ],
+  [
+   "Information appliances",
+   "Q1067263",
+   0.1175,
+   0.447,
+   0.528,
+   "page sim 0.528 < 0.55"
+  ],
+  [
+   "Wheeled vehicles",
+   "Q15618781",
+   0.1116,
+   null,
+   null,
+   "no English article"
+  ],
+  [
+   "Truck rental",
+   "Q8873817",
+   0.1083,
+   null,
+   null,
+   "category, list or disambiguation"
+  ],
+  [
+   "Economics",
+   "Q8134",
+   0.09873,
+   0.425,
+   0.544,
+   "page sim 0.544 < 0.55"
+  ],
+  [
+   "Public sphere",
+   "Q17945",
+   0.08409,
+   0.283,
+   0.411,
+   "keyword sim 0.283 < 0.4 and page sim 0.411 < 0.55"
+  ],
+  [
+   "Vehicle technology",
+   "Q100232465",
+   0.08117,
+   null,
+   null,
+   "no English article"
+  ],
+  [
+   "Information technology",
+   "Q11661",
+   0.08034,
+   0.388,
+   0.476,
+   "keyword sim 0.388 < 0.4 and page sim 0.476 < 0.55"
+  ],
+  [
+   "Commercial vehicles",
+   "Q580939",
+   0.07678,
+   0.314,
+   0.511,
+   "keyword sim 0.314 < 0.4 and page sim 0.511 < 0.55"
+  ],
+  [
+   "Energy",
+   "Q11379",
+   0.07219,
+   0.387,
+   0.507,
+   "keyword sim 0.387 < 0.4 and page sim 0.507 < 0.55"
+  ],
+  [
+   "Health",
+   "Q12147",
+   0.06544,
+   0.281,
+   0.449,
+   "keyword sim 0.281 < 0.4 and page sim 0.449 < 0.55"
+  ],
+  [
+   "Private sector",
+   "Q591763",
+   0.06402,
+   0.322,
+   0.493,
+   "keyword sim 0.322 < 0.4 and page sim 0.493 < 0.55"
+  ],
+  [
+   "Business processes",
+   "Q851587",
+   0.06281,
+   0.388,
+   0.53,
+   "keyword sim 0.388 < 0.4 and page sim 0.53 < 0.55"
+  ],
+  [
+   "Safety",
+   "Q10566551",
+   0.05789,
+   0.344,
+   0.55,
+   "keyword sim 0.344 < 0.4"
+  ]
+ ],
+ "keyword_lookups": {
+  "lookups": {
+   "moving": [
+    "disambiguation",
+    "Moving"
+   ],
+   "moving cost": [
+    "missing",
+    "Moving cost"
+   ],
+   "moving cost calculator": [
+    "missing",
+    "Moving cost calculator"
+   ],
+   "cost": [
+    "exact",
+    "Cost"
+   ],
+   "cost calculator": [
+    "missing",
+    "Cost calculator"
+   ],
+   "calculator": [
+    "exact",
+    "Calculator"
+   ]
+  },
+  "settle \"moving\" (disambiguation Moving)": {
+   "top_links": 2,
+   "chosen": [
+    "Relocation (personal)",
+    "Relocation service"
+   ]
+  }
+ }
+}

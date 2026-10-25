@@ -1,0 +1,1142 @@
+{
+ "props": {
+  "P9885": {
+   "label": "Bing entity ID",
+   "desc": "identifier for an entity in Microsoft Bing; the former public Bing Search resolver was retired on 11 August 2025, while bingId remains exposed by Azure AI Language Entity Linking",
+   "terms": [
+    "Bing",
+    "Microsoft",
+    "Satori"
+   ]
+  },
+  "P6366": {
+   "label": "Microsoft Academic ID (discontinued)",
+   "desc": "identifier for an object or topic in the Microsoft Academic Graph (until 31 December 2021)",
+   "terms": [
+    "Microsoft"
+   ]
+  },
+  "P5885": {
+   "label": "Microsoft Store product ID",
+   "desc": "identifier for a product in Microsoft Store",
+   "terms": [
+    "Microsoft"
+   ]
+  },
+  "P9125": {
+   "label": "Microsoft MVP profile ID",
+   "desc": "identifier for a Microsoft Most Valuable Professional Award recipient",
+   "terms": [
+    "Microsoft"
+   ]
+  },
+  "P11147": {
+   "label": "Microsoft Edge Platform Status feature ID",
+   "desc": "identifier for a feature on Microsoft Edge Platform Status feature ID",
+   "terms": [
+    "Microsoft"
+   ]
+  },
+  "P14160": {
+   "label": "Microsoft Store developer ID",
+   "desc": "identifier for a developer on the Microsoft Store",
+   "terms": [
+    "Microsoft"
+   ]
+  },
+  "P10046": {
+   "label": "Apple Maps \"auid\" identifier",
+   "desc": "identifier of a place in Apple Maps with dec \u201cauid\u201d; for hex \u201cplace-id\u201d, use P14749 instead",
+   "terms": [
+    "Apple",
+    "DuckDuckGo"
+   ]
+  },
+  "P1553": {
+   "label": "Yandex Music artist ID",
+   "desc": "identifier for an artist on Yandex Music",
+   "terms": [
+    "Yandex"
+   ]
+  },
+  "P2819": {
+   "label": "Yandex Music release ID",
+   "desc": "identifier for a release on Yandex Music",
+   "terms": [
+    "Yandex"
+   ]
+  },
+  "P8816": {
+   "label": "Dzen ID",
+   "desc": "identifier for a news source on Dzen",
+   "terms": [
+    "Yandex"
+   ]
+  },
+  "P6537": {
+   "label": "Yandex Music genre ID",
+   "desc": "identifier of a music genre on the Yandex Music website",
+   "terms": [
+    "Yandex"
+   ]
+  },
+  "P6538": {
+   "label": "Yandex Music label ID",
+   "desc": "identifier of a music label on the Yandex Music website",
+   "terms": [
+    "Yandex"
+   ]
+  },
+  "P13096": {
+   "label": "Yandex Maps organization ID",
+   "desc": "identifier for an organization listed in the Yandex Rubricator",
+   "terms": [
+    "Yandex"
+   ]
+  },
+  "P13289": {
+   "label": "Yandex Music track ID",
+   "desc": "identifier for this music track on Yandex Music",
+   "terms": [
+    "Yandex"
+   ]
+  },
+  "P13720": {
+   "label": "Yandex Books author ID",
+   "desc": "identifier for a author at Yandex Books",
+   "terms": [
+    "Yandex"
+   ]
+  },
+  "P14153": {
+   "label": "Yandex Object Answer id",
+   "desc": "identifier for an entry in Yandex Object Answer database",
+   "terms": [
+    "Yandex"
+   ]
+  },
+  "P5647": {
+   "label": "Baidu ScholarID",
+   "desc": "identifier for a scholar at the Baidu Scholar website [with prefix 'CN-']",
+   "terms": [
+    "Baidu"
+   ]
+  },
+  "P10755": {
+   "label": "Baidu Scholar paper ID",
+   "desc": "identifier for a scholarly article on Baidu Scholar, a Google Scholar-like academic search engine",
+   "terms": [
+    "Baidu"
+   ]
+  },
+  "P10061": {
+   "label": "Baidu Scholar journal ID",
+   "desc": "identifier for journals in Baidu Scholar",
+   "terms": [
+    "Baidu"
+   ]
+  },
+  "P11196": {
+   "label": "Baidu Tieba name",
+   "desc": "name of a specific topic driven forum in Baidu Tieba",
+   "terms": [
+    "Baidu"
+   ]
+  },
+  "P9928": {
+   "label": "Baijiahao ID",
+   "desc": "numeric ID of website page to baijiahao",
+   "terms": [
+    "Baidu"
+   ]
+  },
+  "P7506": {
+   "label": "Naver Encyclopedia ID (pre-August 2026)",
+   "desc": "ID of an document in Naver Encyclopedia (using IDs issued prior to August 2026)",
+   "terms": [
+    "Naver"
+   ]
+  },
+  "P8673": {
+   "label": "Naver movie ID",
+   "desc": "identifier for a film in the Naver database",
+   "terms": [
+    "Naver"
+   ]
+  },
+  "P7275": {
+   "label": "Naver VIBE artist ID",
+   "desc": "identifier for artist on Naver VIBE site",
+   "terms": [
+    "Naver"
+   ]
+  },
+  "P7274": {
+   "label": "Naver VIBE album ID",
+   "desc": "identifier for an album on Naver VIBE site",
+   "terms": [
+    "Naver"
+   ]
+  },
+  "P11058": {
+   "label": "Naver game lounge ID",
+   "desc": "identifier for a video game on the Naver Game website",
+   "terms": [
+    "Naver"
+   ]
+  },
+  "P10418": {
+   "label": "Naver VIBE track ID",
+   "desc": "identifier for a track on the South Korean music streaming site Naver VIBE",
+   "terms": [
+    "Naver"
+   ]
+  },
+  "P9893": {
+   "label": "Naver Post member ID",
+   "desc": "identifier for a member of the professional blogging site Naver Post",
+   "terms": [
+    "Naver"
+   ]
+  },
+  "P10352": {
+   "label": "Naver TV ID",
+   "desc": "identifier for a user on the Naver TV website",
+   "terms": [
+    "Naver"
+   ]
+  },
+  "P10523": {
+   "label": "Naver VIBE video ID",
+   "desc": "the identifier for a video on the South Korean music streaming site Naver VIBE",
+   "terms": [
+    "Naver"
+   ]
+  },
+  "P2850": {
+   "label": "Apple Music artist ID",
+   "desc": "identifier for a musical artist or author in Apple Music",
+   "terms": [
+    "Apple"
+   ]
+  },
+  "P9586": {
+   "label": "Apple TV movie ID",
+   "desc": "identifier for a movie on Apple TV",
+   "terms": [
+    "Apple"
+   ]
+  },
+  "P2281": {
+   "label": "Apple Music album ID",
+   "desc": "identifier for a musical work in Apple Music",
+   "terms": [
+    "Apple"
+   ]
+  },
+  "P3861": {
+   "label": "App Store app ID",
+   "desc": "identifier for a mobile application in App Store",
+   "terms": [
+    "Apple"
+   ]
+  },
+  "P5842": {
+   "label": "Apple Podcasts podcast ID",
+   "desc": "identifier for a podcast in iTunes",
+   "terms": [
+    "Apple"
+   ]
+  },
+  "P9751": {
+   "label": "Apple TV show ID",
+   "desc": "identifier for a TV show on Apple TV",
+   "terms": [
+    "Apple"
+   ]
+  },
+  "P5260": {
+   "label": "App Store developer ID",
+   "desc": "identifier for an iOS app developer on App Store",
+   "terms": [
+    "Apple"
+   ]
+  },
+  "P4030": {
+   "label": "PLU code",
+   "desc": "identification numbers affixed to fruits and vegetables for sale, used in checkout and inventory",
+   "terms": [
+    "Apple"
+   ]
+  },
+  "P10110": {
+   "label": "Apple Music track ID",
+   "desc": "track ID (after ?i=) that represents a track in Apple Music",
+   "terms": [
+    "Apple"
+   ]
+  },
+  "P3641": {
+   "label": "Uniform Type Identifier",
+   "desc": "identifier used on software provided by Apple Inc. to uniquely identify a given class or type of item",
+   "terms": [
+    "Apple"
+   ]
+  },
+  "P5655": {
+   "label": "Apple Music music video ID",
+   "desc": "identifier for a music video in American version of Apple Music",
+   "terms": [
+    "Apple"
+   ]
+  },
+  "P10304": {
+   "label": "Apple Podcasts episode ID",
+   "desc": "identifier for a podcast episode on Apple Podcasts",
+   "terms": [
+    "Apple"
+   ]
+  },
+  "P9750": {
+   "label": "Apple TV episode ID",
+   "desc": "identifier for a TV episode on Apple TV",
+   "terms": [
+    "Apple"
+   ]
+  },
+  "P6395": {
+   "label": "Apple Books book ID (U.S. version)",
+   "desc": "identifier for an e-book in the American version of Apple Books",
+   "terms": [
+    "Apple"
+   ]
+  },
+  "P7799": {
+   "label": "Apple IIGS France ID",
+   "desc": "identifier of a software in the Apple IIGS France database",
+   "terms": [
+    "Apple"
+   ]
+  },
+  "P9550": {
+   "label": "Apple Music label ID",
+   "desc": "identifier for a label on Apple Music",
+   "terms": [
+    "Apple"
+   ]
+  },
+  "P6250": {
+   "label": "Apple Music music movie ID (U.S. version)",
+   "desc": "identifier for a concert film or other music-related film in the U.S. version of Apple Music",
+   "terms": [
+    "Apple"
+   ]
+  },
+  "P14161": {
+   "label": "Apple Music Classical work ID",
+   "desc": "identifier for a musical composition in Apple Music Classical",
+   "terms": [
+    "Apple"
+   ]
+  },
+  "P14436": {
+   "label": "\u200eApple TV person ID",
+   "desc": "identifier for a person on Apple TV",
+   "terms": [
+    "Apple"
+   ]
+  },
+  "P14749": {
+   "label": "Apple Maps \"place-id\" identifier",
+   "desc": "identifier of a place in Apple Maps with hex \u201cplace-id\u201d; for dec \u201cauid\u201d, use P10046 instead",
+   "terms": [
+    "Apple"
+   ]
+  },
+  "P7429": {
+   "label": "Bundle ID",
+   "desc": "unique identifier for an application used in iOS, iPadOS, macOS, tvOS, visionOS and watchOS systems",
+   "terms": [
+    "Apple"
+   ]
+  },
+  "P5749": {
+   "label": "Amazon Standard Identification Number",
+   "desc": "identifier for a product on Amazon.com websites",
+   "terms": [
+    "Amazon"
+   ]
+  },
+  "P4862": {
+   "label": "Amazon author ID",
+   "desc": "author identifier on Amazon.com",
+   "terms": [
+    "Amazon"
+   ]
+  },
+  "P6276": {
+   "label": "Amazon Music artist ID",
+   "desc": "artist identifier at Amazon Music",
+   "terms": [
+    "Amazon"
+   ]
+  },
+  "P11293": {
+   "label": "Amazon.com browse node",
+   "desc": "node related to this concept on Amazon.com",
+   "terms": [
+    "Amazon"
+   ]
+  },
+  "P8055": {
+   "label": "Amazon Prime Video ID",
+   "desc": "identifier for a video in Amazon Prime Video (US)",
+   "terms": [
+    "Amazon"
+   ]
+  },
+  "P10295": {
+   "label": "Amazon podcast ID",
+   "desc": "identifier for a podcast on Amazon Music",
+   "terms": [
+    "Amazon"
+   ]
+  },
+  "P14440": {
+   "label": "Prime Video ID",
+   "desc": "identifier for a creative work on Prime Video",
+   "terms": [
+    "Amazon"
+   ]
+  },
+  "P13398": {
+   "label": "Amazon Music track ID",
+   "desc": "identifier for this music track on Amazon Music",
+   "terms": [
+    "Amazon"
+   ]
+  },
+  "P12562": {
+   "label": "Amazon Luna game ID",
+   "desc": "identifier of a video game in the Amazon Luna database",
+   "terms": [
+    "Amazon"
+   ]
+  },
+  "P6683": {
+   "label": "Alexander Turnbull Library ID",
+   "desc": "identifier for names in the Alexander Turnbull Library thesaurus module for unpublished collections",
+   "terms": [
+    "Alexa"
+   ]
+  },
+  "P11692": {
+   "label": "Alexandria UniSG person ID",
+   "desc": "identifier for a person in the Alexandria database operated by the University of St. Gallen",
+   "terms": [
+    "Alexa"
+   ]
+  },
+  "P12317": {
+   "label": "Alexandria.dk person ID",
+   "desc": "identifier for person in the role-playing library Alexandria",
+   "terms": [
+    "Alexa"
+   ]
+  },
+  "P4814": {
+   "label": "Inventories of American Painting and Sculpture control number",
+   "desc": "control number for a work, in 'Inventories of American Painting and Sculpture'",
+   "terms": [
+    "Siri"
+   ]
+  },
+  "P4121": {
+   "label": "openAIP ID",
+   "desc": "identifier of an aerodrome, in the openAIP (open aeronautical information platform) database",
+   "terms": [
+    "OpenAI"
+   ]
+  },
+  "P2671": {
+   "label": "Google Knowledge Graph ID",
+   "desc": "identifier for Google Knowledge Graph API, starting with \"/g/\". For IDs starting with \"/m/\", use Freebase ID (P646)",
+   "terms": [
+    "Google"
+   ]
+  },
+  "P3749": {
+   "label": "Google Maps Customer ID",
+   "desc": "in Google Maps, Customer identifier for a place",
+   "terms": [
+    "Google"
+   ]
+  },
+  "P2847": {
+   "label": "Google+ ID",
+   "desc": "Google+ account identifier of this person or organization: either starting with a \"+\" or consisting of 21 digits",
+   "terms": [
+    "Google"
+   ]
+  },
+  "P4431": {
+   "label": "Google Doodle",
+   "desc": "Google Doodle celebrating this entity or event",
+   "terms": [
+    "Google"
+   ]
+  },
+  "P1960": {
+   "label": "Google Scholar author ID",
+   "desc": "identifier of a person in the Google Scholar academic search service",
+   "terms": [
+    "Google"
+   ]
+  },
+  "P10297": {
+   "label": "Google Arts & Culture entity ID",
+   "desc": "identifier for a person, event, place, or other entity on the Google Arts & Culture website",
+   "terms": [
+    "Google"
+   ]
+  },
+  "P4701": {
+   "label": "Google Arts & Culture asset ID",
+   "desc": "identifier for an artwork or other object on the Google Arts & Culture website",
+   "terms": [
+    "Google"
+   ]
+  },
+  "P675": {
+   "label": "Google Books ID",
+   "desc": "identifier for a book edition in Google Books",
+   "terms": [
+    "Google"
+   ]
+  },
+  "P6562": {
+   "label": "Google Play Movies & TV ID",
+   "desc": "identifier of films and television series on Google Play",
+   "terms": [
+    "Google"
+   ]
+  },
+  "P4198": {
+   "label": "Google Play Music artist ID (former scheme)",
+   "desc": "identifier of an artist on the Google Play Music website. Obsolete starting December 2020",
+   "terms": [
+    "Google"
+   ]
+  },
+  "P5337": {
+   "label": "Google News topics ID",
+   "desc": "identifier for a subject in the news on Google News",
+   "terms": [
+    "Google"
+   ]
+  },
+  "P4028": {
+   "label": "Google Scholar paper ID",
+   "desc": "identifier for a paper in Google Scholar",
+   "terms": [
+    "Google"
+   ]
+  },
+  "P3418": {
+   "label": "Google Play Store app ID",
+   "desc": "package name of an app registered on Google Play",
+   "terms": [
+    "Google"
+   ]
+  },
+  "P8008": {
+   "label": "Google Scholar case ID",
+   "desc": "ID for legal cases cataloged by Google Scholar",
+   "terms": [
+    "Google"
+   ]
+  },
+  "P11302": {
+   "label": "Google Product Taxonomy ID",
+   "desc": "identifier for the product related to this concept on the Google Product Taxonomy",
+   "terms": [
+    "Google"
+   ]
+  },
+  "P4702": {
+   "label": "Google Arts & Culture partner ID",
+   "desc": "identifier for a museum or other partner on the Google Arts & Culture website",
+   "terms": [
+    "Google"
+   ]
+  },
+  "P4199": {
+   "label": "Google Play Music album ID (former scheme)",
+   "desc": "identifier for an album, single, other music release or other publication on the Google Play Music website. Obsolete starting December 2020",
+   "terms": [
+    "Google"
+   ]
+  },
+  "P9003": {
+   "label": "Google Podcasts show ID (obsolete)",
+   "desc": "identifier for a podcast on Google Podcasts",
+   "terms": [
+    "Google"
+   ]
+  },
+  "P10687": {
+   "label": "Google Fonts ID",
+   "desc": "identifier for a font or typeface on Google Fonts",
+   "terms": [
+    "Google"
+   ]
+  },
+  "P6157": {
+   "label": "Google News publication ID",
+   "desc": "identifier for a news source in the news on Google News",
+   "terms": [
+    "Google"
+   ]
+  },
+  "P4486": {
+   "label": "Google Play developer ID",
+   "desc": "numeric identifier for an Android app developer on the Google Play Store",
+   "terms": [
+    "Google"
+   ]
+  },
+  "P8939": {
+   "label": "Google Play developer slug",
+   "desc": "human-readable identifier for a developer on the Google Play Store",
+   "terms": [
+    "Google"
+   ]
+  },
+  "P14087": {
+   "label": "\u200eGoogle Ads Transparency Center advertiser ID",
+   "desc": "identifier for an advertiser at Google Ads Transparency Center (do not include prefix \"AR\")",
+   "terms": [
+    "Google"
+   ]
+  },
+  "P12871": {
+   "label": "Google Play author ID",
+   "desc": "identifier of an author on the Google Play website",
+   "terms": [
+    "Google"
+   ]
+  },
+  "P11961": {
+   "label": "Google Scholar organization ID",
+   "desc": "numeric identifier for an organisation in Google Scholar",
+   "terms": [
+    "Google"
+   ]
+  },
+  "P14932": {
+   "label": "\u200eGoogle Search profile handle",
+   "desc": "handle identifying a public Search profile on Google Search",
+   "terms": [
+    "Google"
+   ]
+  },
+  "P646": {
+   "label": "Freebase ID",
+   "desc": "Machine Identifier (MID) for a topic in the former Freebase knowledge graph; new Freebase MIDs are no longer issued, but existing /m/ identifiers remain in use, including by Google Knowledge Graph",
+   "terms": [
+    "Freebase"
+   ]
+  },
+  "P3284": {
+   "label": "Yahoo! JAPAN Talent Database ID",
+   "desc": "Identifier of person in Yahoo! JAPAN Talent database",
+   "terms": [
+    "Yahoo"
+   ]
+  },
+  "P5084": {
+   "label": "Yahoo Answers category ID",
+   "desc": "category at Yahoo Answers (archived site)",
+   "terms": [
+    "Yahoo"
+   ]
+  },
+  "P11472": {
+   "label": "Yahoo! Japan News publisher ID",
+   "desc": "identifier for a publisher on Yahoo! Japan News",
+   "terms": [
+    "Yahoo"
+   ]
+  },
+  "P1712": {
+   "label": "Metacritic ID",
+   "desc": "identifier for Metacritic",
+   "terms": [
+    "Meta"
+   ]
+  },
+  "P1952": {
+   "label": "Encyclopaedia Metallum band ID",
+   "desc": "identifier for a band in the Encyclopaedia Metallum database",
+   "terms": [
+    "Meta"
+   ]
+  },
+  "P2721": {
+   "label": "Encyclopaedia Metallum release ID",
+   "desc": "identifier for a release in the Encyclopaedia Metallum database",
+   "terms": [
+    "Meta"
+   ]
+  },
+  "P1989": {
+   "label": "Encyclopaedia Metallum artist ID",
+   "desc": "Identifier for a person in the Encyclopaedia Metallum database",
+   "terms": [
+    "Meta"
+   ]
+  },
+  "P8834": {
+   "label": "MetaSat ID",
+   "desc": "identifier for MetaSat, an open metadata vocabulary used to describe space missions",
+   "terms": [
+    "Meta"
+   ]
+  },
+  "P8166": {
+   "label": "Encyclopaedia Metallum label ID",
+   "desc": "identifier for a label in the Encyclopaedia Metallum database",
+   "terms": [
+    "Meta"
+   ]
+  },
+  "P11088": {
+   "label": "Meta Store ID",
+   "desc": "identifier of a video game or application available on the Meta Store",
+   "terms": [
+    "Meta"
+   ]
+  },
+  "P5001": {
+   "label": "METAR code",
+   "desc": "METeorological Aerodrome Report",
+   "terms": [
+    "Meta"
+   ]
+  },
+  "P3890": {
+   "label": "MetaboLights Compound ID",
+   "desc": "identifiers for compound entries in the MetaboLights databases.",
+   "terms": [
+    "Meta"
+   ]
+  },
+  "P14008": {
+   "label": "\u200eMetacritic video game genre ID",
+   "desc": "identifier of a video game genre in Metacritic",
+   "terms": [
+    "Meta"
+   ]
+  },
+  "P12054": {
+   "label": "Metacritic game ID",
+   "desc": "identifier of a video game in the Metacritic database",
+   "terms": [
+    "Meta"
+   ]
+  },
+  "P13021": {
+   "label": "MetalTabs.com band ID",
+   "desc": "identifier of a metal band the MetalTabs.com database",
+   "terms": [
+    "Meta"
+   ]
+  },
+  "P13521": {
+   "label": "MetalTabs.com track ID",
+   "desc": "identifier of a metal track in the MetalTabs.com database",
+   "terms": [
+    "Meta"
+   ]
+  },
+  "P12888": {
+   "label": "Metamath statement ID",
+   "desc": "unique identifier for a theorem, axiom or definition in the Metamath set.mm database",
+   "terms": [
+    "Meta"
+   ]
+  },
+  "P13456": {
+   "label": "Meta-Doctrinal ID",
+   "desc": "identifier for a journal in Meta-Doctrinal.org",
+   "terms": [
+    "Meta"
+   ]
+  },
+  "P12079": {
+   "label": "Metacritic publication ID",
+   "desc": "identifier of a gaming or any other media publication in the Metacritic database",
+   "terms": [
+    "Meta"
+   ]
+  },
+  "P12080": {
+   "label": "Metacritic company ID",
+   "desc": "identifier of a company in the Metacritic database",
+   "terms": [
+    "Meta"
+   ]
+  },
+  "P12078": {
+   "label": "Metacritic numeric game ID",
+   "desc": "numeric identifier of a video game in the Metacritic online database; to be used as a qualifier for the main property \"Metacritic game ID (P12054)\"",
+   "terms": [
+    "Meta"
+   ]
+  },
+  "P2013": {
+   "label": "Facebook username",
+   "desc": "identifier for an official (preferably) Facebook person, product or organization page (everything that follows URL part 'https://www.facebook.com/')",
+   "terms": [
+    "Facebook"
+   ]
+  },
+  "P1997": {
+   "label": "Facebook location ID",
+   "desc": "identifier for a place in Facebook",
+   "terms": [
+    "Facebook"
+   ]
+  },
+  "P6913": {
+   "label": "Facebook Gaming game ID",
+   "desc": "identifier for a video game on Facebook Gaming",
+   "terms": [
+    "Facebook"
+   ]
+  },
+  "P13654": {
+   "label": "Facebook image ID",
+   "desc": "identifier of the photo on Facebook",
+   "terms": [
+    "Facebook"
+   ]
+  },
+  "P11705": {
+   "label": "Facebook numeric ID",
+   "desc": "numeric identifier for a Facebook page or profile",
+   "terms": [
+    "Facebook"
+   ]
+  },
+  "P4839": {
+   "label": "Wolfram Language entity code",
+   "desc": "input form for an entity in Wolfram Language",
+   "terms": [
+    "Wolfram"
+   ]
+  },
+  "P2812": {
+   "label": "MathWorld ID",
+   "desc": "identifier for entries in MathWorld, online mathematics reference work",
+   "terms": [
+    "Wolfram"
+   ]
+  },
+  "P7007": {
+   "label": "Wolfram Language unit code",
+   "desc": "input form for a unit of measurement in the Wolfram Language",
+   "terms": [
+    "Wolfram"
+   ]
+  },
+  "P7431": {
+   "label": "Wolfram Language quantity ID",
+   "desc": "identifier for a (physical, chemical, ...) quantity in the Wolfram Language",
+   "terms": [
+    "Wolfram"
+   ]
+  },
+  "P7497": {
+   "label": "Wolfram Language entity type",
+   "desc": "first part of the Wolfram Language entity code",
+   "terms": [
+    "Wolfram"
+   ]
+  },
+  "P227": {
+   "label": "GND ID",
+   "desc": "identifier from the Gemeinsame Normdatei authority file of names, subjects, and organizations",
+   "terms": [
+    "DBpedia"
+   ]
+  },
+  "P2581": {
+   "label": "BabelNet ID",
+   "desc": "ID in BabelNet encyclopedic dictionary",
+   "terms": [
+    "BabelNet"
+   ]
+  },
+  "P3417": {
+   "label": "Quora topic ID",
+   "desc": "identifier for a topic on Quora (English language version)",
+   "terms": [
+    "Quora"
+   ]
+  },
+  "P4411": {
+   "label": "Quora username",
+   "desc": "username of an individual or organisation, on the Quora website",
+   "terms": [
+    "Quora"
+   ]
+  },
+  "P7703": {
+   "label": "Quora topic ID (Spanish)",
+   "desc": "identifier for a topic on Quora (Spanish language version)",
+   "terms": [
+    "Quora"
+   ]
+  },
+  "P1417": {
+   "label": "Encyclop\u00e6dia Britannica Online ID",
+   "desc": "identifier for an article in the online version of Encyclop\u00e6dia Britannica",
+   "terms": [
+    "Britannica"
+   ]
+  },
+  "P2450": {
+   "label": "Encyclop\u00e6dia Britannica contributor ID",
+   "desc": "identifier for a contributor to the 'Encyclop\u00e6dia Britannica'",
+   "terms": [
+    "Britannica"
+   ]
+  },
+  "P11263": {
+   "label": "The Britannica Dictionary entry",
+   "desc": "identifier for an entry in The Britannica Dictionary",
+   "terms": [
+    "Britannica"
+   ]
+  },
+  "P11764": {
+   "label": "Britannica Kids students level article ID",
+   "desc": "identifier of a students level (grades 6-8) article in Britannica Kids",
+   "terms": [
+    "Britannica"
+   ]
+  },
+  "P11762": {
+   "label": "Britannica Kids kids level article ID",
+   "desc": "identifier of a kids level (up to grade 5) article in Britannica Kids",
+   "terms": [
+    "Britannica"
+   ]
+  },
+  "P11765": {
+   "label": "Britannica Kids scholars level article ID",
+   "desc": "identifier of a scholars level (grade 9 and up) article in Britannica Kids",
+   "terms": [
+    "Britannica"
+   ]
+  },
+  "P10283": {
+   "label": "OpenAlex ID",
+   "desc": "identifier for works, grants, authors, institutes, venues, concepts/subjects in OpenAlex",
+   "terms": [
+    "OpenAlex"
+   ]
+  },
+  "P7502": {
+   "label": "Golden ID (archived)",
+   "desc": "ID page in Golden knowledge base",
+   "terms": [
+    "Golden"
+   ]
+  },
+  "P12253": {
+   "label": "NIWA article ID",
+   "desc": "identifier of an article on the Nintendo Independent Wiki Alliance. Format: wiki:Page_title",
+   "terms": [
+    "Golden"
+   ]
+  },
+  "P2088": {
+   "label": "Crunchbase organization ID",
+   "desc": "Identifier for an organization, in the Crunchbase database of companies and start-ups, operated by TechCrunch",
+   "terms": [
+    "Crunchbase"
+   ]
+  },
+  "P2087": {
+   "label": "Crunchbase person ID",
+   "desc": "Identifier for a person, in the Crunchbase database of companies and start-ups, operated by TechCrunch",
+   "terms": [
+    "Crunchbase"
+   ]
+  }
+ },
+ "selected_external_ids": {
+  "P1014": 7,
+  "P508": 4,
+  "P646": 11,
+  "P1051": 4,
+  "P1417": 7,
+  "P227": 8,
+  "P3417": 10,
+  "P3827": 8,
+  "P244": 7,
+  "P1245": 4,
+  "P7749": 6,
+  "P6366": 4,
+  "P7033": 5,
+  "P6900": 2,
+  "P8408": 8,
+  "P8855": 2,
+  "P4527": 3,
+  "P9475": 3,
+  "P8514": 4,
+  "P268": 3,
+  "P8189": 8,
+  "P10283": 6,
+  "P8313": 4,
+  "P8814": 8,
+  "P691": 4,
+  "P5160": 2,
+  "P11302": 3,
+  "P9497": 3,
+  "P2347": 7,
+  "P10376": 2,
+  "P12086": 3,
+  "P9621": 1,
+  "P5844": 1,
+  "P3365": 2,
+  "P10017": 1,
+  "P6706": 1,
+  "P12596": 5,
+  "P12800": 5,
+  "P3847": 2,
+  "P11947": 1,
+  "P13591": 8,
+  "P1036": 4,
+  "P13750": 2,
+  "P13772": 4,
+  "P1296": 2,
+  "P3916": 1,
+  "P3911": 2,
+  "P2924": 4,
+  "P8834": 2,
+  "P3553": 5,
+  "P4342": 5,
+  "P11514": 3,
+  "P12385": 2,
+  "P1368": 1,
+  "P9322": 3,
+  "P7666": 1,
+  "P12705": 1,
+  "P349": 3,
+  "P1225": 2,
+  "P1256": 4,
+  "P2581": 2,
+  "P5250": 1,
+  "P6573": 3,
+  "P9294": 1,
+  "P9318": 1,
+  "P8309": 2,
+  "P6293": 1,
+  "P6058": 1,
+  "P3984": 2,
+  "P2004": 1,
+  "P10674": 1,
+  "P3859": 2,
+  "P5395": 1,
+  "P8370": 1,
+  "P11473": 4,
+  "P11924": 4,
+  "P4223": 1,
+  "P3219": 2,
+  "P2452": 1,
+  "P5604": 1,
+  "P8406": 1,
+  "P8519": 3,
+  "P4212": 1,
+  "P9495": 1,
+  "P950": 2,
+  "P12187": 1,
+  "P7305": 2,
+  "P11493": 1,
+  "P10381": 1,
+  "P14692": 2,
+  "P7497": 1,
+  "P10329": 1,
+  "P6262": 3,
+  "P1617": 2,
+  "P5063": 1,
+  "P3153": 1,
+  "P213": 1,
+  "P3500": 1,
+  "P214": 1,
+  "P3393": 1,
+  "P1015": 1,
+  "P6782": 1,
+  "P9955": 1,
+  "P14075": 1,
+  "P7431": 1,
+  "P4732": 1,
+  "P8393": 1,
+  "P5064": 1,
+  "P13625": 1,
+  "P7775": 1,
+  "P13204": 2,
+  "P14870": 1,
+  "P14884": 1,
+  "P2263": 1,
+  "P1330": 1,
+  "P2612": 1,
+  "P3221": 1,
+  "P3569": 1,
+  "P3763": 1,
+  "P1807": 1,
+  "P920": 1,
+  "P8516": 1,
+  "P8248": 1,
+  "P9100": 1,
+  "P6412": 1,
+  "P9545": 1,
+  "P6385": 1,
+  "P10757": 1,
+  "P7502": 1,
+  "P11137": 1,
+  "P11408": 1,
+  "P10063": 1,
+  "P11196": 1,
+  "P11214": 1,
+  "P12721": 1,
+  "P9346": 1,
+  "P10890": 1,
+  "P8168": 1,
+  "P7844": 1,
+  "P6870": 1,
+  "P13613": 1,
+  "P4979": 1,
+  "P7185": 1,
+  "P2167": 1,
+  "P4235": 1,
+  "P4467": 1,
+  "P4839": 1
+ },
+ "per_entity": {
+  "Q31087": 44,
+  "Q1757263": 4,
+  "Q240673": 31,
+  "Q43193": 50,
+  "Q12511": 51,
+  "Q136208": 14,
+  "Q5440305": 15,
+  "Q25288": 35,
+  "Q5994": 77,
+  "Q1936429": 18,
+  "Q3500725": 8
+ }
+}
