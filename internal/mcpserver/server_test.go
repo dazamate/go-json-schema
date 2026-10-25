@@ -390,6 +390,13 @@ func TestSelectEntitiesToolGraphSettings(t *testing.T) {
 			t.Errorf("%s: out = %s, isErr = %v, want a tool error containing %q", c.arg, out, isErr, c.want)
 		}
 	}
+	// 0 passes for these two, so the call gets as far as the missing key.
+	for _, arg := range []string{"min_mention_graph_links", "max_graph_neighbours"} {
+		out, isErr := callText(t, cs, "select_entities", map[string]any{"url": "http://localhost:8080/p/", "keyword": "plumber", arg: 0})
+		if !isErr || !strings.Contains(out, "textrazor.api_key") {
+			t.Errorf("%s: out = %s, isErr = %v, want 0 to pass the check", arg, out, isErr)
+		}
+	}
 }
 
 func TestSelectEntitiesToolDescriptionSaysTheDefaultsAreJudgement(t *testing.T) {

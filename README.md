@@ -352,10 +352,16 @@ reads your own page, `localhost` included, and chooses its `about` and
 0.40, `min_page_similarity` 0.55 and `min_link_confidence` 1.5. The first
 four are 0 to 1. `min_link_confidence` is a TextRazor confidence (about 0.5
 to 10) that an entity kept only by a link to another page of your site must
-reach. The graph settings are `min_graph_similarity` 0.40 (0 to 1, for an
-article the page does not name), `min_graph_links` 3, `min_graph_links_ungated`
-10 and `min_mention_graph_links` 2 (whole numbers of 1 or more) and
-`max_graph_neighbours` 30 (0 or more; the owner set this cap). These are our judgement, set by eye
+reach.
+
+The graph settings are `min_graph_similarity` 0.40 (0 to 1, for an article
+the page does not name), `min_graph_links` 3 (links into the graph a page
+entity that qualifies on its own needs to join `about`), `min_graph_links_ungated`
+10 (the same for one that does not, and for a keyword lookup hit TextRazor did
+not link; both 1 or more), `min_mention_graph_links` 2 (0 or more, to stay in
+`mentions`) and `max_graph_neighbours` 30 (0 or more; the owner set this cap).
+
+All of these are our judgement, set by eye
 from one calibration page (the Lift My Boxes moving cost calculator page,
 keyword "moving cost calculator", 2026-10-25), not from any Google source.
 They still need checking on a second page. The calibration data is in

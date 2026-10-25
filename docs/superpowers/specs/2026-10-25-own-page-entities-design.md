@@ -267,12 +267,12 @@ Azure AI Language limits that shape the design
 | `min_page_similarity` | 0.55 | Lowest similarity between a theme and the page. |
 | `min_link_confidence` | 1.5 | Lowest TextRazor confidence (about 0.5 to 10, so 0 or more rather than 0 to 1) for a page entity to qualify through an own-site link. |
 | `min_graph_similarity` | 0.40 | Lowest similarity between a linked article and the keyword, 0 to 1, for an article the page does not name. |
-| `min_graph_links` | 3 | Links into the graph a page entity needs to join `about` when it is close to the keyword. 1 or more. |
-| `min_graph_links_ungated` | 10 | Links into the graph a page entity needs to join `about` whatever its similarity. 1 or more. |
-| `min_mention_graph_links` | 2 | Links into the graph a page entity needs to stay in `mentions`. 1 or more. |
+| `min_graph_links` | 3 | Links into the graph a page entity that qualifies on its own (relevance, topic score or own-site link) needs to join `about`. 1 or more. |
+| `min_graph_links_ungated` | 10 | Links into the graph a page entity that does not qualify on its own needs to join `about`; also the count a keyword lookup hit TextRazor did not link must reach. 1 or more. |
+| `min_mention_graph_links` | 2 | Links into the graph a page entity that qualifies on its own needs to stay in `mentions`; it must also be named in the page's main text, or it is dropped as `not_in_page_text`. 0 or more. |
 | `max_graph_neighbours` | 30 | Most unnamed linked articles that join `about`. 0 or more; set by the owner. |
 
-The five similarity and confidence numbers, and the graph numbers, are our judgement, set by eye from the one calibration
+The defaults above are our judgement, set by eye from the one calibration
 page above, not from any Google source. The tool description and README
 must say so, and they need checking on a second page. Without a TextRazor
 key the tool fails with the same message `page_terms` gives
@@ -334,9 +334,11 @@ key the tool fails with the same message `page_terms` gives
     the page entities linked into it. `about` is then the centre articles, the
     neighbours that are close to the keyword (`min_graph_similarity`) or named
     on the page (at most `max_graph_neighbours` unnamed ones), and the page
-    entities with `min_graph_links` links into the graph (`min_graph_links_ungated`
-    whatever their similarity). `mentions` keeps only page entities with
-    `min_mention_graph_links` links. With no article, or fewer than 3 kept
+    entities with enough links into the graph: `min_graph_links` for one that
+    qualifies on its own (step 5), `min_graph_links_ungated` for one that
+    does not and for a keyword lookup hit TextRazor did not link.
+    `mentions` keeps only page entities that qualify on their own, are named
+    in the page text and have `min_mention_graph_links` links. With no article, or fewer than 3 kept
     neighbours, steps 6, 7 and 9 stand and `note` says so.
 11. **Build each entity's node** (below).
 
