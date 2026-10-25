@@ -505,3 +505,99 @@ func (r *Researcher) buildGraph(ctx context.Context, wr *resolver, keyword strin
 	}
 	return &builtGraph{Members: members, Links: links, Dropped: dropped, Report: rep, Scored: scored}, notes, nil
 }
+
+// graphCandidates turns a built graph into candidates: the centres, the
+// members with how they link to the centres, the page entities and lookup
+// hits that link into the graph, and, as drops in s.dropped, whatever does
+// not. A member's identity is already checked. hits are the keyword lookup
+// hits.
+func (s *selection) graphCandidates(g *builtGraph, hits []lookupHit, set SelectSettings) []*candidate {
+	var out []*candidate
+	member := map[string]bool{}
+	for _, m := range g.Members {
+		member[m.QID] = true
+		id := m.id
+		e := s.byQID[m.QID]
+		c := &candidate{title: m.Title, id: &id}
+		switch {
+		case m.Centre:
+			c.role, c.Selected = roleCentre, Selected{QID: m.QID, Source: SourceKeyword, Matched: []string{}, LinkedTo: []string{}}
+			if e != nil {
+				c.Selected, c.freebase = e.selected(SourceKeyword), e.freebase
+				id.KGMIDChecked = id.KGMIDChecked || (e.freebase != "" && id.KGMID == e.freebase)
+			}
+			c.QualifiedBy = []string{"centre"}
+			out = append(out, c)
+			continue
+		case e != nil:
+			c.role, c.Selected, c.freebase = roleGraphPage, e.selected(SourcePage), e.freebase
+			c.GraphLinks = len(g.Links[m.Title])
+		default:
+			c.role, c.Selected = roleNeighbour, Selected{QID: m.QID, Source: SourceGraph, Matched: append([]string{}, m.Named...), LinkedTo: []string{}}
+			if m.Sim != nil {
+				c.GraphSimilarity = f64(round3(*m.Sim))
+			}
+		}
+		if m.Out {
+			c.QualifiedBy = append(c.QualifiedBy, "out_link")
+		}
+		if m.In {
+			c.QualifiedBy = append(c.QualifiedBy, "in_link")
+		}
+		if m.Named != nil {
+			c.QualifiedBy = append(c.QualifiedBy, "named")
+		}
+		out = append(out, c)
+	}
+
+	for _, e := range s.ents {
+		if member[e.qid] {
+			continue
+		}
+		by := e.qualifiers(set)
+		n := len(g.Links[e.title])
+		c := &candidate{title: e.title, freebase: e.freebase, Selected: e.selected(SourcePage)}
+		c.GraphLinks = n
+		switch {
+		case len(by) > 0 && n >= set.MinGraphLinks, len(by) == 0 && n >= set.MinGraphLinksUngated:
+			c.role, c.QualifiedBy = roleGraphLinked, append(by, "graph_links")
+		case len(by) > 0 && n >= set.MinMentionGraphLinks:
+			if !slices.ContainsFunc(e.matched, func(f string) bool { return hasWords(s.text, f) }) {
+				s.dropped = append(s.dropped, e.drop(ReasonNotInPageText))
+				continue
+			}
+			c.role, c.QualifiedBy = roleMention, append(by, "graph_links")
+		default:
+			d := e.drop(ReasonOffGraph)
+			d.GraphLinks = &n
+			s.dropped = append(s.dropped, d)
+			continue
+		}
+		out = append(out, c)
+	}
+
+	hitQIDs := map[string]bool{}
+	for _, h := range hits {
+		hitQIDs[h.QID] = true
+		if member[h.QID] || s.byQID[h.QID] != nil {
+			continue
+		}
+		n := len(g.Links[h.Title])
+		if n < set.MinGraphLinksUngated {
+			s.dropped = append(s.dropped, Dropped{Name: h.Title, QID: h.QID, Source: SourceKeyword, GraphLinks: &n, Reason: ReasonOffGraph})
+			continue
+		}
+		c := &candidate{role: roleGraphLinked, title: h.Title,
+			Selected: Selected{QID: h.QID, Source: SourceKeyword, GraphLinks: n, Matched: []string{}, LinkedTo: []string{}, QualifiedBy: []string{h.How, "graph_links"}}}
+		out = append(out, c)
+	}
+
+	for _, qid := range s.order {
+		if member[qid] || hitQIDs[qid] || s.byQID[qid] != nil {
+			continue
+		}
+		t := s.topics[qid]
+		s.dropped = append(s.dropped, Dropped{Name: t.Label, QID: qid, Source: SourceTheme, Topic: f64(t.Score), Reason: ReasonOffGraph})
+	}
+	return out
+}

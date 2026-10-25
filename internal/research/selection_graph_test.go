@@ -2,6 +2,7 @@ package research
 
 import (
 	"context"
+	"encoding/json"
 	"strings"
 
 	"fmt"
@@ -533,5 +534,180 @@ func TestBuildGraphWithoutModel(t *testing.T) {
 	}
 	if !hasNote(notes, "graph not scored: no embedding model is set up") {
 		t.Errorf("notes = %v", notes)
+	}
+}
+
+// patResearcher is a Researcher on the pat page, linked as ents and topics,
+// scored by scorer.
+func patResearcher(t *testing.T, raw rawPage, ents []textrazor.Entity, topics []textrazor.Topic, scorer ThemeScorer) *Researcher {
+	t.Helper()
+	return &Researcher{
+		Browser: fakeBrowser{selectPage(patWiki(), raw, nil)},
+		Linker: &fakeLinker{link: func(string) (textrazor.Result, error) {
+			return textrazor.Result{Entities: ents, Topics: topics, Units: 1}, nil
+		}},
+		Themes: scorer,
+		Cache:  NewCache(t.TempDir()),
+	}
+}
+
+func patQuery(set SelectSettings) SelectQuery {
+	return SelectQuery{URL: patURL, Keyword: patKeyword, Settings: set}
+}
+
+func TestSelectEntitiesGraphRoles(t *testing.T) {
+	scorer := &fakeScorer{sim: patSims()}
+	rep := runSelect(t, patResearcher(t, patRaw(), patEntities(), patTopics(), scorer), patQuery(DefaultSelectSettings))
+	want := []string{"Price action trading", "Technical analysis", "Foreign exchange market", "Day trading", "Gap (chart pattern)", "Chart pattern", "Island reversal"}
+	if got := selNames(rep.About); !slices.Equal(got, want) {
+		t.Fatalf("about = %v, want %v", got, want)
+	}
+	by := map[string]Selected{}
+	for _, s := range rep.About {
+		by[s.Name] = s
+	}
+	centre := by["Price action trading"]
+	if b, _ := json.Marshal(centre); centre.Source != SourceKeyword || !slices.Equal(centre.QualifiedBy, []string{"centre"}) || strings.Contains(string(b), "graph_links") {
+		t.Errorf("centre = %s", b)
+	}
+	ta := by["Technical analysis"]
+	if ta.Source != SourcePage || !slices.Equal(ta.QualifiedBy, []string{"out_link", "named"}) || ta.GraphLinks != 2 {
+		t.Errorf("Technical analysis = %+v", ta)
+	}
+	fx := by["Foreign exchange market"]
+	if fx.Source != SourcePage || !slices.Equal(fx.QualifiedBy, []string{"scores", "graph_links"}) || fx.GraphLinks != 3 {
+		t.Errorf("Foreign exchange market = %+v", fx)
+	}
+	day := by["Day trading"]
+	if day.Source != SourceGraph || !slices.Equal(day.QualifiedBy, []string{"in_link"}) || num(day.GraphSimilarity) != 0.576 || day.Matched == nil || len(day.Matched) != 0 || day.LinkedTo == nil {
+		t.Errorf("Day trading = %+v", day)
+	}
+	gap := by["Gap (chart pattern)"]
+	if gap.Source != SourceGraph || !slices.Equal(gap.QualifiedBy, []string{"out_link"}) || len(gap.Matched) != 0 {
+		t.Errorf("Gap = %+v", gap)
+	}
+	if _, ok := thingJSON(t, gap.Thing)["alternateName"]; ok {
+		t.Errorf("Gap thing = %s", gap.Thing)
+	}
+	island := by["Island reversal"]
+	if !slices.Equal(island.QualifiedBy, []string{"out_link", "named"}) || num(island.GraphSimilarity) != 0.325 || !slices.Equal(island.Matched, []string{"Island reversals"}) {
+		t.Errorf("Island reversal = %+v", island)
+	}
+	if got := anyStrs(thingJSON(t, island.Thing)["alternateName"]); !slices.Equal(got, []string{"Island reversals"}) {
+		t.Errorf("Island reversal alternateName = %v", got)
+	}
+	if rep.Model != "fake-bge" {
+		t.Errorf("model = %q", rep.Model)
+	}
+	if got := selNames(rep.Mentions); !slices.Equal(got, []string{"Trade"}) {
+		t.Fatalf("mentions = %v", got)
+	}
+	if m := rep.Mentions[0]; !slices.Equal(m.QualifiedBy, []string{"scores", "graph_links"}) || m.GraphLinks != 2 {
+		t.Errorf("Trade = %+v", m)
+	}
+	for name, want := range map[string]Dropped{
+		"ISBN":           {Reason: ReasonBelowGraphSimilarity, Source: SourceGraph},
+		"Candle":         {Reason: ReasonOffGraph, Source: SourcePage, GraphLinks: new(1)},
+		"Swing trading":  {Reason: ReasonOffGraph, Source: SourcePage, GraphLinks: new(3)},
+		"Microeconomics": {Reason: ReasonOffGraph, Source: SourceTheme},
+	} {
+		d, ok := findDropped(rep, name)
+		if !ok || d.Reason != want.Reason || d.Source != want.Source || (want.GraphLinks != nil && (d.GraphLinks == nil || *d.GraphLinks != *want.GraphLinks)) {
+			t.Errorf("dropped %s = %+v, want %+v", name, d, want)
+		}
+	}
+	if d, _ := findDropped(rep, "Microeconomics"); num(d.Topic) != 0.5 {
+		t.Errorf("Microeconomics topic = %v", d.Topic)
+	}
+	if n := len(rep.Dropped); n != 4 {
+		t.Errorf("dropped = %+v", rep.Dropped)
+	}
+	wantRep := &GraphReport{Centres: []string{"Price action trading"}, OutLinks: 6, InLinks: 2, Neighbours: 6, Kept: 5, Cut: 1}
+	if !reflect.DeepEqual(rep.Graph, wantRep) {
+		t.Errorf("graph = %+v, want %+v", rep.Graph, wantRep)
+	}
+	if len(scorer.labels) != 0 {
+		t.Errorf("themes scored: %v", scorer.labels)
+	}
+}
+
+func TestSelectEntitiesGraphUngatedThreshold(t *testing.T) {
+	set := DefaultSelectSettings
+	set.MinGraphLinksUngated = 3
+	rep := runSelect(t, patResearcher(t, patRaw(), patEntities(), patTopics(), &fakeScorer{sim: patSims()}), patQuery(set))
+	want := []string{"Price action trading", "Technical analysis", "Foreign exchange market", "Swing trading", "Day trading", "Gap (chart pattern)", "Chart pattern", "Island reversal"}
+	if got := selNames(rep.About); !slices.Equal(got, want) {
+		t.Fatalf("about = %v, want %v", got, want)
+	}
+	if s := rep.About[3]; !slices.Equal(s.QualifiedBy, []string{"graph_links"}) || s.GraphLinks != 3 || s.Source != SourcePage {
+		t.Errorf("Swing trading = %+v", s)
+	}
+}
+
+func TestSelectEntitiesGraphCap(t *testing.T) {
+	set := DefaultSelectSettings
+	set.MaxGraphNeighbours = 2
+	rep := runSelect(t, patResearcher(t, patRaw(), patEntities(), patTopics(), &fakeScorer{sim: patSims()}), patQuery(set))
+	if got := selNames(rep.About); slices.Contains(got, "Chart pattern") || !slices.Contains(got, "Day trading") || !slices.Contains(got, "Gap (chart pattern)") {
+		t.Errorf("about = %v", got)
+	}
+	if _, ok := findDropped(rep, "Chart pattern"); ok {
+		t.Errorf("Chart pattern dropped: %+v", rep.Dropped)
+	}
+	if rep.Graph == nil || rep.Graph.Capped != 1 {
+		t.Errorf("graph = %+v", rep.Graph)
+	}
+}
+
+func TestSelectEntitiesCentreLinkedOnThePage(t *testing.T) {
+	ents := append(patEntities(), pageMention("Price action trading", "Q1", "", "price action trading", 0.9))
+	topics := append(patTopics(), textrazor.Topic{Label: "Price action trading", WikidataID: "Q1", Score: 1})
+	rep := runSelect(t, patResearcher(t, patRaw(), ents, topics, &fakeScorer{sim: patSims()}), patQuery(DefaultSelectSettings))
+	n := 0
+	for _, s := range slices.Concat(rep.About, rep.Mentions) {
+		if s.Name == "Price action trading" {
+			n++
+		}
+	}
+	if n != 1 || len(rep.About) == 0 {
+		t.Fatalf("Price action trading listed %d times: about %v mentions %v", n, selNames(rep.About), selNames(rep.Mentions))
+	}
+	c := rep.About[0]
+	if c.Name != "Price action trading" || c.Source != SourceKeyword || !slices.Contains(c.QualifiedBy, "centre") || num(c.Relevance) != 0.9 {
+		t.Errorf("centre = %+v", c)
+	}
+	if _, ok := findDropped(rep, "Price action trading"); ok {
+		t.Errorf("centre dropped: %+v", rep.Dropped)
+	}
+}
+
+func TestSelectEntitiesGraphFallsBack(t *testing.T) {
+	sims := map[string]float64{}
+	for k := range patSims() {
+		sims[k] = 0.1
+	}
+	cos := map[string][2]float64{}
+	for _, tp := range patTopics() {
+		cos[tp.Label] = [2]float64{0.9, 0.9}
+	}
+	raw := patRaw()
+	raw.Text = "Candles form over time."
+	scorer := &fakeScorer{sim: sims, cos: cos}
+	rep := runSelect(t, patResearcher(t, raw, patEntities(), patTopics(), scorer), patQuery(DefaultSelectSettings))
+	if rep.Graph != nil || !strings.Contains(rep.Note, "fewer than 3") {
+		t.Errorf("graph %+v note %q", rep.Graph, rep.Note)
+	}
+	if !slices.Contains(scorer.labels, "Microeconomics") {
+		t.Errorf("themes not scored: %v", scorer.labels)
+	}
+}
+
+func TestSelectEntitiesNoCentreNote(t *testing.T) {
+	rep := runSelect(t, newSelectFixture().researcher(), selectQuery())
+	if !strings.Contains(rep.Note, "no Wikipedia article for the keyword: about uses the page's themes") || rep.Graph != nil {
+		t.Errorf("graph %+v note %q", rep.Graph, rep.Note)
+	}
+	if b, _ := json.Marshal(rep); strings.Contains(string(b), `"graph"`) {
+		t.Errorf("report has a graph key: %s", b)
 	}
 }

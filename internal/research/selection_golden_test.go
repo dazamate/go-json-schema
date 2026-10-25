@@ -181,6 +181,9 @@ func TestSelectEntitiesCalibration(t *testing.T) {
 		}
 	}()
 
+	if rep.Graph != nil || !strings.Contains(rep.Note, "no Wikipedia article for the keyword") {
+		t.Errorf("graph %+v, note %q", rep.Graph, rep.Note)
+	}
 	wantAbout := []string{"Calculator", "Moving company", "Cost", "Relocation (personal)", "Relocation service", "Transport",
 		"Freight transport", "Business economics", "Pricing", "Land transport", "Accounting"}
 	if got := selNames(rep.About); !slices.Equal(got, wantAbout) {

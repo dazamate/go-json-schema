@@ -89,7 +89,8 @@ type SelectReport struct {
 	Settings  SelectSettings `json:"settings"`
 	TextRazor TextRazorUsage `json:"textrazor"`
 	Azure     *AzureUsage    `json:"azure,omitempty"`
-	Model     string         `json:"model"` // the embedding model that scored the themes
+	Graph     *GraphReport   `json:"graph,omitempty"` // the keyword's graph, when about came from it
+	Model     string         `json:"model"`           // the embedding model that scored the themes or the graph
 	Note      string         `json:"note"`
 }
 
@@ -139,6 +140,8 @@ type Selected struct {
 	Confidence        *float64 `json:"confidence,omitempty"`
 	KeywordSimilarity *float64 `json:"keyword_similarity,omitempty"`
 	PageSimilarity    *float64 `json:"page_similarity,omitempty"`
+	GraphSimilarity   *float64 `json:"graph_similarity,omitempty"`
+	GraphLinks        int      `json:"graph_links,omitempty"`
 	Mentions          int      `json:"mentions,omitempty"`
 
 	Matched     []string `json:"matched"`
@@ -222,6 +225,7 @@ func (r *Researcher) SelectEntities(ctx context.Context, q SelectQuery) (SelectR
 
 	grams := keywordGrams(keyword)
 	var cands []*candidate
+	var g *builtGraph
 	var items map[string]wdEntity
 	err = r.Browser.Use(ctx, func(p browser.Page) error {
 		wr := &resolver{ctx: ctx, p: p, lang: lang}
@@ -234,10 +238,41 @@ func (r *Researcher) SelectEntities(ctx context.Context, q SelectQuery) (SelectR
 			return err
 		}
 		rep.KeywordLookups = append([]KeywordLookup{}, looks...)
-		cands = s.candidates(hits, grams)
-		qids := make([]string, len(cands))
-		for i, c := range cands {
-			qids[i] = c.QID
+		groups := centreCandidates(looks, len(words))
+		if len(groups) == 0 {
+			notes = append(notes, "no Wikipedia article for the keyword: about uses the page's themes")
+		} else {
+			// The hits that are neither centre candidates nor linked on the
+			// page are counted by their links into the graph.
+			inGroup := map[string]bool{}
+			for _, grp := range groups {
+				for _, c := range grp {
+					inGroup[c.QID] = true
+				}
+			}
+			var extra []titleQID
+			for _, h := range hits {
+				if !inGroup[h.QID] && s.byQID[h.QID] == nil {
+					extra = append(extra, titleQID{h.Title, h.QID})
+				}
+			}
+			progress(ctx, "building the keyword's graph")
+			var gn []string
+			if g, gn, err = r.buildGraph(ctx, wr, keyword, s, extra, groups, q.Settings); err != nil {
+				return err
+			}
+			notes = append(notes, gn...)
+		}
+		if g != nil {
+			cands = s.graphCandidates(g, hits, q.Settings)
+		} else {
+			cands = s.candidates(hits, grams)
+		}
+		var qids []string
+		for _, c := range cands {
+			if c.id == nil {
+				qids = append(qids, c.QID)
+			}
 		}
 		progress(ctx, fmt.Sprintf("checking %d entities by their Wikidata items", len(qids)))
 		items, err = wr.articleItems(qids)
@@ -247,12 +282,23 @@ func (r *Researcher) SelectEntities(ctx context.Context, q SelectQuery) (SelectR
 		return SelectReport{}, err
 	}
 	rep.Dropped = append(rep.Dropped, s.dropped...)
+	if g != nil {
+		rep.Graph = &g.Report
+		rep.Dropped = append(rep.Dropped, g.Dropped...)
+	}
 
 	p9885 := map[string]string{}
 	var kept, themes []*candidate
 	for _, c := range cands {
-		it, found := items[c.QID]
-		id, reason := checkIdentity(it, found, lang, c.title, c.freebase)
+		// A graph member's identity was checked when the graph was built.
+		var id identity
+		var reason string
+		if c.id != nil {
+			id = *c.id
+		} else {
+			it, found := items[c.QID]
+			id, reason = checkIdentity(it, found, lang, c.title, c.freebase)
+		}
 		if reason != "" {
 			rep.Dropped = append(rep.Dropped, c.drop(reason))
 			continue
@@ -266,11 +312,17 @@ func (r *Researcher) SelectEntities(ctx context.Context, q SelectQuery) (SelectR
 			kept = append(kept, c)
 		}
 	}
-	themes, note := r.scoreThemes(ctx, keyword, text, themes, q.Settings, &rep)
-	if note != "" {
-		notes = append(notes, note)
+	if g != nil {
+		if g.Scored {
+			rep.Model = r.Themes.Model()
+		}
+	} else {
+		themes, note := r.scoreThemes(ctx, keyword, text, themes, q.Settings, &rep)
+		if note != "" {
+			notes = append(notes, note)
+		}
+		kept = append(kept, themes...)
 	}
-	kept = append(kept, themes...)
 
 	about, mentions := roles(kept)
 	var sel []*Selected
@@ -397,6 +449,11 @@ const (
 	roleLookup         // a keyword lookup hit
 	roleTheme
 	roleMention
+
+	roleCentre      // the keyword's Wikipedia article
+	roleGraphPage   // a page entity that is a graph member
+	roleGraphLinked // a page entity or lookup hit linking into the graph
+	roleNeighbour   // a graph member the page doesn't link
 )
 
 // candidate is an entity whose identity is still to be checked.
@@ -408,11 +465,16 @@ type candidate struct {
 	label    string // a theme's TextRazor label, which is what is scored
 	gram     int    // a lookup's place in the keyword
 	classes  []string
+	id       *identity // a graph member's identity, already checked
 }
 
 func (c *candidate) drop(reason string) Dropped {
-	return Dropped{Name: cmp.Or(c.Name, c.title, c.label), QID: c.QID, Source: c.Source, Relevance: c.Relevance, Topic: c.Topic,
-		KeywordSimilarity: c.KeywordSimilarity, PageSimilarity: c.PageSimilarity, Reason: reason}
+	d := Dropped{Name: cmp.Or(c.Name, c.title, c.label), QID: c.QID, Source: c.Source, Relevance: c.Relevance, Topic: c.Topic,
+		KeywordSimilarity: c.KeywordSimilarity, PageSimilarity: c.PageSimilarity, GraphSimilarity: c.GraphSimilarity, Reason: reason}
+	if c.GraphLinks > 0 {
+		d.GraphLinks = &c.GraphLinks
+	}
+	return d
 }
 
 // selection is the page's entities and topics as TextRazor linked them.
@@ -504,16 +566,7 @@ func (s *selection) candidates(hits []lookupHit, grams []string) []*candidate {
 		if moved[e] {
 			continue
 		}
-		var by []string
-		if e.byScores {
-			by = append(by, "scores")
-		}
-		// A link makes no relevance check, so the link path needs TextRazor
-		// to be sure of the entity: "slate" in a card linking to a pool table
-		// page was Slate (magazine) at confidence 1.08.
-		if len(e.links) > 0 && e.conf >= s.set.MinLinkConfidence {
-			by = append(by, "link")
-		}
+		by := e.qualifiers(s.set)
 		if len(by) == 0 {
 			reason := ReasonBelowTopic
 			switch {
@@ -547,6 +600,21 @@ func (s *selection) candidates(hits []lookupHit, grams []string) []*candidate {
 			Matched: []string{}, LinkedTo: []string{}, QualifiedBy: []string{"similarity"}}})
 	}
 	return out
+}
+
+// qualifiers are the gate's ways in: scores, and link. A link makes no
+// relevance check, so the link path needs TextRazor to be sure of the entity:
+// "slate" in a card linking to a pool table page was Slate (magazine) at
+// confidence 1.08.
+func (e *pageEntity) qualifiers(set SelectSettings) []string {
+	var by []string
+	if e.byScores {
+		by = append(by, "scores")
+	}
+	if len(e.links) > 0 && e.conf >= set.MinLinkConfidence {
+		by = append(by, "link")
+	}
+	return by
 }
 
 func (e *pageEntity) drop(reason string) Dropped {
@@ -657,9 +725,11 @@ func (r *Researcher) scoreThemes(ctx context.Context, keyword, page string, them
 
 func round3(x float64) float64 { return math.Round(x*1000) / 1000 }
 
-// roles orders the checked candidates. about is the keyword page entities
-// by relevance, the lookup hits in keyword order, then the themes by topic
-// score; mentions is the other page entities by relevance.
+// roles orders the checked candidates. about is the centres, the graph page
+// entities and the graph-linked ones by graph links, then the neighbours by
+// similarity; without a graph it is the keyword page entities by relevance,
+// the lookup hits in keyword order, then the themes by topic score. mentions
+// is the other page entities by relevance.
 func roles(cands []*candidate) (about, mentions []*candidate) {
 	byRelevance := func(a, b *candidate) int {
 		return cmp.Or(cmp.Compare(*b.Relevance, *a.Relevance), cmp.Compare(*b.Topic, *a.Topic), cmp.Compare(b.Mentions, a.Mentions), strings.Compare(a.Name, b.Name))
@@ -673,6 +743,27 @@ func roles(cands []*candidate) (about, mentions []*candidate) {
 		}
 		return out
 	}
+	byLinks := func(a, b *candidate) int {
+		rel := func(c *candidate) float64 {
+			if c.Relevance == nil {
+				return 0
+			}
+			return *c.Relevance
+		}
+		return cmp.Or(cmp.Compare(b.GraphLinks, a.GraphLinks), cmp.Compare(rel(b), rel(a)), strings.Compare(a.Name, b.Name))
+	}
+	centres, graphPage, graphLinked, neighbours := group(roleCentre), group(roleGraphPage), group(roleGraphLinked), group(roleNeighbour)
+	slices.SortFunc(graphPage, byLinks)
+	slices.SortFunc(graphLinked, byLinks)
+	slices.SortFunc(neighbours, func(a, b *candidate) int {
+		sim := func(c *candidate) float64 {
+			if c.GraphSimilarity == nil {
+				return -1 // unscored: after every scored neighbour
+			}
+			return *c.GraphSimilarity
+		}
+		return cmp.Or(cmp.Compare(sim(b), sim(a)), strings.Compare(a.Name, b.Name))
+	})
 	keyword, lookups, themes := group(roleKeyword), group(roleLookup), group(roleTheme)
 	mentions = group(roleMention)
 	slices.SortFunc(keyword, byRelevance)
@@ -681,7 +772,7 @@ func roles(cands []*candidate) (about, mentions []*candidate) {
 		return cmp.Or(cmp.Compare(*b.Topic, *a.Topic), strings.Compare(a.Name, b.Name))
 	})
 	slices.SortFunc(mentions, byRelevance)
-	return append(append(keyword, lookups...), themes...), mentions
+	return slices.Concat(centres, graphPage, graphLinked, neighbours, keyword, lookups, themes), mentions
 }
 
 // bingLink links the text with Azure, or returns the cached result for the
