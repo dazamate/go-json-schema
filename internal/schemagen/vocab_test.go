@@ -115,3 +115,21 @@ func TestPlanUsesSharedTraitForMultiDomainProperty(t *testing.T) {
 		t.Error("sameAs not in ThingProps")
 	}
 }
+
+func TestEmbeddedVocabMatchesFile(t *testing.T) {
+	v, err := Embedded()
+	if err != nil {
+		t.Fatalf("Embedded: %v", err)
+	}
+	if got, want := len(v.Props), len(loadVocab(t).Props); got != want {
+		t.Fatalf("embedded vocab has %d properties, file has %d", got, want)
+	}
+}
+
+func TestGoNameMatchesGeneratedFields(t *testing.T) {
+	for prop, want := range map[string]string{"sameAs": "SameAs", "contentUrl": "ContentURL", "recipeIngredient": "RecipeIngredient"} {
+		if got := GoName(prop); got != want {
+			t.Errorf("GoName(%q) = %q, want %q", prop, got, want)
+		}
+	}
+}

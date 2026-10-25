@@ -1,0 +1,194 @@
+[
+ {
+  "qid": "Q240673",
+  "title": "Cost",
+  "textrazor_freebase": "/m/0168hv",
+  "wikidata_p646": [
+   "/m/0168hv"
+  ],
+  "wikidata_p2671": [],
+  "status": "match"
+ },
+ {
+  "qid": "Q31087",
+  "title": "Calculator",
+  "textrazor_freebase": "/m/024d2",
+  "wikidata_p646": [
+   "/m/024d2"
+  ],
+  "wikidata_p2671": [],
+  "status": "match"
+ },
+ {
+  "qid": "Q9158",
+  "title": "Email",
+  "textrazor_freebase": "/m/02nf_",
+  "wikidata_p646": [
+   "/m/02nf_"
+  ],
+  "wikidata_p2671": [],
+  "status": "match"
+ },
+ {
+  "qid": "Q136208",
+  "title": "ZIP Code",
+  "textrazor_freebase": "/m/0dllr",
+  "wikidata_p646": [
+   "/m/0dllr"
+  ],
+  "wikidata_p2671": [],
+  "status": "match"
+ },
+ {
+  "qid": "Q12511",
+  "title": "Stairs",
+  "textrazor_freebase": "/m/01lynh",
+  "wikidata_p646": [
+   "/m/01lynh"
+  ],
+  "wikidata_p2671": [],
+  "status": "match"
+ },
+ {
+  "qid": "Q830106",
+  "title": "GeoNames",
+  "textrazor_freebase": "/m/02rnzcx",
+  "wikidata_p646": [
+   "/m/02rnzcx"
+  ],
+  "wikidata_p2671": [],
+  "status": "match"
+ },
+ {
+  "qid": "Q284742",
+  "title": "Creative Commons license",
+  "textrazor_freebase": "/m/01kkml",
+  "wikidata_p646": [
+   "/m/01kkml"
+  ],
+  "wikidata_p2671": [],
+  "status": "match"
+ },
+ {
+  "qid": "Q25288",
+  "title": "Weight",
+  "textrazor_freebase": "/m/085x_",
+  "wikidata_p646": [
+   "/m/085x_"
+  ],
+  "wikidata_p2671": [],
+  "status": "match"
+ },
+ {
+  "qid": "Q42848",
+  "title": "Data",
+  "textrazor_freebase": "/m/026sq",
+  "wikidata_p646": [
+   "/m/026sq"
+  ],
+  "wikidata_p2671": [],
+  "status": "match"
+ },
+ {
+  "qid": "Q1757263",
+  "title": "Moving company",
+  "textrazor_freebase": "/m/07ry5s",
+  "wikidata_p646": [
+   "/m/07ry5s"
+  ],
+  "wikidata_p2671": [],
+  "status": "match"
+ },
+ {
+  "qid": "Q154242",
+  "title": "Nothing",
+  "textrazor_freebase": "/m/0jh4p",
+  "wikidata_p646": [
+   "/m/0jh4p"
+  ],
+  "wikidata_p2671": [
+   "/g/122xfblz"
+  ],
+  "status": "match"
+ },
+ {
+  "qid": "Q5994",
+  "title": "Piano",
+  "textrazor_freebase": "/m/05r5c",
+  "wikidata_p646": [
+   "/m/05r5c"
+  ],
+  "wikidata_p2671": [],
+  "status": "match"
+ },
+ {
+  "qid": "Q1936429",
+  "title": "Hot tub",
+  "textrazor_freebase": "/m/065h6l",
+  "wikidata_p646": [
+   "/m/065h6l"
+  ],
+  "wikidata_p2671": [],
+  "status": "match"
+ },
+ {
+  "qid": "Q1420",
+  "title": "Car",
+  "textrazor_freebase": "/m/0k4j",
+  "wikidata_p646": [
+   "/m/0k4j"
+  ],
+  "wikidata_p2671": [],
+  "status": "match"
+ },
+ {
+  "qid": "Q43193",
+  "title": "Truck",
+  "textrazor_freebase": "/m/07r04",
+  "wikidata_p646": [
+   "/m/07r04"
+  ],
+  "wikidata_p2671": [],
+  "status": "match"
+ },
+ {
+  "qid": "Q3500725",
+  "title": "Billiard table",
+  "textrazor_freebase": "/m/04p0qw",
+  "wikidata_p646": [
+   "/m/04p0qw"
+  ],
+  "wikidata_p2671": [],
+  "status": "match"
+ },
+ {
+  "qid": "Q132911",
+  "title": "Elevator",
+  "textrazor_freebase": "/m/02r60",
+  "wikidata_p646": [
+   "/m/02r60"
+  ],
+  "wikidata_p2671": [],
+  "status": "match"
+ },
+ {
+  "qid": "Q5440305",
+  "title": "Federal Motor Carrier Safety Administration",
+  "textrazor_freebase": "/m/02wvdh3",
+  "wikidata_p646": [
+   "/m/02wvdh3"
+  ],
+  "wikidata_p2671": [],
+  "status": "match"
+ },
+ {
+  "qid": "Q131514",
+  "title": "Couch",
+  "textrazor_freebase": "/m/02crq1",
+  "wikidata_p646": [
+   "/m/02crq1"
+  ],
+  "wikidata_p2671": [],
+  "status": "match"
+ }
+]

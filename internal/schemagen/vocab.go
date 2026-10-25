@@ -9,6 +9,8 @@ import (
 	"slices"
 	"sort"
 	"strings"
+
+	"github.com/dazamate/go-json-schema/internal/schemagen/vocab"
 )
 
 // Vocab is the schema.org vocabulary: classes, properties and enumeration
@@ -70,11 +72,29 @@ func Load(path string) (*Vocab, error) {
 	if err != nil {
 		return nil, err
 	}
+	v, err := Parse(data)
+	if err != nil {
+		return nil, fmt.Errorf("schemagen: parse %s: %w", path, err)
+	}
+	return v, nil
+}
+
+// Embedded returns the vocabulary vendored in internal/schemagen/vocab.
+func Embedded() (*Vocab, error) {
+	v, err := Parse(vocab.JSONLD)
+	if err != nil {
+		return nil, fmt.Errorf("schemagen: parse embedded vocab: %w", err)
+	}
+	return v, nil
+}
+
+// Parse reads a schema.org JSON-LD vocabulary document.
+func Parse(data []byte) (*Vocab, error) {
 	var doc struct {
 		Graph []rawNode `json:"@graph"`
 	}
 	if err := json.Unmarshal(data, &doc); err != nil {
-		return nil, fmt.Errorf("schemagen: parse %s: %w", path, err)
+		return nil, err
 	}
 	v := &Vocab{
 		Classes:   map[string]*Class{},

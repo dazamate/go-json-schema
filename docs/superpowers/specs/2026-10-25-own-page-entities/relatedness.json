@@ -1,0 +1,299 @@
+[
+ {
+  "qid": "Q240673",
+  "label": "monetary cost",
+  "desc": "value of money that has been used up to produce something",
+  "wp": "Cost",
+  "n": 10,
+  "rel": 0.7542,
+  "conf": 1.021,
+  "matched": [
+   "cost"
+  ],
+  "emb": 0.467,
+  "anchor_links_to": [],
+  "links_to_anchor": []
+ },
+ {
+  "qid": "Q31087",
+  "label": "calculator",
+  "desc": "electronic device used for calculations",
+  "wp": "Calculator",
+  "n": 13,
+  "rel": 0.8889,
+  "conf": 2.268,
+  "matched": [
+   "calculator"
+  ],
+  "emb": 0.578,
+  "anchor_links_to": [],
+  "links_to_anchor": []
+ },
+ {
+  "qid": "Q9158",
+  "label": "email",
+  "desc": "electronic changing digital messages between a network",
+  "wp": "Email",
+  "n": 6,
+  "rel": 0.2623,
+  "conf": 3.588,
+  "matched": [
+   "email"
+  ],
+  "emb": 0.331,
+  "anchor_links_to": [],
+  "links_to_anchor": []
+ },
+ {
+  "qid": "Q136208",
+  "label": "ZIP code",
+  "desc": "numeric postal code used in the United States and its territories",
+  "wp": "ZIP Code",
+  "n": 3,
+  "rel": 0.4308,
+  "conf": 5.413,
+  "matched": [
+   "zip code",
+   "zip codes"
+  ],
+  "emb": 0.421,
+  "anchor_links_to": [],
+  "links_to_anchor": []
+ },
+ {
+  "qid": "Q12511",
+  "label": "stairs",
+  "desc": "construction designed to bridge a large vertical distance by dividing it into steps",
+  "wp": "Stairs",
+  "n": 4,
+  "rel": 0.489,
+  "conf": 4.206,
+  "matched": [
+   "flights of stairs",
+   "stairs"
+  ],
+  "emb": 0.396,
+  "anchor_links_to": [],
+  "links_to_anchor": []
+ },
+ {
+  "qid": "Q830106",
+  "label": "GeoNames",
+  "desc": "geographical database available and accessible through various web services, operated by Unxos GmbH",
+  "wp": "GeoNames",
+  "n": 1,
+  "rel": 0.07776,
+  "conf": 4.154,
+  "matched": [
+   "geonames"
+  ],
+  "emb": 0.362,
+  "anchor_links_to": [],
+  "links_to_anchor": []
+ },
+ {
+  "qid": "Q284742",
+  "label": "Creative Commons license",
+  "desc": "family of public copyright licenses for allowing free use of a work",
+  "wp": "Creative Commons license",
+  "n": 1,
+  "rel": 0.02104,
+  "conf": 2.292,
+  "matched": [
+   "cc by 4.0"
+  ],
+  "emb": 0.321,
+  "anchor_links_to": [],
+  "links_to_anchor": []
+ },
+ {
+  "qid": "Q25288",
+  "label": "weight",
+  "desc": "force acting on a mass due to gravity",
+  "wp": "Weight",
+  "n": 5,
+  "rel": 0.385,
+  "conf": 2.671,
+  "matched": [
+   "weight"
+  ],
+  "emb": 0.392,
+  "anchor_links_to": [],
+  "links_to_anchor": []
+ },
+ {
+  "qid": "Q42848",
+  "label": "data",
+  "desc": "codified, fixed and transmissible information, that may be arranged for automatic processing",
+  "wp": "Data",
+  "n": 1,
+  "rel": 0.001159,
+  "conf": 1.104,
+  "matched": [
+   "data"
+  ],
+  "emb": 0.343,
+  "anchor_links_to": [],
+  "links_to_anchor": []
+ },
+ {
+  "qid": "Q1757263",
+  "label": "moving company",
+  "desc": "business that provides packing and moving services for relocation",
+  "wp": "Moving company",
+  "n": 5,
+  "rel": 0.8271,
+  "conf": 1.761,
+  "matched": [
+   "mover",
+   "movers"
+  ],
+  "emb": 0.531,
+  "anchor_links_to": [],
+  "links_to_anchor": []
+ },
+ {
+  "qid": "Q154242",
+  "label": "nothing",
+  "desc": "complete absence of anything",
+  "wp": "Nothing",
+  "n": 1,
+  "rel": 0.0,
+  "conf": 1.86,
+  "matched": [
+   "nothing"
+  ],
+  "emb": 0.3,
+  "anchor_links_to": [],
+  "links_to_anchor": []
+ },
+ {
+  "qid": "Q5994",
+  "label": "piano",
+  "desc": "musical keyboard instrument",
+  "wp": "Piano",
+  "n": 4,
+  "rel": 0.3716,
+  "conf": 1.754,
+  "matched": [
+   "piano",
+   "pianos"
+  ],
+  "emb": 0.374,
+  "anchor_links_to": [],
+  "links_to_anchor": []
+ },
+ {
+  "qid": "Q1936429",
+  "label": "hot tub",
+  "desc": "large tub or small pool",
+  "wp": "Hot tub",
+  "n": 4,
+  "rel": 0.3192,
+  "conf": 2.912,
+  "matched": [
+   "hot tub",
+   "hot tubs"
+  ],
+  "emb": 0.328,
+  "anchor_links_to": [],
+  "links_to_anchor": []
+ },
+ {
+  "qid": "Q1420",
+  "label": "car",
+  "desc": "motorized road vehicle designed to carry one to eight people rather than primarily goods",
+  "wp": "Car",
+  "n": 3,
+  "rel": 0.1741,
+  "conf": 2.023,
+  "matched": [
+   "car"
+  ],
+  "emb": 0.314,
+  "anchor_links_to": [],
+  "links_to_anchor": []
+ },
+ {
+  "qid": "Q43193",
+  "label": "truck",
+  "desc": "commercial or utilitarian large motor vehicle",
+  "wp": "Truck",
+  "n": 4,
+  "rel": 0.6104,
+  "conf": 2.81,
+  "matched": [
+   "truck"
+  ],
+  "emb": 0.327,
+  "anchor_links_to": [
+   "moving company"
+  ],
+  "links_to_anchor": []
+ },
+ {
+  "qid": "Q3500725",
+  "label": "billiard table",
+  "desc": "special table used exclusively for billiards or snooker",
+  "wp": "Billiard table",
+  "n": 3,
+  "rel": 0.1298,
+  "conf": 1.735,
+  "matched": [
+   "pool table",
+   "pool tables"
+  ],
+  "emb": 0.32,
+  "anchor_links_to": [],
+  "links_to_anchor": []
+ },
+ {
+  "qid": "Q132911",
+  "label": "elevator",
+  "desc": "vertical transport device",
+  "wp": "Elevator",
+  "n": 1,
+  "rel": 0.0,
+  "conf": 3.146,
+  "matched": [
+   "elevators"
+  ],
+  "emb": 0.401,
+  "anchor_links_to": [],
+  "links_to_anchor": []
+ },
+ {
+  "qid": "Q5440305",
+  "label": "Federal Motor Carrier Safety Administration",
+  "desc": "agency of the United States Department of Transportation",
+  "wp": "Federal Motor Carrier Safety Administration",
+  "n": 2,
+  "rel": 0.4133,
+  "conf": 7.637,
+  "matched": [
+   "fmcsa"
+  ],
+  "emb": 0.343,
+  "anchor_links_to": [
+   "moving company"
+  ],
+  "links_to_anchor": [
+   "moving company"
+  ]
+ },
+ {
+  "qid": "Q131514",
+  "label": "couch",
+  "desc": "piece of furniture for seating two or more persons in the form of a bench with armrests",
+  "wp": "Couch",
+  "n": 1,
+  "rel": 0.09813,
+  "conf": 1.129,
+  "matched": [
+   "sofas"
+  ],
+  "emb": 0.354,
+  "anchor_links_to": [],
+  "links_to_anchor": []
+ }
+]

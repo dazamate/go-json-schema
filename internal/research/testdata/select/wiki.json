@@ -1,0 +1,4963 @@
+{
+  "items": {
+    "Q100232465": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q11016",
+                  "numeric-id": 11016
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q112057532",
+                  "numeric-id": 112057532
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q100232465"
+    },
+    "Q10566551": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q813912",
+                  "numeric-id": 813912
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q10354783",
+                  "numeric-id": 10354783
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q151885",
+                  "numeric-id": 151885
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/01lh7h"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q10566551",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Safety"
+        }
+      }
+    },
+    "Q1067263": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q5082128",
+                  "numeric-id": 5082128
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q3181395",
+                  "numeric-id": 3181395
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/03034n"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q1067263",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Information appliance"
+        }
+      }
+    },
+    "Q11016": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q28797",
+                  "numeric-id": 28797
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "deprecated"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q34104",
+                  "numeric-id": 34104
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q11862829",
+                  "numeric-id": 11862829
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q268592",
+                  "numeric-id": 268592
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/07c1v"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q11016",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Technology"
+        }
+      }
+    },
+    "Q113025928": {
+      "claims": {
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q4167836",
+                  "numeric-id": 4167836
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q113025928",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Category:Logistics industry"
+        }
+      }
+    },
+    "Q1134763": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q4738155",
+                  "numeric-id": 4738155
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q11862829",
+                  "numeric-id": 11862829
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/02wsnj"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q1134763",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Corporate finance"
+        }
+      }
+    },
+    "Q11371155": {
+      "claims": {
+        "P2671": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/g/1232pk2n"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q268378",
+                  "numeric-id": 268378
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q1914636",
+                  "numeric-id": 1914636
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q11371155"
+    },
+    "Q11379": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q181175",
+                  "numeric-id": 181175
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q3386703",
+                  "numeric-id": 3386703
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q141256417",
+                  "numeric-id": 141256417
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q4373292",
+                  "numeric-id": 4373292
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q107715",
+                  "numeric-id": 107715
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q1554231",
+                  "numeric-id": 1554231
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/02mm_"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q11379",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Energy"
+        }
+      }
+    },
+    "Q11661": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q5268834",
+                  "numeric-id": 5268834
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q2465832",
+                  "numeric-id": 2465832
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q11862829",
+                  "numeric-id": 11862829
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q268592",
+                  "numeric-id": 268592
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/03ytc"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q11661",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Information technology"
+        }
+      }
+    },
+    "Q12147": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q7189713",
+                  "numeric-id": 7189713
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q16681739",
+                  "numeric-id": 16681739
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q19829125",
+                  "numeric-id": 19829125
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q141459800",
+                  "numeric-id": 141459800
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q190258",
+                  "numeric-id": 190258
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q28877",
+                  "numeric-id": 28877
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "deprecated"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q11862829",
+                  "numeric-id": 11862829
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q1047113",
+                  "numeric-id": 1047113
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q2267705",
+                  "numeric-id": 2267705
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q7048977",
+                  "numeric-id": 7048977
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/0kt51"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q12147",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Health"
+        }
+      }
+    },
+    "Q12511": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q391414",
+                  "numeric-id": 391414
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q30327093",
+                  "numeric-id": 30327093
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q1058733",
+                  "numeric-id": 1058733
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q3352369",
+                  "numeric-id": 3352369
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/01lynh"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q12511",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Stairs"
+        }
+      }
+    },
+    "Q126095": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q43035",
+                  "numeric-id": 43035
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q12015335",
+                  "numeric-id": 12015335
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q11862829",
+                  "numeric-id": 11862829
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/01g1rg"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/02kxqjr"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q126095",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Electronics engineering"
+        }
+      }
+    },
+    "Q1301433": {
+      "claims": {
+        "P2671": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/g/12195p2m"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q42889",
+                  "numeric-id": 42889
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q106839123",
+                  "numeric-id": 106839123
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q140424465",
+                  "numeric-id": 140424465
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/01prls"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q1301433",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Land vehicle"
+        }
+      }
+    },
+    "Q136208": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q37447",
+                  "numeric-id": 37447
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q6545185",
+                  "numeric-id": 6545185
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q126286955",
+                  "numeric-id": 126286955
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/0dllr"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q136208",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "ZIP Code"
+        }
+      }
+    },
+    "Q136708593": {
+      "claims": {
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q4167836",
+                  "numeric-id": 4167836
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q136708593",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Category:Mobile businesses"
+        }
+      }
+    },
+    "Q15618781": {
+      "claims": {
+        "P2671": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/g/11bc6r8nzy"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/g/11h6lxkbvt"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q1301433",
+                  "numeric-id": 1301433
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q24249534",
+                  "numeric-id": 24249534
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q140424465",
+                  "numeric-id": 140424465
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q15618781"
+    },
+    "Q159810": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q1639378",
+                  "numeric-id": 1639378
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q24902509",
+                  "numeric-id": 24902509
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/0gfps3"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q159810",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Economy"
+        }
+      }
+    },
+    "Q1666865": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q3099911",
+                  "numeric-id": 3099911
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/0cm8tfr"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q1666865",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Mathematical instrument"
+        }
+      }
+    },
+    "Q1757263": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q4830453",
+                  "numeric-id": 4830453
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q2918584",
+                  "numeric-id": 2918584
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q783794",
+                  "numeric-id": 783794
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q2169973",
+                  "numeric-id": 2169973
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/07ry5s"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q1757263",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Moving company"
+        }
+      }
+    },
+    "Q179310": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q1914636",
+                  "numeric-id": 1914636
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q5268834",
+                  "numeric-id": 5268834
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q116505632",
+                  "numeric-id": 116505632
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/01lps"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q179310",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Computing"
+        }
+      }
+    },
+    "Q17945": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q294440",
+                  "numeric-id": 294440
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "deprecated"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q24902040",
+                  "numeric-id": 24902040
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/02jymh"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q17945",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Public sphere"
+        }
+      }
+    },
+    "Q1936429": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q152095",
+                  "numeric-id": 152095
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/065h6l"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q1936429",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Hot tub"
+        }
+      }
+    },
+    "Q2383811": {
+      "claims": {
+        "P2671": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/g/121bd2f9"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q2424752",
+                  "numeric-id": 2424752
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q8205328",
+                  "numeric-id": 8205328
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/02rdsp"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q2383811",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Office supplies"
+        }
+      }
+    },
+    "Q240673": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q1499548",
+                  "numeric-id": 1499548
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q131363127",
+                  "numeric-id": 131363127
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q151885",
+                  "numeric-id": 151885
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q29028649",
+                  "numeric-id": 29028649
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/0168hv"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q240673",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Cost"
+        }
+      }
+    },
+    "Q24208053": {
+      "claims": {
+        "P2671": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/g/120hzjj4"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q3296256",
+                  "numeric-id": 3296256
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q5001951",
+                  "numeric-id": 5001951
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q11862829",
+                  "numeric-id": 11862829
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q24208053",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Business economics"
+        }
+      }
+    },
+    "Q2516951": {
+      "claims": {
+        "P2671": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/g/1yqccjth6"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q39809",
+                  "numeric-id": 39809
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/01jsvy"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q2108466",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Pricing"
+        }
+      }
+    },
+    "Q25226391": {
+      "claims": {
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q4167836",
+                  "numeric-id": 4167836
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q25226391",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Category:Calculator technologies"
+        }
+      }
+    },
+    "Q25288": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q141350722",
+                  "numeric-id": 141350722
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q71550118",
+                  "numeric-id": 71550118
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/085x_"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q25288",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Weight"
+        }
+      }
+    },
+    "Q2918584": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q115095261",
+                  "numeric-id": 115095261
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q1914636",
+                  "numeric-id": 1914636
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q27949697",
+                  "numeric-id": 27949697
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q268592",
+                  "numeric-id": 268592
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/043rxy0"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q2918584",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Relocation (personal)"
+        }
+      }
+    },
+    "Q2990807": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q4116214",
+                  "numeric-id": 4116214
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q309100",
+                  "numeric-id": 309100
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q11862829",
+                  "numeric-id": 11862829
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/0blyw"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q2990807",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Management accounting"
+        }
+      }
+    },
+    "Q31087": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q39546",
+                  "numeric-id": 39546
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q2858615",
+                  "numeric-id": 2858615
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q2135246",
+                  "numeric-id": 2135246
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/024d2"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q31087",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Calculator"
+        }
+      }
+    },
+    "Q32593433": {
+      "claims": {
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q4167836",
+                  "numeric-id": 4167836
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q32593433",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Category:Electronic calculators"
+        }
+      }
+    },
+    "Q33521": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q395",
+                  "numeric-id": 395
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q11862829",
+                  "numeric-id": 11862829
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q4671286",
+                  "numeric-id": 4671286
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q1936384",
+                  "numeric-id": 1936384
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/0pf2"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q33521",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Applied mathematics"
+        }
+      }
+    },
+    "Q3500725": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q768186",
+                  "numeric-id": 768186
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q14748",
+                  "numeric-id": 14748
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/04p0qw"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q3500725",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Billiard table"
+        }
+      }
+    },
+    "Q39546": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q10273457",
+                  "numeric-id": 10273457
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q8205328",
+                  "numeric-id": 8205328
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q123691918",
+                  "numeric-id": 123691918
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q1485500",
+                  "numeric-id": 1485500
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q111360549",
+                  "numeric-id": 111360549
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q104086571",
+                  "numeric-id": 104086571
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q123588392",
+                  "numeric-id": 123588392
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "preferred"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/07k1x"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q39546",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Tool"
+        }
+      }
+    },
+    "Q3966": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q2858615",
+                  "numeric-id": 2858615
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q811909",
+                  "numeric-id": 811909
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/01mfj"
+              },
+              "snaktype": "value"
+            },
+            "rank": "preferred"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/0h8lprf"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P9885": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "22a95f44-1398-9bf1-ab66-103e5807f16c"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q3966",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Computer hardware"
+        }
+      }
+    },
+    "Q4116214": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q8187769",
+                  "numeric-id": 8187769
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q60050485",
+                  "numeric-id": 60050485
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q1474521",
+                  "numeric-id": 1474521
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q4671286",
+                  "numeric-id": 4671286
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q11862829",
+                  "numeric-id": 11862829
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/0_jm"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q4116214",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Accounting"
+        }
+      }
+    },
+    "Q428691": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q11023",
+                  "numeric-id": 11023
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q12015335",
+                  "numeric-id": 12015335
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q1047113",
+                  "numeric-id": 1047113
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q4671286",
+                  "numeric-id": 4671286
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q11862829",
+                  "numeric-id": 11862829
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/0db86"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q428691",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Computer engineering"
+        }
+      }
+    },
+    "Q42889": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q11019",
+                  "numeric-id": 11019
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "deprecated"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q106839123",
+                  "numeric-id": 106839123
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q115797408",
+                  "numeric-id": 115797408
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q987767",
+                  "numeric-id": 987767
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "deprecated"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q223557",
+                  "numeric-id": 223557
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q811367",
+                  "numeric-id": 811367
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q96251598",
+                  "numeric-id": 96251598
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q63981612",
+                  "numeric-id": 63981612
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/07yv9"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q42889",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Vehicle"
+        }
+      }
+    },
+    "Q43193": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q1515493",
+                  "numeric-id": 1515493
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q12060681",
+                  "numeric-id": 12060681
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q15618781",
+                  "numeric-id": 15618781
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q580939",
+                  "numeric-id": 580939
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q106839123",
+                  "numeric-id": 106839123
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q140402273",
+                  "numeric-id": 140402273
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q140424465",
+                  "numeric-id": 140424465
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/07r04"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q43193",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Truck"
+        }
+      }
+    },
+    "Q4354683": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q7590",
+                  "numeric-id": 7590
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q268592",
+                  "numeric-id": 268592
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q334166",
+                  "numeric-id": 334166
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/05b1_zw"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/0h3q21h"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q4354683",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Land transport"
+        }
+      }
+    },
+    "Q4619": {
+      "claims": {
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q59541917",
+                  "numeric-id": 59541917
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q4619",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Category:Mathematics"
+        }
+      }
+    },
+    "Q4738155": {
+      "claims": {
+        "P2671": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/g/11g8cyt7hv"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q852740",
+                  "numeric-id": 852740
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q2920921",
+                  "numeric-id": 2920921
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q309100",
+                  "numeric-id": 309100
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q96247293",
+                  "numeric-id": 96247293
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q11862829",
+                  "numeric-id": 11862829
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q627436",
+                  "numeric-id": 627436
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/04kmhwd"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q4738155",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Financial management"
+        }
+      }
+    },
+    "Q4830453": {
+      "claims": {
+        "P2671": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/g/121jnq1m"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/g/11bc6r4_7k"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q43229",
+                  "numeric-id": 43229
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q155076",
+                  "numeric-id": 155076
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q2135465",
+                  "numeric-id": 2135465
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q1047113",
+                  "numeric-id": 1047113
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q17197366",
+                  "numeric-id": 17197366
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/09s1f"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q4830453",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Business"
+        }
+      }
+    },
+    "Q492886": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q1423657",
+                  "numeric-id": 1423657
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q177777",
+                  "numeric-id": 177777
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q29017603",
+                  "numeric-id": 29017603
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q96247293",
+                  "numeric-id": 96247293
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/06z59"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q492886",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Supply chain management"
+        }
+      }
+    },
+    "Q516739": {
+      "claims": {
+        "P2671": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/g/120j8dh6"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q4323994",
+                  "numeric-id": 4323994
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q4354683",
+                  "numeric-id": 4354683
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q334166",
+                  "numeric-id": 334166
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q516739",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Road transport"
+        }
+      }
+    },
+    "Q5358497": {
+      "claims": {
+        "P2671": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/g/12307hc4"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/g/11bc5z4_4l"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q10861389",
+                  "numeric-id": 10861389
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q136653105",
+                  "numeric-id": 136653105
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/0j66bwx"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q5358497",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Electronics industry"
+        }
+      }
+    },
+    "Q5440305": {
+      "claims": {
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q20857065",
+                  "numeric-id": 20857065
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/02wvdh3"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q5440305",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Federal Motor Carrier Safety Administration"
+        }
+      }
+    },
+    "Q5460952": {
+      "claims": {
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q59541917",
+                  "numeric-id": 59541917
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q5460952",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Category:Electronics"
+        }
+      }
+    },
+    "Q580939": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q752870",
+                  "numeric-id": 752870
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/0fkwjg"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q580939",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Commercial vehicle"
+        }
+      }
+    },
+    "Q581105": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q2858615",
+                  "numeric-id": 2858615
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q63981612",
+                  "numeric-id": 63981612
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/019z7b"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q581105",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Consumer electronics"
+        }
+      }
+    },
+    "Q591763": {
+      "claims": {
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q3958441",
+                  "numeric-id": 3958441
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q1639378",
+                  "numeric-id": 1639378
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/01lbdx"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q591763",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Private sector"
+        }
+      }
+    },
+    "Q5994": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q3152898",
+                  "numeric-id": 3152898
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q52954",
+                  "numeric-id": 52954
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "preferred"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q4951628",
+                  "numeric-id": 4951628
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q110295396",
+                  "numeric-id": 110295396
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/05r5c"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q5994",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Piano"
+        }
+      }
+    },
+    "Q6063063": {
+      "claims": {
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q4167836",
+                  "numeric-id": 4167836
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q6063063",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Category:Equipment"
+        }
+      }
+    },
+    "Q6143409": {
+      "claims": {
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q4167836",
+                  "numeric-id": 4167836
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q6143409",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Category:Service industries"
+        }
+      }
+    },
+    "Q642121": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q7406919",
+                  "numeric-id": 7406919
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/03cjyj"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q642121",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Relocation service"
+        }
+      }
+    },
+    "Q651658": {
+      "claims": {
+        "P2671": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/g/120_g24_"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q1724915",
+                  "numeric-id": 1724915
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q8187769",
+                  "numeric-id": 8187769
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q1685754",
+                  "numeric-id": 1685754
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q7590",
+                  "numeric-id": 7590
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q627436",
+                  "numeric-id": 627436
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/070qm"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q651658",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Freight transport"
+        }
+      }
+    },
+    "Q6517860": {
+      "claims": {
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q59541917",
+                  "numeric-id": 59541917
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q4167836",
+                  "numeric-id": 4167836
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q6517860",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Category:Computer science"
+        }
+      }
+    },
+    "Q68": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q11019",
+                  "numeric-id": 11019
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q241317",
+                  "numeric-id": 241317
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q1662611",
+                  "numeric-id": 1662611
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q115517465",
+                  "numeric-id": 115517465
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q3181395",
+                  "numeric-id": 3181395
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q1172400",
+                  "numeric-id": 1172400
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q1327500",
+                  "numeric-id": 1327500
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "deprecated"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q12579633",
+                  "numeric-id": 12579633
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q11019",
+                  "numeric-id": 11019
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/01m3v"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P9885": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "45ab54f1-1ed9-8c38-7736-bf0ed054730a"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q68",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Computer"
+        }
+      }
+    },
+    "Q7012003": {
+      "claims": {
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q59541917",
+                  "numeric-id": 59541917
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q4167836",
+                  "numeric-id": 4167836
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q7012003",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Category:Management"
+        }
+      }
+    },
+    "Q7012234": {
+      "claims": {
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q59541917",
+                  "numeric-id": 59541917
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q7012234",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Category:Marketing"
+        }
+      }
+    },
+    "Q716676": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q16889133",
+                  "numeric-id": 16889133
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q19478619",
+                  "numeric-id": 19478619
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/02qk_tz"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q716676",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Classes of computers"
+        }
+      }
+    },
+    "Q752870": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q42889",
+                  "numeric-id": 42889
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q334166",
+                  "numeric-id": 334166
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q140424465",
+                  "numeric-id": 140424465
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/012f08"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q752870",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Motor vehicle"
+        }
+      }
+    },
+    "Q7590": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q451967",
+                  "numeric-id": 451967
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q115095261",
+                  "numeric-id": 115095261
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/07bsy"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q7590",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Transport"
+        }
+      }
+    },
+    "Q8134": {
+      "claims": {
+        "P2671": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/g/12396ypp"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q34749",
+                  "numeric-id": 34749
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q11862829",
+                  "numeric-id": 11862829
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q4671286",
+                  "numeric-id": 4671286
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q2267705",
+                  "numeric-id": 2267705
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/02j62"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q8134",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Economics"
+        }
+      }
+    },
+    "Q83698112": {
+      "claims": {
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q268592",
+                  "numeric-id": 268592
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q83698112"
+    },
+    "Q851587": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q3249551",
+                  "numeric-id": 3249551
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q116505632",
+                  "numeric-id": 116505632
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/01ybqv"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q851587",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Business process"
+        }
+      }
+    },
+    "Q868404": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q2134742",
+                  "numeric-id": 2134742
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "deprecated"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q1340858",
+                  "numeric-id": 1340858
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q28877",
+                  "numeric-id": 28877
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q128889633",
+                  "numeric-id": 128889633
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q137424905",
+                  "numeric-id": 137424905
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q137425179",
+                  "numeric-id": 137425179
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/05t2nt"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q868404",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Final good"
+        }
+      }
+    },
+    "Q8758919": {
+      "claims": {
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q4167836",
+                  "numeric-id": 4167836
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q8758919",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Category:Personal computing"
+        }
+      }
+    },
+    "Q8873817": {
+      "claims": {
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q4167836",
+                  "numeric-id": 4167836
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q8873817",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Category:Truck rental"
+        }
+      }
+    },
+    "Q949180": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q4116214",
+                  "numeric-id": 4116214
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q627436",
+                  "numeric-id": 627436
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/02cswk"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q949180",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Financial accounting"
+        }
+      }
+    }
+  },
+  "links": {
+    "Moving company": [
+      "Relocation (personal)",
+      "Relocation service",
+      "Structure relocation"
+    ],
+    "Relocation (personal)": [
+      "Moving company"
+    ],
+    "Relocation service": [
+      "Moving company"
+    ]
+  },
+  "options": {
+    "Moving": [
+      "Relocation of professional sports teams",
+      "Relocation service",
+      "Moving (The Raincoats album)",
+      "Suede (album)",
+      "Relocation (computing)",
+      "Moving company",
+      "Fake Chemical State",
+      "Moving (Supergrass song)",
+      "Moving (1988 film)",
+      "Movin' On",
+      "Structure relocation",
+      "Movin' (brand)",
+      "Moving (British TV series)",
+      "Moving (Kate Bush song)",
+      "Moving (Peter, Paul and Mary album)",
+      "Movin' (Brass Construction song)",
+      "Relocation",
+      "Relocation (personal)",
+      "Movin' (Jennifer Rush album)",
+      "Tales of Silversleeve",
+      "Moving (1993 film)",
+      "Moving In",
+      "Moving On Up",
+      "Move",
+      "Moving (Travis song)",
+      "Movin' (Herman van Doorn album)",
+      "Universe (Mohombi album)",
+      "− (album)",
+      "Moving (South Korean TV series)",
+      "Magickal Weirdness"
+    ]
+  },
+  "pages": {
+    "Calculator": {
+      "qid": "Q31087"
+    },
+    "Cost": {
+      "qid": "Q240673"
+    },
+    "Cost calculator": {
+      "missing": true
+    },
+    "Fake Chemical State": {
+      "qid": "Q3738504"
+    },
+    "Magickal Weirdness": {
+      "qid": "Q138009479"
+    },
+    "Move": {
+      "disambig": true,
+      "qid": "Q297869"
+    },
+    "Movin' (Brass Construction song)": {
+      "qid": "Q6926982"
+    },
+    "Movin' (Herman van Doorn album)": {
+      "qid": "Q18391368"
+    },
+    "Movin' (Jennifer Rush album)": {
+      "qid": "Q1951206"
+    },
+    "Movin' (brand)": {
+      "qid": "Q6926979"
+    },
+    "Movin' On": {
+      "disambig": true,
+      "qid": "Q6926990"
+    },
+    "Moving": {
+      "disambig": true,
+      "qid": "Q1047402"
+    },
+    "Moving (1988 film)": {
+      "qid": "Q750337"
+    },
+    "Moving (1993 film)": {
+      "qid": "Q82327"
+    },
+    "Moving (British TV series)": {
+      "qid": "Q6927036"
+    },
+    "Moving (Kate Bush song)": {
+      "qid": "Q55768557"
+    },
+    "Moving (Peter, Paul and Mary album)": {
+      "qid": "Q6927031"
+    },
+    "Moving (South Korean TV series)": {
+      "qid": "Q109317559"
+    },
+    "Moving (Supergrass song)": {
+      "qid": "Q6927033"
+    },
+    "Moving (The Raincoats album)": {
+      "qid": "Q6927034"
+    },
+    "Moving (Travis song)": {
+      "qid": "Q16998203"
+    },
+    "Moving In": {
+      "disambig": true,
+      "qid": "Q6927058"
+    },
+    "Moving On Up": {
+      "disambig": true,
+      "qid": "Q6927145"
+    },
+    "Moving company": {
+      "qid": "Q1757263"
+    },
+    "Moving cost": {
+      "missing": true
+    },
+    "Moving cost calculator": {
+      "missing": true
+    },
+    "Relocation": {
+      "disambig": true,
+      "qid": "Q27869711"
+    },
+    "Relocation (computing)": {
+      "qid": "Q3499564"
+    },
+    "Relocation (personal)": {
+      "qid": "Q2918584"
+    },
+    "Relocation of professional sports teams": {
+      "qid": "Q7311469"
+    },
+    "Relocation service": {
+      "qid": "Q642121"
+    },
+    "Structure relocation": {
+      "qid": "Q826949"
+    },
+    "Suede (album)": {
+      "qid": "Q1078818"
+    },
+    "Tales of Silversleeve": {
+      "qid": "Q7679353"
+    },
+    "Universe (Mohombi album)": {
+      "qid": "Q18395054"
+    },
+    "− (album)": {
+      "qid": "Q116949364"
+    }
+  },
+  "redirects": {
+    "- (album)": "− (album)",
+    "Move (disambiguation)": "Move",
+    "Movin' (Mohombi song)": "Universe (Mohombi album)",
+    "Movin' On (disambiguation)": "Movin' On",
+    "Moving In (disambiguation)": "Moving In",
+    "Moving on Up (disambiguation)": "Moving On Up",
+    "Relocation (disambiguation)": "Relocation"
+  }
+}
