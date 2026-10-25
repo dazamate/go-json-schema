@@ -16,6 +16,7 @@ import (
 	"path/filepath"
 	"strings"
 	"sync"
+	"time"
 )
 
 // asset is one pinned download. A file whose SHA-256 is not the pinned one
@@ -38,7 +39,8 @@ var ensureMu sync.Mutex
 var httpClient = &http.Client{}
 
 // ensure makes every asset present and verified under dir, downloading the
-// missing or corrupt ones. progress may be nil.
+// missing or corrupt ones. It first removes the stale temp files a killed
+// download left next to each asset. progress may be nil.
 func ensure(ctx context.Context, dir string, as []asset, progress func(string)) error {
 	ensureMu.Lock()
 	defer ensureMu.Unlock()
@@ -47,6 +49,7 @@ func ensure(ctx context.Context, dir string, as []asset, progress func(string)) 
 	}
 	for _, a := range as {
 		dest := filepath.Join(dir, filepath.FromSlash(a.name))
+		sweep(dest)
 		ok, err := verified(dest, a.sha256)
 		if err != nil {
 			return fmt.Errorf("embed: checking %s: %w", a.name, err)
@@ -59,6 +62,50 @@ func ensure(ctx context.Context, dir string, as []asset, progress func(string)) 
 		}
 	}
 	return nil
+}
+
+// A temp file is named dest's base, a dot, os.CreateTemp's random digits,
+// then one of these suffixes.
+const (
+	partSuffix    = ".part"
+	tgzPartSuffix = ".tgz.part"
+)
+
+// staleAge is how old a temp file must be for sweep to remove it. Writing
+// keeps a download's temp file fresh, so a younger one may be another
+// process's download in flight.
+const staleAge = time.Hour
+
+// sweep removes the temp files next to dest that are older than staleAge,
+// which a process killed mid-download leaves behind. It is best effort.
+func sweep(dest string) {
+	dir, base := filepath.Split(dest)
+	ents, err := os.ReadDir(dir)
+	if err != nil {
+		return
+	}
+	for _, e := range ents {
+		if !e.Type().IsRegular() || !isTemp(base, e.Name()) {
+			continue
+		}
+		if info, err := e.Info(); err == nil && time.Since(info.ModTime()) > staleAge {
+			os.Remove(filepath.Join(dir, e.Name()))
+		}
+	}
+}
+
+// isTemp reports whether name is a temp file temp made for a dest named base.
+func isTemp(base, name string) bool {
+	rest, ok := strings.CutPrefix(name, base+".")
+	if !ok {
+		return false
+	}
+	for _, suffix := range []string{tgzPartSuffix, partSuffix} {
+		if digits, ok := strings.CutSuffix(rest, suffix); ok {
+			return digits != "" && strings.Trim(digits, "0123456789") == ""
+		}
+	}
+	return false
 }
 
 // verified reports whether the file at p exists and has the SHA-256 want.
@@ -182,7 +229,7 @@ func temp(dest, pattern string, r io.Reader, want string) (_ *os.File, err error
 
 // save writes r to dest only if its SHA-256 is want.
 func save(dest string, r io.Reader, want string) error {
-	f, err := temp(dest, ".*.part", r, want)
+	f, err := temp(dest, ".*"+partSuffix, r, want)
 	if err != nil {
 		return err
 	}
@@ -196,7 +243,7 @@ func save(dest string, r io.Reader, want string) error {
 // spool keeps a downloaded archive in a temp file, open for reading, once its
 // SHA-256 is want. The caller closes and removes it.
 func spool(dest string, r io.Reader, want string) (*os.File, error) {
-	f, err := temp(dest, ".*.tgz.part", r, want)
+	f, err := temp(dest, ".*"+tgzPartSuffix, r, want)
 	if err != nil {
 		return nil, fmt.Errorf("archive: %w", err)
 	}

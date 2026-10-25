@@ -7,11 +7,15 @@ import (
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
+	"errors"
+	"fmt"
+	"io"
 	"io/fs"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	"slices"
 	"strconv"
 	"strings"
 	"sync"
@@ -108,6 +112,104 @@ func TestEnsureRejectsABadHashAndLeavesNoFile(t *testing.T) {
 	}
 	if !strings.Contains(err.Error(), a.name) {
 		t.Errorf("error %q does not name %s", err, a.name)
+	}
+	if got := files(t, dir); len(got) != 0 {
+		t.Errorf("dir holds %q, want nothing", got)
+	}
+}
+
+// touch writes a file at p, last modified age ago.
+func touch(t *testing.T, p string, age time.Duration) {
+	t.Helper()
+	if err := os.WriteFile(p, []byte("partial"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	when := time.Now().Add(-age)
+	if err := os.Chtimes(p, when, when); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestEnsureRemovesStaleTempFiles(t *testing.T) {
+	body := []byte("model weights")
+	srv, _ := serve(t, map[string][]byte{"/model.bin": body})
+	dir := t.TempDir()
+	if err := os.MkdirAll(filepath.Join(dir, "m"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	for _, n := range []string{"model.bin.123.part", "model.bin.456.tgz.part"} {
+		touch(t, filepath.Join(dir, "m", n), 2*time.Hour)
+	}
+	// A fresh temp file may be another process's download in flight.
+	touch(t, filepath.Join(dir, "m", "model.bin.789.part"), time.Minute)
+	// Stale, but not the names this package gives its temp files.
+	others := []string{"model.bin.part", "model.bin.12a.part", "other.123.part"}
+	for _, n := range others {
+		touch(t, filepath.Join(dir, "m", n), 2*time.Hour)
+	}
+	a := asset{name: "m/model.bin", url: srv.URL + "/model.bin", sha256: sum(body)}
+	if err := ensure(context.Background(), dir, []asset{a}, nil); err != nil {
+		t.Fatal(err)
+	}
+	want := []string{"m/model.bin", "m/model.bin.789.part"}
+	for _, n := range others {
+		want = append(want, "m/"+n)
+	}
+	slices.Sort(want)
+	if got := files(t, dir); !slices.Equal(got, want) {
+		t.Errorf("dir holds %q, want %q", got, want)
+	}
+}
+
+func TestEnsureCancelledMidTransferLeavesNoFile(t *testing.T) {
+	body := bytes.Repeat([]byte("x"), 1000)
+	done := make(chan struct{})
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Length", strconv.Itoa(len(body)))
+		w.Write(body[:500])
+		w.(http.Flusher).Flush()
+		select {
+		case <-r.Context().Done():
+		case <-done:
+		}
+	}))
+	t.Cleanup(srv.Close)
+	t.Cleanup(func() { close(done) })
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	dir := t.TempDir()
+	a := asset{name: "m/model.bin", url: srv.URL + "/model.bin", sha256: sum(body)}
+	err := ensure(ctx, dir, []asset{a}, func(m string) {
+		if strings.Contains(m, "%") { // the first half has arrived
+			cancel()
+		}
+	})
+	if !errors.Is(err, context.Canceled) {
+		t.Fatalf("err = %v, want context.Canceled", err)
+	}
+	if got := files(t, dir); len(got) != 0 {
+		t.Errorf("dir holds %q, want nothing", got)
+	}
+}
+
+func TestEnsureTruncatedBodyLeavesNoFile(t *testing.T) {
+	body := bytes.Repeat([]byte("x"), 1000)
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		conn, buf, err := w.(http.Hijacker).Hijack()
+		if err != nil {
+			return
+		}
+		defer conn.Close()
+		fmt.Fprintf(buf, "HTTP/1.1 200 OK\r\nContent-Length: %d\r\n\r\n", len(body))
+		buf.Write(body[:400])
+		buf.Flush()
+	}))
+	t.Cleanup(srv.Close)
+	dir := t.TempDir()
+	a := asset{name: "m/model.bin", url: srv.URL + "/model.bin", sha256: sum(body)}
+	err := ensure(context.Background(), dir, []asset{a}, nil)
+	if !errors.Is(err, io.ErrUnexpectedEOF) {
+		t.Fatalf("err = %v, want io.ErrUnexpectedEOF", err)
 	}
 	if got := files(t, dir); len(got) != 0 {
 		t.Errorf("dir holds %q, want nothing", got)
