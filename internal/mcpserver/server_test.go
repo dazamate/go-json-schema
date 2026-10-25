@@ -311,9 +311,23 @@ func TestEntitySchemaPromptPassesCountryAndLanguage(t *testing.T) {
 		t.Fatal(err)
 	}
 	text := res.Messages[0].Content.(*mcp.TextContent).Text
-	if !strings.Contains(text, `serp with keyword "plumber", country au and language en-GB`) || !strings.Contains(text, "select_entities with url") || !strings.Contains(text, "language en") {
+	if !strings.Contains(text, `serp with keyword "plumber", country au and language en-GB`) {
 		t.Fatalf("prompt = %s", text)
 	}
+	if step := selectStep(t, text); !strings.Contains(step, `select_entities with url "http://localhost:8080/p/", keyword "plumber" and language en.`) {
+		t.Errorf("select_entities step = %s", step)
+	}
+}
+
+// selectStep is the prompt's select_entities step.
+func selectStep(t *testing.T, text string) string {
+	t.Helper()
+	i := strings.Index(text, "3. Call select_entities")
+	if i < 0 {
+		t.Fatalf("no select_entities step: %s", text)
+	}
+	step, _, _ := strings.Cut(text[i:], "\n")
+	return step
 }
 
 func TestEntitySchemaPromptUsesLinkedEntitiesAndBoldTerms(t *testing.T) {
@@ -404,8 +418,10 @@ func TestEntitySchemaPromptCallsSelectEntities(t *testing.T) {
 		t.Fatal(err)
 	}
 	text := res.Messages[0].Content.(*mcp.TextContent).Text
-	if !strings.Contains(text, `select_entities with url "http://localhost:8080/p/", keyword "plumber"`) || !strings.Contains(text, "as given") {
-		t.Fatalf("prompt = %s", text)
+	// With no language given, select_entities uses the page's lang.
+	if step := selectStep(t, text); !strings.Contains(step, `select_entities with url "http://localhost:8080/p/" and keyword "plumber".`) ||
+		strings.Contains(step, "language") || !strings.Contains(step, "as given") {
+		t.Fatalf("select_entities step = %s", step)
 	}
 	if strings.Contains(text, "Choose 3-10 core entities") {
 		t.Fatalf("prompt still has the old about/mentions step: %s", text)

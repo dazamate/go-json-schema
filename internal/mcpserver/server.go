@@ -295,16 +295,23 @@ func addPrompts(s *mcp.Server) {
 		}
 		pageType := orDefault(a["page_type"], "WebPage")
 		country, lang := orDefault(a["country"], "us"), orDefault(a["language"], "en")
-		wiki, _, _ := strings.Cut(strings.ToLower(lang), "-")
+		pageURL := strings.TrimSpace(a["page_url"])
+		// select_entities defaults to the page's lang, so it gets a language
+		// only when one was given.
+		selectWith := fmt.Sprintf("url %q and keyword %q", pageURL, a["keyword"])
+		if asked := strings.TrimSpace(a["language"]); asked != "" {
+			wiki, _, _ := strings.Cut(strings.ToLower(asked), "-")
+			selectWith = fmt.Sprintf("url %q, keyword %q and language %s", pageURL, a["keyword"], wiki)
+		}
 		text := fmt.Sprintf(`Build over-the-top schema.org JSON-LD for a page targeting %q (main type %s, country %s, language %s).
 
 1. Call serp with keyword %[1]q, country %[3]s and language %[4]s (add near for a city when the page is local). Note People also ask questions for an FAQ, related searches as keywords, and bold_terms as the variants Google matches for the keyword.
 2. Call page_terms with each organic result's url, or its link where serp gave no url, in rank order, leaving out videos, forums and other junk. Favour terms whose rho is negative and significant: higher-ranked pages use them more. Its entities and topics show what competitors cover: use them for keywords and the page's copy, not for about or mentions.
-3. Call select_entities with url %[6]q, keyword %[1]q and language %[5]s. Put its about and mentions in the graph as given.
+3. Call select_entities with %[5]s. Put its about and mentions in the graph as given.
 4. Call type_properties for %[2]s and fill every property that fits: keywords, knowsAbout, alternateName, additionalType, disambiguatingDescription and the type's own properties. Use resolve_entities for other entity properties such as areaServed.
 5. Call build_jsonld with the draft, fix every error, and return the script tag.
 
-%[7]s`, a["keyword"], pageType, country, lang, wiki, strings.TrimSpace(a["page_url"]), guide)
+%[6]s`, a["keyword"], pageType, country, lang, selectWith, guide)
 		return &mcp.GetPromptResult{Messages: []*mcp.PromptMessage{{Role: "user", Content: &mcp.TextContent{Text: text}}}}, nil
 	})
 }
