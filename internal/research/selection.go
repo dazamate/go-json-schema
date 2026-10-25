@@ -34,19 +34,23 @@ const (
 	ReasonBelowTopic      = "below_topic"
 	ReasonBelowSimilarity = "below_similarity"
 	ReasonNotInPageText   = "not_in_page_text" // a mentions entity named only in the title
+	ReasonBelowConfidence = "below_confidence" // kept only by a link, which TextRazor was unsure of
 )
 
-// SelectSettings are the cutoffs select_entities applies, each 0 to 1.
+// SelectSettings are the cutoffs select_entities applies, each 0 to 1 except
+// MinLinkConfidence.
 type SelectSettings struct {
 	MinRelevance         float64 `json:"min_relevance"`          // lowest TextRazor relevance for a page entity
 	MinTopic             float64 `json:"min_topic"`              // lowest topic score for a page entity
 	MinKeywordSimilarity float64 `json:"min_keyword_similarity"` // lowest theme-to-keyword cosine
 	MinPageSimilarity    float64 `json:"min_page_similarity"`    // lowest theme-to-page cosine
+	MinLinkConfidence    float64 `json:"min_link_confidence"`    // lowest TextRazor confidence for the link path, 0 or more
 }
 
 // DefaultSelectSettings are our judgement, set by eye from one calibration
-// page, not from any Google source.
-var DefaultSelectSettings = SelectSettings{0.3, 0.5, 0.40, 0.55}
+// page, not from any Google source. The link confidence floor keeps out
+// mislinks such as "slate" read as Slate (magazine) at 1.08.
+var DefaultSelectSettings = SelectSettings{MinRelevance: 0.3, MinTopic: 0.5, MinKeywordSimilarity: 0.40, MinPageSimilarity: 0.55, MinLinkConfidence: 1.5}
 
 // SelectQuery is our page and its target keyword.
 type SelectQuery struct {
@@ -98,6 +102,7 @@ type Dropped struct {
 	Source            string   `json:"source"`
 	Relevance         *float64 `json:"relevance,omitempty"`
 	Topic             *float64 `json:"topic,omitempty"`
+	Confidence        *float64 `json:"confidence,omitempty"`
 	KeywordSimilarity *float64 `json:"keyword_similarity,omitempty"`
 	PageSimilarity    *float64 `json:"page_similarity,omitempty"`
 	Reason            string   `json:"reason"`
@@ -308,6 +313,9 @@ func (q SelectQuery) check() error {
 			return fmt.Errorf("%s is %v: want 0 to 1", v.name, v.v)
 		}
 	}
+	if !(s.MinLinkConfidence >= 0) {
+		return fmt.Errorf("min_link_confidence is %v: want 0 or more", s.MinLinkConfidence)
+	}
 	return nil
 }
 
@@ -476,12 +484,18 @@ func (s *selection) candidates(hits []lookupHit, grams []string) []*candidate {
 		if e.byScores {
 			by = append(by, "scores")
 		}
-		if len(e.links) > 0 {
+		// A link makes no relevance check, so the link path needs TextRazor
+		// to be sure of the entity: "slate" in a card linking to a pool table
+		// page was Slate (magazine) at confidence 1.08.
+		if len(e.links) > 0 && e.conf >= s.set.MinLinkConfidence {
 			by = append(by, "link")
 		}
 		if len(by) == 0 {
 			reason := ReasonBelowTopic
-			if e.rel < s.set.MinRelevance {
+			switch {
+			case len(e.links) > 0:
+				reason = ReasonBelowConfidence
+			case e.rel < s.set.MinRelevance:
 				reason = ReasonBelowRelevance
 			}
 			s.dropped = append(s.dropped, e.drop(reason))
@@ -512,7 +526,7 @@ func (s *selection) candidates(hits []lookupHit, grams []string) []*candidate {
 }
 
 func (e *pageEntity) drop(reason string) Dropped {
-	return Dropped{Name: e.title, QID: e.qid, Source: SourcePage, Relevance: f64(e.rel), Topic: f64(e.topic), Reason: reason}
+	return Dropped{Name: e.title, QID: e.qid, Source: SourcePage, Relevance: f64(e.rel), Topic: f64(e.topic), Confidence: f64(e.conf), Reason: reason}
 }
 
 func (e *pageEntity) selected(source string) Selected {

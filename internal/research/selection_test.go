@@ -250,6 +250,54 @@ func TestSelectEntitiesLinkToAnotherHostDoesNotCount(t *testing.T) {
 	}
 }
 
+// setConfidence sets the TextRazor confidence of every mention of qid.
+func (f *selectFixture) setConfidence(qid string, conf float64) {
+	for i := range f.ents {
+		if f.ents[i].WikidataID == qid {
+			f.ents[i].Confidence = conf
+		}
+	}
+}
+
+func TestSelectEntitiesLinkBelowConfidenceDropped(t *testing.T) {
+	f := newSelectFixture()
+	f.setConfidence("Q3", 1.08)
+	rep := runSelect(t, f.researcher(), selectQuery())
+	if got := selNames(rep.Mentions); !slices.Equal(got, []string{"Truck"}) {
+		t.Errorf("mentions = %v", got)
+	}
+	d, ok := findDropped(rep, "Billiard table")
+	if !ok || d.Reason != ReasonBelowConfidence || d.Source != SourcePage || num(d.Confidence) != 1.08 || num(d.Relevance) != 0.1 {
+		t.Errorf("C dropped = %+v", d)
+	}
+}
+
+func TestSelectEntitiesLinkAtConfidenceFloorKept(t *testing.T) {
+	f := newSelectFixture()
+	f.setConfidence("Q3", 1.5)
+	rep := runSelect(t, f.researcher(), selectQuery())
+	i := slices.IndexFunc(rep.Mentions, func(s Selected) bool { return s.Name == "Billiard table" })
+	if i < 0 || !slices.Equal(rep.Mentions[i].QualifiedBy, []string{"link"}) || num(rep.Mentions[i].Confidence) != 1.5 {
+		t.Errorf("mentions = %+v", rep.Mentions)
+	}
+}
+
+// A link from an entity TextRazor is unsure of does not qualify it, but the
+// entity's scores still do, and the link is still listed.
+func TestSelectEntitiesLowConfidenceLinkNotAQualifier(t *testing.T) {
+	f := newSelectFixture()
+	f.raw.Links = append(f.raw.Links, pageLink{Href: "https://a.example/trucks/", Text: "Truck hire"})
+	f.setConfidence("Q2", 1)
+	rep := runSelect(t, f.researcher(), selectQuery())
+	i := slices.IndexFunc(rep.Mentions, func(s Selected) bool { return s.Name == "Truck" })
+	if i < 0 {
+		t.Fatalf("mentions = %v", selNames(rep.Mentions))
+	}
+	if b := rep.Mentions[i]; !slices.Equal(b.QualifiedBy, []string{"scores"}) || !slices.Equal(b.LinkedTo, []string{"https://a.example/trucks/"}) {
+		t.Errorf("B qualified_by %v, linked_to %v", b.QualifiedBy, b.LinkedTo)
+	}
+}
+
 func TestSelectEntitiesOwnHostForms(t *testing.T) {
 	f := newSelectFixture()
 	f.moved = map[string]string{"http://a.example/p": "https://www.a.example/p/"}
@@ -413,6 +461,9 @@ func TestSelectEntitiesRejectsBadQueries(t *testing.T) {
 			q.Settings.MinPageSimilarity = -0.1
 		},
 		"min_relevance is NaN": func(q *SelectQuery) { q.Settings.MinRelevance = math.NaN() },
+		"min_link_confidence is -1: want 0 or more": func(q *SelectQuery) {
+			q.Settings.MinLinkConfidence = -1
+		},
 	} {
 		query := selectQuery()
 		q(&query)
@@ -669,7 +720,7 @@ func TestSelectReportJSONKeys(t *testing.T) {
 			t.Errorf("%s is not a list: %v", k, m[k])
 		}
 	}
-	if s := m["settings"].(map[string]any); s["min_relevance"] != 0.3 || s["min_page_similarity"] != 0.55 {
+	if s := m["settings"].(map[string]any); s["min_relevance"] != 0.3 || s["min_page_similarity"] != 0.55 || s["min_link_confidence"] != 1.5 {
 		t.Errorf("settings = %v", s)
 	}
 }

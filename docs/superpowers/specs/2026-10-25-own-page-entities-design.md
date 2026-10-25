@@ -254,7 +254,7 @@ Azure AI Language limits that shape the design
 
 ## The tool
 
-`select_entities(url, keyword, language?, min_relevance?, min_topic?, min_keyword_similarity?, min_page_similarity?)`
+`select_entities(url, keyword, language?, min_relevance?, min_topic?, min_keyword_similarity?, min_page_similarity?, min_link_confidence?)`
 
 | Input | Default | Meaning |
 |---|---|---|
@@ -265,8 +265,9 @@ Azure AI Language limits that shape the design
 | `min_topic` | 0.5 | Lowest topic score for a page entity to qualify. |
 | `min_keyword_similarity` | 0.40 | Lowest similarity between a theme and the keyword. |
 | `min_page_similarity` | 0.55 | Lowest similarity between a theme and the page. |
+| `min_link_confidence` | 1.5 | Lowest TextRazor confidence (about 0.5 to 10, so 0 or more rather than 0 to 1) for a page entity to qualify through an own-site link. |
 
-The four numbers are our judgement, set by eye from the one calibration
+The five numbers are our judgement, set by eye from the one calibration
 page above, not from any Google source. The tool description and README
 must say so, and they need checking on a second page. Without a TextRazor
 key the tool fails with the same message `page_terms` gives
@@ -295,7 +296,15 @@ key the tool fails with the same message `page_terms` gives
      visible text contains a matched form as whole words, ignoring case.
 5. **Gate:** a page entity qualifies on one of two paths:
    - its scores: relevance ≥ `min_relevance` **and** topic score ≥ `min_topic`;
-   - an own-site link.
+   - an own-site link **and** confidence ≥ `min_link_confidence`. A link
+     makes no relevance check, so this floor keeps out TextRazor's unsure
+     links. Added after the calibration run: on the page as served without
+     its CSS, "Slate" in "Slate or wood", on a card linking to the pool
+     table page, was linked to Slate (magazine) at confidence 1.08 and
+     relevance 0.057. The link-only entities kept there were Billiard table
+     (1.93; 1.74 in the calibration fixture), Mobile home (2.19) and
+     Apartment (2.85). An entity whose link fails the floor but whose
+     scores pass is kept, without `link` in `qualified_by`.
 6. **Keyword entities** (see Keyword entities):
    - qualifying page entities whose Wikipedia title shares a word stem with
      the keyword;
@@ -468,9 +477,10 @@ owner's five families, and no others:
   about:    [ Selected ],
   mentions: [ Selected ],
   keyword_lookups: [ { phrase, result, title?, chosen? [], links? } ],
-  dropped:  [ { name, qid, source, relevance?, topic?, keyword_similarity?,
-                page_similarity?, reason } ],
-  settings: { min_relevance, min_topic, min_keyword_similarity, min_page_similarity },
+  dropped:  [ { name, qid, source, relevance?, topic?, confidence?,
+                keyword_similarity?, page_similarity?, reason } ],
+  settings: { min_relevance, min_topic, min_keyword_similarity, min_page_similarity,
+              min_link_confidence },
   textrazor: { units, cached },
   azure: { records, cached }?,
   model,
@@ -491,8 +501,10 @@ Selected = { name, qid, source, wikipedia, kgmid?, google_kg_id?,
 - `keyword_lookups` records each word or phrase looked up: `exact`,
   `missing`, `disambiguation` or `redirect`, with the options chosen and
   their link counts.
-- `reason` is `below_relevance`, `below_topic`, `below_similarity`,
-  `identity_mismatch` or `not_an_article`.
+- `reason` is `below_relevance`, `below_topic`, `below_confidence` (an
+  own-site link under `min_link_confidence` and scores under the cutoffs),
+  `below_similarity`, `not_in_page_text` (a would-be mention named only in
+  the title), `identity_mismatch` or `not_an_article`.
 - `model` names the embedding model that ran.
 - `note` explains a failed focus check, a cut text, or a missing model or
   key.

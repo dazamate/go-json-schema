@@ -324,7 +324,7 @@ research tools against the live web.
 
 ## Entity selection (`select_entities`)
 
-`select_entities(url, keyword, language?, min_relevance?, min_topic?, min_keyword_similarity?, min_page_similarity?)`
+`select_entities(url, keyword, language?, min_relevance?, min_topic?, min_keyword_similarity?, min_page_similarity?, min_link_confidence?)`
 reads your own page, `localhost` included, and chooses its `about` and
 `mentions`. The rules in brief (the full design is
 [the spec](docs/superpowers/specs/2026-10-25-own-page-entities-design.md)):
@@ -339,7 +339,10 @@ reads your own page, `localhost` included, and chooses its `about` and
 - Each entry has a `thing` node to use as given.
 
 **Defaults:** `min_relevance` 0.3, `min_topic` 0.5, `min_keyword_similarity`
-0.40 and `min_page_similarity` 0.55. These are our judgement, set by eye
+0.40, `min_page_similarity` 0.55 and `min_link_confidence` 1.5. The first
+four are 0 to 1. `min_link_confidence` is a TextRazor confidence (about 0.5
+to 10) that an entity kept only by a link to another page of your site must
+reach. These are our judgement, set by eye
 from one calibration page (the Lift My Boxes moving cost calculator page,
 keyword "moving cost calculator", 2026-10-25), not from any Google source.
 They still need checking on a second page. The calibration data is in

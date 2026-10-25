@@ -360,6 +360,19 @@ func TestSelectEntitiesToolRejectsACutoffAboveOne(t *testing.T) {
 	}
 }
 
+// min_link_confidence is a TextRazor confidence, so any number from 0 up passes.
+func TestSelectEntitiesToolLinkConfidenceCutoff(t *testing.T) {
+	cs := connect(t, &research.Researcher{})
+	out, isErr := callText(t, cs, "select_entities", map[string]any{"url": "http://localhost:8080/p/", "keyword": "plumber", "min_link_confidence": -1})
+	if !isErr || !strings.Contains(out, "min_link_confidence is -1: want 0 or more") {
+		t.Errorf("out = %s, isErr = %v, want a tool error naming min_link_confidence", out, isErr)
+	}
+	out, isErr = callText(t, cs, "select_entities", map[string]any{"url": "http://localhost:8080/p/", "keyword": "plumber", "min_link_confidence": 3})
+	if !isErr || !strings.Contains(out, "textrazor.api_key") {
+		t.Errorf("out = %s, isErr = %v, want min_link_confidence 3 to pass the check", out, isErr)
+	}
+}
+
 func TestSelectEntitiesToolDescriptionSaysTheDefaultsAreJudgement(t *testing.T) {
 	cs := connect(t, &research.Researcher{})
 	res, err := cs.ListTools(context.Background(), nil)

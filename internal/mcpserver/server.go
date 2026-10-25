@@ -159,6 +159,7 @@ type selectArgs struct {
 	MinTopic             *float64 `json:"min_topic,omitempty" jsonschema:"lowest topic score for a page entity, 0 to 1; default 0.5"`
 	MinKeywordSimilarity *float64 `json:"min_keyword_similarity,omitempty" jsonschema:"lowest similarity between a theme and the keyword, 0 to 1; default 0.40"`
 	MinPageSimilarity    *float64 `json:"min_page_similarity,omitempty" jsonschema:"lowest similarity between a theme and the page, 0 to 1; default 0.55"`
+	MinLinkConfidence    *float64 `json:"min_link_confidence,omitempty" jsonschema:"lowest TextRazor confidence (about 0.5 to 10) for an entity kept only by a link to another page of our site, 0 or more; default 1.5"`
 }
 
 // settings applies the cutoffs that were passed over the defaults.
@@ -167,7 +168,7 @@ func (a selectArgs) settings() research.SelectSettings {
 	for _, c := range []struct {
 		in  *float64
 		out *float64
-	}{{a.MinRelevance, &st.MinRelevance}, {a.MinTopic, &st.MinTopic}, {a.MinKeywordSimilarity, &st.MinKeywordSimilarity}, {a.MinPageSimilarity, &st.MinPageSimilarity}} {
+	}{{a.MinRelevance, &st.MinRelevance}, {a.MinTopic, &st.MinTopic}, {a.MinKeywordSimilarity, &st.MinKeywordSimilarity}, {a.MinPageSimilarity, &st.MinPageSimilarity}, {a.MinLinkConfidence, &st.MinLinkConfidence}} {
 		if c.in != nil {
 			*c.out = *c.in
 		}
@@ -220,7 +221,7 @@ func addResearchTools(s *mcp.Server, r *research.Researcher) {
 		Description: "Choose the about and mentions entities for OUR page and its target keyword. The page is read through the browser (localhost works), its title and text are linked to Wikipedia and Wikidata by TextRazor in context, and every entity is checked by its Wikidata item. " +
 			"about is the keyword's own entities (found on the page, and looked up as exact Wikipedia titles from the keyword's words and phrases) plus the page's themes, which the page may not name. mentions holds only entities the page names. There are no caps on either. " +
 			"Each entry comes with its ready schema.org thing node (Wikipedia, Wikidata and Google kgmid sameAs, Bing ID, alternateName from the words the page uses, additionalType): use it as given. dropped lists what was rejected and why, so a looser cutoff can be judged. " +
-			"The four defaults (min_relevance 0.3, min_topic 0.5, min_keyword_similarity 0.40, min_page_similarity 0.55) are our judgement, set by eye from one calibration page, not from any Google source; each is a number from 0 to 1. " +
+			"The defaults (min_relevance 0.3, min_topic 0.5, min_keyword_similarity 0.40, min_page_similarity 0.55, min_link_confidence 1.5) are our judgement, set by eye from one calibration page, not from any Google source; each is a number from 0 to 1, except min_link_confidence, a TextRazor confidence of 0 or more that an entity kept only by a link to another page of our site must reach. " +
 			"It needs a TextRazor key (textrazor.api_key; free plan: 500 requests a day) and fails without one. An Azure AI Language key (Bing IDs) and the local embedding model (themes; about 220 MB downloaded on first use) are optional, and note says which are missing and why. " +
 			"The page text goes to TextRazor and, when configured, Azure; Wikipedia and Wikidata calls go through the browser. Results are cached for a week by the text sent, but the page itself is always read fresh.",
 		Annotations: readOnly(true),
