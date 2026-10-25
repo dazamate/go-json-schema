@@ -367,8 +367,8 @@ func TestSelectEntitiesWithoutScorerHasNoThemes(t *testing.T) {
 	r := f.researcher()
 	r.Themes = &fakeScorer{err: errors.New("model failed to load")}
 	rep = runSelect(t, r, selectQuery())
-	if got := selNames(rep.About); !slices.Equal(got, []string{"Moving company"}) || !strings.Contains(rep.Note, "no themes: model failed to load") {
-		t.Errorf("score error: about %v, note %q", got, rep.Note)
+	if got := selNames(rep.About); !slices.Equal(got, []string{"Moving company"}) || !strings.Contains(rep.Note, "no themes: model failed to load") || rep.Model != "" {
+		t.Errorf("score error: about %v, note %q, model %q", got, rep.Note, rep.Model)
 	}
 }
 

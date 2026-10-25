@@ -286,9 +286,6 @@ func (r *Researcher) SelectEntities(ctx context.Context, q SelectQuery) (SelectR
 		c.Thing = entityThing(lang, c.Selected, c.classes)
 		rep.Mentions = append(rep.Mentions, c.Selected)
 	}
-	if r.Themes != nil {
-		rep.Model = r.Themes.Model()
-	}
 	rep.Note = strings.Join(notes, "; ")
 	return rep, nil
 }
@@ -576,7 +573,8 @@ func hasWords(text, phrase string) bool {
 
 // scoreThemes keeps the article themes whose labels are close to both the
 // keyword and the page, comparing the unrounded cosines; the rest go to
-// rep.Dropped. The note says why there are no themes, if so.
+// rep.Dropped. rep.Model is set only once scoring succeeded. The note says
+// why there are no themes, if so.
 func (r *Researcher) scoreThemes(ctx context.Context, keyword, page string, themes []*candidate, set SelectSettings, rep *SelectReport) ([]*candidate, string) {
 	if r.Themes == nil {
 		return nil, "no themes: no embedding model is set up"
@@ -596,6 +594,7 @@ func (r *Researcher) scoreThemes(ctx context.Context, keyword, page string, them
 	if err != nil {
 		return nil, "no themes: " + err.Error()
 	}
+	rep.Model = r.Themes.Model()
 	var kept []*candidate
 	for i, c := range themes {
 		c.KeywordSimilarity, c.PageSimilarity = f64(round3(kw[i])), f64(round3(pg[i]))
