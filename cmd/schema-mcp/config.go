@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"io/fs"
+	"net/url"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -15,7 +16,16 @@ import (
 // Config is the schema-mcp settings file: API keys for the outside APIs it
 // can call. See schema-mcp.yml.dist.
 type Config struct {
-	TextRazor TextRazorConfig `yaml:"textrazor"`
+	TextRazor     TextRazorConfig     `yaml:"textrazor"`
+	AzureLanguage AzureLanguageConfig `yaml:"azure_language"`
+}
+
+// AzureLanguageConfig enables Bing entity IDs in select_entities, through
+// Azure AI Language entity linking. Endpoint and APIKey are both set or both
+// empty.
+type AzureLanguageConfig struct {
+	Endpoint string `yaml:"endpoint"` // https URL of the Language resource
+	APIKey   string `yaml:"api_key"`
 }
 
 // TextRazorConfig enables entity linking in page_terms.
@@ -59,6 +69,16 @@ func loadConfig(path string, required bool) (Config, []string, error) {
 	}
 	if cfg.TextRazor.MaxKBPerPage < 0 {
 		return Config{}, nil, fmt.Errorf("%s: textrazor.max_kb_per_page is negative", path)
+	}
+	// The key is never put in these errors.
+	az := cfg.AzureLanguage
+	if (az.Endpoint == "") != (az.APIKey == "") {
+		return Config{}, nil, fmt.Errorf("%s: azure_language needs both endpoint and api_key, or neither", path)
+	}
+	if az.Endpoint != "" {
+		if u, err := url.Parse(az.Endpoint); err != nil || u.Scheme != "https" || u.Host == "" {
+			return Config{}, nil, fmt.Errorf("%s: azure_language.endpoint must be an https URL", path)
+		}
 	}
 	return cfg, warnings, nil
 }

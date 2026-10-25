@@ -30,6 +30,43 @@ func TestLoadConfigReadsTheTextRazorSettings(t *testing.T) {
 	}
 }
 
+func TestLoadConfigReadsTheAzureSettings(t *testing.T) {
+	path := writeConfig(t, "azure_language:\n  endpoint: https://x.cognitiveservices.azure.com/\n  api_key: k1\n", 0o600)
+	cfg, _, err := loadConfig(path, true)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if cfg.AzureLanguage.Endpoint != "https://x.cognitiveservices.azure.com/" || cfg.AzureLanguage.APIKey != "k1" {
+		t.Fatalf("config = %+v", cfg.AzureLanguage)
+	}
+}
+
+func TestLoadConfigRejectsHalfAnAzureSetting(t *testing.T) {
+	for name, body := range map[string]string{
+		"endpoint only": "azure_language:\n  endpoint: https://x.cognitiveservices.azure.com/\n",
+		"key only":      "azure_language:\n  api_key: secretazurekey\n",
+	} {
+		_, _, err := loadConfig(writeConfig(t, body, 0o600), true)
+		if err == nil || !strings.Contains(err.Error(), "azure_language") {
+			t.Fatalf("%s: err = %v, want azure_language named", name, err)
+		}
+		if strings.Contains(err.Error(), "secretazurekey") {
+			t.Fatalf("%s: error shows the key's value: %v", name, err)
+		}
+	}
+}
+
+func TestLoadConfigRejectsAPlainHTTPAzureEndpoint(t *testing.T) {
+	path := writeConfig(t, "azure_language:\n  endpoint: http://x.cognitiveservices.azure.com/\n  api_key: secretazurekey\n", 0o600)
+	_, _, err := loadConfig(path, true)
+	if err == nil || !strings.Contains(err.Error(), "azure_language") {
+		t.Fatalf("err = %v, want an error for http", err)
+	}
+	if strings.Contains(err.Error(), "secretazurekey") {
+		t.Fatalf("error shows the key's value: %v", err)
+	}
+}
+
 func TestLoadConfigRejectsUnknownKeys(t *testing.T) {
 	path := writeConfig(t, "textrazor:\n  apikey: abc123\n", 0o600)
 	_, _, err := loadConfig(path, true)

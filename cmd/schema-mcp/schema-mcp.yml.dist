@@ -16,3 +16,11 @@ textrazor:
   api_key: ""
   # Text sent per page, in KB. Default 30 (3 requests per page).
   max_kb_per_page: 30
+
+azure_language:
+  # Adds Bing entity IDs to select_entities through Azure AI Language entity
+  # linking. The free F0 tier exists. Entity linking retires on 1 September
+  # 2028. Only page text already fetched through ChromiumFish is sent.
+  # Leave both empty to skip Bing IDs; set both or neither.
+  endpoint: ""   # https://<resource>.cognitiveservices.azure.com/
+  api_key: ""
