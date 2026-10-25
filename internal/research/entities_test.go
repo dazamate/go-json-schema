@@ -53,9 +53,14 @@ func (w *fakeWiki) linksJSON(v url.Values) map[string]any {
 	type pair struct{ from, to string }
 	var order []string
 	var pairs []pair
+	var normalized, redirects []map[string]any
 	for _, t := range strings.Split(v.Get("titles"), "|") {
 		n := ucfirst(t)
+		if n != t {
+			normalized = append(normalized, map[string]any{"from": t, "to": n})
+		}
 		if r, ok := w.redirects[n]; ok && v.Get("redirects") == "1" {
+			redirects = append(redirects, map[string]any{"from": n, "to": r[0]})
 			n = r[0]
 		}
 		order = append(order, n)
@@ -84,7 +89,14 @@ func (w *fakeWiki) linksJSON(v url.Values) map[string]any {
 		}
 		pages = append(pages, pg)
 	}
-	out := map[string]any{"query": map[string]any{"pages": pages}}
+	q := map[string]any{"pages": pages}
+	if normalized != nil {
+		q["normalized"] = normalized
+	}
+	if redirects != nil {
+		q["redirects"] = redirects
+	}
+	out := map[string]any{"query": q}
 	if more {
 		out["continue"] = map[string]any{"plcontinue": strconv.Itoa(end), "continue": "||"}
 	}

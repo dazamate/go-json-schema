@@ -103,6 +103,35 @@ func TestLinkedMembersBothDirections(t *testing.T) {
 	}
 }
 
+func TestLinkedMembersRedirectedTitle(t *testing.T) {
+	w := &fakeWiki{
+		redirects:    map[string][2]string{"Forex": {"Foreign exchange market", ""}},
+		articleLinks: map[string][]string{"Foreign exchange market": {"Technical analysis"}},
+	}
+	got, err := kwResolver(t, w).linkedMembers([]string{"Forex"}, []string{"Technical analysis"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := map[string][]string{"Forex": {"Technical analysis"}}
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("linkedMembers = %v, want %v", got, want)
+	}
+}
+
+func TestLinkCountsRedirectedKnownTitle(t *testing.T) {
+	w := &fakeWiki{
+		redirects:    map[string][2]string{"K old": {"K1", ""}},
+		articleLinks: map[string][]string{"K1": {"A"}},
+	}
+	got, err := kwResolver(t, w).linkCounts([]string{"A"}, []string{"K old"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got["A"] != 1 {
+		t.Errorf("counts = %v, want A 1", got)
+	}
+}
+
 func TestLinkedMembersBatchesAndContinues(t *testing.T) {
 	w := &fakeWiki{articleLinks: map[string][]string{}, linksPerResponse: 1}
 	var titles []string

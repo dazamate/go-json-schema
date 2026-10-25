@@ -285,7 +285,8 @@ func (r *resolver) linkCounts(options, known []string) (map[string]int, error) {
 }
 
 // linkPairs returns every {from, to} link between a title in a and one in
-// b, in either direction: batched 50 by 50, following continue.
+// b, in either direction: batched 50 by 50, following continue. A from title
+// is the one the caller passed, not the redirect target it resolves to.
 func (r *resolver) linkPairs(a, b []string) (map[[2]string]bool, error) {
 	a, b = dedupe(a), dedupe(b)
 	pairs := map[[2]string]bool{}
@@ -315,9 +316,34 @@ func (r *resolver) linkPairs(a, b []string) (map[[2]string]bool, error) {
 		}
 		var next []url.Values
 		for i, resp := range resps {
+			// A page title may be a requested title normalised and redirected;
+			// credit every requested title that resolves to it.
+			asked := map[string][]string{}
+			for _, t := range strings.Split(pending[i].Get("titles"), "|") {
+				n := t
+				for _, norm := range resp.Query.Normalized {
+					if norm.From == n {
+						n = norm.To
+						break
+					}
+				}
+				for _, red := range resp.Query.Redirects {
+					if red.From == n {
+						n = red.To
+						break
+					}
+				}
+				asked[n] = append(asked[n], t)
+			}
 			for _, pg := range resp.Query.Pages {
+				from := asked[pg.Title]
+				if from == nil {
+					from = []string{pg.Title}
+				}
 				for _, l := range pg.Links {
-					pairs[[2]string{pg.Title, l.Title}] = true
+					for _, f := range from {
+						pairs[[2]string{f, l.Title}] = true
+					}
 				}
 			}
 			if len(resp.Continue) > 0 {
