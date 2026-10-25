@@ -374,6 +374,29 @@ func TestEntitySchemaPromptRequiresPageURL(t *testing.T) {
 	}
 }
 
+func TestEntitySchemaPromptDeclaresPageURL(t *testing.T) {
+	cs := connect(t, nil)
+	res, err := cs.ListPrompts(context.Background(), nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, p := range res.Prompts {
+		if p.Name != "entity_schema" {
+			continue
+		}
+		for _, a := range p.Arguments {
+			if a.Name == "page_url" {
+				if !a.Required {
+					t.Errorf("page_url is not required: %+v", a)
+				}
+				return
+			}
+		}
+		t.Fatalf("entity_schema does not declare page_url: %+v", p.Arguments)
+	}
+	t.Fatal("no entity_schema prompt")
+}
+
 func TestEntitySchemaPromptCallsSelectEntities(t *testing.T) {
 	cs := connect(t, nil)
 	res, err := cs.GetPrompt(context.Background(), &mcp.GetPromptParams{Name: "entity_schema", Arguments: map[string]string{"keyword": "plumber", "page_url": "http://localhost:8080/p/"}})

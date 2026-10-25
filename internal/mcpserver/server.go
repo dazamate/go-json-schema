@@ -280,6 +280,7 @@ func addPrompts(s *mcp.Server) {
 		Description: "Research a keyword and build entity-stuffed JSON-LD for a page targeting it.",
 		Arguments: []*mcp.PromptArgument{
 			{Name: "keyword", Description: "the page's target keyword", Required: true},
+			{Name: "page_url", Description: "our page's URL (localhost works); select_entities reads it for about and mentions", Required: true},
 			{Name: "page_type", Description: "main schema.org type, e.g. Recipe, LocalBusiness, Article; default WebPage"},
 			{Name: "country", Description: "country to search from, a two-letter code such as us or au; default us"},
 			{Name: "language", Description: "language to search in, e.g. en or pt-BR; default en"},
