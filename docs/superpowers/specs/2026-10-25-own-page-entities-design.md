@@ -254,7 +254,7 @@ Azure AI Language limits that shape the design
 
 ## The tool
 
-`select_entities(url, keyword, language?, min_relevance?, min_topic?, min_keyword_similarity?, min_page_similarity?, min_link_confidence?)`
+`select_entities(url, keyword, language?, min_relevance?, min_topic?, min_keyword_similarity?, min_page_similarity?, min_link_confidence?, min_graph_similarity?, min_graph_links?, min_graph_links_ungated?, min_mention_graph_links?, max_graph_neighbours?)`
 
 | Input | Default | Meaning |
 |---|---|---|
@@ -266,8 +266,13 @@ Azure AI Language limits that shape the design
 | `min_keyword_similarity` | 0.40 | Lowest similarity between a theme and the keyword. |
 | `min_page_similarity` | 0.55 | Lowest similarity between a theme and the page. |
 | `min_link_confidence` | 1.5 | Lowest TextRazor confidence (about 0.5 to 10, so 0 or more rather than 0 to 1) for a page entity to qualify through an own-site link. |
+| `min_graph_similarity` | 0.40 | Lowest similarity between a linked article and the keyword, 0 to 1, for an article the page does not name. |
+| `min_graph_links` | 3 | Links into the graph a page entity that qualifies on its own (relevance, topic score or own-site link) needs to join `about`. 1 or more. |
+| `min_graph_links_ungated` | 10 | Links into the graph a page entity that does not qualify on its own needs to join `about`; also the count a keyword lookup hit TextRazor did not link must reach. 1 or more. |
+| `min_mention_graph_links` | 2 | Links into the graph a page entity that qualifies on its own needs to stay in `mentions`; it must also be named in the page's main text, or it is dropped as `not_in_page_text`. 0 or more. |
+| `max_graph_neighbours` | 30 | Most unnamed linked articles that join `about`. 0 or more; set by the owner. |
 
-The five numbers are our judgement, set by eye from the one calibration
+The defaults above are our judgement, set by eye from the one calibration
 page above, not from any Google source. The tool description and README
 must say so, and they need checking on a second page. Without a TextRazor
 key the tool fails with the same message `page_terms` gives
@@ -322,7 +327,20 @@ key the tool fails with the same message `page_terms` gives
    - `mentions`: every other qualifying page entity, by relevance, then
      topic score, then mention count, then name. This includes entities
      that qualified only through a link.
-10. **Build each entity's node** (below).
+10. **Graph** (see [the keyword graph design](2026-10-25-keyword-graph-design.md),
+    which holds the measurements). When the keyword has its own Wikipedia
+    article (the whole keyword, or a phrase of 2 or more of its words), build
+    the graph around it: the article, the articles linked to or from it, and
+    the page entities linked into it. `about` is then the centre articles, the
+    neighbours that are close to the keyword (`min_graph_similarity`) or named
+    on the page (at most `max_graph_neighbours` unnamed ones), and the page
+    entities with enough links into the graph: `min_graph_links` for one that
+    qualifies on its own (step 5), `min_graph_links_ungated` for one that
+    does not and for a keyword lookup hit TextRazor did not link.
+    `mentions` keeps only page entities that qualify on their own, are named
+    in the page text and have `min_mention_graph_links` links. With no article, or fewer than 3 kept
+    neighbours, steps 6, 7 and 9 stand and `note` says so.
+11. **Build each entity's node** (below).
 
 ### Keyword entities
 
@@ -478,9 +496,14 @@ owner's five families, and no others:
   mentions: [ Selected ],
   keyword_lookups: [ { phrase, result, title?, chosen? [], links? } ],
   dropped:  [ { name, qid, source, relevance?, topic?, confidence?,
-                keyword_similarity?, page_similarity?, reason } ],
+                keyword_similarity?, page_similarity?, graph_similarity?,
+                graph_links?, reason } ],
+  graph: { centres, out_links, in_links, in_links_cut, neighbours, kept,
+           cut, capped }?,
   settings: { min_relevance, min_topic, min_keyword_similarity, min_page_similarity,
-              min_link_confidence },
+              min_link_confidence, min_graph_similarity, min_graph_links,
+              min_graph_links_ungated, min_mention_graph_links,
+              max_graph_neighbours },
   textrazor: { units, cached },
   azure: { records, cached }?,
   model,
@@ -488,22 +511,31 @@ owner's five families, and no others:
 }
 Selected = { name, qid, source, wikipedia, kgmid?, google_kg_id?,
              kgmid_checked, bing_id?, bing_checked, relevance?, topic?,
-             confidence?, keyword_similarity?, page_similarity?, mentions?,
-             matched [], linked_to [], qualified_by, thing }
+             confidence?, keyword_similarity?, page_similarity?,
+             graph_similarity?, graph_links?, mentions?, matched [], linked_to [], qualified_by, thing }
 ```
 
-- `source` is `page`, `keyword` or `theme`.
+- `source` is `page`, `keyword`, `theme` or `graph`.
 - `qualified_by`:
   - for a page entity: `scores`, `link` or both, plus `keyword` when it is
     a keyword entity;
   - for a lookup: `exact`, `disambiguation` or `redirect`;
-  - for a theme: `similarity`.
+  - for a theme: `similarity`;
+  - for the graph: `centre` (the keyword's own article, after a page
+    entity's own qualifiers when TextRazor linked it), `out_link` and
+    `in_link` (a neighbour the centre links to, or that links to it) and
+    `named` (a neighbour the page names);
+  - `graph_links` is added to a page entity or lookup hit that joins
+    `about` or `mentions` by its links into the graph.
 - `keyword_lookups` records each word or phrase looked up: `exact`,
   `missing`, `disambiguation` or `redirect`, with the options chosen and
   their link counts.
 - `reason` is `below_relevance`, `below_topic`, `below_confidence` (an
   own-site link under `min_link_confidence` and scores under the cutoffs),
-  `below_similarity`, `not_in_page_text` (a would-be mention named only in
+  `below_similarity`, `off_graph` (a page entity with too few links into the
+  graph; it also applies to themes and keyword lookup hits),
+  `below_graph_similarity` (a linked article under
+  `min_graph_similarity`), `not_in_page_text` (a would-be mention named only in
   the title), `identity_mismatch` or `not_an_article`.
 - `model` names the embedding model that ran.
 - `note` explains a failed focus check, a cut text, or a missing model or

@@ -23,6 +23,7 @@ type KeywordLookup struct {
 	Title  string   `json:"title,omitempty"`
 	Chosen []string `json:"chosen,omitempty"` // options kept by their links to known entities
 	Links  int      `json:"links,omitempty"`  // the top link count
+	qid    string   // the Wikidata item of an exact or redirect result
 }
 
 // titleQID is an article and its Wikidata item.
@@ -178,11 +179,12 @@ func (r *resolver) keywordLookups(grams []string, known []titleQID) ([]KeywordLo
 			}))
 			owners = append(owners, i)
 		case l.redirected:
-			out[i].Result, out[i].Title = "redirect", l.page.Title
+			out[i].Result, out[i].Title, out[i].qid = "redirect", l.page.Title, l.page.PageProps["wikibase_item"]
 			options[i] = []option{{l.page.Title, l.page.PageProps["wikibase_item"]}}
 		default:
 			out[i].Result, out[i].Title = "exact", l.page.Title
 			qid := l.page.PageProps["wikibase_item"]
+			out[i].qid = qid
 			if qid != "" && !seen[qid] {
 				seen[qid] = true
 				hits = append(hits, lookupHit{Phrase: g, Title: l.page.Title, QID: qid, How: "exact"})
@@ -261,62 +263,102 @@ func (r *resolver) keywordLookups(grams []string, known []titleQID) ([]KeywordLo
 // the known titles' links to it.
 func (r *resolver) linkCounts(options, known []string) (map[string]int, error) {
 	options, known = dedupe(options), dedupe(known)
+	pairs, err := r.linkPairs(options, known)
+	if err != nil {
+		return nil, err
+	}
+	isOption, isKnown := map[string]bool{}, map[string]bool{}
 	counts := map[string]int{}
-	isOption := map[string]bool{}
 	for _, o := range options {
 		counts[o], isOption[o] = 0, true
 	}
-	type req struct {
-		params  url.Values
-		reverse bool // the known titles are the sources
+	for _, k := range known {
+		isKnown[k] = true
 	}
-	var pending []req
-	query := func(from, to []string, reverse bool) {
-		pending = append(pending, req{url.Values{
+	for p := range pairs {
+		if isOption[p[0]] && isKnown[p[1]] {
+			counts[p[0]]++
+		}
+		if isOption[p[1]] && isKnown[p[0]] {
+			counts[p[1]]++
+		}
+	}
+	return counts, nil
+}
+
+// linkPairs returns every {from, to} link between a title in a and one in
+// b, in either direction: batched 50 by 50, following continue. A from title
+// is the one the caller passed, not the redirect target it resolves to.
+func (r *resolver) linkPairs(a, b []string) (map[[2]string]bool, error) {
+	a, b = dedupe(a), dedupe(b)
+	pairs := map[[2]string]bool{}
+	var pending []url.Values
+	query := func(from, to []string) {
+		pending = append(pending, url.Values{
 			"action": {"query"}, "prop": {"links"}, "titles": {strings.Join(from, "|")},
 			"pltitles": {strings.Join(to, "|")}, "pllimit": {"max"}, "redirects": {"1"},
-		}, reverse})
+		})
 	}
-	for i := 0; i < len(options); i += batchSize {
-		ob := options[i:min(i+batchSize, len(options))]
-		for j := 0; j < len(known); j += batchSize {
-			kb := known[j:min(j+batchSize, len(known))]
-			query(ob, kb, false)
-			query(kb, ob, true)
+	for i := 0; i < len(a); i += batchSize {
+		ab := a[i:min(i+batchSize, len(a))]
+		for j := 0; j < len(b); j += batchSize {
+			bb := b[j:min(j+batchSize, len(b))]
+			query(ab, bb)
+			query(bb, ab)
 		}
 	}
 	for len(pending) > 0 {
 		urls := make([]string, len(pending))
-		for i, q := range pending {
-			urls[i] = r.wikiAPI(cloneValues(q.params))
+		for i, p := range pending {
+			urls[i] = r.wikiAPI(cloneValues(p))
 		}
 		resps := make([]wikiResp, len(urls))
 		if err := r.fetch(urls, ptrs(resps)); err != nil {
 			return nil, err
 		}
-		var next []req
+		var next []url.Values
 		for i, resp := range resps {
+			// A page title may be a requested title normalised and redirected;
+			// credit every requested title that resolves to it.
+			asked := map[string][]string{}
+			for _, t := range strings.Split(pending[i].Get("titles"), "|") {
+				n := t
+				for _, norm := range resp.Query.Normalized {
+					if norm.From == n {
+						n = norm.To
+						break
+					}
+				}
+				for _, red := range resp.Query.Redirects {
+					if red.From == n {
+						n = red.To
+						break
+					}
+				}
+				asked[n] = append(asked[n], t)
+			}
 			for _, pg := range resp.Query.Pages {
+				from := asked[pg.Title]
+				if from == nil {
+					from = []string{pg.Title}
+				}
 				for _, l := range pg.Links {
-					switch {
-					case pending[i].reverse && isOption[l.Title]:
-						counts[l.Title]++
-					case !pending[i].reverse && isOption[pg.Title]:
-						counts[pg.Title]++
+					for _, f := range from {
+						pairs[[2]string{f, l.Title}] = true
 					}
 				}
 			}
 			if len(resp.Continue) > 0 {
-				p := cloneValues(pending[i].params)
+				p := cloneValues(pending[i])
 				for k, v := range resp.Continue {
 					p.Set(k, v)
 				}
-				next = append(next, req{p, pending[i].reverse})
+				next = append(next, p)
 			}
 		}
 		pending = next
 	}
-	return counts, nil
+	return pairs, nil
 }
 
 func cloneValues(v url.Values) url.Values {

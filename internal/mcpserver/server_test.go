@@ -373,6 +373,32 @@ func TestSelectEntitiesToolLinkConfidenceCutoff(t *testing.T) {
 	}
 }
 
+// The graph settings are integers with their own ranges: a neighbour cap may
+// be 0, a link count may not.
+func TestSelectEntitiesToolGraphSettings(t *testing.T) {
+	cs := connect(t, &research.Researcher{})
+	for _, c := range []struct {
+		arg  string
+		val  int
+		want string
+	}{
+		{"max_graph_neighbours", -1, "max_graph_neighbours is -1: want 0 or more"},
+		{"min_graph_links", 0, "min_graph_links is 0: want 1 or more"},
+	} {
+		out, isErr := callText(t, cs, "select_entities", map[string]any{"url": "http://localhost:8080/p/", "keyword": "plumber", c.arg: c.val})
+		if !isErr || !strings.Contains(out, c.want) {
+			t.Errorf("%s: out = %s, isErr = %v, want a tool error containing %q", c.arg, out, isErr, c.want)
+		}
+	}
+	// 0 passes for these two, so the call gets as far as the missing key.
+	for _, arg := range []string{"min_mention_graph_links", "max_graph_neighbours"} {
+		out, isErr := callText(t, cs, "select_entities", map[string]any{"url": "http://localhost:8080/p/", "keyword": "plumber", arg: 0})
+		if !isErr || !strings.Contains(out, "textrazor.api_key") {
+			t.Errorf("%s: out = %s, isErr = %v, want 0 to pass the check", arg, out, isErr)
+		}
+	}
+}
+
 func TestSelectEntitiesToolDescriptionSaysTheDefaultsAreJudgement(t *testing.T) {
 	cs := connect(t, &research.Researcher{})
 	res, err := cs.ListTools(context.Background(), nil)
@@ -383,7 +409,7 @@ func TestSelectEntitiesToolDescriptionSaysTheDefaultsAreJudgement(t *testing.T) 
 		if tool.Name != "select_entities" {
 			continue
 		}
-		for _, want := range []string{"our judgement", "one calibration page"} {
+		for _, want := range []string{"our judgement", "two calibration pages"} {
 			if !strings.Contains(tool.Description, want) {
 				t.Errorf("description does not contain %q", want)
 			}

@@ -28,8 +28,9 @@ func TestRecordSelectFixtures(t *testing.T) {
 	defer cancel()
 	b := browser.New("go-json-schema-record")
 	defer b.Close()
-	rec := &wikiRecorder{t: t, b: b, raw: calibrationPage(t, calibrationURL), fx: wikiFixture{
-		Items: map[string]json.RawMessage{}, Links: map[string][]string{}, Options: map[string][]string{},
+	raw := calibrationPage(t, calibrationURL)
+	rec := &wikiRecorder{t: t, b: b, raw: &raw, fx: wikiFixture{
+		Items: map[string]json.RawMessage{}, Links: map[string][]string{}, LinksHere: map[string][]string{}, Options: map[string][]string{},
 		Pages: map[string]fixturePage{}, Redirects: map[string]string{},
 	}}
 	rep, err := calibrationResearcher(t, rec).SelectEntities(ctx, calibrationQuery())
@@ -58,13 +59,15 @@ func TestRecordSelectFixtures(t *testing.T) {
 }
 
 // wikiRecorder is the real browser, except that our page is answered from
-// the fixtures without loading it. It takes every fetchJS call apart into
-// the wiki.json maps.
+// the fixtures without loading it, when raw is set. With a nil raw the page
+// is loaded and read for real, and saved in page. It takes every fetchJS call
+// apart into the wiki.json maps.
 type wikiRecorder struct {
-	t   *testing.T
-	b   Browser
-	raw rawPage
-	fx  wikiFixture
+	t    *testing.T
+	b    Browser
+	raw  *rawPage
+	page rawPage // the page pageJS read, when raw is nil
+	fx   wikiFixture
 }
 
 func (r *wikiRecorder) Use(ctx context.Context, fn func(browser.Page) error) error {
@@ -77,7 +80,7 @@ type recordPage struct {
 }
 
 func (p recordPage) Navigate(ctx context.Context, u string) (string, error) {
-	if u == calibrationURL {
+	if u == calibrationURL && p.r.raw != nil {
 		return u, nil
 	}
 	return p.p.Navigate(ctx, u)
@@ -85,7 +88,13 @@ func (p recordPage) Navigate(ctx context.Context, u string) (string, error) {
 
 func (p recordPage) Eval(ctx context.Context, expr string, out any) error {
 	if expr == pageJS {
-		raw := p.r.raw
+		if p.r.raw == nil {
+			if err := p.p.Eval(ctx, expr, &p.r.page); err != nil {
+				return err
+			}
+			return roundTrip(p.r.page, out)
+		}
+		raw := *p.r.raw
 		raw.Href = calibrationURL
 		return roundTrip(raw, out)
 	}
@@ -167,6 +176,12 @@ func (r *wikiRecorder) add(raw, body string) {
 				addUnique(r.fx.Links, pg.Title, l.Title)
 			}
 		}
+	case v.Get("prop") == "linkshere":
+		for _, pg := range resp.Query.Pages {
+			for _, l := range pg.LinksHere {
+				addUnique(r.fx.LinksHere, pg.Title, l.Title)
+			}
+		}
 	case v.Get("generator") == "links":
 		for _, pg := range resp.Query.Pages {
 			r.addPage(pg)
@@ -231,9 +246,12 @@ func (it recordedItem) trim(wiki string) recordedItem {
 // never loses its QID.
 func (r *wikiRecorder) addPage(pg wikiRespPage) {
 	old := r.fx.Pages[pg.Title]
-	p := fixturePage{QID: pg.PageProps["wikibase_item"], Disambig: pg.disambiguation(), Missing: pg.Missing || pg.Invalid}
+	p := fixturePage{Desc: pg.Description, QID: pg.PageProps["wikibase_item"], Disambig: pg.disambiguation(), Missing: pg.Missing || pg.Invalid}
 	if p.QID == "" {
 		p.QID = old.QID
+	}
+	if p.Desc == "" {
+		p.Desc = old.Desc
 	}
 	p.Disambig = p.Disambig || old.Disambig
 	r.fx.Pages[pg.Title] = p

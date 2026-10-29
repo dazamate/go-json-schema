@@ -160,6 +160,11 @@ type selectArgs struct {
 	MinKeywordSimilarity *float64 `json:"min_keyword_similarity,omitempty" jsonschema:"lowest similarity between a theme and the keyword, 0 to 1; default 0.40"`
 	MinPageSimilarity    *float64 `json:"min_page_similarity,omitempty" jsonschema:"lowest similarity between a theme and the page, 0 to 1; default 0.55"`
 	MinLinkConfidence    *float64 `json:"min_link_confidence,omitempty" jsonschema:"lowest TextRazor confidence (about 0.5 to 10) for an entity kept only by a link to another page of our site, 0 or more; default 1.5"`
+	MinGraphSimilarity   *float64 `json:"min_graph_similarity,omitempty" jsonschema:"lowest similarity between a linked Wikipedia article and the keyword, 0 to 1, for an article the page does not name; default 0.40"`
+	MinGraphLinks        *int     `json:"min_graph_links,omitempty" jsonschema:"links into the graph a page entity that qualifies on its own (relevance, topic score or own-site link) needs to join about, 1 or more; default 3"`
+	MinGraphLinksUngated *int     `json:"min_graph_links_ungated,omitempty" jsonschema:"links into the graph a page entity that does not qualify on its own, or a keyword lookup hit TextRazor did not link, needs to join about, 1 or more; default 10"`
+	MinMentionGraphLinks *int     `json:"min_mention_graph_links,omitempty" jsonschema:"links into the graph a page entity that qualifies on its own needs to stay in mentions (it must also be named in the page text), 0 or more; default 2"`
+	MaxGraphNeighbours   *int     `json:"max_graph_neighbours,omitempty" jsonschema:"most linked articles the page does not name that join about, 0 or more; default 30"`
 }
 
 // settings applies the cutoffs that were passed over the defaults.
@@ -168,7 +173,15 @@ func (a selectArgs) settings() research.SelectSettings {
 	for _, c := range []struct {
 		in  *float64
 		out *float64
-	}{{a.MinRelevance, &st.MinRelevance}, {a.MinTopic, &st.MinTopic}, {a.MinKeywordSimilarity, &st.MinKeywordSimilarity}, {a.MinPageSimilarity, &st.MinPageSimilarity}, {a.MinLinkConfidence, &st.MinLinkConfidence}} {
+	}{{a.MinRelevance, &st.MinRelevance}, {a.MinTopic, &st.MinTopic}, {a.MinKeywordSimilarity, &st.MinKeywordSimilarity}, {a.MinPageSimilarity, &st.MinPageSimilarity}, {a.MinLinkConfidence, &st.MinLinkConfidence}, {a.MinGraphSimilarity, &st.MinGraphSimilarity}} {
+		if c.in != nil {
+			*c.out = *c.in
+		}
+	}
+	for _, c := range []struct {
+		in  *int
+		out *int
+	}{{a.MinGraphLinks, &st.MinGraphLinks}, {a.MinGraphLinksUngated, &st.MinGraphLinksUngated}, {a.MinMentionGraphLinks, &st.MinMentionGraphLinks}, {a.MaxGraphNeighbours, &st.MaxGraphNeighbours}} {
 		if c.in != nil {
 			*c.out = *c.in
 		}
@@ -220,10 +233,11 @@ func addResearchTools(s *mcp.Server, r *research.Researcher) {
 		OutputSchema: outputSchema[research.SelectReport](),
 		Description: "Choose the about and mentions entities for OUR page and its target keyword. The page is read through the browser (localhost works), its title and text are linked to Wikipedia and Wikidata by TextRazor in context, and every entity is checked by its Wikidata item. " +
 			"about is the keyword's own entities (found on the page, and looked up as exact Wikipedia titles from the keyword's words and phrases) plus the page's themes, which the page may not name. mentions holds only entities the page names. There are no caps on either. " +
+			"When the keyword has its own Wikipedia article (the whole keyword, or a phrase of 2 or more of its words), about is instead that article, the articles linked to or from it that are close to the keyword or named on the page (at most max_graph_neighbours unnamed ones), and the page entities well linked into that graph; mentions then holds only page entities linked into it, and graph reports its size. " +
 			"Each entry comes with its ready schema.org thing node (Wikipedia, Wikidata and Google kgmid sameAs, Bing ID, alternateName from the words the page uses, additionalType): use it as given. dropped lists what was rejected and why, so a looser cutoff can be judged. " +
-			"The defaults (min_relevance 0.3, min_topic 0.5, min_keyword_similarity 0.40, min_page_similarity 0.55, min_link_confidence 1.5) are our judgement, set by eye from one calibration page, not from any Google source; each is a number from 0 to 1, except min_link_confidence, a TextRazor confidence of 0 or more that an entity kept only by a link to another page of our site must reach. " +
-			"It needs a TextRazor key (textrazor.api_key; free plan: 500 requests a day) and fails without one. An Azure AI Language key (Bing IDs) and the local embedding model (themes; about 220 MB downloaded on first use) are optional, and note says which are missing and why. " +
-			"The page text goes to TextRazor and, when configured, Azure; Wikipedia and Wikidata calls go through the browser. Results are cached for a week by the text sent, but the page itself is always read fresh.",
+			"The defaults (min_relevance 0.3, min_topic 0.5, min_keyword_similarity 0.40, min_page_similarity 0.55, min_link_confidence 1.5, min_graph_similarity 0.40, min_graph_links 3, min_graph_links_ungated 10, min_mention_graph_links 2, max_graph_neighbours 30) are our judgement, set by eye from two calibration pages (the moving page for the base settings, the forex page for the five graph settings), not from any Google source (the cap was set by the owner); each similarity is a number from 0 to 1, except min_link_confidence, a TextRazor confidence of 0 or more that an entity kept only by a link to another page of our site must reach. min_graph_links and min_graph_links_ungated are whole numbers of 1 or more, and min_mention_graph_links and max_graph_neighbours are whole numbers of 0 or more. A page entity that qualifies on its own needs min_graph_links links to join about; one that does not, and a keyword lookup hit TextRazor did not link, needs min_graph_links_ungated. " +
+			"It needs a TextRazor key (textrazor.api_key; free plan: 500 requests a day) and fails without one. An Azure AI Language key (Bing IDs) and the local embedding model (it scores the page's themes and the graph's neighbours; without it the graph keeps only the neighbours the page names; about 220 MB downloaded on first use) are optional, and note says which are missing and why. " +
+			"The page text goes to TextRazor and, when configured, Azure; Wikipedia and Wikidata calls go through the browser. Results are cached for a week by the text sent, and the graph neighbourhood of a keyword article for 30 days, but the page itself is always read fresh.",
 		Annotations: readOnly(true),
 	}, func(ctx context.Context, req *mcp.CallToolRequest, in selectArgs) (*mcp.CallToolResult, research.SelectReport, error) {
 		out, err := r.SelectEntities(withProgress(ctx, req), research.SelectQuery{URL: in.URL, Keyword: in.Keyword, Language: in.Language, Settings: in.settings()})

@@ -35,6 +35,8 @@ select_entities or resolve_entities returns, or leave them out.
 
 - **about** = "this IS about X": core subject entities plus URLs
 - **mentions** = "this talks about Y": supporting entities plus URLs
+- select_entities builds about from the keyword's own Wikipedia article when it has one: that article, the articles linked to or from it that are close to the keyword or named on the page, and the page entities well linked into that graph. With no article, or fewer than 3 kept neighbours, about is the keyword's entities and the page's themes, and note says so. mentions is then only page entities linked into the graph
+- To get more about entries, lower min_graph_similarity or min_graph_links, or raise max_graph_neighbours; for fewer, do the opposite. Read dropped (off_graph, below_graph_similarity) before changing them
 - **knowsAbout** = topical expertise (on Person, Organization and their subtypes; usable anywhere)
 - **keywords** = raw keyword list; may overlap knowsAbout
 

@@ -75,26 +75,28 @@ func calibrationPage(t *testing.T, base string) rawPage {
 // calibration run, by QID and title. Its fields are in key order, so the
 // file's keys are sorted.
 type wikiFixture struct {
-	Items     map[string]json.RawMessage `json:"items"`     // wbgetentities entity by QID, trimmed to what is read
-	Links     map[string][]string        `json:"links"`     // page -> pages it links to, among those asked about
-	Options   map[string][]string        `json:"options"`   // disambiguation page -> the pages it links to
-	Pages     map[string]fixturePage     `json:"pages"`     // title -> what a title lookup found
-	Redirects map[string]string          `json:"redirects"` // from -> to
+	Items     map[string]json.RawMessage `json:"items"`      // wbgetentities entity by QID, trimmed to what is read
+	Links     map[string][]string        `json:"links"`      // page -> pages it links to, among those asked about
+	LinksHere map[string][]string        `json:"links_here"` // page -> pages that link to it
+	Options   map[string][]string        `json:"options"`    // disambiguation page -> the pages it links to
+	Pages     map[string]fixturePage     `json:"pages"`      // title -> what a title lookup found
+	Redirects map[string]string          `json:"redirects"`  // from -> to
 }
 
 type fixturePage struct {
+	Desc     string `json:"desc,omitempty"` // Wikipedia's short description
 	Disambig bool   `json:"disambig,omitempty"`
 	Missing  bool   `json:"missing,omitempty"`
 	QID      string `json:"qid,omitempty"`
 }
 
-// loadWikiFixture builds a fake Wikipedia from wiki.json, skipping the test
-// until it is recorded.
-func loadWikiFixture(t *testing.T) *fakeWiki {
+// loadWikiFixture builds a fake Wikipedia from testdata/<dir>/wiki.json,
+// skipping the test until it is recorded.
+func loadWikiFixture(t *testing.T, dir string) *fakeWiki {
 	t.Helper()
-	b, err := os.ReadFile(selectFixturePath("wiki.json"))
+	b, err := os.ReadFile(filepath.Join("testdata", dir, "wiki.json"))
 	if errors.Is(err, fs.ErrNotExist) {
-		t.Skip("record wiki.json first: SCHEMA_MCP_RECORD=1 go test ./internal/research -run RecordSelect")
+		t.Skipf("record testdata/%s/wiki.json first: SCHEMA_MCP_RECORD=1 go test ./internal/research -run Record", dir)
 	}
 	if err != nil {
 		t.Fatal(err)
@@ -103,10 +105,10 @@ func loadWikiFixture(t *testing.T) *fakeWiki {
 	if err := json.Unmarshal(b, &fx); err != nil {
 		t.Fatal(err)
 	}
-	w := &fakeWiki{pages: map[string]wikiPage{}, redirects: map[string][2]string{}, rawItems: fx.Items, articleLinks: fx.Links}
+	w := &fakeWiki{pages: map[string]wikiPage{}, redirects: map[string][2]string{}, rawItems: fx.Items, articleLinks: fx.Links, linksHere: fx.LinksHere}
 	for title, p := range fx.Pages {
 		if !p.Missing {
-			w.pages[title] = wikiPage{qid: p.QID, disambig: p.Disambig, links: fx.Options[title]}
+			w.pages[title] = wikiPage{qid: p.QID, desc: p.Desc, disambig: p.Disambig, links: fx.Options[title]}
 		}
 	}
 	for from, to := range fx.Redirects {
@@ -167,7 +169,7 @@ func findSelected(sel []Selected, name string) Selected {
 // TestSelectEntitiesCalibration replays the spec's calibration run on the
 // moving cost calculator page from the recorded fixtures.
 func TestSelectEntitiesCalibration(t *testing.T) {
-	w := loadWikiFixture(t)
+	w := loadWikiFixture(t, "select")
 	raw := calibrationPage(t, calibrationURL)
 	rep := runSelect(t, calibrationResearcher(t, fakeBrowser{selectPage(w, raw, nil)}), calibrationQuery())
 	// A theme label missing from cosines.json fails the scoring, which the
@@ -181,6 +183,9 @@ func TestSelectEntitiesCalibration(t *testing.T) {
 		}
 	}()
 
+	if rep.Graph != nil || !strings.Contains(rep.Note, "no Wikipedia article for the keyword") {
+		t.Errorf("graph %+v, note %q", rep.Graph, rep.Note)
+	}
 	wantAbout := []string{"Calculator", "Moving company", "Cost", "Relocation (personal)", "Relocation service", "Transport",
 		"Freight transport", "Business economics", "Pricing", "Land transport", "Accounting"}
 	if got := selNames(rep.About); !slices.Equal(got, wantAbout) {

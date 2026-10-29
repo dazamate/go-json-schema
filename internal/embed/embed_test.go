@@ -125,3 +125,30 @@ func TestScoreRejectsAnEmptyPage(t *testing.T) {
 		t.Fatal("want an error for a page with no words")
 	}
 }
+
+func TestSimilarityUsesTheQueryInstruction(t *testing.T) {
+	enc := &fakeEnc{vecs: map[string][]float64{QueryInstruction + "price action": {1, 0}, "Doji: Common pattern": {0.6, 0.8}, "Gap": {0, 1}}}
+	s := &Scorer{Enc: enc}
+	got, err := s.Similarity(context.Background(), "price action", []string{"Doji: Common pattern", "Gap"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(got) != 2 || got[0] != 0.6 || got[1] != 0 {
+		t.Fatalf("similarity = %v, want [0.6 0]", got)
+	}
+	wantCalls := []string{QueryInstruction + "price action", "Doji: Common pattern", "Gap"}
+	if strings.Join(enc.calls, "|") != strings.Join(wantCalls, "|") {
+		t.Fatalf("encoder inputs %q, want %q", enc.calls, wantCalls)
+	}
+}
+
+func TestSimilarityOfNoTexts(t *testing.T) {
+	enc := &fakeEnc{}
+	got, err := (&Scorer{Enc: enc}).Similarity(context.Background(), "x", nil)
+	if err != nil || got != nil {
+		t.Fatalf("got %v, %v; want nil, nil", got, err)
+	}
+	if len(enc.calls) != 0 {
+		t.Fatalf("encoded %q, want nothing", enc.calls)
+	}
+}

@@ -1,0 +1,2904 @@
+{
+  "items": {
+    "Q1004322": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q1190554",
+                  "numeric-id": 1190554
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q1514415",
+                  "numeric-id": 1514415
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/0g_23"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q1004322",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Market trend"
+        }
+      }
+    },
+    "Q1064131": {
+      "claims": {
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q192581",
+                  "numeric-id": 192581
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q2670999",
+                  "numeric-id": 2670999
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/01h9n8"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q1064131",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Day trading"
+        }
+      }
+    },
+    "Q1067794": {
+      "claims": {
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q28923",
+                  "numeric-id": 28923
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/049z88"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q1067794",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Candlestick chart"
+        }
+      }
+    },
+    "Q1130194": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q11348",
+                  "numeric-id": 11348
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/03x7d4"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q1130194",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Moving average"
+        }
+      }
+    },
+    "Q116044962": {
+      "id": "Q116044962",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Candlestick pattern"
+        }
+      }
+    },
+    "Q11832699": {
+      "claims": {
+        "P2671": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/g/121m2scn"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/g/1q6j8vbd8"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q184783",
+                  "numeric-id": 184783
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q1207505",
+                  "numeric-id": 1207505
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q11832699",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Market liquidity"
+        }
+      }
+    },
+    "Q1196314": {
+      "claims": {
+        "P2671": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/g/11bc5kkhbk"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q169489",
+                  "numeric-id": 169489
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q421829",
+                  "numeric-id": 421829
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q116460050",
+                  "numeric-id": 116460050
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q557715",
+                  "numeric-id": 557715
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/077mq"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q1196314",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Stock"
+        }
+      }
+    },
+    "Q1295871": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q1424605",
+                  "numeric-id": 1424605
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q28640",
+                  "numeric-id": 28640
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/03byk35"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q1295871",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Floor trader"
+        }
+      }
+    },
+    "Q139445": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q1638254",
+                  "numeric-id": 1638254
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/07h5dh"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q139445",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Algorithmic trading"
+        }
+      }
+    },
+    "Q1424605": {
+      "claims": {
+        "P2671": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/g/1211r9qx"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/g/1211wzjk"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q215536",
+                  "numeric-id": 215536
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q3704253",
+                  "numeric-id": 3704253
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q28640",
+                  "numeric-id": 28640
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/0cncxk"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q1424605",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Trader (finance)"
+        }
+      }
+    },
+    "Q1430676": {
+      "claims": {
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q12812139",
+                  "numeric-id": 12812139
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/07jpqf"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q1430676",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Financial quote"
+        }
+      }
+    },
+    "Q1439154": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q107885",
+                  "numeric-id": 107885
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q2670999",
+                  "numeric-id": 2670999
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/058vf0"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q1439154",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Swing trading"
+        }
+      }
+    },
+    "Q1552218": {
+      "claims": {
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q101072",
+                  "numeric-id": 101072
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/02qk45"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q1552218",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Support and resistance"
+        }
+      }
+    },
+    "Q1574928": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q2670999",
+                  "numeric-id": 2670999
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/0ckkny"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q1574928",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Trading strategy"
+        }
+      }
+    },
+    "Q160117": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q43845",
+                  "numeric-id": 43845
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q28640",
+                  "numeric-id": 28640
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/02yxr8"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/011808st"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q160117",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Broker"
+        }
+      }
+    },
+    "Q17051812": {
+      "claims": {
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/0gx0rk1"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q17051812",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Price action trading"
+        }
+      }
+    },
+    "Q1779371": {
+      "claims": {
+        "P2671": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/g/1213_037"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q566889",
+                  "numeric-id": 566889
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/09qg1d"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q1779371",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Order (exchange)"
+        }
+      }
+    },
+    "Q223371": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q1167393",
+                  "numeric-id": 1167393
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q15809678",
+                  "numeric-id": 15809678
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q1020008",
+                  "numeric-id": 1020008
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q631360",
+                  "numeric-id": 631360
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/0crl0"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q223371",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Stock market index"
+        }
+      }
+    },
+    "Q235038": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q1363554",
+                  "numeric-id": 1363554
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/0spt1"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q235038",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Technical analysis"
+        }
+      }
+    },
+    "Q2738263": {
+      "claims": {
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q4456825",
+                  "numeric-id": 4456825
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/08tmn3"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q2738263",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Commodity channel index"
+        }
+      }
+    },
+    "Q321310": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q400707",
+                  "numeric-id": 400707
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q1574928",
+                  "numeric-id": 1574928
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/0fktm1"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q321310",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Scalping (trading)"
+        }
+      }
+    },
+    "Q3291840": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q5031997",
+                  "numeric-id": 5031997
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/05b2snq"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q3291840",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Doji"
+        }
+      }
+    },
+    "Q3503416": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q28923",
+                  "numeric-id": 28923
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/02pljf0"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q3503416",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Open-high-low-close chart"
+        }
+      }
+    },
+    "Q3880292": {
+      "claims": {
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/056w6k2"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q3880292",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Flag and pennant patterns"
+        }
+      }
+    },
+    "Q3998252": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q141155920",
+                  "numeric-id": 141155920
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/09yjwc"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q3998252",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Trend line (technical analysis)"
+        }
+      }
+    },
+    "Q4153227": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q4347105",
+                  "numeric-id": 4347105
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q109781815",
+                  "numeric-id": 109781815
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/065y4q2"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q4153227",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Gap (chart pattern)"
+        }
+      }
+    },
+    "Q4347105": {
+      "claims": {
+        "P2671": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/g/11b6ddx79t"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q2083958",
+                  "numeric-id": 2083958
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q2083958",
+                  "numeric-id": 2083958
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/05kpd_"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q4347105",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Chart pattern"
+        }
+      }
+    },
+    "Q4384938": {
+      "claims": {
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/03whtt4"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q4384938",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Head and shoulders (chart pattern)"
+        }
+      }
+    },
+    "Q4461049": {
+      "claims": {
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/04jg9bp"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q4461049",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Price channels"
+        }
+      }
+    },
+    "Q475000": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q750458",
+                  "numeric-id": 750458
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q16686448",
+                  "numeric-id": 16686448
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q8187769",
+                  "numeric-id": 8187769
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/0drqp"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q475000",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Stock market"
+        }
+      }
+    },
+    "Q4959649": {
+      "claims": {
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/051g2z"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q4959649",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Breakout (technical analysis)"
+        }
+      }
+    },
+    "Q4972167": {
+      "claims": {
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/065z_y6"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q4972167",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Broadening top"
+        }
+      }
+    },
+    "Q5300108": {
+      "claims": {
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/06w5rfm"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q5300108",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Double top and double bottom"
+        }
+      }
+    },
+    "Q5469520": {
+      "claims": {
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/0b6lh6h"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q5469520",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Forex signal"
+        }
+      }
+    },
+    "Q6130172": {
+      "claims": {
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/0506nw"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q6130172",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Slippage (finance)"
+        }
+      }
+    },
+    "Q66076": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q37654",
+                  "numeric-id": 37654
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/02_cz4"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q66076",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Foreign exchange market"
+        }
+      }
+    },
+    "Q756115": {
+      "claims": {
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q12453",
+                  "numeric-id": 12453
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/0ht7l"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q756115",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Volatility (finance)"
+        }
+      }
+    },
+    "Q7617902": {
+      "claims": {
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/0czbryf"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q7617902",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Stock market data systems"
+        }
+      }
+    },
+    "Q7840051": {
+      "claims": {
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/057pjpv"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q7840051",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Triangle (chart pattern)"
+        }
+      }
+    },
+    "Q7979169": {
+      "claims": {
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/053ht8q"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q7979169",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Wedge pattern"
+        }
+      }
+    },
+    "Q905615": {
+      "claims": {
+        "P279": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q15214544",
+                  "numeric-id": 15214544
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          },
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q183984",
+                  "numeric-id": 183984
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P31": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "wikibase-entityid",
+                "value": {
+                  "entity-type": "item",
+                  "id": "Q116460050",
+                  "numeric-id": 116460050
+                }
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ],
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/02ry12r"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q905615",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Stock market index future"
+        }
+      }
+    },
+    "Q913748": {
+      "claims": {
+        "P646": [
+          {
+            "mainsnak": {
+              "datavalue": {
+                "type": "string",
+                "value": "/m/0b75ns6"
+              },
+              "snaktype": "value"
+            },
+            "rank": "normal"
+          }
+        ]
+      },
+      "id": "Q913748",
+      "sitelinks": {
+        "enwiki": {
+          "site": "enwiki",
+          "title": "Volume (finance)"
+        }
+      }
+    }
+  },
+  "links": {
+    "Algorithmic trading": [
+      "Day trading",
+      "Foreign exchange market",
+      "Market trend",
+      "Scalping (trading)",
+      "Swing trading",
+      "Technical analysis",
+      "Trader (finance)",
+      "Broker",
+      "Stock",
+      "Stock market",
+      "Stock market index"
+    ],
+    "Bitcoin": [
+      "Volatility (finance)"
+    ],
+    "Breakout (technical analysis)": [
+      "Candlestick pattern",
+      "Market trend",
+      "Technical analysis"
+    ],
+    "Broadening top": [
+      "Candlestick pattern",
+      "Market trend",
+      "Technical analysis"
+    ],
+    "Broker": [
+      "Algorithmic trading",
+      "Floor trader",
+      "Market trend",
+      "Scalping (trading)",
+      "Slippage (finance)",
+      "Stock market index",
+      "Technical analysis",
+      "Trading strategy",
+      "Volatility (finance)"
+    ],
+    "Candlestick": [
+      "Candlestick pattern"
+    ],
+    "Candlestick chart": [
+      "Candle",
+      "Candlestick pattern",
+      "Foreign exchange market",
+      "Market trend",
+      "Technical analysis",
+      "Currency",
+      "Currency pair"
+    ],
+    "Candlestick pattern": [
+      "Breakout (technical analysis)",
+      "Broadening top",
+      "Candlestick chart",
+      "Chart pattern",
+      "Commodity channel index",
+      "Doji",
+      "Double top and double bottom",
+      "Flag and pennant patterns",
+      "Gap (chart pattern)",
+      "Head and shoulders (chart pattern)",
+      "Market trend",
+      "Moving average",
+      "Open-high-low-close chart",
+      "Price channels",
+      "Support and resistance",
+      "Technical analysis",
+      "Trend line (technical analysis)",
+      "Triangle (chart pattern)",
+      "Volatility (finance)",
+      "Volume (finance)",
+      "Wedge pattern",
+      "Currency"
+    ],
+    "Chart pattern": [
+      "Candlestick pattern",
+      "Market trend",
+      "Technical analysis"
+    ],
+    "Commodity": [
+      "Moving average"
+    ],
+    "Commodity channel index": [
+      "Candlestick pattern",
+      "Market trend",
+      "Technical analysis",
+      "Trader (finance)"
+    ],
+    "Currency pair": [
+      "Market liquidity",
+      "Volatility (finance)"
+    ],
+    "Day trading": [
+      "Price action trading",
+      "Algorithmic trading",
+      "Scalping (trading)",
+      "Technical analysis",
+      "Trading strategy",
+      "Volatility (finance)",
+      "Foreign exchange market",
+      "Investment management",
+      "Swing trading",
+      "Trader (finance)",
+      "United States dollar",
+      "Stock market"
+    ],
+    "Doji": [
+      "Candlestick pattern",
+      "Market trend",
+      "Technical analysis",
+      "Stock"
+    ],
+    "Double top and double bottom": [
+      "Candlestick pattern",
+      "Market trend",
+      "Technical analysis",
+      "Trader (finance)",
+      "Stock"
+    ],
+    "Economic bubble": [
+      "Market liquidity",
+      "Market trend",
+      "Technical analysis"
+    ],
+    "Financial quote": [
+      "Commodity"
+    ],
+    "Flag and pennant patterns": [
+      "Candlestick pattern",
+      "Foreign exchange market",
+      "Market trend",
+      "Real estate",
+      "Technical analysis",
+      "Stock",
+      "Stock market"
+    ],
+    "Floor trader": [
+      "Market trend",
+      "Scalping (trading)",
+      "Swing trading",
+      "Technical analysis",
+      "Trader (finance)",
+      "Broker",
+      "Stock",
+      "Stock market index"
+    ],
+    "Foreign exchange market": [
+      "Algorithmic trading",
+      "Market liquidity",
+      "Market trend",
+      "Technical analysis",
+      "Volume (finance)"
+    ],
+    "Forex signal": [
+      "Foreign exchange market",
+      "Scalping (trading)",
+      "Technical analysis",
+      "Trade idea",
+      "Currency pair"
+    ],
+    "Gap (chart pattern)": [
+      "Candlestick pattern",
+      "Market trend",
+      "Price",
+      "Technical analysis"
+    ],
+    "Head and shoulders (chart pattern)": [
+      "Candlestick pattern",
+      "Market trend",
+      "Technical analysis"
+    ],
+    "Investment management": [
+      "Stock market index"
+    ],
+    "Market liquidity": [
+      "Economic bubble",
+      "Market trend",
+      "Stock"
+    ],
+    "Market trend": [
+      "Algorithmic trading",
+      "Breakout (technical analysis)",
+      "Broadening top",
+      "Candlestick chart",
+      "Candlestick pattern",
+      "Chart pattern",
+      "Commodity channel index",
+      "Doji",
+      "Double top and double bottom",
+      "Flag and pennant patterns",
+      "Floor trader",
+      "Gap (chart pattern)",
+      "Head and shoulders (chart pattern)",
+      "Market liquidity",
+      "Moving average",
+      "Open-high-low-close chart",
+      "Price channels",
+      "Scalping (trading)",
+      "Slippage (finance)",
+      "Stock market index",
+      "Support and resistance",
+      "Technical analysis",
+      "Trading strategy",
+      "Trend line (technical analysis)",
+      "Triangle (chart pattern)",
+      "Volatility (finance)",
+      "Volume (finance)",
+      "Wedge pattern",
+      "Economic bubble",
+      "Swing trading",
+      "Trader (finance)",
+      "Broker",
+      "Stock",
+      "Stock market"
+    ],
+    "Money": [
+      "Market liquidity"
+    ],
+    "Moving average": [
+      "Candlestick pattern",
+      "Market trend",
+      "Quality control",
+      "Statistics",
+      "Technical analysis"
+    ],
+    "Open-high-low-close chart": [
+      "Candlestick pattern",
+      "Market trend",
+      "Technical analysis"
+    ],
+    "Order (exchange)": [
+      "Foreign exchange market",
+      "Trade",
+      "Broker",
+      "Stock market"
+    ],
+    "Price": [
+      "Trade"
+    ],
+    "Price action trading": [
+      "Algorithmic trading",
+      "Breakout (technical analysis)",
+      "Broadening top",
+      "Candlestick chart",
+      "Candlestick pattern",
+      "Chart patterns",
+      "Doji",
+      "Double top and double bottom",
+      "Extraordinary Popular Delusions and the Madness of Crowds",
+      "Failure rate",
+      "Financial quote",
+      "Flag and pennant patterns",
+      "Floor trader",
+      "Gap (chart pattern)",
+      "Head and shoulders (chart pattern)",
+      "ISBN (identifier)",
+      "Island reversal",
+      "Market liquidity",
+      "Market trend",
+      "Moving average",
+      "One Direction",
+      "Open-high-low-close chart",
+      "Pattern formation",
+      "Price channels",
+      "Scalping (trading)",
+      "Slippage (finance)",
+      "Stock market data systems",
+      "Stock market index",
+      "Stock market index future",
+      "Stop order",
+      "Support and resistance",
+      "Survivorship bias",
+      "Technical analysis",
+      "Trading strategy",
+      "Trend line (technical analysis)",
+      "Triangle (chart pattern)",
+      "Triple top and triple bottom",
+      "Volatility (finance)",
+      "Volume (finance)",
+      "Wedge pattern"
+    ],
+    "Price channels": [
+      "Candlestick pattern",
+      "Market trend",
+      "Technical analysis"
+    ],
+    "Risk": [
+      "Volatility (finance)"
+    ],
+    "Scalping (trading)": [
+      "Foreign exchange market",
+      "Trader (finance)"
+    ],
+    "Slippage (finance)": [
+      "Cryptocurrency",
+      "Market trend",
+      "Scalping (trading)",
+      "Swing trading",
+      "Technical analysis",
+      "Trader (finance)",
+      "Broker",
+      "Stock",
+      "Stock market",
+      "Stock market index"
+    ],
+    "Stock": [
+      "Algorithmic trading",
+      "Floor trader",
+      "Market trend",
+      "Scalping (trading)",
+      "Slippage (finance)",
+      "Stock market index",
+      "Technical analysis",
+      "Trading strategy",
+      "Volatility (finance)"
+    ],
+    "Stock market": [
+      "Market liquidity",
+      "Market trend",
+      "Stock market data systems",
+      "Stock market index",
+      "Technical analysis",
+      "Volatility (finance)"
+    ],
+    "Stock market data systems": [
+      "Commodity",
+      "Stock"
+    ],
+    "Stock market index": [
+      "Market trend",
+      "Scalping (trading)",
+      "Swing trading",
+      "Technical analysis",
+      "Trader (finance)",
+      "Algorithmic trading",
+      "Floor trader",
+      "Slippage (finance)",
+      "Trading strategy",
+      "Volatility (finance)",
+      "Broker",
+      "Stock",
+      "Stock market"
+    ],
+    "Stock market index future": [
+      "Trader (finance)",
+      "Stock market index"
+    ],
+    "Support and resistance": [
+      "Candlestick pattern",
+      "Market trend",
+      "Technical analysis",
+      "Stock market"
+    ],
+    "Swing trading": [
+      "Algorithmic trading",
+      "Day trading",
+      "Floor trader",
+      "Market trend",
+      "Moving average",
+      "Scalping (trading)",
+      "Slippage (finance)",
+      "Stock market index",
+      "Technical analysis",
+      "Trading strategy",
+      "Volatility (finance)"
+    ],
+    "Technical analysis": [
+      "Algorithmic trading",
+      "Breakout (technical analysis)",
+      "Broadening top",
+      "Candlestick chart",
+      "Candlestick pattern",
+      "Chart pattern",
+      "Commodity channel index",
+      "Doji",
+      "Double top and double bottom",
+      "Flag and pennant patterns",
+      "Floor trader",
+      "Gap (chart pattern)",
+      "Head and shoulders (chart pattern)",
+      "Market trend",
+      "Moving average",
+      "Open-high-low-close chart",
+      "Price action trading",
+      "Price channels",
+      "Scalping (trading)",
+      "Slippage (finance)",
+      "Stock market data systems",
+      "Stock market index",
+      "Support and resistance",
+      "Trading strategy",
+      "Trend line (technical analysis)",
+      "Triangle (chart pattern)",
+      "Volatility (finance)",
+      "Volume (finance)",
+      "Wedge pattern",
+      "Foreign exchange market",
+      "Investment management",
+      "Real estate",
+      "Swing trading",
+      "Trader (finance)",
+      "Broker",
+      "Currency",
+      "Stock",
+      "Stock market"
+    ],
+    "Trade": [
+      "Price"
+    ],
+    "Trader (finance)": [
+      "Algorithmic trading",
+      "Floor trader",
+      "Market trend",
+      "Scalping (trading)",
+      "Slippage (finance)",
+      "Stock market index",
+      "Technical analysis",
+      "Trading strategy",
+      "Volatility (finance)"
+    ],
+    "Trading strategy": [
+      "Day trading",
+      "Scalping (trading)",
+      "Swing trading",
+      "Technical analysis",
+      "Broker"
+    ],
+    "Trend line (technical analysis)": [
+      "Candlestick pattern",
+      "Market trend",
+      "Technical analysis"
+    ],
+    "Triangle (chart pattern)": [
+      "Candlestick pattern",
+      "Market trend",
+      "Technical analysis"
+    ],
+    "Volatility (finance)": [
+      "Candlestick pattern",
+      "Donald Trump",
+      "Foreign exchange market",
+      "Market trend",
+      "Risk",
+      "Scalping (trading)",
+      "Swing trading",
+      "Technical analysis",
+      "Trader (finance)",
+      "Broker",
+      "Stock",
+      "Stock market index"
+    ],
+    "Volume (finance)": [
+      "Candlestick pattern",
+      "Market trend",
+      "Technical analysis",
+      "Stock market"
+    ],
+    "Wedge pattern": [
+      "Candlestick pattern",
+      "Market trend",
+      "Technical analysis"
+    ]
+  },
+  "links_here": {
+    "Price action trading": [
+      "Technical analysis",
+      "Day trading",
+      "Chart pattern",
+      "Hikkake pattern",
+      "Commodity channel index",
+      "Forex signal"
+    ]
+  },
+  "options": {
+    "Action": [
+      "Group action",
+      "Action film",
+      "Action Comics",
+      "Action (firearms)",
+      "Lawsuit",
+      "The Action",
+      "Action fiction",
+      "Module (mathematics)",
+      "Action (physics)",
+      "Action (philosophy)",
+      "Action game",
+      "Action at a distance",
+      "Feeling This",
+      "Action (TV series)",
+      "Semigroup action",
+      "Action! (programming language)",
+      "Action (comics)",
+      "Lonesome Crow",
+      "Transform (Powerman 5000 album)",
+      "Punchline (band)",
+      "ACTION",
+      "Structural load",
+      "Action (supermarkets)",
+      "Action (music)",
+      "Action (piano)",
+      "Continuous group action",
+      "Action (radio)",
+      "Action (UML)",
+      "ACTION (U.S. government agency)",
+      "Action (Sweet song)",
+      "Action (B'z album)",
+      "Kiddo",
+      "Pearly Gates (singer)",
+      "Action (1921 film)",
+      "The Fits",
+      "Lance Fortune",
+      "We Are the Physics Are OK at Music",
+      "Actaeon (disambiguation)",
+      "Actions Technology",
+      "The Action Album!",
+      "Chuggington",
+      "Take a Bite",
+      "Action (French TV channel)",
+      "Acción",
+      "Action (play)",
+      "Action (Question Mark \u0026 the Mysterians album)",
+      "Action! (Desmond Dekker album)",
+      "Drassi",
+      "Action theory",
+      "The Stingrays (Bristol band)",
+      "CBS Justice",
+      "Gorky Park (album)",
+      "Action (Oscar Peterson album)",
+      "Action (Jackie McLean album)",
+      "Sky Sports",
+      "Meanwhile Back in Paris...",
+      "Uppermost",
+      "Terror Fabulous",
+      "Action Bronson",
+      "Action (theatre)",
+      "Adult Swim (Canada)",
+      "Action 3D",
+      "Action Man (disambiguation)",
+      "Get After It Media",
+      "Action (EP)",
+      "Action Force (disambiguation)",
+      "Action Jackson",
+      "Action (1980 film)",
+      "Action (store)",
+      "Action (Freddy Cannon song)",
+      "Action (Cypriot political party)",
+      "Action (newspaper)",
+      "Action (narrative)",
+      "Amy Rose Spiegel",
+      "The Action Network",
+      "Action (2019 film)",
+      "Action (Italian political party)",
+      "Translation (album)",
+      "Diia",
+      "Action principles",
+      "Hareket",
+      "Action television",
+      "Action Channel"
+    ]
+  },
+  "pages": {
+    "ACTION": {
+      "desc": "Bus operator in Canberra, Australia",
+      "qid": "Q288794"
+    },
+    "ACTION (U.S. government agency)": {
+      "desc": "Nixon administration effort to consolidate volunteer services",
+      "qid": "Q4650843"
+    },
+    "Acción": {
+      "desc": "Topics referred to by the same term",
+      "disambig": true,
+      "qid": "Q4672633"
+    },
+    "Actaeon (disambiguation)": {
+      "desc": "Topics referred to by the same term",
+      "disambig": true,
+      "qid": "Q1177085"
+    },
+    "Action": {
+      "desc": "Topics referred to by the same term",
+      "disambig": true,
+      "qid": "Q12410670"
+    },
+    "Action (1921 film)": {
+      "desc": "1921 film",
+      "qid": "Q2747431"
+    },
+    "Action (1980 film)": {
+      "desc": "1980 Italian film",
+      "qid": "Q3604808"
+    },
+    "Action (2019 film)": {
+      "desc": "2019 film by Sundar C",
+      "qid": "Q85739674"
+    },
+    "Action (B'z album)": {
+      "desc": "2007 studio album by B'z",
+      "qid": "Q3280414"
+    },
+    "Action (Cypriot political party)": {
+      "desc": "Political party in Cyprus",
+      "qid": "Q23585786"
+    },
+    "Action (EP)": {
+      "desc": "2012 EP by NU'EST",
+      "qid": "Q4677060"
+    },
+    "Action (Freddy Cannon song)": {
+      "desc": "1965 single by Freddy Cannon",
+      "qid": "Q18159542"
+    },
+    "Action (French TV channel)": {
+      "desc": "French television channel",
+      "qid": "Q776786"
+    },
+    "Action (Italian political party)": {
+      "desc": "Political party in Italy",
+      "qid": "Q63926676"
+    },
+    "Action (Jackie McLean album)": {
+      "desc": "1967 studio album by Jackie McLean",
+      "qid": "Q4677073"
+    },
+    "Action (Oscar Peterson album)": {
+      "desc": "1968 studio album by Oscar Peterson",
+      "qid": "Q4677062"
+    },
+    "Action (Question Mark \u0026 the Mysterians album)": {
+      "desc": "Album by Question Mark \u0026 the Mysterians",
+      "qid": "Q15728337"
+    },
+    "Action (Sweet song)": {
+      "desc": "1975 song by Sweet",
+      "qid": "Q3271630"
+    },
+    "Action (TV series)": {
+      "desc": "American comedy television series",
+      "qid": "Q2823636"
+    },
+    "Action (UML)": {
+      "qid": "Q422293"
+    },
+    "Action (comics)": {
+      "desc": "British weekly comic",
+      "qid": "Q4677065"
+    },
+    "Action (firearms)": {
+      "desc": "Functional mechanism of breech-loading",
+      "qid": "Q5451695"
+    },
+    "Action (music)": {
+      "qid": "Q927551"
+    },
+    "Action (narrative)": {
+      "desc": "Literary term; the physical movement of the characters",
+      "qid": "Q3678445"
+    },
+    "Action (newspaper)": {
+      "desc": "British newspaper(s) associated with fascism",
+      "qid": "Q21999870"
+    },
+    "Action (philosophy)": {
+      "desc": "Event done by an agent for a purpose",
+      "qid": "Q4026292"
+    },
+    "Action (physics)": {
+      "desc": "Physical quantity of energy × time",
+      "qid": "Q846785"
+    },
+    "Action (piano)": {
+      "desc": "Piano mechanism",
+      "qid": "Q1410936"
+    },
+    "Action (play)": {
+      "desc": "Play by Sam Shepard",
+      "qid": "Q4677066"
+    },
+    "Action (radio)": {
+      "desc": "Planned 1945 NBC radio anthology series",
+      "qid": "Q4677070"
+    },
+    "Action (store)": {
+      "desc": "Dutch multinational discount store chain",
+      "qid": "Q2634111"
+    },
+    "Action (supermarkets)": {
+      "desc": "Former Australian supermarket chain",
+      "qid": "Q4677071"
+    },
+    "Action (theatre)": {
+      "qid": "Q4677072"
+    },
+    "Action 3D": {
+      "desc": "2013 Indian film",
+      "qid": "Q4677059"
+    },
+    "Action Bronson": {
+      "desc": "American rapper (born 1983)",
+      "qid": "Q2823641"
+    },
+    "Action Channel": {
+      "desc": "Japanese television channel",
+      "qid": "Q141598219"
+    },
+    "Action Comics": {
+      "desc": "American comic book",
+      "qid": "Q343615"
+    },
+    "Action Force (disambiguation)": {
+      "desc": "Topics referred to by the same term",
+      "disambig": true,
+      "qid": "Q4677095"
+    },
+    "Action Jackson": {
+      "desc": "Topics referred to by the same term",
+      "disambig": true,
+      "qid": "Q16249636"
+    },
+    "Action Man (disambiguation)": {
+      "desc": "Topics referred to by the same term",
+      "disambig": true,
+      "qid": "Q278899"
+    },
+    "Action at a distance": {
+      "desc": "Concept in physics",
+      "qid": "Q1407429"
+    },
+    "Action fiction": {
+      "desc": "Written and visual fiction genre",
+      "qid": "Q1762165"
+    },
+    "Action film": {
+      "desc": "Film genre",
+      "qid": "Q188473"
+    },
+    "Action game": {
+      "desc": "Video game genre",
+      "qid": "Q270948"
+    },
+    "Action principles": {
+      "desc": "Fundamental mechanical principles",
+      "qid": "Q722799"
+    },
+    "Action television": {
+      "desc": "Television series genre",
+      "qid": "Q343782"
+    },
+    "Action theory": {
+      "desc": "Topics referred to by the same term",
+      "disambig": true,
+      "qid": "Q1201095"
+    },
+    "Action trading": {
+      "missing": true
+    },
+    "Action! (Desmond Dekker album)": {
+      "desc": "1968 studio album by Desmond Dekker \u0026 the Aces",
+      "qid": "Q4677031"
+    },
+    "Action! (programming language)": {
+      "desc": "Atari 8-bit computer programming language",
+      "qid": "Q343587"
+    },
+    "Actions Technology": {
+      "desc": "Chinese fabless semiconductor company",
+      "qid": "Q4677436"
+    },
+    "Adult Swim (Canada)": {
+      "desc": "Canadian specialty television network",
+      "qid": "Q4685904"
+    },
+    "Algorithmic trading": {
+      "desc": "Method of executing orders",
+      "qid": "Q139445"
+    },
+    "Amy Rose Spiegel": {
+      "desc": "Writer and editor",
+      "qid": "Q29017079"
+    },
+    "Breakout (technical analysis)": {
+      "desc": "Term in technical analysis",
+      "qid": "Q4959649"
+    },
+    "Broadening top": {
+      "desc": "Technical analysis chart pattern",
+      "qid": "Q4972167"
+    },
+    "CBS Justice": {
+      "desc": "TV channel active in Africa and Ireland and formerly in the UK",
+      "qid": "Q11689301"
+    },
+    "Candlestick chart": {
+      "desc": "Type of financial chart",
+      "qid": "Q1067794"
+    },
+    "Candlestick pattern": {
+      "desc": "Movement of prices shown on a candlestick chart",
+      "qid": "Q116044962"
+    },
+    "Chart pattern": {
+      "desc": "Pattern within a chart when prices are graphed",
+      "qid": "Q4347105"
+    },
+    "Chuggington": {
+      "desc": "British animated children's television series",
+      "qid": "Q781698"
+    },
+    "Commodity channel index": {
+      "desc": "Oscillator",
+      "qid": "Q2738263"
+    },
+    "Continuous group action": {
+      "qid": "Q16951242"
+    },
+    "Day trading": {
+      "desc": "Buying and selling financial instruments within the same trading day",
+      "qid": "Q1064131"
+    },
+    "Diia": {
+      "desc": "E-governance service in Ukraine",
+      "qid": "Q97379831"
+    },
+    "Doji": {
+      "desc": "Common pattern in financial analysis",
+      "qid": "Q3291840"
+    },
+    "Double top and double bottom": {
+      "desc": "Patterns in stock charts",
+      "qid": "Q5300108"
+    },
+    "Drassi": {
+      "desc": "Political party in Greece",
+      "qid": "Q5305890"
+    },
+    "Extraordinary Popular Delusions and the Madness of Crowds": {
+      "desc": "1841 book by Charles Mackay",
+      "qid": "Q2431853"
+    },
+    "Failure rate": {
+      "desc": "Frequency with which an engineered system or component fails",
+      "qid": "Q2737027"
+    },
+    "Feeling This": {
+      "desc": "2003 single by Blink-182",
+      "qid": "Q2738818"
+    },
+    "Financial quote": {
+      "desc": "Last price at which a security traded",
+      "qid": "Q1430676"
+    },
+    "Flag and pennant patterns": {
+      "desc": "Financial chart patterns",
+      "qid": "Q3880292"
+    },
+    "Floor trader": {
+      "desc": "Stock or commodities trader",
+      "qid": "Q1295871"
+    },
+    "Forex signal": {
+      "desc": "Suggested currency trade",
+      "qid": "Q5469520"
+    },
+    "Gap (chart pattern)": {
+      "desc": "Price chart analysis concept",
+      "qid": "Q4153227"
+    },
+    "Get After It Media": {
+      "desc": "American television broadcast company",
+      "qid": "Q6702510"
+    },
+    "Gorky Park (album)": {
+      "desc": "1989 studio album by Gorky Park",
+      "qid": "Q1943100"
+    },
+    "Group action": {
+      "desc": "Transformations induced by a mathematical group",
+      "qid": "Q288465"
+    },
+    "Hareket": {
+      "desc": "Conservative magazine in Turkey (1939–1982)",
+      "qid": "Q21855538"
+    },
+    "Head and shoulders (chart pattern)": {
+      "desc": "Financial chart pattern",
+      "qid": "Q4384938"
+    },
+    "Hikkake pattern": {
+      "qid": "Q5760604"
+    },
+    "ISBN": {
+      "desc": "Unique numeric book identifier since 1970",
+      "qid": "Q33057"
+    },
+    "Island reversal": {
+      "qid": "Q3155384"
+    },
+    "Kiddo": {
+      "desc": "American P-Funk band",
+      "qid": "Q6404713"
+    },
+    "Lance Fortune": {
+      "desc": "English pop singer (1940–2025)",
+      "qid": "Q6483392"
+    },
+    "Lawsuit": {
+      "desc": "Civil action brought in a court of law",
+      "qid": "Q697327"
+    },
+    "Lonesome Crow": {
+      "desc": "1972 studio album by Scorpions",
+      "qid": "Q164515"
+    },
+    "Market liquidity": {
+      "desc": "Finance property of an asset",
+      "qid": "Q11832699"
+    },
+    "Market trend": {
+      "desc": "Perceived financial market movement tendency over time",
+      "qid": "Q1004322"
+    },
+    "Meanwhile Back in Paris...": {
+      "desc": "1978 rock album by Streetheart",
+      "qid": "Q6804112"
+    },
+    "Module (mathematics)": {
+      "desc": "Generalization of vector spaces from fields to rings",
+      "qid": "Q18848"
+    },
+    "Moving average": {
+      "desc": "Type of statistical measure over subsets of a dataset",
+      "qid": "Q1130194"
+    },
+    "One Direction": {
+      "desc": "English–Irish boy band (2010–2016)",
+      "qid": "Q146027"
+    },
+    "Open-high-low-close chart": {
+      "desc": "Financial chart showing prices over time",
+      "qid": "Q3503416"
+    },
+    "Order (exchange)": {
+      "desc": "Instructions to buy or sell financial securities",
+      "qid": "Q1779371"
+    },
+    "Pattern formation": {
+      "desc": "Study of how patterns form by self-organization in nature",
+      "qid": "Q1955627"
+    },
+    "Pearly Gates (singer)": {
+      "desc": "American singer",
+      "qid": "Q5815423"
+    },
+    "Price": {
+      "desc": "Amount of money given in order to purchase a thing or service",
+      "qid": "Q160151"
+    },
+    "Price action trading": {
+      "desc": "Trading",
+      "qid": "Q17051812"
+    },
+    "Price channels": {
+      "qid": "Q4461049"
+    },
+    "Punchline (band)": {
+      "desc": "American rock band",
+      "qid": "Q7260004"
+    },
+    "Scalping (trading)": {
+      "desc": "Arbitrage or market manipulation",
+      "qid": "Q321310"
+    },
+    "Semigroup action": {
+      "desc": "Action of a semigroup on a set",
+      "qid": "Q7449424"
+    },
+    "Sky Sports": {
+      "desc": "British television channels",
+      "qid": "Q1340204"
+    },
+    "Slippage (finance)": {
+      "desc": "Difference between estimated transaction costs and the amount actually paid",
+      "qid": "Q6130172"
+    },
+    "Stock market data systems": {
+      "qid": "Q7617902"
+    },
+    "Stock market index": {
+      "desc": "Financial metric which investors use to determine market performance",
+      "qid": "Q223371"
+    },
+    "Stock market index future": {
+      "desc": "Cash-settled futures contract on the value of a particular stock market index",
+      "qid": "Q905615"
+    },
+    "Structural load": {
+      "desc": "Mechanical loads (forces) applied to a structure or its components",
+      "qid": "Q7964839"
+    },
+    "Support and resistance": {
+      "desc": "Economics concept",
+      "qid": "Q1552218"
+    },
+    "Survivorship bias": {
+      "desc": "Statistical error resulting from focusing on successes over failures",
+      "qid": "Q2919077"
+    },
+    "Take a Bite": {
+      "desc": "1988 studio album by Girlschool",
+      "qid": "Q7677852"
+    },
+    "Technical analysis": {
+      "desc": "Security analysis methodology",
+      "qid": "Q235038"
+    },
+    "Terror Fabulous": {
+      "desc": "Jamaican dancehall deejay",
+      "qid": "Q7703845"
+    },
+    "The Action": {
+      "desc": "English rock band (1963–1969)",
+      "qid": "Q1760836"
+    },
+    "The Action Album!": {
+      "desc": "2002 studio album by Oh My God",
+      "qid": "Q131051455"
+    },
+    "The Action Network": {
+      "desc": "Sports data and technology company",
+      "qid": "Q56291134"
+    },
+    "The Fits": {
+      "desc": "British punk rock band",
+      "qid": "Q16257419"
+    },
+    "The Stingrays (Bristol band)": {
+      "desc": "British new wave musical group",
+      "qid": "Q7766546"
+    },
+    "Trade": {
+      "desc": "Exchange of goods and services",
+      "qid": "Q601401"
+    },
+    "Trading strategy": {
+      "desc": "Plan for achieving returns from a financial marketplace",
+      "qid": "Q1574928"
+    },
+    "Transform (Powerman 5000 album)": {
+      "desc": "2003 studio album by Powerman 5000",
+      "qid": "Q3285989"
+    },
+    "Translation (album)": {
+      "desc": "2020 studio album by Black Eyed Peas",
+      "qid": "Q96251220"
+    },
+    "Trend line (technical analysis)": {
+      "desc": "Tool in technical analysis",
+      "qid": "Q3998252"
+    },
+    "Triangle (chart pattern)": {
+      "desc": "Chart pattern in asset price charts",
+      "qid": "Q7840051"
+    },
+    "Triple top and triple bottom": {
+      "qid": "Q7843540"
+    },
+    "Uppermost": {
+      "desc": "French music producer and DJ",
+      "qid": "Q7899071"
+    },
+    "Volatility (finance)": {
+      "desc": "Degree of variation of a trading price series over time",
+      "qid": "Q756115"
+    },
+    "Volume (finance)": {
+      "desc": "Amount of a security traded during a period of time in a capital market",
+      "qid": "Q913748"
+    },
+    "We Are the Physics Are OK at Music": {
+      "desc": "2008 studio album by We Are the Physics",
+      "qid": "Q7977390"
+    },
+    "Wedge pattern": {
+      "desc": "Market trend",
+      "qid": "Q7979169"
+    }
+  },
+  "redirects": {
+    "Acción (disambiguation)": "Acción",
+    "Acteon (disambiguation)": "Actaeon (disambiguation)",
+    "Action (Canadian TV channel)": "Adult Swim (Canada)",
+    "Action (Freddy Canon song)": "Action (Freddy Cannon song)",
+    "Action (Greek political party)": "Drassi",
+    "Action (Punchline album)": "Punchline (band)",
+    "Action (Uppermost album)": "Uppermost",
+    "Action Action Action": "Action (Jackie McLean album)",
+    "Action Jackson (disambiguation)": "Action Jackson",
+    "Action theory (disambiguation)": "Action theory",
+    "Action! (Oh My God album)": "The Action Album!",
+    "Action: A Book about Sex": "Amy Rose Spiegel",
+    "Actions Semiconductor": "Actions Technology",
+    "Chart patterns": "Chart pattern",
+    "ISBN (identifier)": "ISBN",
+    "Price action": "Price action trading",
+    "Stop order": "Order (exchange)",
+    "The Action Channel (US TV channel)": "Get After It Media",
+    "Trading": "Trade"
+  }
+}

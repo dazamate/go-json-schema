@@ -47,11 +47,12 @@ type BingLinker interface {
 	Link(ctx context.Context, text, language string) (azurelang.Result, error)
 }
 
-// ThemeScorer scores a keyword and a page against theme labels. embed.Scorer
-// is one; research does not import embed.
+// ThemeScorer scores theme labels and graph texts. embed.Scorer is one;
+// research does not import embed.
 type ThemeScorer interface {
 	Model() string
 	Score(ctx context.Context, keyword, page string, labels []string) (kw, pg []float64, err error)
+	Similarity(ctx context.Context, keyword string, texts []string) ([]float64, error)
 }
 
 const (

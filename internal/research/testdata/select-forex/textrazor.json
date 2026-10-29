@@ -1,0 +1,3952 @@
+{
+  "language": "eng",
+  "entities": [
+    {
+      "entityId": "Statistics",
+      "entityEnglishId": "Statistics",
+      "wikiLink": "http://en.wikipedia.org/wiki/Statistics",
+      "wikidataId": "Q12483",
+      "freebaseId": "/m/06mnr",
+      "matchedText": "statistics",
+      "relevanceScore": 0.1028,
+      "confidenceScore": 1.383,
+      "type": null
+    },
+    {
+      "entityId": "Simulation",
+      "entityEnglishId": "Simulation",
+      "wikiLink": "http://en.wikipedia.org/wiki/Simulation",
+      "wikidataId": "Q45045",
+      "freebaseId": "/m/0bwzm",
+      "matchedText": "simulations",
+      "relevanceScore": 0.2744,
+      "confidenceScore": 2.474,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Candlestick",
+      "entityEnglishId": "Candlestick",
+      "wikiLink": "http://en.wikipedia.org/wiki/Candlestick",
+      "wikidataId": "Q151771",
+      "freebaseId": "/m/03b8t3",
+      "matchedText": "candlestick",
+      "relevanceScore": 0.8539,
+      "confidenceScore": 2.57,
+      "type": null
+    },
+    {
+      "entityId": "Baptism",
+      "entityEnglishId": "Baptism",
+      "wikiLink": "http://en.wikipedia.org/wiki/Baptism",
+      "wikidataId": "Q35856",
+      "freebaseId": "/m/01cvx",
+      "matchedText": "baptism",
+      "relevanceScore": 0,
+      "confidenceScore": 3.809,
+      "type": null
+    },
+    {
+      "entityId": "Baptism by fire",
+      "entityEnglishId": "Baptism by fire",
+      "wikiLink": "http://en.wikipedia.org/wiki/Baptism_by_fire",
+      "wikidataId": "Q1409751",
+      "freebaseId": "/m/083pbl",
+      "matchedText": "baptism of fire",
+      "relevanceScore": 0,
+      "confidenceScore": 2.188,
+      "type": null
+    },
+    {
+      "entityId": "Money",
+      "entityEnglishId": "Money",
+      "wikiLink": "http://en.wikipedia.org/wiki/Money",
+      "wikidataId": "Q1368",
+      "freebaseId": "/m/04_x4",
+      "matchedText": "money",
+      "relevanceScore": 0.1294,
+      "confidenceScore": 8.191,
+      "type": null
+    },
+    {
+      "entityId": "Investment management",
+      "entityEnglishId": "Investment management",
+      "wikiLink": "http://en.wikipedia.org/wiki/Investment_management",
+      "wikidataId": "Q14864997",
+      "freebaseId": "/m/05b6l8",
+      "matchedText": "money management",
+      "relevanceScore": 0.2786,
+      "confidenceScore": 1.36,
+      "type": null
+    },
+    {
+      "entityId": "Management",
+      "entityEnglishId": "Management",
+      "wikiLink": "http://en.wikipedia.org/wiki/Management",
+      "wikidataId": "Q2920921",
+      "freebaseId": "/m/04_tv",
+      "matchedText": "management",
+      "relevanceScore": 0,
+      "confidenceScore": 2.716,
+      "type": null
+    },
+    {
+      "entityId": "Holy Grail",
+      "entityEnglishId": "Holy Grail",
+      "wikiLink": "http://en.wikipedia.org/wiki/Holy_Grail",
+      "wikidataId": "Q162808",
+      "freebaseId": "/m/03q9d",
+      "matchedText": "holy grail",
+      "relevanceScore": 0.02086,
+      "confidenceScore": 3.556,
+      "type": null
+    },
+    {
+      "entityId": "Curve",
+      "entityEnglishId": "Curve",
+      "wikiLink": "http://en.wikipedia.org/wiki/Curve",
+      "wikidataId": "Q161973",
+      "freebaseId": "/m/0m8xx",
+      "matchedText": "curve",
+      "relevanceScore": 0.07588,
+      "confidenceScore": 1.437,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trade",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 2.754,
+      "type": null
+    },
+    {
+      "entityId": "Candlestick",
+      "entityEnglishId": "Candlestick",
+      "wikiLink": "http://en.wikipedia.org/wiki/Candlestick",
+      "wikidataId": "Q151771",
+      "freebaseId": "/m/03b8t3",
+      "matchedText": "candlestick",
+      "relevanceScore": 0.8539,
+      "confidenceScore": 2.57,
+      "type": null
+    },
+    {
+      "entityId": "Candlestick pattern",
+      "entityEnglishId": "Candlestick pattern",
+      "wikiLink": "http://en.wikipedia.org/wiki/Candlestick_pattern",
+      "wikidataId": "Q116044962",
+      "freebaseId": "/m/0cmdn32",
+      "matchedText": "candlestick pattern",
+      "relevanceScore": 0.9343,
+      "confidenceScore": 3.046,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trade",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 2.754,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Signal",
+      "entityEnglishId": "Signal",
+      "wikiLink": "http://en.wikipedia.org/wiki/Signal",
+      "wikidataId": "Q174984",
+      "freebaseId": "/m/01p9_w",
+      "matchedText": "signal",
+      "relevanceScore": 0.4161,
+      "confidenceScore": 2.289,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trade",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 2.754,
+      "type": null
+    },
+    {
+      "entityId": "Feces",
+      "entityEnglishId": "Feces",
+      "wikiLink": "http://en.wikipedia.org/wiki/Feces",
+      "wikidataId": "Q496",
+      "freebaseId": "/m/03241",
+      "matchedText": "poo",
+      "relevanceScore": 0,
+      "confidenceScore": 1.618,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trade",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 2.754,
+      "type": null
+    },
+    {
+      "entityId": "Trade idea",
+      "entityEnglishId": "Trade idea",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade_idea",
+      "wikidataId": "Q7832045",
+      "freebaseId": "/m/06_ydtm",
+      "matchedText": "trade idea",
+      "relevanceScore": 0.138,
+      "confidenceScore": 1.002,
+      "type": null
+    },
+    {
+      "entityId": "Quality control",
+      "entityEnglishId": "Quality control",
+      "wikiLink": "http://en.wikipedia.org/wiki/Quality_control",
+      "wikidataId": "Q827792",
+      "freebaseId": "/m/0bfc5",
+      "matchedText": "Quality control",
+      "relevanceScore": 0.1981,
+      "confidenceScore": 1.545,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "Price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.024,
+      "type": null
+    },
+    {
+      "entityId": "Segway",
+      "entityEnglishId": "Segway",
+      "wikiLink": "http://en.wikipedia.org/wiki/Segway",
+      "wikidataId": "Q214893",
+      "freebaseId": "/m/076bq",
+      "matchedText": "segway",
+      "relevanceScore": 0,
+      "confidenceScore": 3.686,
+      "type": null
+    },
+    {
+      "entityId": "Hour",
+      "entityEnglishId": "Hour",
+      "wikiLink": "http://en.wikipedia.org/wiki/Hour",
+      "wikidataId": "Q25235",
+      "freebaseId": "/m/03mxv",
+      "matchedText": "hour",
+      "relevanceScore": 0.07024,
+      "confidenceScore": 1.153,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Candlestick",
+      "entityEnglishId": "Candlestick",
+      "wikiLink": "http://en.wikipedia.org/wiki/Candlestick",
+      "wikidataId": "Q151771",
+      "freebaseId": "/m/03b8t3",
+      "matchedText": "candlestick",
+      "relevanceScore": 0.8539,
+      "confidenceScore": 2.57,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trade",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 2.754,
+      "type": null
+    },
+    {
+      "entityId": "Candlestick",
+      "entityEnglishId": "Candlestick",
+      "wikiLink": "http://en.wikipedia.org/wiki/Candlestick",
+      "wikidataId": "Q151771",
+      "freebaseId": "/m/03b8t3",
+      "matchedText": "candlestick",
+      "relevanceScore": 0.8539,
+      "confidenceScore": 2.57,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Technical analysis",
+      "entityEnglishId": "Technical analysis",
+      "wikiLink": "http://en.wikipedia.org/wiki/Technical_analysis",
+      "wikidataId": "Q235038",
+      "freebaseId": "/m/0spt1",
+      "matchedText": "technical analysis",
+      "relevanceScore": 0.513,
+      "confidenceScore": 6.733,
+      "type": null
+    },
+    {
+      "entityId": "Behavior",
+      "entityEnglishId": "Behavior",
+      "wikiLink": "http://en.wikipedia.org/wiki/Behavior",
+      "wikidataId": "Q9332",
+      "freebaseId": "/m/01jbm",
+      "matchedText": "behavior",
+      "relevanceScore": 0.1252,
+      "confidenceScore": 1.305,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Hour",
+      "entityEnglishId": "Hour",
+      "wikiLink": "http://en.wikipedia.org/wiki/Hour",
+      "wikidataId": "Q25235",
+      "freebaseId": "/m/03mxv",
+      "matchedText": "hour",
+      "relevanceScore": 0.07024,
+      "confidenceScore": 1.153,
+      "type": null
+    },
+    {
+      "entityId": "Money",
+      "entityEnglishId": "Money",
+      "wikiLink": "http://en.wikipedia.org/wiki/Money",
+      "wikidataId": "Q1368",
+      "freebaseId": "/m/04_x4",
+      "matchedText": "money",
+      "relevanceScore": 0.1294,
+      "confidenceScore": 8.191,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "Price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.024,
+      "type": null
+    },
+    {
+      "entityId": "Tutorial",
+      "entityEnglishId": "Tutorial",
+      "wikiLink": "http://en.wikipedia.org/wiki/Tutorial",
+      "wikidataId": "Q535741",
+      "freebaseId": "/m/0157xl",
+      "matchedText": "tutorial",
+      "relevanceScore": 0.243,
+      "confidenceScore": 1.719,
+      "type": null
+    },
+    {
+      "entityId": "Candlestick",
+      "entityEnglishId": "Candlestick",
+      "wikiLink": "http://en.wikipedia.org/wiki/Candlestick",
+      "wikidataId": "Q151771",
+      "freebaseId": "/m/03b8t3",
+      "matchedText": "Candlestick",
+      "relevanceScore": 0.8539,
+      "confidenceScore": 2.157,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Candlestick",
+      "entityEnglishId": "Candlestick",
+      "wikiLink": "http://en.wikipedia.org/wiki/Candlestick",
+      "wikidataId": "Q151771",
+      "freebaseId": "/m/03b8t3",
+      "matchedText": "candlestick",
+      "relevanceScore": 0.8539,
+      "confidenceScore": 2.57,
+      "type": null
+    },
+    {
+      "entityId": "Mud",
+      "entityEnglishId": "Mud",
+      "wikiLink": "http://en.wikipedia.org/wiki/Mud",
+      "wikidataId": "Q170449",
+      "freebaseId": "/m/01qr50",
+      "matchedText": "mud",
+      "relevanceScore": 0,
+      "confidenceScore": 1.041,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "Price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.024,
+      "type": null
+    },
+    {
+      "entityId": "Candlestick",
+      "entityEnglishId": "Candlestick",
+      "wikiLink": "http://en.wikipedia.org/wiki/Candlestick",
+      "wikidataId": "Q151771",
+      "freebaseId": "/m/03b8t3",
+      "matchedText": "candlestick",
+      "relevanceScore": 0.8539,
+      "confidenceScore": 2.57,
+      "type": null
+    },
+    {
+      "entityId": "Candlestick",
+      "entityEnglishId": "Candlestick",
+      "wikiLink": "http://en.wikipedia.org/wiki/Candlestick",
+      "wikidataId": "Q151771",
+      "freebaseId": "/m/03b8t3",
+      "matchedText": "Candlestick",
+      "relevanceScore": 0.8539,
+      "confidenceScore": 2.157,
+      "type": null
+    },
+    {
+      "entityId": "Candlestick pattern",
+      "entityEnglishId": "Candlestick pattern",
+      "wikiLink": "http://en.wikipedia.org/wiki/Candlestick_pattern",
+      "wikidataId": "Q116044962",
+      "freebaseId": "/m/0cmdn32",
+      "matchedText": "Candlestick Patterns",
+      "relevanceScore": 0.9343,
+      "confidenceScore": 1.903,
+      "type": null
+    },
+    {
+      "entityId": "Money",
+      "entityEnglishId": "Money",
+      "wikiLink": "http://en.wikipedia.org/wiki/Money",
+      "wikidataId": "Q1368",
+      "freebaseId": "/m/04_x4",
+      "matchedText": "money",
+      "relevanceScore": 0.1294,
+      "confidenceScore": 8.191,
+      "type": null
+    },
+    {
+      "entityId": "Mascot",
+      "entityEnglishId": "Mascot",
+      "wikiLink": "http://en.wikipedia.org/wiki/Mascot",
+      "wikidataId": "Q18670161",
+      "freebaseId": "/m/0153bq",
+      "matchedText": "mascots",
+      "relevanceScore": 0.03634,
+      "confidenceScore": 0.9627,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Trader (finance)",
+      "entityEnglishId": "Trader (finance)",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trader_(finance)",
+      "wikidataId": "Q1424605",
+      "freebaseId": "/m/0cncxk",
+      "matchedText": "traders",
+      "relevanceScore": 0.6631,
+      "confidenceScore": 2.417,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Candlestick",
+      "entityEnglishId": "Candlestick",
+      "wikiLink": "http://en.wikipedia.org/wiki/Candlestick",
+      "wikidataId": "Q151771",
+      "freebaseId": "/m/03b8t3",
+      "matchedText": "Candlestick",
+      "relevanceScore": 0.8539,
+      "confidenceScore": 2.157,
+      "type": null
+    },
+    {
+      "entityId": "Reason",
+      "entityEnglishId": "Reason",
+      "wikiLink": "http://en.wikipedia.org/wiki/Reason",
+      "wikidataId": "Q178354",
+      "freebaseId": "/m/0bn32",
+      "matchedText": "reason",
+      "relevanceScore": 0,
+      "confidenceScore": 1.457,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trade",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 2.754,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Candle",
+      "entityEnglishId": "Candle",
+      "wikiLink": "http://en.wikipedia.org/wiki/Candle",
+      "wikidataId": "Q12888135",
+      "freebaseId": "/m/0c06p",
+      "matchedText": "candle",
+      "relevanceScore": 0.5835,
+      "confidenceScore": 2.009,
+      "type": null
+    },
+    {
+      "entityId": "Candlestick",
+      "entityEnglishId": "Candlestick",
+      "wikiLink": "http://en.wikipedia.org/wiki/Candlestick",
+      "wikidataId": "Q151771",
+      "freebaseId": "/m/03b8t3",
+      "matchedText": "candlestick",
+      "relevanceScore": 0.8539,
+      "confidenceScore": 2.57,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Computer",
+      "entityEnglishId": "Computer",
+      "wikiLink": "http://en.wikipedia.org/wiki/Computer",
+      "wikidataId": "Q68",
+      "freebaseId": "/m/01m3v",
+      "matchedText": "computer",
+      "relevanceScore": 0,
+      "confidenceScore": 1.443,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Decision-making",
+      "entityEnglishId": "Decision-making",
+      "wikiLink": "http://en.wikipedia.org/wiki/Decision-making",
+      "wikidataId": "Q1331926",
+      "freebaseId": "/m/01nccs",
+      "matchedText": "decision making",
+      "relevanceScore": 0.01999,
+      "confidenceScore": 1.575,
+      "type": null
+    },
+    {
+      "entityId": "Opinion",
+      "entityEnglishId": "Opinion",
+      "wikiLink": "http://en.wikipedia.org/wiki/Opinion",
+      "wikidataId": "Q3962655",
+      "freebaseId": "/m/04vpz4",
+      "matchedText": "opinion",
+      "relevanceScore": 0.05366,
+      "confidenceScore": 1.256,
+      "type": null
+    },
+    {
+      "entityId": "Risk",
+      "entityEnglishId": "Risk",
+      "wikiLink": "http://en.wikipedia.org/wiki/Risk",
+      "wikidataId": "Q104493",
+      "freebaseId": "/m/06d5f",
+      "matchedText": "risk analysis",
+      "relevanceScore": 0.1848,
+      "confidenceScore": 1.623,
+      "type": null
+    },
+    {
+      "entityId": "Risk",
+      "entityEnglishId": "Risk",
+      "wikiLink": "http://en.wikipedia.org/wiki/Risk",
+      "wikidataId": "Q104493",
+      "freebaseId": "/m/06d5f",
+      "matchedText": "risk",
+      "relevanceScore": 0.1848,
+      "confidenceScore": 4.114,
+      "type": null
+    },
+    {
+      "entityId": "Foreign exchange market",
+      "entityEnglishId": "Foreign exchange market",
+      "wikiLink": "http://en.wikipedia.org/wiki/Foreign_exchange_market",
+      "wikidataId": "Q66076",
+      "freebaseId": "/m/02_cz4",
+      "matchedText": "Forex trading",
+      "relevanceScore": 0.7173,
+      "confidenceScore": 6.588,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "Price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.024,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trade",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 2.754,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Philosophy",
+      "entityEnglishId": "Philosophy",
+      "wikiLink": "http://en.wikipedia.org/wiki/Philosophy",
+      "wikidataId": "Q5891",
+      "freebaseId": "/m/037mh8",
+      "matchedText": "philosophy",
+      "relevanceScore": 0.08795,
+      "confidenceScore": 12.18,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Skill",
+      "entityEnglishId": "Skill",
+      "wikiLink": "http://en.wikipedia.org/wiki/Skill",
+      "wikidataId": "Q205961",
+      "freebaseId": "/m/01zsxh",
+      "matchedText": "skill",
+      "relevanceScore": 0.3588,
+      "confidenceScore": 2.428,
+      "type": null
+    },
+    {
+      "entityId": "Day trading",
+      "entityEnglishId": "Day trading",
+      "wikiLink": "http://en.wikipedia.org/wiki/Day_trading",
+      "wikidataId": "Q1064131",
+      "freebaseId": "/m/01h9n8",
+      "matchedText": "day trading",
+      "relevanceScore": 0.4029,
+      "confidenceScore": 3.42,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Octane rating",
+      "entityEnglishId": "Octane rating",
+      "wikiLink": "http://en.wikipedia.org/wiki/Octane_rating",
+      "wikidataId": "Q193423",
+      "freebaseId": "/m/012tp5",
+      "matchedText": "high octane",
+      "relevanceScore": 0.06551,
+      "confidenceScore": 1.116,
+      "type": null
+    },
+    {
+      "entityId": "Octane",
+      "entityEnglishId": "Octane",
+      "wikiLink": "http://en.wikipedia.org/wiki/Octane",
+      "wikidataId": "Q150681",
+      "freebaseId": "/m/012lgp",
+      "matchedText": "octane",
+      "relevanceScore": 0,
+      "confidenceScore": 1.466,
+      "type": [
+        "ChemicalSubstance",
+        "ChemicalCompound"
+      ]
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Ticket resale",
+      "entityEnglishId": "Ticket resale",
+      "wikiLink": "http://en.wikipedia.org/wiki/Ticket_resale",
+      "wikidataId": "Q2522563",
+      "freebaseId": "/m/05ml60",
+      "matchedText": "scalping",
+      "relevanceScore": 0.2313,
+      "confidenceScore": 1.611,
+      "type": null
+    },
+    {
+      "entityId": "Scalping (trading)",
+      "entityEnglishId": "Scalping (trading)",
+      "wikiLink": "http://en.wikipedia.org/wiki/Scalping_(trading)",
+      "wikidataId": "Q321310",
+      "freebaseId": "/m/0fktm1",
+      "matchedText": "scalping strategies",
+      "relevanceScore": 0.1659,
+      "confidenceScore": 1.564,
+      "type": null
+    },
+    {
+      "entityId": "Scalping (trading)",
+      "entityEnglishId": "Scalping (trading)",
+      "wikiLink": "http://en.wikipedia.org/wiki/Scalping_(trading)",
+      "wikidataId": "Q321310",
+      "freebaseId": "/m/0fktm1",
+      "matchedText": "scalpers",
+      "relevanceScore": 0.115,
+      "confidenceScore": 2.551,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Swing trading",
+      "entityEnglishId": "Swing trading",
+      "wikiLink": "http://en.wikipedia.org/wiki/Swing_trading",
+      "wikidataId": "Q1439154",
+      "freebaseId": "/m/058vf0",
+      "matchedText": "swing trading",
+      "relevanceScore": 0.1214,
+      "confidenceScore": 2.212,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Hour",
+      "entityEnglishId": "Hour",
+      "wikiLink": "http://en.wikipedia.org/wiki/Hour",
+      "wikidataId": "Q25235",
+      "freebaseId": "/m/03mxv",
+      "matchedText": "hour",
+      "relevanceScore": 0.06986,
+      "confidenceScore": 1.153,
+      "type": null
+    },
+    {
+      "entityId": "Hour",
+      "entityEnglishId": "Hour",
+      "wikiLink": "http://en.wikipedia.org/wiki/Hour",
+      "wikidataId": "Q25235",
+      "freebaseId": "/m/03mxv",
+      "matchedText": "hour",
+      "relevanceScore": 0.06986,
+      "confidenceScore": 1.153,
+      "type": null
+    },
+    {
+      "entityId": "Day trading",
+      "entityEnglishId": "Day trading",
+      "wikiLink": "http://en.wikipedia.org/wiki/Day_trading",
+      "wikidataId": "Q1064131",
+      "freebaseId": "/m/01h9n8",
+      "matchedText": "intraday",
+      "relevanceScore": 0.3519,
+      "confidenceScore": 3.818,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Hour",
+      "entityEnglishId": "Hour",
+      "wikiLink": "http://en.wikipedia.org/wiki/Hour",
+      "wikidataId": "Q25235",
+      "freebaseId": "/m/03mxv",
+      "matchedText": "hour",
+      "relevanceScore": 0.06986,
+      "confidenceScore": 1.153,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Real estate",
+      "entityEnglishId": "Real estate",
+      "wikiLink": "http://en.wikipedia.org/wiki/Real_estate",
+      "wikidataId": "Q684740",
+      "freebaseId": "/m/08fgzd",
+      "matchedText": "real estate",
+      "relevanceScore": 0.06213,
+      "confidenceScore": 1.247,
+      "type": null
+    },
+    {
+      "entityId": "Technical analysis",
+      "entityEnglishId": "Technical analysis",
+      "wikiLink": "http://en.wikipedia.org/wiki/Technical_analysis",
+      "wikidataId": "Q235038",
+      "freebaseId": "/m/0spt1",
+      "matchedText": "buy signal",
+      "relevanceScore": 0.513,
+      "confidenceScore": 1.35,
+      "type": null
+    },
+    {
+      "entityId": "Signal",
+      "entityEnglishId": "Signal",
+      "wikiLink": "http://en.wikipedia.org/wiki/Signal",
+      "wikidataId": "Q174984",
+      "freebaseId": "/m/01p9_w",
+      "matchedText": "signal",
+      "relevanceScore": 0.4161,
+      "confidenceScore": 2.289,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trade",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 2.754,
+      "type": null
+    },
+    {
+      "entityId": "Foreign exchange market",
+      "entityEnglishId": "Foreign exchange market",
+      "wikiLink": "http://en.wikipedia.org/wiki/Foreign_exchange_market",
+      "wikidataId": "Q66076",
+      "freebaseId": "/m/02_cz4",
+      "matchedText": "Forex",
+      "relevanceScore": 0.7173,
+      "confidenceScore": 9.476,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trade",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 2.754,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "Price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.024,
+      "type": null
+    },
+    {
+      "entityId": "Market trend",
+      "entityEnglishId": "Market trend",
+      "wikiLink": "http://en.wikipedia.org/wiki/Market_trend",
+      "wikidataId": "Q1004322",
+      "freebaseId": "/m/0g_23",
+      "matchedText": "bearish",
+      "relevanceScore": 0.1788,
+      "confidenceScore": 6.298,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Evidence",
+      "entityEnglishId": "Evidence",
+      "wikiLink": "http://en.wikipedia.org/wiki/Evidence",
+      "wikidataId": "Q1347572",
+      "freebaseId": "/m/0d9cbr",
+      "matchedText": "evidence",
+      "relevanceScore": 0.09925,
+      "confidenceScore": 1.037,
+      "type": null
+    },
+    {
+      "entityId": "Skill",
+      "entityEnglishId": "Skill",
+      "wikiLink": "http://en.wikipedia.org/wiki/Skill",
+      "wikidataId": "Q205961",
+      "freebaseId": "/m/01zsxh",
+      "matchedText": "skill",
+      "relevanceScore": 0.3588,
+      "confidenceScore": 2.428,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Hour",
+      "entityEnglishId": "Hour",
+      "wikiLink": "http://en.wikipedia.org/wiki/Hour",
+      "wikidataId": "Q25235",
+      "freebaseId": "/m/03mxv",
+      "matchedText": "hour",
+      "relevanceScore": 0.07024,
+      "confidenceScore": 1.153,
+      "type": null
+    },
+    {
+      "entityId": "Technical analysis",
+      "entityEnglishId": "Technical analysis",
+      "wikiLink": "http://en.wikipedia.org/wiki/Technical_analysis",
+      "wikidataId": "Q235038",
+      "freebaseId": "/m/0spt1",
+      "matchedText": "sell signals",
+      "relevanceScore": 0.513,
+      "confidenceScore": 1.208,
+      "type": null
+    },
+    {
+      "entityId": "Signal",
+      "entityEnglishId": "Signal",
+      "wikiLink": "http://en.wikipedia.org/wiki/Signal",
+      "wikidataId": "Q174984",
+      "freebaseId": "/m/01p9_w",
+      "matchedText": "signals",
+      "relevanceScore": 0.4161,
+      "confidenceScore": 1.259,
+      "type": null
+    },
+    {
+      "entityId": "Foreign exchange market",
+      "entityEnglishId": "Foreign exchange market",
+      "wikiLink": "http://en.wikipedia.org/wiki/Foreign_exchange_market",
+      "wikidataId": "Q66076",
+      "freebaseId": "/m/02_cz4",
+      "matchedText": "Forex traders",
+      "relevanceScore": 0.7173,
+      "confidenceScore": 1.28,
+      "type": null
+    },
+    {
+      "entityId": "Trader (finance)",
+      "entityEnglishId": "Trader (finance)",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trader_(finance)",
+      "wikidataId": "Q1424605",
+      "freebaseId": "/m/0cncxk",
+      "matchedText": "traders",
+      "relevanceScore": 0.6631,
+      "confidenceScore": 2.417,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Knowledge",
+      "entityEnglishId": "Knowledge",
+      "wikiLink": "http://en.wikipedia.org/wiki/Knowledge",
+      "wikidataId": "Q9081",
+      "freebaseId": "/m/01k8wb",
+      "matchedText": "knowledge",
+      "relevanceScore": 0.1415,
+      "confidenceScore": 1.182,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trade",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 2.754,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "Price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.024,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "Trade",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 2.656,
+      "type": null
+    },
+    {
+      "entityId": "Money",
+      "entityEnglishId": "Money",
+      "wikiLink": "http://en.wikipedia.org/wiki/Money",
+      "wikidataId": "Q1368",
+      "freebaseId": "/m/04_x4",
+      "matchedText": "Money",
+      "relevanceScore": 0.1294,
+      "confidenceScore": 7.848,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Money",
+      "entityEnglishId": "Money",
+      "wikiLink": "http://en.wikipedia.org/wiki/Money",
+      "wikidataId": "Q1368",
+      "freebaseId": "/m/04_x4",
+      "matchedText": "money",
+      "relevanceScore": 0.1294,
+      "confidenceScore": 8.191,
+      "type": null
+    },
+    {
+      "entityId": "Market trend",
+      "entityEnglishId": "Market trend",
+      "wikiLink": "http://en.wikipedia.org/wiki/Market_trend",
+      "wikidataId": "Q1004322",
+      "freebaseId": "/m/0g_23",
+      "matchedText": "trends",
+      "relevanceScore": 0.2174,
+      "confidenceScore": 0.9596,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Money",
+      "entityEnglishId": "Money",
+      "wikiLink": "http://en.wikipedia.org/wiki/Money",
+      "wikidataId": "Q1368",
+      "freebaseId": "/m/04_x4",
+      "matchedText": "money",
+      "relevanceScore": 0.1294,
+      "confidenceScore": 8.191,
+      "type": null
+    },
+    {
+      "entityId": "Cryptocurrency",
+      "entityEnglishId": "Cryptocurrency",
+      "wikiLink": "http://en.wikipedia.org/wiki/Cryptocurrency",
+      "wikidataId": "Q13479982",
+      "freebaseId": "/m/0vpj4_b",
+      "matchedText": "crypto",
+      "relevanceScore": 0.2055,
+      "confidenceScore": 3.995,
+      "type": null
+    },
+    {
+      "entityId": "Economic bubble",
+      "entityEnglishId": "Economic bubble",
+      "wikiLink": "http://en.wikipedia.org/wiki/Economic_bubble",
+      "wikidataId": "Q207781",
+      "freebaseId": "/m/011ddw",
+      "matchedText": "bubble",
+      "relevanceScore": 0.1836,
+      "confidenceScore": 1.011,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trade",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 2.754,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Donald Trump",
+      "entityEnglishId": "Donald Trump",
+      "wikiLink": "http://en.wikipedia.org/wiki/Donald_Trump",
+      "wikidataId": "Q22686",
+      "freebaseId": "/m/0cqt90",
+      "matchedText": "Trump",
+      "relevanceScore": 0.07751,
+      "confidenceScore": 1.461,
+      "type": [
+        "Agent",
+        "Person",
+        "Politician"
+      ]
+    },
+    {
+      "entityId": "United States dollar",
+      "entityEnglishId": "United States dollar",
+      "wikiLink": "http://en.wikipedia.org/wiki/United_States_dollar",
+      "wikidataId": "Q4917",
+      "freebaseId": "/m/09nqf",
+      "matchedText": "USD",
+      "relevanceScore": 0.1527,
+      "confidenceScore": 10.78,
+      "type": [
+        "Currency"
+      ]
+    },
+    {
+      "entityId": "Money",
+      "entityEnglishId": "Money",
+      "wikiLink": "http://en.wikipedia.org/wiki/Money",
+      "wikidataId": "Q1368",
+      "freebaseId": "/m/04_x4",
+      "matchedText": "money",
+      "relevanceScore": 0.1294,
+      "confidenceScore": 8.191,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trade",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 2.754,
+      "type": null
+    },
+    {
+      "entityId": "United States",
+      "entityEnglishId": "United States",
+      "wikiLink": "http://en.wikipedia.org/wiki/United_States",
+      "wikidataId": "Q30",
+      "freebaseId": "/m/09c7w0",
+      "matchedText": "US",
+      "relevanceScore": 0.06821,
+      "confidenceScore": 3.31,
+      "type": [
+        "Place",
+        "PopulatedPlace",
+        "Country"
+      ]
+    },
+    {
+      "entityId": "United States dollar",
+      "entityEnglishId": "United States dollar",
+      "wikiLink": "http://en.wikipedia.org/wiki/United_States_dollar",
+      "wikidataId": "Q4917",
+      "freebaseId": "/m/09nqf",
+      "matchedText": "US Dollar",
+      "relevanceScore": 0.08908,
+      "confidenceScore": 11.97,
+      "type": [
+        "Currency"
+      ]
+    },
+    {
+      "entityId": "Money",
+      "entityEnglishId": "Money",
+      "wikiLink": "http://en.wikipedia.org/wiki/Money",
+      "wikidataId": "Q1368",
+      "freebaseId": "/m/04_x4",
+      "matchedText": "money",
+      "relevanceScore": 0.1294,
+      "confidenceScore": 8.191,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trade",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 2.754,
+      "type": null
+    },
+    {
+      "entityId": "Money",
+      "entityEnglishId": "Money",
+      "wikiLink": "http://en.wikipedia.org/wiki/Money",
+      "wikidataId": "Q1368",
+      "freebaseId": "/m/04_x4",
+      "matchedText": "money",
+      "relevanceScore": 0.1294,
+      "confidenceScore": 8.191,
+      "type": null
+    },
+    {
+      "entityId": "Bull",
+      "entityEnglishId": "Bull",
+      "wikiLink": "http://en.wikipedia.org/wiki/Bull",
+      "wikidataId": "Q693690",
+      "freebaseId": "/m/0cnyhnx",
+      "matchedText": "bull",
+      "relevanceScore": 0.03935,
+      "confidenceScore": 1.146,
+      "type": null
+    },
+    {
+      "entityId": "Money",
+      "entityEnglishId": "Money",
+      "wikiLink": "http://en.wikipedia.org/wiki/Money",
+      "wikidataId": "Q1368",
+      "freebaseId": "/m/04_x4",
+      "matchedText": "money",
+      "relevanceScore": 0.1294,
+      "confidenceScore": 8.191,
+      "type": null
+    },
+    {
+      "entityId": "United States",
+      "entityEnglishId": "United States",
+      "wikiLink": "http://en.wikipedia.org/wiki/United_States",
+      "wikidataId": "Q30",
+      "freebaseId": "/m/09c7w0",
+      "matchedText": "US",
+      "relevanceScore": 0.06821,
+      "confidenceScore": 3.31,
+      "type": [
+        "Place",
+        "PopulatedPlace",
+        "Country"
+      ]
+    },
+    {
+      "entityId": "Stock market",
+      "entityEnglishId": "Stock market",
+      "wikiLink": "http://en.wikipedia.org/wiki/Stock_market",
+      "wikidataId": "Q475000",
+      "freebaseId": "/m/0drqp",
+      "matchedText": "stock markets",
+      "relevanceScore": 0.213,
+      "confidenceScore": 4.992,
+      "type": null
+    },
+    {
+      "entityId": "Stock",
+      "entityEnglishId": "Stock",
+      "wikiLink": "http://en.wikipedia.org/wiki/Stock",
+      "wikidataId": "Q1196314",
+      "freebaseId": "/m/077mq",
+      "matchedText": "stock",
+      "relevanceScore": 0.167,
+      "confidenceScore": 7.99,
+      "type": null
+    },
+    {
+      "entityId": "Market trend",
+      "entityEnglishId": "Market trend",
+      "wikiLink": "http://en.wikipedia.org/wiki/Market_trend",
+      "wikidataId": "Q1004322",
+      "freebaseId": "/m/0g_23",
+      "matchedText": "trend",
+      "relevanceScore": 0.3287,
+      "confidenceScore": 1.25,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Foreign exchange market",
+      "entityEnglishId": "Foreign exchange market",
+      "wikiLink": "http://en.wikipedia.org/wiki/Foreign_exchange_market",
+      "wikidataId": "Q66076",
+      "freebaseId": "/m/02_cz4",
+      "matchedText": "Forex brokers",
+      "relevanceScore": 0.7173,
+      "confidenceScore": 1.819,
+      "type": null
+    },
+    {
+      "entityId": "Broker",
+      "entityEnglishId": "Broker",
+      "wikiLink": "http://en.wikipedia.org/wiki/Broker",
+      "wikidataId": "Q160117",
+      "freebaseId": "/m/011808st",
+      "matchedText": "brokers",
+      "relevanceScore": 0.02311,
+      "confidenceScore": 2.848,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trade",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 2.754,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Broker",
+      "entityEnglishId": "Broker",
+      "wikiLink": "http://en.wikipedia.org/wiki/Broker",
+      "wikidataId": "Q160117",
+      "freebaseId": "/m/011808st",
+      "matchedText": "brokers",
+      "relevanceScore": 0.02311,
+      "confidenceScore": 2.848,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trade",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 2.754,
+      "type": null
+    },
+    {
+      "entityId": "Bitcoin",
+      "entityEnglishId": "Bitcoin",
+      "wikiLink": "http://en.wikipedia.org/wiki/Bitcoin",
+      "wikidataId": "Q131723",
+      "freebaseId": "/m/05p0rrx",
+      "matchedText": "Bitcoin",
+      "relevanceScore": 0.1427,
+      "confidenceScore": 9.868,
+      "type": [
+        "Work",
+        "Software"
+      ]
+    },
+    {
+      "entityId": "Money",
+      "entityEnglishId": "Money",
+      "wikiLink": "http://en.wikipedia.org/wiki/Money",
+      "wikidataId": "Q1368",
+      "freebaseId": "/m/04_x4",
+      "matchedText": "money",
+      "relevanceScore": 0.1294,
+      "confidenceScore": 8.191,
+      "type": null
+    },
+    {
+      "entityId": "Cryptocurrency",
+      "entityEnglishId": "Cryptocurrency",
+      "wikiLink": "http://en.wikipedia.org/wiki/Cryptocurrency",
+      "wikidataId": "Q13479982",
+      "freebaseId": "/m/0vpj4_b",
+      "matchedText": "crypto currencies",
+      "relevanceScore": 0.1919,
+      "confidenceScore": 4.54,
+      "type": null
+    },
+    {
+      "entityId": "Currency",
+      "entityEnglishId": "Currency",
+      "wikiLink": "http://en.wikipedia.org/wiki/Currency",
+      "wikidataId": "Q8142",
+      "freebaseId": "/m/01q7l",
+      "matchedText": "currencies",
+      "relevanceScore": 0.1125,
+      "confidenceScore": 7.018,
+      "type": [
+        "Currency"
+      ]
+    },
+    {
+      "entityId": "Broker",
+      "entityEnglishId": "Broker",
+      "wikiLink": "http://en.wikipedia.org/wiki/Broker",
+      "wikidataId": "Q160117",
+      "freebaseId": "/m/011808st",
+      "matchedText": "broker",
+      "relevanceScore": 0.02311,
+      "confidenceScore": 2.948,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Trader (finance)",
+      "entityEnglishId": "Trader (finance)",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trader_(finance)",
+      "wikidataId": "Q1424605",
+      "freebaseId": "/m/0cncxk",
+      "matchedText": "traders",
+      "relevanceScore": 0.6631,
+      "confidenceScore": 2.417,
+      "type": null
+    },
+    {
+      "entityId": "Currency",
+      "entityEnglishId": "Currency",
+      "wikiLink": "http://en.wikipedia.org/wiki/Currency",
+      "wikidataId": "Q8142",
+      "freebaseId": "/m/01q7l",
+      "matchedText": "currency",
+      "relevanceScore": 0.1125,
+      "confidenceScore": 12.17,
+      "type": [
+        "Currency"
+      ]
+    },
+    {
+      "entityId": "Foreign exchange market",
+      "entityEnglishId": "Foreign exchange market",
+      "wikiLink": "http://en.wikipedia.org/wiki/Foreign_exchange_market",
+      "wikidataId": "Q66076",
+      "freebaseId": "/m/02_cz4",
+      "matchedText": "currency markets",
+      "relevanceScore": 0.7173,
+      "confidenceScore": 6.125,
+      "type": null
+    },
+    {
+      "entityId": "Truth",
+      "entityEnglishId": "Truth",
+      "wikiLink": "http://en.wikipedia.org/wiki/Truth",
+      "wikidataId": "Q7949",
+      "freebaseId": "/m/07cb8",
+      "matchedText": "truth",
+      "relevanceScore": 0.0552,
+      "confidenceScore": 4.27,
+      "type": null
+    },
+    {
+      "entityId": "Currency",
+      "entityEnglishId": "Currency",
+      "wikiLink": "http://en.wikipedia.org/wiki/Currency",
+      "wikidataId": "Q8142",
+      "freebaseId": "/m/01q7l",
+      "matchedText": "currency",
+      "relevanceScore": 0.1125,
+      "confidenceScore": 12.17,
+      "type": [
+        "Currency"
+      ]
+    },
+    {
+      "entityId": "Foreign exchange market",
+      "entityEnglishId": "Foreign exchange market",
+      "wikiLink": "http://en.wikipedia.org/wiki/Foreign_exchange_market",
+      "wikidataId": "Q66076",
+      "freebaseId": "/m/02_cz4",
+      "matchedText": "currency trading",
+      "relevanceScore": 0.7173,
+      "confidenceScore": 6.2,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Money",
+      "entityEnglishId": "Money",
+      "wikiLink": "http://en.wikipedia.org/wiki/Money",
+      "wikidataId": "Q1368",
+      "freebaseId": "/m/04_x4",
+      "matchedText": "money",
+      "relevanceScore": 0.1294,
+      "confidenceScore": 8.191,
+      "type": null
+    },
+    {
+      "entityId": "Currency",
+      "entityEnglishId": "Currency",
+      "wikiLink": "http://en.wikipedia.org/wiki/Currency",
+      "wikidataId": "Q8142",
+      "freebaseId": "/m/01q7l",
+      "matchedText": "currency",
+      "relevanceScore": 0.1125,
+      "confidenceScore": 12.17,
+      "type": [
+        "Currency"
+      ]
+    },
+    {
+      "entityId": "Currency pair",
+      "entityEnglishId": "Currency pair",
+      "wikiLink": "http://en.wikipedia.org/wiki/Currency_pair",
+      "wikidataId": "Q3360632",
+      "freebaseId": "/m/08c63z",
+      "matchedText": "currency pair",
+      "relevanceScore": 0.1857,
+      "confidenceScore": 3.198,
+      "type": null
+    },
+    {
+      "entityId": "Cancer",
+      "entityEnglishId": "Cancer",
+      "wikiLink": "http://en.wikipedia.org/wiki/Cancer",
+      "wikidataId": "Q12078",
+      "freebaseId": "/m/0qcr0",
+      "matchedText": "cancer",
+      "relevanceScore": 0.03184,
+      "confidenceScore": 3.321,
+      "type": [
+        "Disease"
+      ]
+    },
+    {
+      "entityId": "Attention",
+      "entityEnglishId": "Attention",
+      "wikiLink": "http://en.wikipedia.org/wiki/Attention",
+      "wikidataId": "Q6501338",
+      "freebaseId": "/m/0hy_j",
+      "matchedText": "attention",
+      "relevanceScore": 0.08065,
+      "confidenceScore": 0.9929,
+      "type": null
+    },
+    {
+      "entityId": "Currency",
+      "entityEnglishId": "Currency",
+      "wikiLink": "http://en.wikipedia.org/wiki/Currency",
+      "wikidataId": "Q8142",
+      "freebaseId": "/m/01q7l",
+      "matchedText": "currencies",
+      "relevanceScore": 0.1125,
+      "confidenceScore": 7.018,
+      "type": [
+        "Currency"
+      ]
+    },
+    {
+      "entityId": "Stock",
+      "entityEnglishId": "Stock",
+      "wikiLink": "http://en.wikipedia.org/wiki/Stock",
+      "wikidataId": "Q1196314",
+      "freebaseId": "/m/077mq",
+      "matchedText": "stock",
+      "relevanceScore": 0.1408,
+      "confidenceScore": 7.99,
+      "type": null
+    },
+    {
+      "entityId": "Stock market index",
+      "entityEnglishId": "Stock market index",
+      "wikiLink": "http://en.wikipedia.org/wiki/Stock_market_index",
+      "wikidataId": "Q223371",
+      "freebaseId": "/m/0crl0",
+      "matchedText": "stock indices",
+      "relevanceScore": 0.05817,
+      "confidenceScore": 1.191,
+      "type": null
+    },
+    {
+      "entityId": "Commodity",
+      "entityEnglishId": "Commodity",
+      "wikiLink": "http://en.wikipedia.org/wiki/Commodity",
+      "wikidataId": "Q317088",
+      "freebaseId": "/m/0cxp1",
+      "matchedText": "commodities",
+      "relevanceScore": 0.1368,
+      "confidenceScore": 6.024,
+      "type": null
+    },
+    {
+      "entityId": "Petroleum",
+      "entityEnglishId": "Petroleum",
+      "wikiLink": "http://en.wikipedia.org/wiki/Petroleum",
+      "wikidataId": "Q22656",
+      "freebaseId": "/m/05r_j",
+      "matchedText": "crude oil",
+      "relevanceScore": 0.07379,
+      "confidenceScore": 7.184,
+      "type": null
+    },
+    {
+      "entityId": "Oil",
+      "entityEnglishId": "Oil",
+      "wikiLink": "http://en.wikipedia.org/wiki/Oil",
+      "wikidataId": "Q42962",
+      "freebaseId": "/m/0bp_wy",
+      "matchedText": "oil",
+      "relevanceScore": 0.09852,
+      "confidenceScore": 1.093,
+      "type": null
+    },
+    {
+      "entityId": "Market trend",
+      "entityEnglishId": "Market trend",
+      "wikiLink": "http://en.wikipedia.org/wiki/Market_trend",
+      "wikidataId": "Q1004322",
+      "freebaseId": "/m/0g_23",
+      "matchedText": "bullish",
+      "relevanceScore": 0.3421,
+      "confidenceScore": 4.482,
+      "type": null
+    },
+    {
+      "entityId": "Oil",
+      "entityEnglishId": "Oil",
+      "wikiLink": "http://en.wikipedia.org/wiki/Oil",
+      "wikidataId": "Q42962",
+      "freebaseId": "/m/0bp_wy",
+      "matchedText": "oil",
+      "relevanceScore": 0.09852,
+      "confidenceScore": 1.093,
+      "type": null
+    },
+    {
+      "entityId": "Market trend",
+      "entityEnglishId": "Market trend",
+      "wikiLink": "http://en.wikipedia.org/wiki/Market_trend",
+      "wikidataId": "Q1004322",
+      "freebaseId": "/m/0g_23",
+      "matchedText": "bullish trends",
+      "relevanceScore": 0.2937,
+      "confidenceScore": 1.314,
+      "type": null
+    },
+    {
+      "entityId": "Money",
+      "entityEnglishId": "Money",
+      "wikiLink": "http://en.wikipedia.org/wiki/Money",
+      "wikidataId": "Q1368",
+      "freebaseId": "/m/04_x4",
+      "matchedText": "money",
+      "relevanceScore": 0.1294,
+      "confidenceScore": 8.191,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "Price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.024,
+      "type": null
+    },
+    {
+      "entityId": "Skill",
+      "entityEnglishId": "Skill",
+      "wikiLink": "http://en.wikipedia.org/wiki/Skill",
+      "wikidataId": "Q205961",
+      "freebaseId": "/m/01zsxh",
+      "matchedText": "skill",
+      "relevanceScore": 0.3588,
+      "confidenceScore": 2.428,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Tutorial",
+      "entityEnglishId": "Tutorial",
+      "wikiLink": "http://en.wikipedia.org/wiki/Tutorial",
+      "wikidataId": "Q535741",
+      "freebaseId": "/m/0157xl",
+      "matchedText": "tutorials",
+      "relevanceScore": 0.243,
+      "confidenceScore": 1.377,
+      "type": null
+    },
+    {
+      "entityId": "Knowledge",
+      "entityEnglishId": "Knowledge",
+      "wikiLink": "http://en.wikipedia.org/wiki/Knowledge",
+      "wikidataId": "Q9081",
+      "freebaseId": "/m/01k8wb",
+      "matchedText": "knowledge",
+      "relevanceScore": 0.04704,
+      "confidenceScore": 1.182,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trade",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 2.754,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "Price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.024,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "Trade",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 2.656,
+      "type": null
+    },
+    {
+      "entityId": "Management",
+      "entityEnglishId": "Management",
+      "wikiLink": "http://en.wikipedia.org/wiki/Management",
+      "wikidataId": "Q2920921",
+      "freebaseId": "/m/04_tv",
+      "matchedText": "Management",
+      "relevanceScore": 0,
+      "confidenceScore": 1.842,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Feedback",
+      "entityEnglishId": "Feedback",
+      "wikiLink": "http://en.wikipedia.org/wiki/Feedback",
+      "wikidataId": "Q183635",
+      "freebaseId": "/m/03232",
+      "matchedText": "feedback",
+      "relevanceScore": 0,
+      "confidenceScore": 2.983,
+      "type": null
+    },
+    {
+      "entityId": "Luck",
+      "entityEnglishId": "Luck",
+      "wikiLink": "http://en.wikipedia.org/wiki/Luck",
+      "wikidataId": "Q1970348",
+      "freebaseId": "/m/01bchv",
+      "matchedText": "luck",
+      "relevanceScore": 0.03455,
+      "confidenceScore": 1.171,
+      "type": null
+    },
+    {
+      "entityId": "Trader (finance)",
+      "entityEnglishId": "Trader (finance)",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trader_(finance)",
+      "wikidataId": "Q1424605",
+      "freebaseId": "/m/0cncxk",
+      "matchedText": "Trader",
+      "relevanceScore": 0.6631,
+      "confidenceScore": 1.169,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Trader (finance)",
+      "entityEnglishId": "Trader (finance)",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trader_(finance)",
+      "wikidataId": "Q1424605",
+      "freebaseId": "/m/0cncxk",
+      "matchedText": "trader",
+      "relevanceScore": 0.6631,
+      "confidenceScore": 1.169,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Hour",
+      "entityEnglishId": "Hour",
+      "wikiLink": "http://en.wikipedia.org/wiki/Hour",
+      "wikidataId": "Q25235",
+      "freebaseId": "/m/03mxv",
+      "matchedText": "hour",
+      "relevanceScore": 0.06519,
+      "confidenceScore": 1.153,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.055,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trading",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 1.525,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trade",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 2.754,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trade",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 2.754,
+      "type": null
+    },
+    {
+      "entityId": "Signal",
+      "entityEnglishId": "Signal",
+      "wikiLink": "http://en.wikipedia.org/wiki/Signal",
+      "wikidataId": "Q174984",
+      "freebaseId": "/m/01p9_w",
+      "matchedText": "signals",
+      "relevanceScore": 0.4161,
+      "confidenceScore": 1.259,
+      "type": null
+    },
+    {
+      "entityId": "Trade",
+      "entityEnglishId": "Trade",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trade",
+      "wikidataId": "Q601401",
+      "freebaseId": "/m/07br0",
+      "matchedText": "trade",
+      "relevanceScore": 0.8708,
+      "confidenceScore": 2.754,
+      "type": null
+    },
+    {
+      "entityId": "10",
+      "entityEnglishId": "",
+      "wikiLink": "",
+      "wikidataId": "",
+      "freebaseId": "",
+      "matchedText": "10 years",
+      "relevanceScore": 0,
+      "confidenceScore": 0.5,
+      "type": [
+        "Duration"
+      ]
+    },
+    {
+      "entityId": "12",
+      "entityEnglishId": "",
+      "wikiLink": "",
+      "wikidataId": "",
+      "freebaseId": "",
+      "matchedText": "12 hour",
+      "relevanceScore": 0,
+      "confidenceScore": 0.5,
+      "type": [
+        "Duration"
+      ]
+    },
+    {
+      "entityId": "8",
+      "entityEnglishId": "",
+      "wikiLink": "",
+      "wikidataId": "",
+      "freebaseId": "",
+      "matchedText": "8 hour",
+      "relevanceScore": 0,
+      "confidenceScore": 0.5,
+      "type": [
+        "Duration"
+      ]
+    },
+    {
+      "entityId": "4",
+      "entityEnglishId": "",
+      "wikiLink": "",
+      "wikidataId": "",
+      "freebaseId": "",
+      "matchedText": "4 hour",
+      "relevanceScore": 0,
+      "confidenceScore": 0.5,
+      "type": [
+        "Duration"
+      ]
+    },
+    {
+      "entityId": "4",
+      "entityEnglishId": "",
+      "wikiLink": "",
+      "wikidataId": "",
+      "freebaseId": "",
+      "matchedText": "4 hour",
+      "relevanceScore": 0,
+      "confidenceScore": 0.5,
+      "type": [
+        "Duration"
+      ]
+    },
+    {
+      "entityId": "4",
+      "entityEnglishId": "",
+      "wikiLink": "",
+      "wikidataId": "",
+      "freebaseId": "",
+      "matchedText": "4 hour",
+      "relevanceScore": 0,
+      "confidenceScore": 0.5,
+      "type": [
+        "Duration"
+      ]
+    },
+    {
+      "entityId": "Forex War Room",
+      "entityEnglishId": "",
+      "wikiLink": "",
+      "wikidataId": "",
+      "freebaseId": "",
+      "matchedText": "Forex War Room",
+      "relevanceScore": 0,
+      "confidenceScore": 0.5,
+      "type": [
+        "Company"
+      ]
+    },
+    {
+      "entityId": "2",
+      "entityEnglishId": "",
+      "wikiLink": "",
+      "wikidataId": "",
+      "freebaseId": "",
+      "matchedText": "2 years",
+      "relevanceScore": 0,
+      "confidenceScore": 0.5,
+      "type": [
+        "Duration"
+      ]
+    },
+    {
+      "entityId": "5",
+      "entityEnglishId": "",
+      "wikiLink": "",
+      "wikidataId": "",
+      "freebaseId": "",
+      "matchedText": "5",
+      "relevanceScore": 0,
+      "confidenceScore": 0.5,
+      "type": [
+        "Number"
+      ]
+    },
+    {
+      "entityId": "4",
+      "entityEnglishId": "",
+      "wikiLink": "",
+      "wikidataId": "",
+      "freebaseId": "",
+      "matchedText": "4",
+      "relevanceScore": 0,
+      "confidenceScore": 0.5,
+      "type": [
+        "Number"
+      ]
+    },
+    {
+      "entityId": "4",
+      "entityEnglishId": "",
+      "wikiLink": "",
+      "wikidataId": "",
+      "freebaseId": "",
+      "matchedText": "4",
+      "relevanceScore": 0,
+      "confidenceScore": 0.5,
+      "type": [
+        "Number"
+      ]
+    },
+    {
+      "entityId": "4",
+      "entityEnglishId": "",
+      "wikiLink": "",
+      "wikidataId": "",
+      "freebaseId": "",
+      "matchedText": "4 hour",
+      "relevanceScore": 0,
+      "confidenceScore": 0.5,
+      "type": [
+        "Duration"
+      ]
+    },
+    {
+      "entityId": "Trader (finance)",
+      "entityEnglishId": "Trader (finance)",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trader_(finance)",
+      "wikidataId": "Q1424605",
+      "freebaseId": "/m/0cncxk",
+      "matchedText": "trader",
+      "relevanceScore": 0.6631,
+      "confidenceScore": 1.169,
+      "type": null
+    },
+    {
+      "entityId": "Trader (finance)",
+      "entityEnglishId": "Trader (finance)",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trader_(finance)",
+      "wikidataId": "Q1424605",
+      "freebaseId": "/m/0cncxk",
+      "matchedText": "trader",
+      "relevanceScore": 0.6631,
+      "confidenceScore": 1.169,
+      "type": null
+    },
+    {
+      "entityId": "Trader (finance)",
+      "entityEnglishId": "Trader (finance)",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trader_(finance)",
+      "wikidataId": "Q1424605",
+      "freebaseId": "/m/0cncxk",
+      "matchedText": "trader",
+      "relevanceScore": 0.6631,
+      "confidenceScore": 1.169,
+      "type": null
+    },
+    {
+      "entityId": "Trader (finance)",
+      "entityEnglishId": "Trader (finance)",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trader_(finance)",
+      "wikidataId": "Q1424605",
+      "freebaseId": "/m/0cncxk",
+      "matchedText": "trader",
+      "relevanceScore": 0.6631,
+      "confidenceScore": 1.169,
+      "type": null
+    },
+    {
+      "entityId": "Trader (finance)",
+      "entityEnglishId": "Trader (finance)",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trader_(finance)",
+      "wikidataId": "Q1424605",
+      "freebaseId": "/m/0cncxk",
+      "matchedText": "trader",
+      "relevanceScore": 0.6631,
+      "confidenceScore": 1.169,
+      "type": null
+    },
+    {
+      "entityId": "Foreign exchange market",
+      "entityEnglishId": "Foreign exchange market",
+      "wikiLink": "http://en.wikipedia.org/wiki/Foreign_exchange_market",
+      "wikidataId": "Q66076",
+      "freebaseId": "/m/02_cz4",
+      "matchedText": "Forex",
+      "relevanceScore": 0.7173,
+      "confidenceScore": 9.476,
+      "type": null
+    },
+    {
+      "entityId": "Foreign exchange market",
+      "entityEnglishId": "Foreign exchange market",
+      "wikiLink": "http://en.wikipedia.org/wiki/Foreign_exchange_market",
+      "wikidataId": "Q66076",
+      "freebaseId": "/m/02_cz4",
+      "matchedText": "Forex",
+      "relevanceScore": 0.7173,
+      "confidenceScore": 9.476,
+      "type": null
+    },
+    {
+      "entityId": "Price",
+      "entityEnglishId": "Price",
+      "wikiLink": "http://en.wikipedia.org/wiki/Price",
+      "wikidataId": "Q160151",
+      "freebaseId": "/m/01d_1l",
+      "matchedText": "Price",
+      "relevanceScore": 0.7392,
+      "confidenceScore": 1.024,
+      "type": null
+    },
+    {
+      "entityId": "Foreign exchange market",
+      "entityEnglishId": "Foreign exchange market",
+      "wikiLink": "http://en.wikipedia.org/wiki/Foreign_exchange_market",
+      "wikidataId": "Q66076",
+      "freebaseId": "/m/02_cz4",
+      "matchedText": "Forex",
+      "relevanceScore": 0.7173,
+      "confidenceScore": 9.476,
+      "type": null
+    },
+    {
+      "entityId": "Signal",
+      "entityEnglishId": "Signal",
+      "wikiLink": "http://en.wikipedia.org/wiki/Signal",
+      "wikidataId": "Q174984",
+      "freebaseId": "/m/01p9_w",
+      "matchedText": "signals",
+      "relevanceScore": 0.4161,
+      "confidenceScore": 1.259,
+      "type": null
+    },
+    {
+      "entityId": "Signal",
+      "entityEnglishId": "Signal",
+      "wikiLink": "http://en.wikipedia.org/wiki/Signal",
+      "wikidataId": "Q174984",
+      "freebaseId": "/m/01p9_w",
+      "matchedText": "signals",
+      "relevanceScore": 0.4161,
+      "confidenceScore": 1.259,
+      "type": null
+    },
+    {
+      "entityId": "Signal",
+      "entityEnglishId": "Signal",
+      "wikiLink": "http://en.wikipedia.org/wiki/Signal",
+      "wikidataId": "Q174984",
+      "freebaseId": "/m/01p9_w",
+      "matchedText": "signals",
+      "relevanceScore": 0.4161,
+      "confidenceScore": 1.259,
+      "type": null
+    },
+    {
+      "entityId": "Signal",
+      "entityEnglishId": "Signal",
+      "wikiLink": "http://en.wikipedia.org/wiki/Signal",
+      "wikidataId": "Q174984",
+      "freebaseId": "/m/01p9_w",
+      "matchedText": "signals",
+      "relevanceScore": 0.4161,
+      "confidenceScore": 1.259,
+      "type": null
+    },
+    {
+      "entityId": "Signal",
+      "entityEnglishId": "Signal",
+      "wikiLink": "http://en.wikipedia.org/wiki/Signal",
+      "wikidataId": "Q174984",
+      "freebaseId": "/m/01p9_w",
+      "matchedText": "signals",
+      "relevanceScore": 0.4161,
+      "confidenceScore": 1.259,
+      "type": null
+    },
+    {
+      "entityId": "Signal",
+      "entityEnglishId": "Signal",
+      "wikiLink": "http://en.wikipedia.org/wiki/Signal",
+      "wikidataId": "Q174984",
+      "freebaseId": "/m/01p9_w",
+      "matchedText": "signals",
+      "relevanceScore": 0.4161,
+      "confidenceScore": 1.259,
+      "type": null
+    },
+    {
+      "entityId": "Signal",
+      "entityEnglishId": "Signal",
+      "wikiLink": "http://en.wikipedia.org/wiki/Signal",
+      "wikidataId": "Q174984",
+      "freebaseId": "/m/01p9_w",
+      "matchedText": "signals",
+      "relevanceScore": 0.4161,
+      "confidenceScore": 1.259,
+      "type": null
+    },
+    {
+      "entityId": "Foreign exchange market",
+      "entityEnglishId": "Foreign exchange market",
+      "wikiLink": "http://en.wikipedia.org/wiki/Foreign_exchange_market",
+      "wikidataId": "Q66076",
+      "freebaseId": "/m/02_cz4",
+      "matchedText": "Forex traders",
+      "relevanceScore": 0.7173,
+      "confidenceScore": 1.28,
+      "type": null
+    },
+    {
+      "entityId": "Candlestick pattern",
+      "entityEnglishId": "Candlestick pattern",
+      "wikiLink": "http://en.wikipedia.org/wiki/Candlestick_pattern",
+      "wikidataId": "Q116044962",
+      "freebaseId": "/m/0cmdn32",
+      "matchedText": "Candlestick patterns",
+      "relevanceScore": 0.9343,
+      "confidenceScore": 1.903,
+      "type": null
+    },
+    {
+      "entityId": "Candlestick pattern",
+      "entityEnglishId": "Candlestick pattern",
+      "wikiLink": "http://en.wikipedia.org/wiki/Candlestick_pattern",
+      "wikidataId": "Q116044962",
+      "freebaseId": "/m/0cmdn32",
+      "matchedText": "candlestick patterns",
+      "relevanceScore": 0.9343,
+      "confidenceScore": 1.903,
+      "type": null
+    },
+    {
+      "entityId": "Candlestick pattern",
+      "entityEnglishId": "Candlestick pattern",
+      "wikiLink": "http://en.wikipedia.org/wiki/Candlestick_pattern",
+      "wikidataId": "Q116044962",
+      "freebaseId": "/m/0cmdn32",
+      "matchedText": "Candlestick patterns",
+      "relevanceScore": 0.9343,
+      "confidenceScore": 1.903,
+      "type": null
+    },
+    {
+      "entityId": "Candlestick pattern",
+      "entityEnglishId": "Candlestick pattern",
+      "wikiLink": "http://en.wikipedia.org/wiki/Candlestick_pattern",
+      "wikidataId": "Q116044962",
+      "freebaseId": "/m/0cmdn32",
+      "matchedText": "candlestick patterns",
+      "relevanceScore": 0.9343,
+      "confidenceScore": 1.903,
+      "type": null
+    },
+    {
+      "entityId": "Candlestick pattern",
+      "entityEnglishId": "Candlestick pattern",
+      "wikiLink": "http://en.wikipedia.org/wiki/Candlestick_pattern",
+      "wikidataId": "Q116044962",
+      "freebaseId": "/m/0cmdn32",
+      "matchedText": "candlestick patterns",
+      "relevanceScore": 0.9343,
+      "confidenceScore": 1.903,
+      "type": null
+    },
+    {
+      "entityId": "Trader (finance)",
+      "entityEnglishId": "Trader (finance)",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trader_(finance)",
+      "wikidataId": "Q1424605",
+      "freebaseId": "/m/0cncxk",
+      "matchedText": "traders",
+      "relevanceScore": 0.6631,
+      "confidenceScore": 2.417,
+      "type": null
+    },
+    {
+      "entityId": "Trader (finance)",
+      "entityEnglishId": "Trader (finance)",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trader_(finance)",
+      "wikidataId": "Q1424605",
+      "freebaseId": "/m/0cncxk",
+      "matchedText": "traders",
+      "relevanceScore": 0.6631,
+      "confidenceScore": 2.417,
+      "type": null
+    },
+    {
+      "entityId": "Trader (finance)",
+      "entityEnglishId": "Trader (finance)",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trader_(finance)",
+      "wikidataId": "Q1424605",
+      "freebaseId": "/m/0cncxk",
+      "matchedText": "traders",
+      "relevanceScore": 0.6631,
+      "confidenceScore": 2.417,
+      "type": null
+    },
+    {
+      "entityId": "Trader (finance)",
+      "entityEnglishId": "Trader (finance)",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trader_(finance)",
+      "wikidataId": "Q1424605",
+      "freebaseId": "/m/0cncxk",
+      "matchedText": "Traders",
+      "relevanceScore": 0.6631,
+      "confidenceScore": 2.417,
+      "type": null
+    },
+    {
+      "entityId": "Trader (finance)",
+      "entityEnglishId": "Trader (finance)",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trader_(finance)",
+      "wikidataId": "Q1424605",
+      "freebaseId": "/m/0cncxk",
+      "matchedText": "traders",
+      "relevanceScore": 0.6631,
+      "confidenceScore": 2.417,
+      "type": null
+    },
+    {
+      "entityId": "Trader (finance)",
+      "entityEnglishId": "Trader (finance)",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trader_(finance)",
+      "wikidataId": "Q1424605",
+      "freebaseId": "/m/0cncxk",
+      "matchedText": "traders",
+      "relevanceScore": 0.6631,
+      "confidenceScore": 2.417,
+      "type": null
+    },
+    {
+      "entityId": "Trader (finance)",
+      "entityEnglishId": "Trader (finance)",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trader_(finance)",
+      "wikidataId": "Q1424605",
+      "freebaseId": "/m/0cncxk",
+      "matchedText": "traders",
+      "relevanceScore": 0.6631,
+      "confidenceScore": 2.417,
+      "type": null
+    },
+    {
+      "entityId": "Trader (finance)",
+      "entityEnglishId": "Trader (finance)",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trader_(finance)",
+      "wikidataId": "Q1424605",
+      "freebaseId": "/m/0cncxk",
+      "matchedText": "traders",
+      "relevanceScore": 0.6631,
+      "confidenceScore": 2.417,
+      "type": null
+    },
+    {
+      "entityId": "Trader (finance)",
+      "entityEnglishId": "Trader (finance)",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trader_(finance)",
+      "wikidataId": "Q1424605",
+      "freebaseId": "/m/0cncxk",
+      "matchedText": "traders",
+      "relevanceScore": 0.6631,
+      "confidenceScore": 2.417,
+      "type": null
+    },
+    {
+      "entityId": "Trader (finance)",
+      "entityEnglishId": "Trader (finance)",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trader_(finance)",
+      "wikidataId": "Q1424605",
+      "freebaseId": "/m/0cncxk",
+      "matchedText": "traders",
+      "relevanceScore": 0.6631,
+      "confidenceScore": 2.417,
+      "type": null
+    },
+    {
+      "entityId": "Trader (finance)",
+      "entityEnglishId": "Trader (finance)",
+      "wikiLink": "http://en.wikipedia.org/wiki/Trader_(finance)",
+      "wikidataId": "Q1424605",
+      "freebaseId": "/m/0cncxk",
+      "matchedText": "traders",
+      "relevanceScore": 0.6631,
+      "confidenceScore": 2.417,
+      "type": null
+    },
+    {
+      "entityId": "Candle",
+      "entityEnglishId": "Candle",
+      "wikiLink": "http://en.wikipedia.org/wiki/Candle",
+      "wikidataId": "Q12888135",
+      "freebaseId": "/m/0c06p",
+      "matchedText": "candle",
+      "relevanceScore": 0.5835,
+      "confidenceScore": 2.009,
+      "type": null
+    },
+    {
+      "entityId": "Candle",
+      "entityEnglishId": "Candle",
+      "wikiLink": "http://en.wikipedia.org/wiki/Candle",
+      "wikidataId": "Q12888135",
+      "freebaseId": "/m/0c06p",
+      "matchedText": "candle",
+      "relevanceScore": 0.5835,
+      "confidenceScore": 2.009,
+      "type": null
+    },
+    {
+      "entityId": "Candle",
+      "entityEnglishId": "Candle",
+      "wikiLink": "http://en.wikipedia.org/wiki/Candle",
+      "wikidataId": "Q12888135",
+      "freebaseId": "/m/0c06p",
+      "matchedText": "candle",
+      "relevanceScore": 0.5835,
+      "confidenceScore": 2.009,
+      "type": null
+    },
+    {
+      "entityId": "Candle",
+      "entityEnglishId": "Candle",
+      "wikiLink": "http://en.wikipedia.org/wiki/Candle",
+      "wikidataId": "Q12888135",
+      "freebaseId": "/m/0c06p",
+      "matchedText": "candle",
+      "relevanceScore": 0.5835,
+      "confidenceScore": 2.009,
+      "type": null
+    },
+    {
+      "entityId": "Candlestick pattern",
+      "entityEnglishId": "Candlestick pattern",
+      "wikiLink": "http://en.wikipedia.org/wiki/Candlestick_pattern",
+      "wikidataId": "Q116044962",
+      "freebaseId": "/m/0cmdn32",
+      "matchedText": "candlestick pattern",
+      "relevanceScore": 0.9343,
+      "confidenceScore": 3.046,
+      "type": null
+    },
+    {
+      "entityId": "Candlestick pattern",
+      "entityEnglishId": "Candlestick pattern",
+      "wikiLink": "http://en.wikipedia.org/wiki/Candlestick_pattern",
+      "wikidataId": "Q116044962",
+      "freebaseId": "/m/0cmdn32",
+      "matchedText": "candlestick pattern",
+      "relevanceScore": 0.9343,
+      "confidenceScore": 3.046,
+      "type": null
+    },
+    {
+      "entityId": "Signal",
+      "entityEnglishId": "Signal",
+      "wikiLink": "http://en.wikipedia.org/wiki/Signal",
+      "wikidataId": "Q174984",
+      "freebaseId": "/m/01p9_w",
+      "matchedText": "signal",
+      "relevanceScore": 0.4161,
+      "confidenceScore": 2.289,
+      "type": null
+    },
+    {
+      "entityId": "Signal",
+      "entityEnglishId": "Signal",
+      "wikiLink": "http://en.wikipedia.org/wiki/Signal",
+      "wikidataId": "Q174984",
+      "freebaseId": "/m/01p9_w",
+      "matchedText": "signal",
+      "relevanceScore": 0.4161,
+      "confidenceScore": 2.289,
+      "type": null
+    },
+    {
+      "entityId": "Signal",
+      "entityEnglishId": "Signal",
+      "wikiLink": "http://en.wikipedia.org/wiki/Signal",
+      "wikidataId": "Q174984",
+      "freebaseId": "/m/01p9_w",
+      "matchedText": "signal",
+      "relevanceScore": 0.4161,
+      "confidenceScore": 2.289,
+      "type": null
+    },
+    {
+      "entityId": "Signal",
+      "entityEnglishId": "Signal",
+      "wikiLink": "http://en.wikipedia.org/wiki/Signal",
+      "wikidataId": "Q174984",
+      "freebaseId": "/m/01p9_w",
+      "matchedText": "signal",
+      "relevanceScore": 0.4161,
+      "confidenceScore": 2.289,
+      "type": null
+    },
+    {
+      "entityId": "Technical analysis",
+      "entityEnglishId": "Technical analysis",
+      "wikiLink": "http://en.wikipedia.org/wiki/Technical_analysis",
+      "wikidataId": "Q235038",
+      "freebaseId": "/m/0spt1",
+      "matchedText": "technical analysis",
+      "relevanceScore": 0.513,
+      "confidenceScore": 6.733,
+      "type": null
+    },
+    {
+      "entityId": "Swing trading",
+      "entityEnglishId": "Swing trading",
+      "wikiLink": "http://en.wikipedia.org/wiki/Swing_trading",
+      "wikidataId": "Q1439154",
+      "freebaseId": "/m/058vf0",
+      "matchedText": "swing trading",
+      "relevanceScore": 0.1214,
+      "confidenceScore": 2.212,
+      "type": null
+    },
+    {
+      "entityId": "Swing trading",
+      "entityEnglishId": "Swing trading",
+      "wikiLink": "http://en.wikipedia.org/wiki/Swing_trading",
+      "wikidataId": "Q1439154",
+      "freebaseId": "/m/058vf0",
+      "matchedText": "swing trading",
+      "relevanceScore": 0.1214,
+      "confidenceScore": 2.212,
+      "type": null
+    },
+    {
+      "entityId": "Swing trading",
+      "entityEnglishId": "Swing trading",
+      "wikiLink": "http://en.wikipedia.org/wiki/Swing_trading",
+      "wikidataId": "Q1439154",
+      "freebaseId": "/m/058vf0",
+      "matchedText": "swing trading",
+      "relevanceScore": 0.1214,
+      "confidenceScore": 2.212,
+      "type": null
+    },
+    {
+      "entityId": "Day trading",
+      "entityEnglishId": "Day trading",
+      "wikiLink": "http://en.wikipedia.org/wiki/Day_trading",
+      "wikidataId": "Q1064131",
+      "freebaseId": "/m/01h9n8",
+      "matchedText": "intraday",
+      "relevanceScore": 0.3519,
+      "confidenceScore": 3.818,
+      "type": null
+    },
+    {
+      "entityId": "Market trend",
+      "entityEnglishId": "Market trend",
+      "wikiLink": "http://en.wikipedia.org/wiki/Market_trend",
+      "wikidataId": "Q1004322",
+      "freebaseId": "/m/0g_23",
+      "matchedText": "bearish",
+      "relevanceScore": 0.1788,
+      "confidenceScore": 6.298,
+      "type": null
+    },
+    {
+      "entityId": "Market trend",
+      "entityEnglishId": "Market trend",
+      "wikiLink": "http://en.wikipedia.org/wiki/Market_trend",
+      "wikidataId": "Q1004322",
+      "freebaseId": "/m/0g_23",
+      "matchedText": "bearish",
+      "relevanceScore": 0.1788,
+      "confidenceScore": 6.298,
+      "type": null
+    },
+    {
+      "entityId": "Market trend",
+      "entityEnglishId": "Market trend",
+      "wikiLink": "http://en.wikipedia.org/wiki/Market_trend",
+      "wikidataId": "Q1004322",
+      "freebaseId": "/m/0g_23",
+      "matchedText": "trends",
+      "relevanceScore": 0.2174,
+      "confidenceScore": 0.9596,
+      "type": null
+    },
+    {
+      "entityId": "Cryptocurrency",
+      "entityEnglishId": "Cryptocurrency",
+      "wikiLink": "http://en.wikipedia.org/wiki/Cryptocurrency",
+      "wikidataId": "Q13479982",
+      "freebaseId": "/m/0vpj4_b",
+      "matchedText": "crypto",
+      "relevanceScore": 0.2055,
+      "confidenceScore": 3.995,
+      "type": null
+    },
+    {
+      "entityId": "Cryptocurrency",
+      "entityEnglishId": "Cryptocurrency",
+      "wikiLink": "http://en.wikipedia.org/wiki/Cryptocurrency",
+      "wikidataId": "Q13479982",
+      "freebaseId": "/m/0vpj4_b",
+      "matchedText": "crypto",
+      "relevanceScore": 0.2055,
+      "confidenceScore": 3.995,
+      "type": null
+    },
+    {
+      "entityId": "Economic bubble",
+      "entityEnglishId": "Economic bubble",
+      "wikiLink": "http://en.wikipedia.org/wiki/Economic_bubble",
+      "wikidataId": "Q207781",
+      "freebaseId": "/m/011ddw",
+      "matchedText": "bubble",
+      "relevanceScore": 0.1836,
+      "confidenceScore": 1.011,
+      "type": null
+    },
+    {
+      "entityId": "Bitcoin",
+      "entityEnglishId": "Bitcoin",
+      "wikiLink": "http://en.wikipedia.org/wiki/Bitcoin",
+      "wikidataId": "Q131723",
+      "freebaseId": "/m/05p0rrx",
+      "matchedText": "bitcoin",
+      "relevanceScore": 0.1427,
+      "confidenceScore": 9.868,
+      "type": [
+        "Work",
+        "Software"
+      ]
+    },
+    {
+      "entityId": "Bitcoin",
+      "entityEnglishId": "Bitcoin",
+      "wikiLink": "http://en.wikipedia.org/wiki/Bitcoin",
+      "wikidataId": "Q131723",
+      "freebaseId": "/m/05p0rrx",
+      "matchedText": "bitcoin",
+      "relevanceScore": 0.1427,
+      "confidenceScore": 9.868,
+      "type": [
+        "Work",
+        "Software"
+      ]
+    },
+    {
+      "entityId": "United States dollar",
+      "entityEnglishId": "United States dollar",
+      "wikiLink": "http://en.wikipedia.org/wiki/United_States_dollar",
+      "wikidataId": "Q4917",
+      "freebaseId": "/m/09nqf",
+      "matchedText": "USD",
+      "relevanceScore": 0.1527,
+      "confidenceScore": 10.78,
+      "type": [
+        "Currency"
+      ]
+    },
+    {
+      "entityId": "United States dollar",
+      "entityEnglishId": "United States dollar",
+      "wikiLink": "http://en.wikipedia.org/wiki/United_States_dollar",
+      "wikidataId": "Q4917",
+      "freebaseId": "/m/09nqf",
+      "matchedText": "USD",
+      "relevanceScore": 0.1527,
+      "confidenceScore": 10.78,
+      "type": [
+        "Currency"
+      ]
+    },
+    {
+      "entityId": "United States dollar",
+      "entityEnglishId": "United States dollar",
+      "wikiLink": "http://en.wikipedia.org/wiki/United_States_dollar",
+      "wikidataId": "Q4917",
+      "freebaseId": "/m/09nqf",
+      "matchedText": "USD",
+      "relevanceScore": 0.1527,
+      "confidenceScore": 10.78,
+      "type": [
+        "Currency"
+      ]
+    },
+    {
+      "entityId": "Broker",
+      "entityEnglishId": "Broker",
+      "wikiLink": "http://en.wikipedia.org/wiki/Broker",
+      "wikidataId": "Q160117",
+      "freebaseId": "/m/011808st",
+      "matchedText": "brokers",
+      "relevanceScore": 0.02311,
+      "confidenceScore": 2.848,
+      "type": null
+    },
+    {
+      "entityId": "Petroleum",
+      "entityEnglishId": "Petroleum",
+      "wikiLink": "http://en.wikipedia.org/wiki/Petroleum",
+      "wikidataId": "Q22656",
+      "freebaseId": "/m/05r_j",
+      "matchedText": "Crude oil",
+      "relevanceScore": 0.07379,
+      "confidenceScore": 7.184,
+      "type": null
+    },
+    {
+      "entityId": "1",
+      "entityEnglishId": "",
+      "wikiLink": "",
+      "wikidataId": "",
+      "freebaseId": "",
+      "matchedText": "1 hour",
+      "relevanceScore": 0,
+      "confidenceScore": 0.5,
+      "type": [
+        "Duration"
+      ]
+    }
+  ],
+  "topics": [
+    {
+      "label": "Trade",
+      "wikiLink": "http://en.wikipedia.org/Trade",
+      "wikidataId": "Q601401",
+      "score": 1
+    },
+    {
+      "label": "Price",
+      "wikiLink": "http://en.wikipedia.org/Price",
+      "wikidataId": "Q160151",
+      "score": 1
+    },
+    {
+      "label": "Candlestick pattern",
+      "wikiLink": "http://en.wikipedia.org/Candlestick_pattern",
+      "wikidataId": "Q116044962",
+      "score": 1
+    },
+    {
+      "label": "Candlestick",
+      "wikiLink": "http://en.wikipedia.org/Candlestick",
+      "wikidataId": "Q151771",
+      "score": 1
+    },
+    {
+      "label": "Trader (finance)",
+      "wikiLink": "http://en.wikipedia.org/Trader_(finance)",
+      "wikidataId": "Q1424605",
+      "score": 1
+    },
+    {
+      "label": "Foreign exchange market",
+      "wikiLink": "http://en.wikipedia.org/Foreign_exchange_market",
+      "wikidataId": "Q66076",
+      "score": 1
+    },
+    {
+      "label": "Candle",
+      "wikiLink": "http://en.wikipedia.org/Candle",
+      "wikidataId": "Q12888135",
+      "score": 1
+    },
+    {
+      "label": "Signal",
+      "wikiLink": "http://en.wikipedia.org/Signal",
+      "wikidataId": "Q174984",
+      "score": 1
+    },
+    {
+      "label": "Financial markets",
+      "wikiLink": "http://en.wikipedia.org/Category:Financial_markets",
+      "wikidataId": "Q208697",
+      "score": 1
+    },
+    {
+      "label": "Market (economics)",
+      "wikiLink": "http://en.wikipedia.org/Category:Market_(economics)",
+      "wikidataId": "Q37654",
+      "score": 1
+    },
+    {
+      "label": "Private sector",
+      "wikiLink": "http://en.wikipedia.org/Category:Private_sector",
+      "wikidataId": "Q591763",
+      "score": 1
+    },
+    {
+      "label": "Investment",
+      "wikiLink": "http://en.wikipedia.org/Category:Investment",
+      "wikidataId": "Q4290",
+      "score": 1
+    },
+    {
+      "label": "Business",
+      "wikiLink": "http://en.wikipedia.org/Category:Business",
+      "wikidataId": "Q4830453",
+      "score": 0.9703
+    },
+    {
+      "label": "Economy",
+      "wikiLink": "http://en.wikipedia.org/Category:Economy",
+      "wikidataId": "Q159810",
+      "score": 0.9266
+    },
+    {
+      "label": "Technical analysis",
+      "wikiLink": "http://en.wikipedia.org/Technical_analysis",
+      "wikidataId": "Q235038",
+      "score": 0.9004
+    },
+    {
+      "label": "Cultural exchange",
+      "wikiLink": "http://en.wikipedia.org/Category:Cultural_exchange",
+      "wikidataId": "Q138609120",
+      "score": 0.6204
+    },
+    {
+      "label": "Day trading",
+      "wikiLink": "http://en.wikipedia.org/Day_trading",
+      "wikidataId": "Q1064131",
+      "score": 0.5953
+    },
+    {
+      "label": "Skill",
+      "wikiLink": "http://en.wikipedia.org/Skill",
+      "wikidataId": "Q205961",
+      "score": 0.5791
+    },
+    {
+      "label": "Market trends",
+      "wikiLink": "http://en.wikipedia.org/Category:Market_trends",
+      "wikidataId": "Q1004322",
+      "score": 0.5444
+    },
+    {
+      "label": "Knowledge economy",
+      "wikiLink": "http://en.wikipedia.org/Category:Knowledge_economy",
+      "wikidataId": "Q830170",
+      "score": 0.5344
+    },
+    {
+      "label": "Stock market",
+      "wikiLink": "http://en.wikipedia.org/Category:Stock_market",
+      "wikidataId": "Q475000",
+      "score": 0.5182
+    },
+    {
+      "label": "Market trend",
+      "wikiLink": "http://en.wikipedia.org/Market_trend",
+      "wikidataId": "Q1004322",
+      "score": 0.5071
+    },
+    {
+      "label": "Business processes",
+      "wikiLink": "http://en.wikipedia.org/Category:Business_processes",
+      "wikidataId": "Q851587",
+      "score": 0.4918
+    },
+    {
+      "label": "Business economics",
+      "wikiLink": "http://en.wikipedia.org/Category:Business_economics",
+      "wikidataId": "Q24208053",
+      "score": 0.4598
+    },
+    {
+      "label": "Securities (finance)",
+      "wikiLink": "http://en.wikipedia.org/Category:Securities_(finance)",
+      "wikidataId": "Q169489",
+      "score": 0.4576
+    },
+    {
+      "label": "Equity securities",
+      "wikiLink": "http://en.wikipedia.org/Category:Equity_securities",
+      "wikidataId": "Q1196314",
+      "score": 0.43
+    },
+    {
+      "label": "Finance",
+      "wikiLink": "http://en.wikipedia.org/Category:Finance",
+      "wikidataId": "Q43015",
+      "score": 0.423
+    },
+    {
+      "label": "Financial data analysis",
+      "wikiLink": "http://en.wikipedia.org/Category:Financial_data_analysis",
+      "wikidataId": "Q8458386",
+      "score": 0.4037
+    },
+    {
+      "label": "Culture",
+      "wikiLink": "http://en.wikipedia.org/Category:Culture",
+      "wikidataId": "Q11042",
+      "score": 0.403
+    },
+    {
+      "label": "Pricing",
+      "wikiLink": "http://en.wikipedia.org/Category:Pricing",
+      "wikidataId": "Q2516951",
+      "score": 0.3785
+    },
+    {
+      "label": "Candles",
+      "wikiLink": "http://en.wikipedia.org/Category:Candles",
+      "wikidataId": "Q12888135",
+      "score": 0.3673
+    },
+    {
+      "label": "Cryptocurrency",
+      "wikiLink": "http://en.wikipedia.org/Cryptocurrency",
+      "wikidataId": "Q13479982",
+      "score": 0.3547
+    },
+    {
+      "label": "Marketing",
+      "wikiLink": "http://en.wikipedia.org/Category:Marketing",
+      "wikidataId": "Q7012234",
+      "score": 0.3507
+    },
+    {
+      "label": "Tutorial",
+      "wikiLink": "http://en.wikipedia.org/Tutorial",
+      "wikidataId": "Q535741",
+      "score": 0.3437
+    },
+    {
+      "label": "Commodity markets",
+      "wikiLink": "http://en.wikipedia.org/Category:Commodity_markets",
+      "wikidataId": "Q2922469",
+      "score": 0.3095
+    },
+    {
+      "label": "Investment management",
+      "wikiLink": "http://en.wikipedia.org/Investment_management",
+      "wikidataId": "Q14864997",
+      "score": 0.2993
+    },
+    {
+      "label": "Simulation",
+      "wikiLink": "http://en.wikipedia.org/Simulation",
+      "wikidataId": "Q45045",
+      "score": 0.2948
+    },
+    {
+      "label": "International finance",
+      "wikiLink": "http://en.wikipedia.org/Category:International_finance",
+      "wikidataId": "Q2048185",
+      "score": 0.2785
+    },
+    {
+      "label": "Derivatives (finance)",
+      "wikiLink": "http://en.wikipedia.org/Category:Derivatives_(finance)",
+      "wikidataId": "Q66295",
+      "score": 0.2759
+    },
+    {
+      "label": "Financial law",
+      "wikiLink": "http://en.wikipedia.org/Category:Financial_law",
+      "wikidataId": "Q1416588",
+      "score": 0.2583
+    },
+    {
+      "label": "International trade",
+      "wikiLink": "http://en.wikipedia.org/Category:International_trade",
+      "wikidataId": "Q178803",
+      "score": 0.2488
+    },
+    {
+      "label": "Ticket resale",
+      "wikiLink": "http://en.wikipedia.org/Ticket_resale",
+      "wikidataId": "Q2522563",
+      "score": 0.2485
+    },
+    {
+      "label": "Financial economics",
+      "wikiLink": "http://en.wikipedia.org/Category:Financial_economics",
+      "wikidataId": "Q2294553",
+      "score": 0.2212
+    },
+    {
+      "label": "Candlestick patterns",
+      "wikiLink": "http://en.wikipedia.org/Category:Candlestick_patterns",
+      "wikidataId": "Q5031997",
+      "score": 0.2209
+    },
+    {
+      "label": "Commodities",
+      "wikiLink": "http://en.wikipedia.org/Category:Commodities",
+      "wikidataId": "Q317088",
+      "score": 0.2085
+    },
+    {
+      "label": "International business",
+      "wikiLink": "http://en.wikipedia.org/Category:International_business",
+      "wikidataId": "Q8550914",
+      "score": 0.1969
+    },
+    {
+      "label": "World economy",
+      "wikiLink": "http://en.wikipedia.org/Category:World_economy",
+      "wikidataId": "Q473750",
+      "score": 0.1759
+    },
+    {
+      "label": "Wagering",
+      "wikiLink": "http://en.wikipedia.org/Category:Wagering",
+      "wikidataId": "Q2565881",
+      "score": 0.1627
+    },
+    {
+      "label": "Corporate finance",
+      "wikiLink": "http://en.wikipedia.org/Category:Corporate_finance",
+      "wikidataId": "Q1134763",
+      "score": 0.1474
+    },
+    {
+      "label": "Microeconomics",
+      "wikiLink": "http://en.wikipedia.org/Category:Microeconomics",
+      "wikidataId": "Q39072",
+      "score": 0.1167
+    },
+    {
+      "label": "Economic forecasting",
+      "wikiLink": "http://en.wikipedia.org/Category:Economic_forecasting",
+      "wikidataId": "Q3409313",
+      "score": 0.1085
+    },
+    {
+      "label": "Money",
+      "wikiLink": "http://en.wikipedia.org/Category:Money",
+      "wikidataId": "Q1368",
+      "score": 0.1077
+    },
+    {
+      "label": "Economic sectors",
+      "wikiLink": "http://en.wikipedia.org/Category:Economic_sectors",
+      "wikidataId": "Q3958441",
+      "score": 0.107
+    },
+    {
+      "label": "Share trading",
+      "wikiLink": "http://en.wikipedia.org/Category:Share_trading",
+      "wikidataId": "Q30875003",
+      "score": 0.08887
+    },
+    {
+      "label": "Macroeconomics",
+      "wikiLink": "http://en.wikipedia.org/Category:Macroeconomics",
+      "wikidataId": "Q39680",
+      "score": 0.08876
+    },
+    {
+      "label": "Valuation (finance)",
+      "wikiLink": "http://en.wikipedia.org/Category:Valuation_(finance)",
+      "wikidataId": "Q4008379",
+      "score": 0.06779
+    },
+    {
+      "label": "Telecommunication theory",
+      "wikiLink": "http://en.wikipedia.org/Category:Telecommunication_theory",
+      "wikidataId": "Q124005992",
+      "score": 0.06379
+    },
+    {
+      "label": "Economics",
+      "wikiLink": "http://en.wikipedia.org/Category:Economics",
+      "wikidataId": "Q8134",
+      "score": 0.06228
+    },
+    {
+      "label": "Financial management",
+      "wikiLink": "http://en.wikipedia.org/Category:Financial_management",
+      "wikidataId": "Q4738155",
+      "score": 0.06153
+    },
+    {
+      "label": "Computer engineering",
+      "wikiLink": "http://en.wikipedia.org/Category:Computer_engineering",
+      "wikidataId": "Q428691",
+      "score": 0.06015
+    },
+    {
+      "label": "Signal processing",
+      "wikiLink": "http://en.wikipedia.org/Category:Signal_processing",
+      "wikidataId": "Q208163",
+      "score": 0.05991
+    },
+    {
+      "label": "Telecommunications engineering",
+      "wikiLink": "http://en.wikipedia.org/Category:Telecommunications_engineering",
+      "wikidataId": "Q1061219",
+      "score": 0.05822
+    },
+    {
+      "label": "Corporations",
+      "wikiLink": "http://en.wikipedia.org/Category:Corporations",
+      "wikidataId": "Q167037",
+      "score": 0.05659
+    },
+    {
+      "label": "Currency",
+      "wikiLink": "http://en.wikipedia.org/Category:Currency",
+      "wikidataId": "Q8142",
+      "score": 0.05285
+    },
+    {
+      "label": "Business ownership",
+      "wikiLink": "http://en.wikipedia.org/Category:Business_ownership",
+      "wikidataId": "Q28836314",
+      "score": 0.05268
+    },
+    {
+      "label": "Information and communications technology",
+      "wikiLink": "http://en.wikipedia.org/Category:Information_and_communications_technology",
+      "wikidataId": "Q5268834",
+      "score": 0.05094
+    }
+  ],
+  "units": 2
+}

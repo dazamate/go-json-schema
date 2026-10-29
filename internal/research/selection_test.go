@@ -20,6 +20,9 @@ type fakeScorer struct {
 	err    error
 	labels []string // every label scored
 	pages  []string // every page text scored
+
+	sim      map[string]float64 // graph text to its cosine against the keyword
+	simTexts []string           // every graph text scored
 }
 
 func (s *fakeScorer) Model() string { return "fake-bge" }
@@ -38,6 +41,22 @@ func (s *fakeScorer) Score(_ context.Context, _, page string, labels []string) (
 		kw[i], pg[i] = c[0], c[1]
 	}
 	return kw, pg, nil
+}
+
+func (s *fakeScorer) Similarity(_ context.Context, _ string, texts []string) ([]float64, error) {
+	if s.err != nil {
+		return nil, s.err
+	}
+	s.simTexts = append(s.simTexts, texts...)
+	out := make([]float64, len(texts))
+	for i, text := range texts {
+		c, ok := s.sim[text]
+		if !ok {
+			return nil, fmt.Errorf("no similarity for %q", text)
+		}
+		out[i] = c
+	}
+	return out, nil
 }
 
 // fakeBing links the same entities in any text.
@@ -464,6 +483,19 @@ func TestSelectEntitiesRejectsBadQueries(t *testing.T) {
 		"min_link_confidence is -1: want 0 or more": func(q *SelectQuery) {
 			q.Settings.MinLinkConfidence = -1
 		},
+		"min_graph_similarity is 1.5": func(q *SelectQuery) { q.Settings.MinGraphSimilarity = 1.5 },
+		"min_graph_links is 0: want 1 or more": func(q *SelectQuery) {
+			q.Settings.MinGraphLinks = 0
+		},
+		"min_graph_links_ungated is 0: want 1 or more": func(q *SelectQuery) {
+			q.Settings.MinGraphLinksUngated = 0
+		},
+		"min_mention_graph_links is -1: want 0 or more": func(q *SelectQuery) {
+			q.Settings.MinMentionGraphLinks = -1
+		},
+		"max_graph_neighbours is -1: want 0 or more": func(q *SelectQuery) {
+			q.Settings.MaxGraphNeighbours = -1
+		},
 	} {
 		query := selectQuery()
 		q(&query)
@@ -720,7 +752,7 @@ func TestSelectReportJSONKeys(t *testing.T) {
 			t.Errorf("%s is not a list: %v", k, m[k])
 		}
 	}
-	if s := m["settings"].(map[string]any); s["min_relevance"] != 0.3 || s["min_page_similarity"] != 0.55 || s["min_link_confidence"] != 1.5 {
+	if s := m["settings"].(map[string]any); s["min_relevance"] != 0.3 || s["min_page_similarity"] != 0.55 || s["min_link_confidence"] != 1.5 || s["min_graph_similarity"] != 0.4 || s["max_graph_neighbours"] != float64(30) {
 		t.Errorf("settings = %v", s)
 	}
 }
