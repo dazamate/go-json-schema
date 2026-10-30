@@ -529,7 +529,7 @@ func TestPageGraphGuidance(t *testing.T) {
 		t.Fatal("guide has no Page graph section")
 	}
 	section := guide[i:]
-	for _, want := range []string{"hasPart", "isPartOf", "mainEntityOfPage", "Brand", "potentialAction", "DesktopWebPlatform", "{\"@id\": ...}", "stays a Thing", "match the visible text", "page_text", "page_html", "SiteNavigationElement", "WPHeader", "WPFooter", "WPSideBar", "cssSelector"} {
+	for _, want := range []string{"hasPart", "isPartOf", "mainEntityOfPage", "Brand", "potentialAction", "DesktopWebPlatform", "{\"@id\": ...}", "stays a Thing", "match the visible text", "page_text", "page_html", "SiteNavigationElement", "WPHeader", "WPFooter", "WPSideBar", "cssSelector", "**Specific types:**", "AboutPage", "openingHours"} {
 		if !strings.Contains(section, want) {
 			t.Errorf("Page graph section does not say %q", want)
 		}
@@ -537,7 +537,7 @@ func TestPageGraphGuidance(t *testing.T) {
 	if !strings.Contains(guide, "| FAQPage mainEntity |") || strings.Contains(guide, "| mainEntity / FAQPage |") {
 		t.Error("guide's FAQ row is not the FAQPage-as-part-of-the-page row")
 	}
-	for _, want := range []string{"retype none", `{"@id"}`, "Page graph section", "6. build_jsonld(draft, page_html)"} {
+	for _, want := range []string{"retype none", `{"@id"}`, "Page graph section", "6. build_jsonld(draft, page_html)", "a more specific subtype fits"} {
 		if !strings.Contains(instructions, want) {
 			t.Errorf("instructions do not say %q", want)
 		}
@@ -552,7 +552,7 @@ func TestPageGraphGuidance(t *testing.T) {
 	if step := selectStep(t, text); !strings.Contains(step, `{"@id"}`) {
 		t.Errorf("select_entities step does not say to reference graph nodes by @id: %s", step)
 	}
-	for _, want := range []string{"5. Shape the graph", "FAQPage that is a part of the page", "6. Call build_jsonld", "as page_html", "## Page graph"} {
+	for _, want := range []string{"5. Shape the graph", "FAQPage that is a part of the page", "6. Call build_jsonld", "as page_html", "the subtype a warning names", "## Page graph"} {
 		if !strings.Contains(text, want) {
 			t.Errorf("prompt does not say %q", want)
 		}

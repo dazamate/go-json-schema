@@ -19,6 +19,7 @@ type Tool struct {
 	applicable map[string]map[string]bool
 	enumOnly   map[string]string
 	lower      map[string]map[string]string // kind -> lowercased term -> term, for suggestions
+	subtypesOf map[string][]string          // type -> its suggestable strict subtypes
 }
 
 // Term kinds, for suggestions.
@@ -53,6 +54,7 @@ func New() (*Tool, error) {
 		}
 		t.applicable[name] = set
 	}
+	t.indexSubtypes()
 	return t, nil
 }
 

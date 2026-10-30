@@ -372,3 +372,71 @@ func TestCheckListsThePageElements(t *testing.T) {
 		t.Errorf("page elements without page_html: %+v", plain.PageElements)
 	}
 }
+
+func TestCheckSuggestsTheSubtypeThatTakesAProperty(t *testing.T) {
+	r := check(t, `{"@context":"https://schema.org","@graph":[
+		{"@type":"Organization","name":"Acme","openingHours":"Mo-Fr 09:00-17:00"},
+		{"@type":"CreativeWork","name":"Notes","articleBody":"Text."},
+		{"@type":"Recipe","name":"Tart","knowsAbout":"Lemon"}]}`)
+	// both subtypes that take it are named, the most general ones only
+	if !issueAt(r, Warning, "$.@graph[0].openingHours", "subtypes EducationalOrganization and LocalBusiness: type it EducationalOrganization or LocalBusiness") {
+		t.Errorf("no EducationalOrganization or LocalBusiness warning for openingHours on an Organization: %+v", r.Issues)
+	}
+	if !issueAt(r, Warning, "$.@graph[1].articleBody", "type it Article") {
+		t.Errorf("no Article warning for articleBody on a CreativeWork: %+v", r.Issues)
+	}
+	// knowsAbout is no subtype of Recipe's: it stays an info, kept as is
+	if !issueAt(r, Info, "$.@graph[2].knowsAbout", "not listed for Recipe") || r.Warnings != 2 || r.Errors != 0 {
+		t.Errorf("issues = %+v, want two warnings and the knowsAbout info", r.Issues)
+	}
+}
+
+func TestCheckSuggestsTheSubtypeItsWikidataClassGives(t *testing.T) {
+	q := func(id string) string { return `"additionalType":"https://www.wikidata.org/wiki/` + id + `"` }
+	r := check(t, `{"@context":"https://schema.org","@graph":[
+		{"@type":"Place","name":"Sydney",`+q("Q515")+`},
+		{"@type":"AdministrativeArea","name":"Sydney",`+q("Q515")+`},
+		{"@type":"Organization","name":"University of Sydney",`+q("Q3918")+`},
+		{"@type":"City","name":"Sydney",`+q("Q515")+`},
+		{"@type":"Place","name":"East Asia",`+q("Q82794")+`}]}`)
+	for path, want := range map[string]string{"$.@graph[0]": "City", "$.@graph[1]": "City", "$.@graph[2]": "CollegeOrUniversity"} {
+		if !issueAt(r, Warning, path, "type it "+want) {
+			t.Errorf("no %s warning at %s: %+v", want, path, r.Issues)
+		}
+	}
+	if r.Warnings != 3 || r.Errors != 0 {
+		t.Errorf("%d warnings, %d errors, want 3 and 0: %+v", r.Warnings, r.Errors, r.Issues)
+	}
+}
+
+func TestCheckSuggestsTheSubtypeItsNameOrURLNames(t *testing.T) {
+	r := check(t, `{"@context":"https://schema.org","@graph":[
+		{"@type":"WebPage","@id":"https://x.test/about/#webpage","name":"Andrew Mo"},
+		{"@type":"WebPage","url":"https://x.test/contact/","name":"Get in touch"},
+		{"@type":"WebPage","name":"Image gallery"},
+		{"@type":"LocalBusiness","name":"Park Street Bakery"},
+		{"@type":"Organization","name":"University of Sydney"},
+		{"@type":"Place","name":"Bondi Beach"},
+		{"@type":"WebPage","name":"Wedding MC Sydney","url":"https://x.test/wedding-mc-sydney/"},
+		{"@type":"Thing","name":"Wedding customs by country"},
+		{"@type":"Place","name":"Hyde Park","sameAs":"https://www.wikidata.org/wiki/Q1"},
+		{"@type":"EntertainmentBusiness","name":"Andrew Mo, Sydney Wedding MC"},
+		{"@type":"Service","name":"Chinese wedding MC"}]}`)
+	for path, want := range map[string]string{
+		"$.@graph[0]": "AboutPage",
+		"$.@graph[1]": "ContactPage",
+		"$.@graph[2]": "ImageGallery",
+		"$.@graph[3]": "Bakery",
+		"$.@graph[4]": "CollegeOrUniversity",
+		"$.@graph[5]": "Beach",
+	} {
+		if !issueAt(r, Warning, path, "type it "+want) {
+			t.Errorf("no %s warning at %s: %+v", want, path, r.Issues)
+		}
+	}
+	// a page about weddings, a Thing (typed by its Wikidata class instead),
+	// a Wikidata entity, and names no subtype matches get none
+	if r.Warnings != 6 || r.Errors != 0 {
+		t.Errorf("%d warnings, %d errors, want 6 and 0: %+v", r.Warnings, r.Errors, r.Issues)
+	}
+}

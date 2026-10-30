@@ -6,8 +6,6 @@ import (
 	"slices"
 	"strings"
 	"unicode"
-
-	"github.com/dazamate/go-json-schema/internal/classtype"
 )
 
 // located is a node and its path in the draft.
@@ -69,31 +67,6 @@ func strs(n *object, key string) []string {
 		}
 	}
 	return out
-}
-
-// thingTypes warns about a Thing whose first Wikidata class in additionalType
-// has a schema.org type in the classtype table, the table the research tools
-// type entities with. Only the first class counts: it is an instance-of
-// class, while a later one may be a subclass-of class. An item that is itself
-// a class (a kind of thing) stays a Thing however, which the draft does not
-// show, so this is a warning to weigh, not an error.
-func (c *checker) thingTypes(all []located) {
-	for _, l := range all {
-		if !slices.Equal(typeNames(l.n), []string{"Thing"}) {
-			continue
-		}
-		classes := strs(l.n, "additionalType")
-		if len(classes) == 0 {
-			continue
-		}
-		m := wikidataItem.FindStringSubmatch(classes[0])
-		if m == nil {
-			continue
-		}
-		if t := classtype.Of([]string{m[1]}, false); t != "" {
-			c.add(l.path, Warning, "Thing with the Wikidata class %s: type it %s, unless the item is a kind of thing rather than one", m[1], t)
-		}
-	}
 }
 
 // pageEntityProps are the properties whose entities must be named on the page.

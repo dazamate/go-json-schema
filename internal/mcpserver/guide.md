@@ -88,6 +88,14 @@ them (the site origin plus #name), and every later use of it is a
   their kin. A general idea (a wedding, tea, a bride) stays a Thing: do not
   retype it. An Event is one dated happening at one place, and a Product is
   something offered for sale.
+- **Specific types:** give every node the most specific type that is true
+  of it, not a parent type a subtype refines: a page at /about/ or /contact/
+  is an AboutPage or ContactPage, a gallery page an ImageGallery, a bakery a
+  Bakery rather than a LocalBusiness, a university a CollegeOrUniversity, a
+  beach a Beach. build_jsonld warns when a subtype fits: a property the node
+  uses is listed only for a subtype (openingHours on an Organization is a
+  LocalBusiness's), the node's first Wikidata class gives a subtype (a Place
+  of the class city is a City), or its name or URL path names one.
 - **Reuse, don't repeat:** when an about, mentions or knowsAbout entity is the
   same Wikidata item as a node already in the graph (a served area's City,
   a Language the business works in, the Person's Occupation), put that node's
