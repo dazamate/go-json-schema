@@ -90,6 +90,7 @@ type identity struct {
 	P9885        string // the item's Bing entity ID
 	KGMIDChecked bool   // the page's Freebase ID equals KGMID
 	Classes      []string
+	SchemaType   string // from the item's P31 classes; "" is a Thing
 }
 
 // checkIdentity holds an item against the article it was fetched for. title
@@ -119,6 +120,7 @@ func checkIdentity(it wdEntity, found bool, lang, title, freebase string) (ident
 		P9885:      first(it.ranked("P9885")),
 	}
 	id.KGMIDChecked = freebase != "" && id.KGMID == freebase
+	id.SchemaType = schemaType(p31, len(it.ranked("P279")) > 0)
 	for _, c := range append(p31, it.ranked("P279")...) {
 		if len(id.Classes) == maxClasses {
 			break
@@ -130,12 +132,12 @@ func checkIdentity(it wdEntity, found bool, lang, title, freebase string) (ident
 	return id, ""
 }
 
-// entityThing builds the entity's lean schema.org node: sameAs from Wikipedia,
-// Wikidata, Google and, for en, DBpedia; identifiers for Wikidata, Google and
-// Bing; the matched words as alternateName; and its classes as
-// additionalType. It carries no @id.
+// entityThing builds the entity's lean schema.org node: typed s.SchemaType
+// (Thing when empty); sameAs from Wikipedia, Wikidata, Google and, for en,
+// DBpedia; identifiers for Wikidata, Google and Bing; the matched words as
+// alternateName; and its classes as additionalType. It carries no @id.
 func entityThing(lang string, s Selected, classes []string) json.RawMessage {
-	se := schema.Entity{Name: s.Name, Wikidata: s.QID, KGMID: s.KGMID}
+	se := schema.Entity{Name: s.Name, Wikidata: s.QID, KGMID: s.KGMID, Type: s.SchemaType}
 	if s.GoogleKGID != "" {
 		se.KGMIDs = []string{s.GoogleKGID}
 	}
