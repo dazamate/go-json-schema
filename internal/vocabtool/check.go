@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"regexp"
 	"slices"
+	"strconv"
 	"strings"
 
 	"golang.org/x/net/html"
@@ -86,9 +87,9 @@ func (t *Tool) Check(draft json.RawMessage, opts CheckOptions) (Report, error) {
 	c.webPageElements(all)
 	text := opts.PageText
 	var elements []PageElement
+	var page *html.Node
 	if strings.TrimSpace(opts.PageHTML) != "" {
-		page, err := html.Parse(strings.NewReader(opts.PageHTML))
-		if err != nil {
+		if page, err = html.Parse(strings.NewReader(opts.PageHTML)); err != nil {
 			return Report{}, fmt.Errorf("page_html: %w", err)
 		}
 		if text == "" {
@@ -97,6 +98,12 @@ func (t *Tool) Check(draft json.RawMessage, opts CheckOptions) (Report, error) {
 		elements = c.pageElements(all, page)
 	}
 	c.pageEntities(all, text)
+	c.bare(all)
+	c.ownReviews(all)
+	c.reviews(all)
+	if strings.TrimSpace(text) != "" {
+		c.content(all, newPageFacts(page, text))
+	}
 	rep := Report{Issues: c.issues, PageElements: elements}
 	if rep.Issues == nil {
 		rep.Issues = []Issue{}
@@ -289,6 +296,15 @@ func (c *checker) property(path, key string, types []string, n *object) {
 	}
 	if len(p.SupersededBy) > 0 {
 		c.add(path, Warning, "property %s is superseded by %s", term, strings.Join(p.SupersededBy, ", "))
+	}
+	if numericOnly(p.Ranges) {
+		for _, v := range values(n.vals[key]) {
+			if s, ok := v.(string); ok {
+				if _, err := strconv.ParseFloat(strings.TrimSpace(s), 64); err == nil {
+					c.add(path, Warning, "%s takes a number: write %s, not %q", term, strings.TrimSpace(s), s)
+				}
+			}
+		}
 	}
 	if len(types) > 0 && !slices.ContainsFunc(types, func(ty string) bool { return c.t.applicable[ty][term] }) {
 		// a subtype that takes the property is the type the node means

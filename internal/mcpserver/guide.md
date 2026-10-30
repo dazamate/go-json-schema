@@ -115,8 +115,40 @@ them (the site origin plus #name), and every later use of it is a
   has a search page. Every target must be a real page, and every #fragment an
   id on it.
 - **Only what the page shows:** structured data must match the visible text.
-  No price, priceRange or tax keys unless the page shows the price; no Review
-  or AggregateRating about yourself (self-serving reviews are not eligible);
-  no email or telephone the page does not show. Every about and mentions
-  entity is named on the page; build_jsonld warns on one that is not when
-  it is given the page's visible text as page_text.
+  Every price the page shows goes on the item it is the price of: an Offer's
+  price, or an AggregateOffer's lowPrice and highPrice for a range of many
+  sellers' prices, with priceCurrency, and a PriceSpecification whose
+  valueAddedTaxIncluded says whether the page's price includes the tax.
+  Never a price the page does not show, and never another seller's price on
+  your own Offer. Every testimonial the page quotes is a Review: reviewBody
+  word for word, author, itemReviewed. Give it a reviewRating only when the
+  page shows the rating. Google shows no stars for reviews of your own
+  business, but the markup is valid. Use no email or telephone the page does
+  not show. Every about and mentions entity is named on the page; build_jsonld
+  warns on one that is not when it is given the page's visible text as
+  page_text.
+- **What the page shows:** with page_html, build_jsonld holds the markup to
+  the page both ways.
+  - What the markup repeats must be on the page word for word: HowToStep
+    names and text, Question names, Answer text, a Review's reviewBody.
+    Every #fragment must be an id on the page.
+  - What the page shows must be in the markup:
+    - a "© 2026" line as copyrightYear and copyrightHolder;
+    - "7 min read" as the Article's timeRequired (PT7M);
+    - the label above the h1 as its articleSection;
+    - each content image as an ImageObject (contentUrl, width, height,
+      description);
+    - a video or audio embed as a VideoObject or AudioObject;
+    - prices, ratings and blockquotes, as above;
+    - terms given in another script with their romanisation, such as 飲勝
+      (jam2 sing3), as DefinedTerms in a DefinedTermSet;
+    - a heading that counts items ("16 ideas") as an ItemList with that
+      numberOfItems;
+    - a group of links to other businesses as an ItemList of them in
+      hasPart;
+    - a related-reading block as the WebPage's relatedLink;
+    - a reply-time promise as the ServiceChannel's processingTime;
+    - a search box as a SearchAction;
+    - a form as the Action that targets it, with the form's httpMethod;
+    - tel: and mailto: links as telephone and email;
+    - an ABN, VAT or licence number as taxID, vatID or identifier.

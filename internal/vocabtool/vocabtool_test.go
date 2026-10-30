@@ -365,8 +365,12 @@ func TestCheckListsThePageElements(t *testing.T) {
 	if n := issueCount(r, "is not named on the page"); n != 1 || !issueAt(r, Warning, "$.@graph[0].about[1]", "Kitchen is not named") {
 		t.Errorf("%d not-on-page warnings, want 1 for Kitchen: %+v", n, r.Issues)
 	}
-	if n := r.Warnings; n != 6 || r.Errors != 0 {
-		t.Errorf("%d warnings, %d errors, want 6 and 0: %+v", n, r.Errors, r.Issues)
+	// the WebPage has neither url nor name
+	if !issueAt(r, Warning, "$.@graph[0]", "this WebPage has no url or name") {
+		t.Errorf("no url/name warning on the WebPage: %+v", r.Issues)
+	}
+	if n := r.Warnings; n != 7 || r.Errors != 0 {
+		t.Errorf("%d warnings, %d errors, want 7 and 0: %+v", n, r.Errors, r.Issues)
 	}
 	if plain := check(t, draft); len(plain.PageElements) != 0 || issueCount(plain, "has no") != 0 {
 		t.Errorf("page elements without page_html: %+v", plain.PageElements)
