@@ -1,0 +1,589 @@
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "OnlineStore",
+   "@id": "http://localhost:8001/#store",
+   "name": "Queen of Diamonds Jewellery",
+   "url": "http://localhost:8001/",
+   "logo": {
+    "@type": "ImageObject",
+    "url": "http://localhost:8001/logo.png",
+    "width": 512,
+    "height": 512
+   },
+   "sameAs": [
+    "https://www.instagram.com/queen_of_diamonds_jewellery/",
+    "https://www.facebook.com/104992909320900"
+   ],
+   "potentialAction": [
+    {
+     "@type": "FollowAction",
+     "target": "https://www.instagram.com/queen_of_diamonds_jewellery/"
+    },
+    {
+     "@type": "FollowAction",
+     "target": "https://www.facebook.com/104992909320900"
+    }
+   ],
+   "email": "qodjewellery@gmail.com",
+   "taxID": "74 139 811 412",
+   "hasMerchantReturnPolicy": {
+    "@type": "MerchantReturnPolicy",
+    "applicableCountry": "AU",
+    "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+    "merchantReturnDays": 14,
+    "returnMethod": "https://schema.org/ReturnByMail",
+    "returnFees": "https://schema.org/ReturnFeesCustomerResponsibility",
+    "merchantReturnLink": "http://localhost:8001/au/returns"
+   },
+   "hasShippingService": {
+    "@type": "ShippingService",
+    "shippingConditions": [
+     {
+      "@type": "ShippingConditions",
+      "shippingDestination": {
+       "@type": "DefinedRegion",
+       "addressCountry": "AU"
+      },
+      "orderValue": {
+       "@type": "MonetaryAmount",
+       "maxValue": 59.99,
+       "currency": "AUD"
+      },
+      "shippingRate": {
+       "@type": "MonetaryAmount",
+       "value": 7.95,
+       "currency": "AUD"
+      },
+      "transitTime": {
+       "@type": "ServicePeriod",
+       "duration": {
+        "@type": "QuantitativeValue",
+        "minValue": 2,
+        "maxValue": 6,
+        "unitCode": "DAY"
+       },
+       "businessDays": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+         "https://schema.org/Monday",
+         "https://schema.org/Tuesday",
+         "https://schema.org/Wednesday",
+         "https://schema.org/Thursday",
+         "https://schema.org/Friday"
+        ]
+       }
+      }
+     },
+     {
+      "@type": "ShippingConditions",
+      "shippingDestination": {
+       "@type": "DefinedRegion",
+       "addressCountry": "AU"
+      },
+      "orderValue": {
+       "@type": "MonetaryAmount",
+       "minValue": 60,
+       "currency": "AUD"
+      },
+      "shippingRate": {
+       "@type": "MonetaryAmount",
+       "value": 0,
+       "currency": "AUD"
+      },
+      "transitTime": {
+       "@type": "ServicePeriod",
+       "duration": {
+        "@type": "QuantitativeValue",
+        "minValue": 2,
+        "maxValue": 6,
+        "unitCode": "DAY"
+       },
+       "businessDays": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+         "https://schema.org/Monday",
+         "https://schema.org/Tuesday",
+         "https://schema.org/Wednesday",
+         "https://schema.org/Thursday",
+         "https://schema.org/Friday"
+        ]
+       }
+      }
+     }
+    ],
+    "handlingTime": {
+     "@type": "QuantitativeValue",
+     "minValue": 0,
+     "maxValue": 1,
+     "unitCode": "DAY"
+    }
+   },
+   "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Jewellery",
+    "itemListElement": [
+     {
+      "@type": "ListItem",
+      "position": 1,
+      "item": {
+       "@type": "CollectionPage",
+       "name": "Necklaces",
+       "url": "http://localhost:8001/au/categories/necklace"
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 2,
+      "item": {
+       "@type": "CollectionPage",
+       "name": "Rings",
+       "url": "http://localhost:8001/au/categories/rings"
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 3,
+      "item": {
+       "@type": "CollectionPage",
+       "name": "Earrings",
+       "url": "http://localhost:8001/au/categories/earrings"
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 4,
+      "item": {
+       "@type": "CollectionPage",
+       "name": "Bracelets",
+       "url": "http://localhost:8001/au/categories/bracelet"
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 5,
+      "item": {
+       "@type": "CollectionPage",
+       "name": "Accessories",
+       "url": "http://localhost:8001/au/categories/jewellery-accessories"
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 6,
+      "item": {
+       "@type": "CollectionPage",
+       "name": "Aromatherapy jewellery",
+       "url": "http://localhost:8001/au/categories/aromatherapy-necklace"
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 7,
+      "item": {
+       "@type": "CollectionPage",
+       "name": "Angel caller necklaces",
+       "url": "http://localhost:8001/au/categories/harmony-ball-necklace"
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 8,
+      "item": {
+       "@type": "CollectionPage",
+       "name": "Chakra",
+       "url": "http://localhost:8001/au/categories/chakra-jewellery"
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 9,
+      "item": {
+       "@type": "CollectionPage",
+       "name": "Chakra bracelets",
+       "url": "http://localhost:8001/au/categories/chakra-bracelet"
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 10,
+      "item": {
+       "@type": "CollectionPage",
+       "name": "Inspirational jewellery",
+       "url": "http://localhost:8001/au/categories/inspirational-jewellery"
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 11,
+      "item": {
+       "@type": "CollectionPage",
+       "name": "Friends, family & pets",
+       "url": "http://localhost:8001/au/categories/friendship-necklaces"
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 12,
+      "item": {
+       "@type": "CollectionPage",
+       "name": "Photo lockets",
+       "url": "http://localhost:8001/au/categories/photo-locket-necklace"
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 13,
+      "item": {
+       "@type": "CollectionPage",
+       "name": "Glow in the dark",
+       "url": "http://localhost:8001/au/categories/glow-in-the-dark-necklace"
+      }
+     }
+    ]
+   },
+   "address": {
+    "@type": "PostalAddress",
+    "addressCountry": "AU"
+   },
+   "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "customer service",
+    "email": "qodjewellery@gmail.com",
+    "areaServed": "AU",
+    "availableLanguage": "en"
+   }
+  },
+  {
+   "@type": "WebSite",
+   "@id": "http://localhost:8001/#website",
+   "url": "http://localhost:8001/",
+   "name": "Queen of Diamonds Jewellery",
+   "inLanguage": "en-AU",
+   "publisher": {
+    "@id": "http://localhost:8001/#store"
+   },
+   "copyrightYear": 2026,
+   "copyrightHolder": {
+    "@id": "http://localhost:8001/#store"
+   },
+   "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+     "@type": "EntryPoint",
+     "urlTemplate": "http://localhost:8001/au/search?q={search_term_string}"
+    },
+    "query-input": "required name=search_term_string"
+   }
+  },
+  {
+   "@type": "WebPage",
+   "@id": "http://localhost:8001/au",
+   "url": "http://localhost:8001/au",
+   "name": "Queen of Diamonds Jewellery",
+   "isPartOf": {
+    "@id": "http://localhost:8001/#website"
+   },
+   "about": {
+    "@id": "http://localhost:8001/#store"
+   },
+   "image": [
+    {
+     "@type": "ImageObject",
+     "contentUrl": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/EC0FAE04-215B-42F1-8C0C-F8694E3BA0FB.jpeg/:/rs=w:600,h:600",
+     "width": 600,
+     "height": 600,
+     "description": "Mermaid Scale Diffuser Locket"
+    },
+    {
+     "@type": "ImageObject",
+     "contentUrl": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/F3AAC2B6-4B99-40DB-BA5E-E33CBCFBB70D.jpeg/:/rs=w:600,h:600",
+     "width": 600,
+     "height": 600,
+     "description": "Angel Caller Harmony Locket"
+    }
+   ],
+   "hasPart": [
+    {
+     "@type": "WPHeader",
+     "cssSelector": "body > main > div > header"
+    },
+    {
+     "@type": "SiteNavigationElement",
+     "cssSelector": "body > main > div > header > nav"
+    },
+    {
+     "@type": "WPFooter",
+     "cssSelector": "body > main > footer"
+    },
+    {
+     "@type": "ItemList",
+     "name": "Best sellers",
+     "itemListElement": [
+      {
+       "@type": "ListItem",
+       "position": 1,
+       "url": "http://localhost:8001/au/products/blue-fire-opal-black-ring",
+       "item": {
+        "@type": "Product",
+        "name": "Blue Fire Opal Black Ring",
+        "url": "http://localhost:8001/au/products/blue-fire-opal-black-ring",
+        "image": "https://isteam.wsimg.com/ip/6b858395-ba12-481e-a912-553919a178cd/ols/2918_original/:/rs=w:600,h:600",
+        "offers": {
+         "@type": "Offer",
+         "price": "12.95",
+         "priceCurrency": "AUD",
+         "availability": "https://schema.org/InStock",
+         "seller": {
+          "@id": "http://localhost:8001/#store"
+         },
+         "priceSpecification": [
+          {
+           "@type": "UnitPriceSpecification",
+           "price": "12.95",
+           "priceCurrency": "AUD",
+           "valueAddedTaxIncluded": true
+          }
+         ]
+        },
+        "potentialAction": {
+         "@type": "WantAction",
+         "target": "http://localhost:8001/au/wishlist"
+        }
+       }
+      },
+      {
+       "@type": "ListItem",
+       "position": 2,
+       "url": "http://localhost:8001/au/products/butterfly-fire-opal-ring",
+       "item": {
+        "@type": "Product",
+        "name": "Butterfly Fire Opal Ring",
+        "url": "http://localhost:8001/au/products/butterfly-fire-opal-ring",
+        "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/E70F4BF4-401A-479E-BE30-7DECBF029244.jpeg/:/rs=w:600,h:600",
+        "offers": {
+         "@type": "Offer",
+         "price": "11.95",
+         "priceCurrency": "AUD",
+         "availability": "https://schema.org/InStock",
+         "seller": {
+          "@id": "http://localhost:8001/#store"
+         },
+         "priceSpecification": [
+          {
+           "@type": "UnitPriceSpecification",
+           "price": "11.95",
+           "priceCurrency": "AUD",
+           "valueAddedTaxIncluded": true
+          }
+         ]
+        },
+        "potentialAction": {
+         "@type": "WantAction",
+         "target": "http://localhost:8001/au/wishlist"
+        }
+       }
+      },
+      {
+       "@type": "ListItem",
+       "position": 3,
+       "url": "http://localhost:8001/au/products/moonstone-crescent-moon-necklace",
+       "item": {
+        "@type": "Product",
+        "name": "Moonstone Crescent Moon Necklace",
+        "url": "http://localhost:8001/au/products/moonstone-crescent-moon-necklace",
+        "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/IMG_1263.jpeg/:/rs=w:600,h:600",
+        "offers": {
+         "@type": "Offer",
+         "price": "14.95",
+         "priceCurrency": "AUD",
+         "availability": "https://schema.org/InStock",
+         "seller": {
+          "@id": "http://localhost:8001/#store"
+         },
+         "priceSpecification": [
+          {
+           "@type": "UnitPriceSpecification",
+           "price": "14.95",
+           "priceCurrency": "AUD",
+           "valueAddedTaxIncluded": true
+          }
+         ]
+        },
+        "potentialAction": {
+         "@type": "WantAction",
+         "target": "http://localhost:8001/au/wishlist"
+        }
+       }
+      },
+      {
+       "@type": "ListItem",
+       "position": 4,
+       "url": "http://localhost:8001/au/products/fire-opal-heart-celtic-ring",
+       "item": {
+        "@type": "Product",
+        "name": "Fire Opal Heart Celtic Ring",
+        "url": "http://localhost:8001/au/products/fire-opal-heart-celtic-ring",
+        "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/IMG_0278.jpeg/:/rs=w:600,h:600",
+        "offers": {
+         "@type": "Offer",
+         "price": "14.95",
+         "priceCurrency": "AUD",
+         "availability": "https://schema.org/InStock",
+         "seller": {
+          "@id": "http://localhost:8001/#store"
+         },
+         "priceSpecification": [
+          {
+           "@type": "UnitPriceSpecification",
+           "price": "14.95",
+           "priceCurrency": "AUD",
+           "valueAddedTaxIncluded": true
+          }
+         ]
+        },
+        "potentialAction": {
+         "@type": "WantAction",
+         "target": "http://localhost:8001/au/wishlist"
+        }
+       }
+      },
+      {
+       "@type": "ListItem",
+       "position": 5,
+       "url": "http://localhost:8001/au/products/purple-topaz-celtic-ring",
+       "item": {
+        "@type": "Product",
+        "name": "Purple Topaz Celtic Ring",
+        "url": "http://localhost:8001/au/products/purple-topaz-celtic-ring",
+        "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/2B4D752F-1AEC-4271-844B-41920341FC10.jpeg/:/rs=w:600,h:600",
+        "offers": {
+         "@type": "Offer",
+         "price": "14.50",
+         "priceCurrency": "AUD",
+         "availability": "https://schema.org/InStock",
+         "seller": {
+          "@id": "http://localhost:8001/#store"
+         },
+         "priceSpecification": [
+          {
+           "@type": "UnitPriceSpecification",
+           "price": "14.50",
+           "priceCurrency": "AUD",
+           "valueAddedTaxIncluded": true
+          }
+         ]
+        },
+        "potentialAction": {
+         "@type": "WantAction",
+         "target": "http://localhost:8001/au/wishlist"
+        }
+       }
+      },
+      {
+       "@type": "ListItem",
+       "position": 6,
+       "url": "http://localhost:8001/au/products/iridescent-teardrop-earrings",
+       "item": {
+        "@type": "Product",
+        "name": "Iridescent Teardrop Earrings",
+        "url": "http://localhost:8001/au/products/iridescent-teardrop-earrings",
+        "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/D0214A75-8920-466F-8075-A5C531E08505.jpeg/:/rs=w:600,h:600",
+        "offers": {
+         "@type": "Offer",
+         "price": "12.95",
+         "priceCurrency": "AUD",
+         "availability": "https://schema.org/LimitedAvailability",
+         "seller": {
+          "@id": "http://localhost:8001/#store"
+         },
+         "priceSpecification": [
+          {
+           "@type": "UnitPriceSpecification",
+           "price": "12.95",
+           "priceCurrency": "AUD",
+           "valueAddedTaxIncluded": true
+          }
+         ],
+         "inventoryLevel": {
+          "@type": "QuantitativeValue",
+          "value": 2
+         }
+        },
+        "potentialAction": {
+         "@type": "WantAction",
+         "target": "http://localhost:8001/au/wishlist"
+        }
+       }
+      },
+      {
+       "@type": "ListItem",
+       "position": 7,
+       "url": "http://localhost:8001/au/products/amethyst-heart-necklace",
+       "item": {
+        "@type": "Product",
+        "name": "Amethyst Heart Necklace",
+        "url": "http://localhost:8001/au/products/amethyst-heart-necklace",
+        "image": "https://isteam.wsimg.com/ip/6b858395-ba12-481e-a912-553919a178cd/ols/359_original/:/rs=w:600,h:600",
+        "offers": {
+         "@type": "Offer",
+         "price": "14.95",
+         "priceCurrency": "AUD",
+         "availability": "https://schema.org/InStock",
+         "seller": {
+          "@id": "http://localhost:8001/#store"
+         },
+         "priceSpecification": [
+          {
+           "@type": "UnitPriceSpecification",
+           "price": "14.95",
+           "priceCurrency": "AUD",
+           "valueAddedTaxIncluded": true
+          }
+         ]
+        },
+        "potentialAction": {
+         "@type": "WantAction",
+         "target": "http://localhost:8001/au/wishlist"
+        }
+       }
+      },
+      {
+       "@type": "ListItem",
+       "position": 8,
+       "url": "http://localhost:8001/au/products/tree-of-life-stone-necklace",
+       "item": {
+        "@type": "Product",
+        "name": "Tree of Life Stone Necklace",
+        "url": "http://localhost:8001/au/products/tree-of-life-stone-necklace",
+        "image": "https://isteam.wsimg.com/ip/6b858395-ba12-481e-a912-553919a178cd/ols/1038_original/:/rs=w:600,h:600",
+        "offers": {
+         "@type": "Offer",
+         "price": "14.95",
+         "priceCurrency": "AUD",
+         "availability": "https://schema.org/InStock",
+         "seller": {
+          "@id": "http://localhost:8001/#store"
+         },
+         "priceSpecification": [
+          {
+           "@type": "UnitPriceSpecification",
+           "price": "14.95",
+           "priceCurrency": "AUD",
+           "valueAddedTaxIncluded": true
+          }
+         ]
+        },
+        "potentialAction": {
+         "@type": "WantAction",
+         "target": "http://localhost:8001/au/wishlist"
+        }
+       }
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

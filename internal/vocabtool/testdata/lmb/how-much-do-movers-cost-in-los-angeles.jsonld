@@ -1,0 +1,681 @@
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@id": "http://localhost:8080/#organization",
+   "@type": "Organization",
+   "contactPoint": {
+    "@type": "ContactPoint",
+    "areaServed": "US",
+    "availableLanguage": "en",
+    "contactType": "customer support",
+    "telephone": "+18334990939"
+   },
+   "description": "Lift My Boxes gives free moving cost estimates and, when asked, connects people with independent moving companies.",
+   "disambiguatingDescription": "An online moving cost estimator and referral service, not a moving company.",
+   "email": "hello@liftmyboxes.com",
+   "logo": "http://localhost:8080/favicon.svg",
+   "name": "Lift My Boxes",
+   "url": "http://localhost:8080/"
+  },
+  {
+   "@id": "http://localhost:8080/#website",
+   "@type": "WebSite",
+   "inLanguage": "en-US",
+   "name": "Lift My Boxes",
+   "publisher": {
+    "@id": "http://localhost:8080/#organization"
+   },
+   "url": "http://localhost:8080/"
+  },
+  {
+   "@id": "http://localhost:8080/#home-moving",
+   "@type": "Thing",
+   "alternateName": [
+    "Home move",
+    "Household move"
+   ],
+   "description": "Moving the contents of a house or apartment to a new home.",
+   "name": "Home moving"
+  },
+  {
+   "@id": "http://localhost:8080/#moving-company",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q783794",
+    "https://www.wikidata.org/wiki/Q2169973"
+   ],
+   "alternateName": [
+    "movers",
+    "mover",
+    "Movers",
+    "moving companies",
+    "Moving companies",
+    "Moving Companies",
+    "moving van",
+    "moving vans",
+    "Mover"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q1757263"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/07ry5s"
+    }
+   ],
+   "name": "Moving company",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Moving_company",
+    "https://www.wikidata.org/wiki/Q1757263",
+    "https://www.google.com/search?kgmid=/m/07ry5s",
+    "https://dbpedia.org/resource/Moving_company"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#los-angeles",
+   "@type": "City",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q13218391",
+    "https://www.wikidata.org/wiki/Q515"
+   ],
+   "alternateName": [
+    "City of Los Angeles",
+    "Los Angeles, CA"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q65"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/030qb3t"
+    }
+   ],
+   "name": "Los Angeles",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Los_Angeles",
+    "https://www.wikidata.org/wiki/Q65",
+    "https://www.google.com/search?kgmid=/m/030qb3t",
+    "https://dbpedia.org/resource/Los_Angeles"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#koreatown-los-angeles",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q52154375",
+    "https://www.wikidata.org/wiki/Q904319"
+   ],
+   "alternateName": [
+    "Koreatown"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q872664"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0284fn"
+    }
+   ],
+   "name": "Koreatown, Los Angeles",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Koreatown,_Los_Angeles",
+    "https://www.wikidata.org/wiki/Q872664",
+    "https://www.google.com/search?kgmid=/m/0284fn",
+    "https://dbpedia.org/resource/Koreatown,_Los_Angeles"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#los-angeles-department-of-transportation",
+   "@type": "Thing",
+   "additionalType": "https://www.wikidata.org/wiki/Q10438042",
+   "alternateName": [
+    "LADOT",
+    "LADOT,"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q3259703"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/079lq1"
+    }
+   ],
+   "name": "Los Angeles Department of Transportation",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Los_Angeles_Department_of_Transportation",
+    "https://www.wikidata.org/wiki/Q3259703",
+    "https://www.google.com/search?kgmid=/m/079lq1",
+    "https://dbpedia.org/resource/Los_Angeles_Department_of_Transportation"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#cost",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q151885",
+    "https://www.wikidata.org/wiki/Q29028649"
+   ],
+   "alternateName": [
+    "costs",
+    "Costs"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q240673"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0168hv"
+    }
+   ],
+   "name": "Cost",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Cost",
+    "https://www.wikidata.org/wiki/Q240673",
+    "https://www.google.com/search?kgmid=/m/0168hv",
+    "https://dbpedia.org/resource/Cost"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#moving-cost-calculator",
+   "@type": "WebApplication",
+   "applicationCategory": "UtilitiesApplication",
+   "description": "Free online calculator that estimates the cost of a local or long-distance move.",
+   "isAccessibleForFree": true,
+   "name": "Lift My Boxes Moving Cost Calculator",
+   "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+   },
+   "operatingSystem": "Any",
+   "publisher": [
+    {
+     "@id": "http://localhost:8080/#organization"
+    }
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#moving-labor",
+   "@type": "Thing",
+   "alternateName": [
+    "Labor-only help",
+    "Labor-only movers",
+    "Labor-only"
+   ],
+   "description": "Hired help to load or unload a truck the customer provides.",
+   "name": "Moving labor"
+  },
+  {
+   "@id": "http://localhost:8080/#apartment",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q1247867",
+    "https://www.wikidata.org/wiki/Q3305339"
+   ],
+   "alternateName": [
+    "apartment building",
+    "apartments",
+    "Flat",
+    "Apartment buildings",
+    "apartment buildings",
+    "flat",
+    "Apartment complexes",
+    "garden apartment",
+    "Apartments",
+    "apartment complexes"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q188507"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/01nblt"
+    }
+   ],
+   "name": "Apartment",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Apartment",
+    "https://www.wikidata.org/wiki/Q188507",
+    "https://www.google.com/search?kgmid=/m/01nblt",
+    "https://dbpedia.org/resource/Apartment"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#santa-monica-california",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q13218357",
+    "https://www.wikidata.org/wiki/Q13218391"
+   ],
+   "alternateName": [
+    "Santa Monica"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q47164"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/06_kh"
+    }
+   ],
+   "name": "Santa Monica, California",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Santa_Monica,_California",
+    "https://www.wikidata.org/wiki/Q47164",
+    "https://www.google.com/search?kgmid=/m/06_kh",
+    "https://dbpedia.org/resource/Santa_Monica,_California"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#hour",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q1790144",
+    "https://www.wikidata.org/wiki/Q106839753"
+   ],
+   "alternateName": [
+    "hours",
+    "Hours"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q25235"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/03mxv"
+    }
+   ],
+   "name": "Hour",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Hour",
+    "https://www.wikidata.org/wiki/Q25235",
+    "https://www.google.com/search?kgmid=/m/03mxv",
+    "https://dbpedia.org/resource/Hour"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#zip-code",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q6545185",
+    "https://www.wikidata.org/wiki/Q126286955"
+   ],
+   "alternateName": [
+    "ZIP codes",
+    "ZIP"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q136208"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0dllr"
+    }
+   ],
+   "name": "ZIP Code",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/ZIP_Code",
+    "https://www.wikidata.org/wiki/Q136208",
+    "https://www.google.com/search?kgmid=/m/0dllr",
+    "https://dbpedia.org/resource/ZIP_Code"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#truck",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q140424465",
+    "https://www.wikidata.org/wiki/Q1515493"
+   ],
+   "alternateName": [
+    "trucks",
+    "Trucks"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q43193"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/07r04"
+    }
+   ],
+   "name": "Truck",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Truck",
+    "https://www.wikidata.org/wiki/Q43193",
+    "https://www.google.com/search?kgmid=/m/07r04",
+    "https://dbpedia.org/resource/Truck"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#tariff",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q130109687",
+    "https://www.wikidata.org/wiki/Q736288"
+   ],
+   "alternateName": [
+    "tariffs"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q52389"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0ffnx"
+    }
+   ],
+   "name": "Tariff",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Tariff",
+    "https://www.wikidata.org/wiki/Q52389",
+    "https://www.google.com/search?kgmid=/m/0ffnx",
+    "https://dbpedia.org/resource/Tariff"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#overtime",
+   "@type": "Thing",
+   "additionalType": "https://www.wikidata.org/wiki/Q260732",
+   "alternateName": [
+    "overtime rates"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q667022"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/01y3d8"
+    }
+   ],
+   "name": "Overtime",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Overtime",
+    "https://www.wikidata.org/wiki/Q667022",
+    "https://www.google.com/search?kgmid=/m/01y3d8",
+    "https://dbpedia.org/resource/Overtime"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#california",
+   "@type": "State",
+   "additionalType": "https://www.wikidata.org/wiki/Q35657",
+   "alternateName": [
+    "Californians"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q99"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/01n7q"
+    }
+   ],
+   "name": "California",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/California",
+    "https://www.wikidata.org/wiki/Q99",
+    "https://www.google.com/search?kgmid=/m/01n7q",
+    "https://dbpedia.org/resource/California"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#elevator",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q334166",
+    "https://www.wikidata.org/wiki/Q811979"
+   ],
+   "alternateName": [
+    "elevators",
+    "lifts",
+    "freight elevator"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q132911"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/02r60"
+    }
+   ],
+   "name": "Elevator",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Elevator",
+    "https://www.wikidata.org/wiki/Q132911",
+    "https://www.google.com/search?kgmid=/m/02r60",
+    "https://dbpedia.org/resource/Elevator"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/how-much-do-movers-cost-in-los-angeles/#webpage",
+   "@type": "WebPage",
+   "about": [
+    {
+     "@id": "http://localhost:8080/#home-moving"
+    },
+    {
+     "@id": "http://localhost:8080/#moving-company"
+    },
+    {
+     "@id": "http://localhost:8080/#los-angeles"
+    },
+    {
+     "@id": "http://localhost:8080/#koreatown-los-angeles"
+    },
+    {
+     "@id": "http://localhost:8080/#los-angeles-department-of-transportation"
+    },
+    {
+     "@id": "http://localhost:8080/#cost"
+    }
+   ],
+   "breadcrumb": {
+    "@id": "http://localhost:8080/how-much-do-movers-cost-in-los-angeles/#breadcrumb"
+   },
+   "dateModified": "2026-10-29T16:21:58Z",
+   "datePublished": "2026-10-29T16:21:58Z",
+   "description": "How much do movers cost in Los Angeles? See crew rates, double drive time and what LA traffic adds, then get a free estimate for your own move in a minute.",
+   "inLanguage": "en-US",
+   "isPartOf": {
+    "@id": "http://localhost:8080/#website"
+   },
+   "keywords": [
+    "how much do movers cost in los angeles"
+   ],
+   "mentions": [
+    {
+     "@id": "http://localhost:8080/#moving-cost-calculator"
+    },
+    {
+     "@id": "http://localhost:8080/#moving-labor"
+    },
+    {
+     "@id": "http://localhost:8080/#apartment"
+    },
+    {
+     "@id": "http://localhost:8080/#santa-monica-california"
+    },
+    {
+     "@id": "http://localhost:8080/#hour"
+    },
+    {
+     "@id": "http://localhost:8080/#zip-code"
+    },
+    {
+     "@id": "http://localhost:8080/#truck"
+    },
+    {
+     "@id": "http://localhost:8080/#tariff"
+    },
+    {
+     "@id": "http://localhost:8080/#overtime"
+    },
+    {
+     "@id": "http://localhost:8080/#california"
+    },
+    {
+     "@id": "http://localhost:8080/#elevator"
+    }
+   ],
+   "name": "How Much Do Movers Cost in Los Angeles? Rates | Lift My Boxes",
+   "spatialCoverage": {
+    "@type": "City",
+    "containedInPlace": {
+     "@type": "State",
+     "containedInPlace": {
+      "@type": "Country",
+      "name": "United States"
+     },
+     "name": "California"
+    },
+    "geo": {
+     "@type": "GeoCoordinates",
+     "latitude": 34.019394,
+     "longitude": -118.410825
+    },
+    "name": "Los Angeles"
+   },
+   "url": "http://localhost:8080/how-much-do-movers-cost-in-los-angeles/"
+  },
+  {
+   "@id": "http://localhost:8080/how-much-do-movers-cost-in-los-angeles/#breadcrumb",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/",
+     "name": "Home",
+     "position": 1
+    },
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/how-much-do-movers-cost/",
+     "name": "How much do movers cost",
+     "position": 2
+    },
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/local-movers-cost/",
+     "name": "What do local movers cost?",
+     "position": 3
+    },
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/local-moving-cost/",
+     "name": "Local moving cost, from full service to doing it yourself",
+     "position": 4
+    },
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/how-much-do-movers-cost-in-los-angeles/",
+     "name": "How much do movers cost in Los Angeles, from the Valley to the Westside?",
+     "position": 5
+    }
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/how-much-do-movers-cost-in-los-angeles/#faq",
+   "@type": "FAQPage",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Multiply the crew's hourly rate by the hours. A 3-mover crew for a 2-bedroom home costs $150–$225 an hour, so an eight-hour day is eight times that, before packing or extras. If the day runs past the crew's regular hours, ask whether overtime applies, because it changes how much do movers cost in Los Angeles for the last hours."
+     },
+     "name": "How much do movers cost in Los Angeles for a full day?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Often, yes. Weekends book up first, and California's Max 4 tariff allows overtime rates when you ask for service at a time the mover must pay its crew overtime. A weekday midday slot avoids both, and it usually means less freeway traffic, which matters when the drive is billed at double its time."
+     },
+     "name": "Is a weekend move in Los Angeles more expensive?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Tipping is up to you and isn't part of how much do movers cost in Los Angeles on the bill. Moving guides suggest $10.00–$20.00 per mover for a job of up to 4 hours and $20.00–$65.00 per mover for a full day. Tip toward the top for hillside steps or a long carry from the street."
+     },
+     "name": "How much should you tip each mover in Los Angeles?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Ask about a minimum number of hours, double drive time between your addresses, stairs, a long carry from the truck, elevator waits, packing materials and any overtime. On a short job these can be a large share of how much do movers cost in Los Angeles, so get each one written into the estimate before moving day."
+     },
+     "name": "What extra charges show up on a short Los Angeles move?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Check that the company holds a household mover license from BHGS, and be wary of an estimate given without anyone seeing your belongings, or one far cheaper than every other. BHGS also warns against paying a large deposit. A licensed mover will put its rates and charges in writing before the move."
+     },
+     "name": "How can you spot a moving scam in Los Angeles?"
+    }
+   ]
+  }
+ ]
+}

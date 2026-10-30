@@ -26,18 +26,63 @@ const pagePath = "html:body" // an issue about the page as a whole
 
 // pageFacts is what the content checks read from the rendered page.
 type pageFacts struct {
-	doc  *xhtml.Node // nil when only the page's text is known
-	text string      // the visible text, whitespace collapsed
-	norm string      // normWords(text), padded with spaces
-	base *url.URL    // the page's canonical URL, or nil
+	doc     *xhtml.Node // nil when only the page's text is known
+	text    string      // the visible text, whitespace collapsed
+	norm    string      // normWords(text), padded with spaces
+	main    string      // the visible text outside the site's header, footer and navs
+	base    *url.URL    // the page's canonical URL, else its address, or nil
+	url     *url.URL    // the page's address, else its canonical URL, or nil
+	kind    pageKind
+	private string           // why search engines skip the page ("" when they index it)
+	claimed map[float64]bool // prices a check other than prices reports
+
+	cards     []*card // product cards, found once
+	cardsDone bool
 }
 
-func newPageFacts(doc *xhtml.Node, text string) *pageFacts {
-	p := &pageFacts{doc: doc, text: text, norm: " " + normWords(text) + " "}
+func newPageFacts(doc *xhtml.Node, text, address string) *pageFacts {
+	p := &pageFacts{doc: doc, text: text, norm: " " + normWords(text) + " ", main: text, claimed: map[float64]bool{}}
+	if u, err := url.Parse(strings.TrimSpace(address)); err == nil && u.IsAbs() {
+		p.url = u
+	}
 	if doc != nil {
 		p.base = canonical(doc)
+		p.main = mainText(doc)
+	}
+	if p.base == nil {
+		p.base = p.url
+	}
+	if p.url == nil {
+		p.url = p.base
+	}
+	p.kind = p.classify()
+	switch {
+	case doc != nil && noindex(doc):
+		p.private = "noindex"
+	case privateKinds[p.kind] != "":
+		p.private = privateKinds[p.kind]
 	}
 	return p
+}
+
+// mainText is the visible text outside the site's header, footer and navs.
+func mainText(doc *xhtml.Node) string {
+	var b strings.Builder
+	var walk func(*xhtml.Node)
+	walk = func(n *xhtml.Node) {
+		for ch := n.FirstChild; ch != nil; ch = ch.NextSibling {
+			if skipped(ch) || ch.DataAtom == atom.Nav || ((ch.DataAtom == atom.Header || ch.DataAtom == atom.Footer) && !scoped(ch)) {
+				continue
+			}
+			if ch.Type == xhtml.TextNode {
+				b.WriteString(ch.Data)
+				b.WriteByte(' ')
+			}
+			walk(ch)
+		}
+	}
+	walk(doc)
+	return strings.Join(strings.Fields(b.String()), " ")
 }
 
 // canonical is the page's canonical link, or its og:url.
@@ -190,11 +235,40 @@ func (c *checker) pageNode(all []located, p *pageFacts) string {
 	return first
 }
 
-// content runs the checks that compare the draft with the page.
+// privateNotes say what a page search engines skip would be typed as.
+var privateNotes = map[pageKind]string{
+	kindSearch:   "its WebPage is a SearchResultsPage",
+	kindCheckout: "its WebPage is a CheckoutPage",
+}
+
+// content runs the checks that compare the draft with the page. What the
+// markup repeats is held to the page always; what the page shows is asked of
+// the markup only on a page search engines index.
 func (c *checker) content(all []located, p *pageFacts) {
 	d := indexDraft(all)
 	c.shownText(all, p)
 	c.anchors(all, p)
+	c.offers(all)
+	c.personNames(all)
+	c.pageNames(all)
+	if p.private != "" {
+		what := p.private
+		if p.private == "noindex" {
+			what = "the page is noindex"
+		} else {
+			what = "the page is " + what
+		}
+		note := ""
+		if n := privateNotes[p.kind]; n != "" {
+			note = "; if you mark it up at all, " + n
+		}
+		c.add(pagePath, Info, "%s: search engines leave its structured data out, so the shop checks skip it%s", what, note)
+		return
+	}
+	c.shop(all, p, d)
+	c.site(all, p, d)
+	c.sources(all, p, d)
+	c.data(all, p, d)
 	c.copyright(all, p)
 	c.readTime(all, p)
 	c.sectionLabel(all, p)
@@ -207,14 +281,47 @@ func (c *checker) content(all []located, p *pageFacts) {
 	c.images(all, p)
 	c.counts(all, p)
 	c.outsideLinks(p, d)
-	c.related(all, p)
+	c.related(all, p, d)
 	c.responseTime(all, p)
+	c.costs(all, p)
 	c.prices(all, p)
 	c.quotes(p, d)
 	c.ratings(all, p)
-	c.offers(all)
-	c.personNames(all)
-	c.pageNames(all)
+}
+
+// shop runs the shop checks: the sitewide nodes, the page's type, and what a
+// product page, a listing and the shop's policies show. They run before
+// prices, which leaves out the prices they report.
+func (c *checker) shop(all []located, p *pageFacts, d *draftIndex) {
+	if p.doc != nil {
+		c.pageType(all, p)
+		c.website(all, p)
+		if p.sells() || p.address() != "" {
+			c.business(all, p)
+		}
+		c.logo(all, p)
+		c.social(p, d)
+		c.catalog(all, p)
+	}
+	if p.kind == kindProduct {
+		c.product(all, p, d)
+	}
+	c.listing(all, p, d)
+	// what a shop's pages state about its own sales; on another site the
+	// same words ("a damaged item", "pay by bank transfer") are about others
+	if p.sells() {
+		c.sale(all, p)
+		c.stock(all, p)
+		c.members(all, p)
+		c.extras(all, p)
+		c.shipping(all, p)
+		c.returns(all, p)
+		c.payments(all, p)
+	}
+	c.engagement(all, p)
+	c.whereAndWhen(all, p)
+	c.faq(all, p)
+	c.founding(all, p)
 }
 
 // shownProps are the texts the markup must repeat word for word.
@@ -423,7 +530,8 @@ func (c *checker) media(all []located, p *pageFacts) {
 	})
 }
 
-// search warns on a search box with no SearchAction in the draft.
+// search warns on a search box, or a link to the site's search page, with no
+// SearchAction in the draft.
 func (c *checker) search(all []located, p *pageFacts) {
 	if p.doc == nil || slices.ContainsFunc(all, func(l located) bool { return c.is(l.n, "SearchAction") }) {
 		return
@@ -434,6 +542,20 @@ func (c *checker) search(all []located, p *pageFacts) {
 			return
 		}
 	}
+	for _, a := range queryAll(p.doc, "a[href]") {
+		u, ok := p.siteLink(a)
+		label, _ := attr(a, "aria-label")
+		if ok && shown(a) && slices.Contains(segments(mustParse(u)), "search") && strings.Contains(strings.ToLower(label+" "+htmlText(a)), "search") {
+			c.add("html:"+selectorFor(p.doc, a), Warning, "the page links the site's search page (%s) but no SearchAction: add one to the WebSite's potentialAction, target an EntryPoint whose urlTemplate is the search page's address with {search_term_string} as the query", u)
+			return
+		}
+	}
+}
+
+// mustParse parses a URL this package normalized.
+func mustParse(s string) *url.URL {
+	u, _ := url.Parse(s)
+	return u
 }
 
 var phoneNumber = regexp.MustCompile(`\+?\d[\d ()-]{6,}\d`)
@@ -515,6 +637,17 @@ func (c *checker) contacts(all []located, p *pageFacts) {
 
 // forms warns on a form no Action targets, and on an EntryPoint whose
 // httpMethod does not match the form it targets.
+// inSearch reports an element in a search landmark: a search element, or one
+// with role search.
+func inSearch(n *xhtml.Node) bool {
+	for e := n; e != nil; e = e.Parent {
+		if role, _ := attr(e, "role"); e.Type == xhtml.ElementNode && (e.Data == "search" || role == "search") {
+			return true
+		}
+	}
+	return false
+}
+
 func (c *checker) forms(all []located, p *pageFacts, d *draftIndex) {
 	if p.doc == nil {
 		return
@@ -550,7 +683,8 @@ func (c *checker) forms(all []located, p *pageFacts, d *draftIndex) {
 		if n.DataAtom != atom.Form {
 			return
 		}
-		if role, _ := attr(n, "role"); role == "search" || len(queryAll(n, `input[type="search"]`)) > 0 {
+		// a search box is the SearchAction's; a dialog's form only closes it
+		if method, _ := attr(n, "method"); inSearch(n) || len(queryAll(n, `input[type="search"]`)) > 0 || strings.EqualFold(strings.TrimSpace(method), "dialog") {
 			return
 		}
 		ids := map[string]bool{}
@@ -580,7 +714,17 @@ func (c *checker) forms(all []located, p *pageFacts, d *draftIndex) {
 			if near != "" {
 				where = "with an EntryPoint target whose urlTemplate is the page URL plus #" + near
 			}
-			c.add("html:"+selectorFor(p.doc, n), Warning, "the page's form has no Action whose target points at it: add the Action it performs (AskAction, QuoteAction, ReserveAction, SubscribeAction and the like) %s", where)
+			text := htmlText(n)
+			switch {
+			case preOrder.MatchString(text):
+				c.add("html:"+selectorFor(p.doc, n), Warning, "the page's pre-order form has no Action whose target points at it: add a PreOrderAction as the Offer's potentialAction, target an EntryPoint (urlTemplate %s, httpMethod %s)", p.abs(action), method)
+			case cartForm.MatchString(action) || addToCart.MatchString(text):
+				c.add("html:"+selectorFor(p.doc, n), Warning, "the page's add-to-bag form has no Action whose target points at it: add a BuyAction as the Offer's potentialAction, target an EntryPoint (urlTemplate %s, httpMethod %s, actionPlatform https://schema.org/DesktopWebPlatform and https://schema.org/MobileWebPlatform)", p.abs(action), method)
+			case subscribeForm.MatchString(text+" "+htmlText(n.Parent)) && len(queryAll(n, `input[type="email"], input[name*="email"]`)) > 0:
+				c.add("html:"+selectorFor(p.doc, n), Warning, "the page's newsletter form has no Action whose target points at it: add a SubscribeAction (to the business) %s", where)
+			default:
+				c.add("html:"+selectorFor(p.doc, n), Warning, "the page's form has no Action whose target points at it: add the Action it performs (AskAction, QuoteAction, ReserveAction, SubscribeAction and the like) %s", where)
+			}
 			return
 		}
 		for _, t := range hit {
@@ -602,6 +746,11 @@ func (c *checker) forms(all []located, p *pageFacts, d *draftIndex) {
 		}
 	})
 }
+
+var (
+	cartForm      = regexp.MustCompile(`(?i)(cart|basket|bag)\b`)
+	subscribeForm = regexp.MustCompile(`(?i)\b(subscribe|newsletter|sign up|join our)\b`)
+)
 
 var registration = regexp.MustCompile(`(?i)\b(ABN|ACN|ARBN|NZBN|UEN|EIN|GSTIN|VAT(?:\s+(?:no\.?|number|reg(?:istration)?\.?\s+no\.?))?|company\s+(?:no\.?|number|reg(?:istration)?\.?\s+(?:no\.?|number))|licen[cs]e\s+(?:no\.?|number))[\s:#.]*([A-Z]{0,3}\s?\d[\d ]{4,18}\d)\b`)
 
@@ -665,9 +814,35 @@ func (c *checker) terms(all []located, p *pageFacts) {
 		}
 	}
 	if p.doc != nil {
+		// a label that several lists repeat (Includes, How long for each
+		// option) names a field of data; a glossary defines each term once
+		lists := map[string]int{}
+		for _, dl := range queryAll(p.doc, "dl") {
+			seen := map[string]bool{}
+			for _, d := range pairs(dl) {
+				if k := normWords(d.label); !seen[k] {
+					seen[k] = true
+					lists[k]++
+				}
+			}
+		}
+		repeats := func(dl *xhtml.Node) bool {
+			return slices.ContainsFunc(pairs(dl), func(d detail) bool { return lists[normWords(d.label)] > 1 })
+		}
 		visit(p.doc, func(n *xhtml.Node) {
-			if n.DataAtom == atom.Dfn || (n.DataAtom == atom.Dt && n.Parent != nil && n.Parent.DataAtom == atom.Dl) {
+			switch n.DataAtom {
+			case atom.Dfn:
 				add(htmlText(n))
+			case atom.Dl:
+				// a list of short values (Shipping rate: $7.95), or a
+				// product's details, is data the shop checks read, and a
+				// shop's dl beside a "Shop lockets" link sells: neither is a
+				// glossary
+				if !keyValueList(n) && p.kind != kindProduct && !p.promo(n) && !repeats(n) {
+					for _, d := range pairs(n) {
+						add(d.label)
+					}
+				}
 			}
 		})
 	}
@@ -705,6 +880,16 @@ func chrome(n *xhtml.Node) bool {
 			if !scoped(e) {
 				return true
 			}
+		}
+	}
+	return false
+}
+
+// siteChromeAround reports an element in the site's own header or footer.
+func siteChromeAround(n *xhtml.Node) bool {
+	for e := n.Parent; e != nil; e = e.Parent {
+		if (e.DataAtom == atom.Header || e.DataAtom == atom.Footer) && !scoped(e) {
+			return true
 		}
 	}
 	return false
@@ -758,7 +943,8 @@ func (c *checker) images(all []located, p *pageFacts) {
 	}
 	reported := map[string]bool{}
 	visit(p.doc, func(n *xhtml.Node) {
-		if n.DataAtom != atom.Img || chrome(n) {
+		// a product card's image is its Product's, which the listing check asks for
+		if n.DataAtom != atom.Img || chrome(n) || p.inCard(n) {
 			return
 		}
 		alt, _ := attr(n, "alt")
@@ -804,8 +990,21 @@ var (
 		"eleven": 11, "twelve": 12, "thirteen": 13, "fourteen": 14, "fifteen": 15, "sixteen": 16, "seventeen": 17, "eighteen": 18, "nineteen": 19, "twenty": 20}
 	countHeading = regexp.MustCompile(`(?i)\b(\d{1,3}|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\s+(?:[\p{L}'’-]+\s+){0,2}?([\p{L}'’-]+s)\b`)
 	unitNouns    = map[string]bool{"seconds": true, "secs": true, "minutes": true, "mins": true, "hours": true, "hrs": true, "days": true, "weeks": true, "months": true, "years": true,
-		"guests": true, "people": true, "dollars": true, "cents": true, "percent": true, "times": true, "metres": true, "meters": true, "kilometres": true, "kilometers": true, "kms": true, "miles": true, "stars": true, "points": true}
+		"guests": true, "people": true, "dollars": true, "cents": true, "percent": true, "times": true, "metres": true, "meters": true, "kilometres": true, "kilometers": true, "kms": true, "miles": true, "stars": true, "points": true,
+		"pcs": true, "pieces": true, "packs": true, "pairs": true, "business": true}
 )
+
+// linkHeading reports a heading that is a link, or sits in one: a product
+// card's title, not a heading over a list.
+func linkHeading(n *xhtml.Node) bool {
+	for e := n.Parent; e != nil; e = e.Parent {
+		if e.DataAtom == atom.A {
+			return true
+		}
+	}
+	links := queryAll(n, "a")
+	return len(links) == 1 && strings.TrimSpace(htmlText(links[0])) == strings.TrimSpace(htmlText(n))
+}
 
 // counts warns on a heading that counts its items ("16 ideas", "Four
 // steps") when no ItemList or HowTo in the draft has that many.
@@ -834,7 +1033,7 @@ func (c *checker) counts(all []located, p *pageFacts) {
 		default:
 			return
 		}
-		if chrome(n) {
+		if chrome(n) || linkHeading(n) || p.inCard(n) {
 			return
 		}
 		t := htmlText(n)
@@ -846,13 +1045,79 @@ func (c *checker) counts(all []located, p *pageFacts) {
 			if err != nil {
 				k = countWords[strings.ToLower(m[1])]
 			}
-			if k < 2 || have[k] {
+			if k < 2 || have[k] || !slices.Contains(sectionCounts(n), k) {
 				continue
 			}
 			c.add("html:"+selectorFor(p.doc, n), Warning, "the heading %q counts %d items: add an ItemList of them (numberOfItems %d, a ListItem each) or a HowTo with %d steps, in the WebPage's hasPart", clip(t, 60), k, k, k)
 			return
 		}
 	})
+}
+
+// sectionCounts are the counts of the items a heading's section holds: its
+// subheadings, and the items of the first list, the details and the table
+// rows before them. A heading whose number the section does not hold counts
+// something else: "2 movers", "two bedrooms", "10 business days".
+func sectionCounts(h *xhtml.Node) []int {
+	level := headingLevel(h)
+	var subs, details, rows, items int
+	listDone, before, started := false, true, false
+	stop := false
+	var walk func(*xhtml.Node)
+	walk = func(n *xhtml.Node) {
+		for c := n.FirstChild; c != nil && !stop; c = c.NextSibling {
+			if skipped(c) || c.Type != xhtml.ElementNode {
+				continue
+			}
+			if c == h {
+				started = true
+				continue
+			}
+			if started {
+				if l := headingLevel(c); l > 0 {
+					if l <= level {
+						stop = true
+						return
+					}
+					if l == level+1 {
+						subs++
+					}
+					before = false
+					continue
+				}
+				if before {
+					switch c.DataAtom {
+					case atom.Ul, atom.Ol:
+						if !listDone {
+							items, listDone = len(queryAll(c, "li")), true
+						}
+					case atom.Details:
+						details++
+					case atom.Tr:
+						if len(queryAll(c, "td")) > 0 {
+							rows++
+						}
+					}
+				}
+			}
+			walk(c)
+		}
+	}
+	for top := h; top != nil; top = top.Parent {
+		if top.Parent == nil {
+			walk(top)
+		}
+	}
+	return []int{subs, details, rows, items}
+}
+
+// headingLevel is an h1 to h6's level, or 0.
+func headingLevel(n *xhtml.Node) int {
+	switch n.DataAtom {
+	case atom.H1, atom.H2, atom.H3, atom.H4, atom.H5, atom.H6:
+		return int(n.Data[1] - '0')
+	}
+	return 0
 }
 
 // idBox is the nearest ancestor with an id, or the body.
@@ -882,6 +1147,10 @@ func (c *checker) outsideLinks(p *pageFacts, d *draftIndex) {
 		h, _ := attr(n, "href")
 		u, err := url.Parse(strings.TrimSpace(h))
 		if err != nil || (u.Scheme != "http" && u.Scheme != "https") || strings.EqualFold(u.Hostname(), p.base.Hostname()) {
+			return
+		}
+		// the business's profiles and share buttons have checks of their own
+		if socialProfile(h) || shareLink.MatchString(h) {
 			return
 		}
 		key := normURL(u)
@@ -919,11 +1188,15 @@ func (c *checker) outsideLinks(p *pageFacts, d *draftIndex) {
 	}
 }
 
-var relatedLabel = regexp.MustCompile(`(?i)^(?:related\b|keep reading|read next|read more|more (?:for|from|on|like this|guides|articles|reading)|you (?:may|might) also like|see also|further reading)`)
+var (
+	relatedLabel = regexp.MustCompile(`(?i)^(?:related\b|keep reading|read next|read more|more (?:for|from|on|like this|guides|articles|reading)|you (?:may|might) also like|see also|further reading|in this (?:guide|section|series|hub)\b|guides in\b)`)
+	guideLabel   = regexp.MustCompile(`(?i)^(?:in this (?:guide|section|series|hub)\b|guides in\b)`)
+)
 
 // related warns when a block the page labels as related reading links to
-// pages of the site that the WebPage's relatedLink does not list.
-func (c *checker) related(all []located, p *pageFacts) {
+// pages of the site that the WebPage's relatedLink does not list. A block of
+// product cards is the Product's related products instead.
+func (c *checker) related(all []located, p *pageFacts, d *draftIndex) {
 	if p.doc == nil {
 		return
 	}
@@ -935,28 +1208,39 @@ func (c *checker) related(all []located, p *pageFacts) {
 			}
 		}
 	}
-	done := map[*xhtml.Node]bool{}
-	visit(p.doc, func(n *xhtml.Node) {
-		switch n.DataAtom {
-		case atom.H2, atom.H3, atom.H4, atom.P, atom.Span:
-		default:
-			return
-		}
-		t := strings.TrimSpace(htmlText(n))
-		if len(strings.Fields(t)) > 6 || !relatedLabel.MatchString(t) || chrome(n) {
-			return
-		}
-		box := n.Parent
-		for e := n.Parent; e != nil; e = e.Parent {
-			if e.DataAtom == atom.Section || e.DataAtom == atom.Aside || e.DataAtom == atom.Nav || e.DataAtom == atom.Article {
-				box = e
-				break
+	for _, b := range p.relatedBoxes() {
+		t, box := b.label, b.n
+		var cards []*card
+		for _, cd := range p.productCards() {
+			if cd.related && slices.Contains(ancestors(cd.n), box) {
+				cards = append(cards, cd)
 			}
 		}
-		if box == nil || done[box] {
-			return
+		if len(cards) > 0 {
+			var names []string
+			for _, cd := range cards {
+				if !d.urls[cd.url] && !slices.Contains(names, cd.name) {
+					names = append(names, cd.name)
+				}
+			}
+			if len(names) > 0 {
+				c.add("html:"+selectorFor(p.doc, box), Warning, "the page's %q block lists products (%s) that the Product's isRelatedTo and isSimilarTo do not name: add each as a Product (name, url, image, offers)", t, strings.Join(names, ", "))
+			}
+			continue
 		}
-		done[box] = true
+		// a guide's own pages, listed on its hub, are a part of the page
+		if guideLabel.MatchString(t) {
+			var pages []string
+			for _, u := range p.siteLinks(box) {
+				if !slices.Contains(pages, u) {
+					pages = append(pages, u)
+				}
+			}
+			if len(pages) >= 3 && slices.ContainsFunc(pages, func(u string) bool { return !d.urls[u] }) {
+				c.add("html:"+selectorFor(p.doc, box), Warning, "the page's %q block lists %d pages of the site: add an ItemList of them (a ListItem for each with position, url and name) to the WebPage's hasPart; a hub page whose purpose is the list is a CollectionPage with the ItemList as its mainEntity", t, len(pages))
+			}
+			continue
+		}
 		var missing []string
 		visit(box, func(a *xhtml.Node) {
 			if a.DataAtom != atom.A {
@@ -980,7 +1264,16 @@ func (c *checker) related(all []located, p *pageFacts) {
 		if len(missing) > 0 {
 			c.add("html:"+selectorFor(p.doc, box), Warning, "the page's %q links are not in the WebPage's relatedLink: add %s", t, strings.Join(missing, ", "))
 		}
-	})
+	}
+}
+
+// ancestors are n and the elements around it.
+func ancestors(n *xhtml.Node) []*xhtml.Node {
+	var out []*xhtml.Node
+	for e := n; e != nil; e = e.Parent {
+		out = append(out, e)
+	}
+	return out
 }
 
 var responseTime = regexp.MustCompile(`(?i)\b(?:repl(?:y|ies)|responds?|responses?|get back to you|hear back)\b[^.!?]{0,40}?\bwithin\s+(?:(?:\d+|one|two|three)\s+)?(?:business days?|working days?|days?|hours?|minutes?)`)
@@ -1001,8 +1294,9 @@ func (c *checker) responseTime(all []located, p *pageFacts) {
 
 var (
 	priceAmount = regexp.MustCompile(`(?:A\$|AU\$|AUD ?|US\$|USD ?|NZ\$|NZD ?|C\$|CA\$|S\$|HK\$|€|£|¥|₹|\$)\s?(\d{1,3}(?:,\d{3})+|\d+)(?:\.(\d{1,2}))?`)
-	taxWords    = regexp.MustCompile(`(?i)\b(plus|excl(?:uding|\.)?|ex|exclusive of|incl(?:uding|\.)?|inc\.?|inclusive of)\s+(GST|VAT|tax(?:es)?|sales tax)\b`)
-	taxOut      = regexp.MustCompile(`(?i)^(?:plus|ex)`)
+	taxWords    = regexp.MustCompile(`(?i)\b(plus|excl(?:uding|\.)?|ex|exclusive of|incl(?:uding|\.)?|inc\.?|inclusive of)\s+(GST|VAT|tax(?:es)?|sales tax)\b|\b(GST|VAT|tax(?:es)?)\s+(included|inclusive|incl\.?|excluded|exclusive|excl\.?|extra)\b`)
+	taxOut      = regexp.MustCompile(`(?i)^(?:plus|ex|excl|exclusive|excluded|extra)`)
+	notPrices   = regexp.MustCompile(`(?i)\b(?:save|payments? of|under|below|less than)\s+(?:A\$|AU\$|\$|£|€)\s?\d[\d,]*(?:\.\d{1,2})?`)
 )
 
 // amount reads a price's number.
@@ -1015,17 +1309,21 @@ func amount(s string) (float64, bool) {
 // a price without its currency, and on tax wording the PriceSpecification
 // does not match.
 func (c *checker) prices(all []located, p *pageFacts) {
-	marked := map[float64]bool{}
+	// marked holds every amount the draft carries; sold, only the prices of
+	// things for sale, which tax wording is about (a shipping rate's
+	// MonetaryAmount is not one)
+	marked, sold := map[float64]bool{}, map[float64]bool{}
 	for _, l := range all {
 		keys := []string{"price", "lowPrice", "highPrice", "minPrice", "maxPrice"}
 		if c.is(l.n, "MonetaryAmount") || c.is(l.n, "PriceSpecification") {
 			keys = append(keys, "value", "minValue", "maxValue")
 		}
 		priced := false
-		for _, k := range keys {
+		for i, k := range keys {
 			for _, s := range scalars(l.n, k) {
 				if f, ok := amount(s); ok {
 					marked[f], priced = true, true
+					sold[f] = sold[f] || i < 5
 				}
 			}
 		}
@@ -1033,33 +1331,40 @@ func (c *checker) prices(all []located, p *pageFacts) {
 			c.add(l.path, Warning, "this %s has a price but no priceCurrency: set it (AUD, USD, EUR)", typeNames(l.n)[0])
 		}
 	}
-	ms := priceAmount.FindAllStringSubmatch(p.text, -1)
+	// prices in the site's header, footer and menus, a saving ("save $50")
+	// and an instalment are no item's price; the shop checks report the
+	// prices they own (was prices, shipping rates, product cards)
+	ms := priceAmount.FindAllStringSubmatch(notPrices.ReplaceAllString(p.main, " "), -1)
 	if len(ms) == 0 {
 		return
 	}
 	var missing []string
 	seen := map[float64]bool{}
+	anySold := false
 	for _, m := range ms {
-		f, ok := amount(m[1] + "." + m[2])
-		if m[2] == "" {
-			f, ok = amount(m[1])
-		}
+		f, ok := priceOf(m)
 		if !ok || seen[f] {
 			continue
 		}
 		seen[f] = true
-		if !marked[f] {
+		anySold = anySold || sold[f]
+		if !marked[f] && !p.claimed[f] {
 			missing = append(missing, strings.TrimSpace(m[0]))
 		}
 	}
-	if len(missing) > 0 {
+	switch {
+	case len(missing) == 0:
+	case p.sells():
 		c.add(pagePath, Warning, "the page shows prices (%s) that no price property carries: mark each up on the item it is the price of, as an Offer's price or, for a range, an AggregateOffer's lowPrice and highPrice, with priceCurrency", strings.Join(missing, ", "))
+	default:
+		// a site that sells nothing shows what others charge
+		c.add(pagePath, Warning, "the page shows prices (%s) that no price property carries: mark each up on the thing it is the price of, as a MonetaryAmount (value, or minValue and maxValue, currency) for a cost or estimate of what others charge, or an Offer's price only for what the business itself sells", strings.Join(missing, ", "))
 	}
 	t := taxWords.FindStringSubmatch(p.text)
-	if t == nil || len(missing) == len(seen) {
+	if t == nil || !anySold {
 		return
 	}
-	incl := !taxOut.MatchString(t[1])
+	incl := !taxOut.MatchString(firstNonEmpty(t[1], t[4]))
 	found := false
 	for _, l := range all {
 		for _, v := range scalars(l.n, "valueAddedTaxIncluded") {
@@ -1171,12 +1476,25 @@ func pullQuote(n *xhtml.Node) (quote, who string, ok bool) {
 	return "", "", false
 }
 
+var (
+	integerOutOf = regexp.MustCompile(`^\d+\s*/`)
+	ratingWord   = regexp.MustCompile(`(?i)\b(rat(?:ed|ing|ings)|scores?|stars?|reviews?)\b`)
+)
+
 var ratingShown = regexp.MustCompile(`(?i)\b(\d(?:\.\d)?)\s*(?:/\s*(?:5|10)\b|out of\s*(?:5|10)\b|stars?\b)`)
 
 // ratings warns on ratings the page shows that no Rating carries as its
 // ratingValue.
 func (c *checker) ratings(all []located, p *pageFacts) {
-	shownVals := ratingShown.FindAllStringSubmatch(p.text, -1)
+	var shownVals [][]string
+	for _, loc := range ratingShown.FindAllStringSubmatchIndex(p.text, -1) {
+		m := p.text[loc[0]:loc[1]]
+		// "1 / 10" with no rating word before it is a gallery's counter
+		if integerOutOf.MatchString(m) && !ratingWord.MatchString(p.text[max(0, loc[0]-30):loc[0]]) {
+			continue
+		}
+		shownVals = append(shownVals, []string{m, p.text[loc[2]:loc[3]]})
+	}
 	if p.doc != nil {
 		visit(p.doc, func(n *xhtml.Node) {
 			for _, k := range []string{"aria-label", "title"} {

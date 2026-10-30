@@ -1,0 +1,8 @@
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {"@type": "Organization", "@id": "https://harbour.test/#org", "name": "Harbour Jewellers", "url": "https://harbour.test/"},
+  {"@type": "Product", "name": "Women's Aurora Opal Pendant",
+   "offers": {"@type": "Offer", "price": 199, "priceCurrency": "AUD", "seller": {"@id": "https://harbour.test/#org"}}}
+ ]
+}

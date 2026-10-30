@@ -1,0 +1,104 @@
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@id": "http://localhost:8080/#organization",
+   "@type": "Organization",
+   "contactPoint": {
+    "@type": "ContactPoint",
+    "areaServed": "US",
+    "availableLanguage": "en",
+    "contactType": "customer support",
+    "telephone": "+18334990939"
+   },
+   "description": "Lift My Boxes gives free moving cost estimates and, when asked, connects people with independent moving companies.",
+   "disambiguatingDescription": "An online moving cost estimator and referral service, not a moving company.",
+   "email": "hello@liftmyboxes.com",
+   "logo": "http://localhost:8080/favicon.svg",
+   "name": "Lift My Boxes",
+   "url": "http://localhost:8080/"
+  },
+  {
+   "@id": "http://localhost:8080/#website",
+   "@type": "WebSite",
+   "inLanguage": "en-US",
+   "name": "Lift My Boxes",
+   "publisher": {
+    "@id": "http://localhost:8080/#organization"
+   },
+   "url": "http://localhost:8080/"
+  },
+  {
+   "@id": "http://localhost:8080/#webpage",
+   "@type": "WebPage",
+   "about": [
+    {
+     "@id": "http://localhost:8080/#organization"
+    }
+   ],
+   "dateModified": "2026-10-29T16:21:17Z",
+   "datePublished": "2026-10-29T16:21:17Z",
+   "description": "See what your move will cost in about 60 seconds. Free estimates for homes, apartments, pianos, pool tables and hot tubs, with no email needed.",
+   "inLanguage": "en-US",
+   "isPartOf": {
+    "@id": "http://localhost:8080/#website"
+   },
+   "name": "Free Moving Cost Estimates in 60 Seconds | Lift My Boxes",
+   "url": "http://localhost:8080/"
+  },
+  {
+   "@id": "http://localhost:8080/#faq",
+   "@type": "FAQPage",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Yes. The estimate is free and so is asking for your exact price. Lift My Boxes is paid by the moving companies and networks we connect you with, never by you."
+     },
+     "name": "Is the moving cost estimate really free?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "No. You answer a few questions about your move and see your estimate straight away. Contact details are only needed if you decide you want a specialist to confirm your exact price."
+     },
+     "name": "Do I have to give my email or phone number to see a price?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "It is a starting range based on distance, how much you are moving, your date and any extras. Your final price depends on your actual inventory and access at both homes, so a mover confirms it before you book."
+     },
+     "name": "How accurate is the estimate?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "A moving company or moving network that serves your route and your type of move. You choose whether to go ahead; there is no obligation to book."
+     },
+     "name": "Who contacts me if I ask for my exact price?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "No. We help you estimate the cost of your move and connect you with independent movers when you ask. Before you book any mover, check their USDOT number and get your estimate in writing."
+     },
+     "name": "Is Lift My Boxes a moving company?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Yes. The calculator has its own options for pianos, pool tables and hot tubs, and requests for those moves go to specialists who handle heavy, awkward items."
+     },
+     "name": "Can you help with pianos, pool tables and hot tubs?"
+    }
+   ]
+  }
+ ]
+}

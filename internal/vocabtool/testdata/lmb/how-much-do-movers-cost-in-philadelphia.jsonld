@@ -1,0 +1,725 @@
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@id": "http://localhost:8080/#organization",
+   "@type": "Organization",
+   "contactPoint": {
+    "@type": "ContactPoint",
+    "areaServed": "US",
+    "availableLanguage": "en",
+    "contactType": "customer support",
+    "telephone": "+18334990939"
+   },
+   "description": "Lift My Boxes gives free moving cost estimates and, when asked, connects people with independent moving companies.",
+   "disambiguatingDescription": "An online moving cost estimator and referral service, not a moving company.",
+   "email": "hello@liftmyboxes.com",
+   "logo": "http://localhost:8080/favicon.svg",
+   "name": "Lift My Boxes",
+   "url": "http://localhost:8080/"
+  },
+  {
+   "@id": "http://localhost:8080/#website",
+   "@type": "WebSite",
+   "inLanguage": "en-US",
+   "name": "Lift My Boxes",
+   "publisher": {
+    "@id": "http://localhost:8080/#organization"
+   },
+   "url": "http://localhost:8080/"
+  },
+  {
+   "@id": "http://localhost:8080/#home-moving",
+   "@type": "Thing",
+   "alternateName": [
+    "Home move",
+    "Household move"
+   ],
+   "description": "Moving the contents of a house or apartment to a new home.",
+   "name": "Home moving"
+  },
+  {
+   "@id": "http://localhost:8080/#moving-company",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q783794",
+    "https://www.wikidata.org/wiki/Q2169973"
+   ],
+   "alternateName": [
+    "movers",
+    "mover",
+    "Movers",
+    "moving companies",
+    "Moving companies",
+    "Moving Companies",
+    "moving van",
+    "moving vans",
+    "Mover"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q1757263"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/07ry5s"
+    }
+   ],
+   "name": "Moving company",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Moving_company",
+    "https://www.wikidata.org/wiki/Q1757263",
+    "https://www.google.com/search?kgmid=/m/07ry5s",
+    "https://dbpedia.org/resource/Moving_company"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#philadelphia",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q21010817",
+    "https://www.wikidata.org/wiki/Q62049"
+   ],
+   "alternateName": [
+    "City of Philadelphia",
+    "Philadelphia, PA"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q1345"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0dclg"
+    }
+   ],
+   "name": "Philadelphia",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Philadelphia",
+    "https://www.wikidata.org/wiki/Q1345",
+    "https://www.google.com/search?kgmid=/m/0dclg",
+    "https://dbpedia.org/resource/Philadelphia"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#cost",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q151885",
+    "https://www.wikidata.org/wiki/Q29028649"
+   ],
+   "alternateName": [
+    "costs",
+    "Costs"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q240673"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0168hv"
+    }
+   ],
+   "name": "Cost",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Cost",
+    "https://www.wikidata.org/wiki/Q240673",
+    "https://www.google.com/search?kgmid=/m/0168hv",
+    "https://dbpedia.org/resource/Cost"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#moving-cost-calculator",
+   "@type": "WebApplication",
+   "applicationCategory": "UtilitiesApplication",
+   "description": "Free online calculator that estimates the cost of a local or long-distance move.",
+   "isAccessibleForFree": true,
+   "name": "Lift My Boxes Moving Cost Calculator",
+   "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+   },
+   "operatingSystem": "Any",
+   "publisher": [
+    {
+     "@id": "http://localhost:8080/#organization"
+    }
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#stairs",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q391414",
+    "https://www.wikidata.org/wiki/Q30327093"
+   ],
+   "alternateName": [
+    "stair",
+    "flights of stairs",
+    "staircase",
+    "flight of stairs",
+    "stairway",
+    "staircases"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q12511"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/01lynh"
+    }
+   ],
+   "name": "Stairs",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Stairs",
+    "https://www.wikidata.org/wiki/Q12511",
+    "https://www.google.com/search?kgmid=/m/01lynh",
+    "https://dbpedia.org/resource/Stairs"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#truck",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q140424465",
+    "https://www.wikidata.org/wiki/Q1515493"
+   ],
+   "alternateName": [
+    "trucks",
+    "Trucks"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q43193"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/07r04"
+    }
+   ],
+   "name": "Truck",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Truck",
+    "https://www.wikidata.org/wiki/Q43193",
+    "https://www.google.com/search?kgmid=/m/07r04",
+    "https://dbpedia.org/resource/Truck"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#hour",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q1790144",
+    "https://www.wikidata.org/wiki/Q106839753"
+   ],
+   "alternateName": [
+    "hours",
+    "Hours"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q25235"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/03mxv"
+    }
+   ],
+   "name": "Hour",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Hour",
+    "https://www.wikidata.org/wiki/Q25235",
+    "https://www.google.com/search?kgmid=/m/03mxv",
+    "https://dbpedia.org/resource/Hour"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#terraced-house",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q3947",
+    "https://www.wikidata.org/wiki/Q6807105"
+   ],
+   "alternateName": [
+    "row-house",
+    "row house",
+    "Row houses",
+    "rowhouse",
+    "Rowhouses",
+    "Townhouse"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q875016"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/02j9yk"
+    }
+   ],
+   "name": "Terraced house",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Terraced_house",
+    "https://www.wikidata.org/wiki/Q875016",
+    "https://www.google.com/search?kgmid=/m/02j9yk",
+    "https://dbpedia.org/resource/Terraced_house"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#bedroom",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q13226383",
+    "https://www.wikidata.org/wiki/Q180516"
+   ],
+   "alternateName": [
+    "bedrooms",
+    "Bedrooms"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q193837"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/02_58j"
+    }
+   ],
+   "name": "Bedroom",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Bedroom",
+    "https://www.wikidata.org/wiki/Q193837",
+    "https://www.google.com/search?kgmid=/m/02_58j",
+    "https://dbpedia.org/resource/Bedroom"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#apartment",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q1247867",
+    "https://www.wikidata.org/wiki/Q3305339"
+   ],
+   "alternateName": [
+    "apartment building",
+    "apartments",
+    "Flat",
+    "Apartment buildings",
+    "apartment buildings",
+    "flat",
+    "Apartment complexes",
+    "garden apartment",
+    "Apartments",
+    "apartment complexes"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q188507"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/01nblt"
+    }
+   ],
+   "name": "Apartment",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Apartment",
+    "https://www.wikidata.org/wiki/Q188507",
+    "https://www.google.com/search?kgmid=/m/01nblt",
+    "https://dbpedia.org/resource/Apartment"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#zip-code",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q6545185",
+    "https://www.wikidata.org/wiki/Q126286955"
+   ],
+   "alternateName": [
+    "ZIP codes",
+    "ZIP"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q136208"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0dllr"
+    }
+   ],
+   "name": "ZIP Code",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/ZIP_Code",
+    "https://www.wikidata.org/wiki/Q136208",
+    "https://www.google.com/search?kgmid=/m/0dllr",
+    "https://dbpedia.org/resource/ZIP_Code"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#house",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q811102",
+    "https://www.wikidata.org/wiki/Q41176"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q3947"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/03jm5"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/g/11b7d_m85x"
+    }
+   ],
+   "name": "House",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/House",
+    "https://www.wikidata.org/wiki/Q3947",
+    "https://www.google.com/search?kgmid=/m/03jm5",
+    "https://www.google.com/search?kgmid=/g/11b7d_m85x",
+    "https://dbpedia.org/resource/House"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#lease",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q29028649",
+    "https://www.wikidata.org/wiki/Q93288"
+   ],
+   "alternateName": [
+    "leases",
+    "Leases"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q716894"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/03x_d3f"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/g/1yg4dfsyl"
+    }
+   ],
+   "name": "Lease",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Lease",
+    "https://www.wikidata.org/wiki/Q716894",
+    "https://www.google.com/search?kgmid=/m/03x_d3f",
+    "https://www.google.com/search?kgmid=/g/1yg4dfsyl",
+    "https://dbpedia.org/resource/Lease"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#studio-apartment",
+   "@type": "Thing",
+   "additionalType": "https://www.wikidata.org/wiki/Q699405",
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q1335996"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/025tl34"
+    }
+   ],
+   "name": "Studio apartment",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Studio_apartment",
+    "https://www.wikidata.org/wiki/Q1335996",
+    "https://www.google.com/search?kgmid=/m/025tl34",
+    "https://dbpedia.org/resource/Studio_apartment"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#box",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q987767",
+    "https://www.wikidata.org/wiki/Q8205328"
+   ],
+   "alternateName": [
+    "boxes",
+    "Boxes"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q188075"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/025dyy"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/g/1232c43s"
+    }
+   ],
+   "name": "Box",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Box",
+    "https://www.wikidata.org/wiki/Q188075",
+    "https://www.google.com/search?kgmid=/m/025dyy",
+    "https://www.google.com/search?kgmid=/g/1232c43s",
+    "https://dbpedia.org/resource/Box"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#calculator",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q39546",
+    "https://www.wikidata.org/wiki/Q2858615"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q31087"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/024d2"
+    }
+   ],
+   "name": "Calculator",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Calculator",
+    "https://www.wikidata.org/wiki/Q31087",
+    "https://www.google.com/search?kgmid=/m/024d2",
+    "https://dbpedia.org/resource/Calculator"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/how-much-do-movers-cost-in-philadelphia/#webpage",
+   "@type": "WebPage",
+   "about": [
+    {
+     "@id": "http://localhost:8080/#home-moving"
+    },
+    {
+     "@id": "http://localhost:8080/#moving-company"
+    },
+    {
+     "@id": "http://localhost:8080/#philadelphia"
+    },
+    {
+     "@id": "http://localhost:8080/#cost"
+    }
+   ],
+   "breadcrumb": {
+    "@id": "http://localhost:8080/how-much-do-movers-cost-in-philadelphia/#breadcrumb"
+   },
+   "dateModified": "2026-10-29T16:21:58Z",
+   "datePublished": "2026-10-29T16:21:58Z",
+   "description": "How much do movers cost in Philadelphia? See crew rates, rowhouse stairs and permit costs, and what raises a Philly move. Get a free estimate in about a minute.",
+   "inLanguage": "en-US",
+   "isPartOf": {
+    "@id": "http://localhost:8080/#website"
+   },
+   "keywords": [
+    "how much do movers cost in philadelphia"
+   ],
+   "mentions": [
+    {
+     "@id": "http://localhost:8080/#moving-cost-calculator"
+    },
+    {
+     "@id": "http://localhost:8080/#stairs"
+    },
+    {
+     "@id": "http://localhost:8080/#truck"
+    },
+    {
+     "@id": "http://localhost:8080/#hour"
+    },
+    {
+     "@id": "http://localhost:8080/#terraced-house"
+    },
+    {
+     "@id": "http://localhost:8080/#bedroom"
+    },
+    {
+     "@id": "http://localhost:8080/#apartment"
+    },
+    {
+     "@id": "http://localhost:8080/#zip-code"
+    },
+    {
+     "@id": "http://localhost:8080/#house"
+    },
+    {
+     "@id": "http://localhost:8080/#lease"
+    },
+    {
+     "@id": "http://localhost:8080/#studio-apartment"
+    },
+    {
+     "@id": "http://localhost:8080/#box"
+    },
+    {
+     "@id": "http://localhost:8080/#calculator"
+    }
+   ],
+   "name": "How Much Do Movers Cost in Philadelphia, PA? | Lift My Boxes",
+   "spatialCoverage": {
+    "@type": "City",
+    "containedInPlace": {
+     "@type": "State",
+     "containedInPlace": {
+      "@type": "Country",
+      "name": "United States"
+     },
+     "name": "Pennsylvania"
+    },
+    "geo": {
+     "@type": "GeoCoordinates",
+     "latitude": 40.009297,
+     "longitude": -75.133271
+    },
+    "name": "Philadelphia"
+   },
+   "url": "http://localhost:8080/how-much-do-movers-cost-in-philadelphia/"
+  },
+  {
+   "@id": "http://localhost:8080/how-much-do-movers-cost-in-philadelphia/#breadcrumb",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/",
+     "name": "Home",
+     "position": 1
+    },
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/how-much-do-movers-cost/",
+     "name": "How much do movers cost",
+     "position": 2
+    },
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/local-movers-cost/",
+     "name": "What do local movers cost?",
+     "position": 3
+    },
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/local-moving-cost/",
+     "name": "Local moving cost, from full service to doing it yourself",
+     "position": 4
+    },
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/how-much-do-movers-cost-in-philadelphia/",
+     "name": "How much do movers cost in Philadelphia?",
+     "position": 5
+    }
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/how-much-do-movers-cost-in-philadelphia/#faq",
+   "@type": "FAQPage",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "On the calculator's planning rates, a local crew with a truck costs $100–$150 an hour for 2 movers and $250–$375 an hour for 5, which is $50–$75 for each mover. A 3-bedroom rowhouse usually takes 4. Those hourly figures are the core of how much do movers cost in Philadelphia, and stairs or a long carry add hours to them."
+     },
+     "name": "How much do movers cost in Philadelphia per hour?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Tipping is your choice. Published guides suggest $20.00–$65.00 for each mover for a full working day, less for a half day, or a share of the total bill. Tip at the high end after a day of narrow rowhouse stairs, and let the tip calculator on this page total it for your crew."
+     },
+     "name": "How much should each mover get as a tip?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "The usual extras are stairs, a long carry from a truck that couldn't park close, minimum hours, travel time from the depot, packing materials and any parking permit. Ask each mover to name every fee on the written estimate, so how much do movers cost in Philadelphia on the day matches the quote."
+     },
+     "name": "What hidden costs can show up on a Philadelphia moving bill?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "A home of about 1,000 square feet usually has 2 bedrooms, so start from $720–$1,800 for a local move of 10 road miles, off peak with no stairs or extras. A rowhouse that size often has two narrow flights, which pushes it up the range. Enter your bedrooms and stairs in the calculator for your own figure."
+     },
+     "name": "What does a 1,000-square-foot rowhouse cost to move?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "For a move within Pennsylvania, check that the company holds authority from the Pennsylvania Public Utility Commission. For a move to New Jersey or farther, look up its USDOT number with FMCSA. Be wary of an estimate given sight unseen, a demand for a large cash deposit, or blank papers to sign."
+     },
+     "name": "How can you tell if a Philadelphia mover is legitimate?"
+    }
+   ]
+  }
+ ]
+}

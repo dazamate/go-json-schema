@@ -152,8 +152,9 @@ func TestBuildJSONLDListsPageElements(t *testing.T) {
 	if len(rep.PageElements) != 3 || rep.PageElements[1].MarkedBy != "$.hasPart" {
 		t.Fatalf("page elements = %+v, want header, the marked nav and footer", rep.PageElements)
 	}
-	// header and footer unmarked; Lemon named by the page's text
-	if rep.Warnings != 2 || !strings.Contains(out, "has no WPHeader") || !strings.Contains(out, "has no WPFooter") {
+	// header and footer unmarked, no sitewide WebSite and no publisher; Lemon
+	// named by the page's text
+	if rep.Warnings != 4 || !strings.Contains(out, "has no WPHeader") || !strings.Contains(out, "has no WPFooter") || !strings.Contains(out, "has no WebSite") || !strings.Contains(out, "no node publishes the page") {
 		t.Fatalf("issues = %+v", rep.Issues)
 	}
 }
@@ -529,7 +530,7 @@ func TestPageGraphGuidance(t *testing.T) {
 		t.Fatal("guide has no Page graph section")
 	}
 	section := guide[i:]
-	for _, want := range []string{"hasPart", "isPartOf", "mainEntityOfPage", "Brand", "potentialAction", "DesktopWebPlatform", "{\"@id\": ...}", "stays a Thing", "match the visible text", "page_text", "page_html", "SiteNavigationElement", "WPHeader", "WPFooter", "WPSideBar", "cssSelector", "**Specific types:**", "AboutPage", "openingHours", "**What the page shows:**", "valueAddedTaxIncluded", "DefinedTermSet", "relatedLink", "timeRequired", "copyrightYear", "reviewBody"} {
+	for _, want := range []string{"hasPart", "isPartOf", "mainEntityOfPage", "Brand", "potentialAction", "DesktopWebPlatform", "{\"@id\": ...}", "stays a Thing", "match the visible text", "page_text", "page_html", "SiteNavigationElement", "WPHeader", "WPFooter", "WPSideBar", "cssSelector", "**Specific types:**", "AboutPage", "openingHours", "**What the page shows:**", "valueAddedTaxIncluded", "DefinedTermSet", "relatedLink", "timeRequired", "copyrightYear", "reviewBody", "**Shops:**", "page_url", "OnlineStore", "ItemPage", "ProductGroup", "StrikethroughPrice", "ItemList", "ShippingService", "MerchantReturnPolicy", "**Every site:**", "OnlineBusiness", "**Content sites:**", "UnitPriceSpecification", "CompoundPriceSpecification", "MonetaryAmount", "QuoteAction", "Legislation", "Dataset"} {
 		if !strings.Contains(section, want) {
 			t.Errorf("Page graph section does not say %q", want)
 		}
@@ -540,7 +541,7 @@ func TestPageGraphGuidance(t *testing.T) {
 	if !strings.Contains(guide, "| FAQPage mainEntity |") || strings.Contains(guide, "| mainEntity / FAQPage |") {
 		t.Error("guide's FAQ row is not the FAQPage-as-part-of-the-page row")
 	}
-	for _, want := range []string{"retype none", `{"@id"}`, "Page graph section", "6. build_jsonld(draft, page_html)", "a more specific subtype fits", "what the page shows"} {
+	for _, want := range []string{"retype none", `{"@id"}`, "Page graph section", "6. build_jsonld(draft, page_html, page_url)", "a more specific subtype fits", "what the page shows", "OnlineStore"} {
 		if !strings.Contains(instructions, want) {
 			t.Errorf("instructions do not say %q", want)
 		}
@@ -555,7 +556,7 @@ func TestPageGraphGuidance(t *testing.T) {
 	if step := selectStep(t, text); !strings.Contains(step, `{"@id"}`) {
 		t.Errorf("select_entities step does not say to reference graph nodes by @id: %s", step)
 	}
-	for _, want := range []string{"5. Shape the graph", "FAQPage that is a part of the page", "6. Call build_jsonld", "as page_html", "the subtype a warning names", "every price, quote", "## Page graph"} {
+	for _, want := range []string{"5. Shape the graph", "FAQPage that is a part of the page", "6. Call build_jsonld", "as page_html", `"http://localhost:8080/p/" as page_url`, "the subtype a warning names", "every price, quote", "## Page graph"} {
 		if !strings.Contains(text, want) {
 			t.Errorf("prompt does not say %q", want)
 		}

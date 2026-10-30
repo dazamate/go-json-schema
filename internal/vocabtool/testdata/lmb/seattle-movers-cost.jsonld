@@ -1,0 +1,877 @@
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@id": "http://localhost:8080/#organization",
+   "@type": "Organization",
+   "contactPoint": {
+    "@type": "ContactPoint",
+    "areaServed": "US",
+    "availableLanguage": "en",
+    "contactType": "customer support",
+    "telephone": "+18334990939"
+   },
+   "description": "Lift My Boxes gives free moving cost estimates and, when asked, connects people with independent moving companies.",
+   "disambiguatingDescription": "An online moving cost estimator and referral service, not a moving company.",
+   "email": "hello@liftmyboxes.com",
+   "logo": "http://localhost:8080/favicon.svg",
+   "name": "Lift My Boxes",
+   "url": "http://localhost:8080/"
+  },
+  {
+   "@id": "http://localhost:8080/#website",
+   "@type": "WebSite",
+   "inLanguage": "en-US",
+   "name": "Lift My Boxes",
+   "publisher": {
+    "@id": "http://localhost:8080/#organization"
+   },
+   "url": "http://localhost:8080/"
+  },
+  {
+   "@id": "http://localhost:8080/#home-moving",
+   "@type": "Thing",
+   "alternateName": [
+    "Home move",
+    "Household move"
+   ],
+   "description": "Moving the contents of a house or apartment to a new home.",
+   "name": "Home moving"
+  },
+  {
+   "@id": "http://localhost:8080/#moving-company",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q783794",
+    "https://www.wikidata.org/wiki/Q2169973"
+   ],
+   "alternateName": [
+    "movers",
+    "mover",
+    "Movers",
+    "moving companies",
+    "Moving companies",
+    "Moving Companies",
+    "moving van",
+    "moving vans",
+    "Mover"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q1757263"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/07ry5s"
+    }
+   ],
+   "name": "Moving company",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Moving_company",
+    "https://www.wikidata.org/wiki/Q1757263",
+    "https://www.google.com/search?kgmid=/m/07ry5s",
+    "https://dbpedia.org/resource/Moving_company"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#seattle",
+   "@type": "City",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q1093829",
+    "https://www.wikidata.org/wiki/Q62049"
+   ],
+   "alternateName": [
+    "Seattle, WA",
+    "City of Seattle",
+    "West Seattle"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q5083"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0d9jr"
+    }
+   ],
+   "name": "Seattle",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Seattle",
+    "https://www.wikidata.org/wiki/Q5083",
+    "https://www.google.com/search?kgmid=/m/0d9jr",
+    "https://dbpedia.org/resource/Seattle"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#cost",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q151885",
+    "https://www.wikidata.org/wiki/Q29028649"
+   ],
+   "alternateName": [
+    "costs",
+    "Costs"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q240673"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0168hv"
+    }
+   ],
+   "name": "Cost",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Cost",
+    "https://www.wikidata.org/wiki/Q240673",
+    "https://www.google.com/search?kgmid=/m/0168hv",
+    "https://dbpedia.org/resource/Cost"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#seattle-metropolitan-area",
+   "@type": "Thing",
+   "additionalType": "https://www.wikidata.org/wiki/Q1768043",
+   "alternateName": [
+    "Seattle metro area",
+    "Seattle-Tacoma-Bellevue, WA",
+    "Seattle-area",
+    "Seattle area",
+    "Seattle metro"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q1114947"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0370vy"
+    }
+   ],
+   "name": "Seattle metropolitan area",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Seattle_metropolitan_area",
+    "https://www.wikidata.org/wiki/Q1114947",
+    "https://www.google.com/search?kgmid=/m/0370vy",
+    "https://dbpedia.org/resource/Seattle_metropolitan_area"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#seattle-department-of-transportation",
+   "@type": "GovernmentOrganization",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q327333",
+    "https://www.wikidata.org/wiki/Q2516426"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q39052410"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/g/11gb3n1fp3"
+    }
+   ],
+   "name": "Seattle Department of Transportation",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Seattle_Department_of_Transportation",
+    "https://www.wikidata.org/wiki/Q39052410",
+    "https://www.google.com/search?kgmid=/g/11gb3n1fp3",
+    "https://dbpedia.org/resource/Seattle_Department_of_Transportation"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#pricing",
+   "@type": "Thing",
+   "additionalType": "https://www.wikidata.org/wiki/Q39809",
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q2516951"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/01jsvy"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/g/1yqccjth6"
+    }
+   ],
+   "name": "Pricing",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Pricing",
+    "https://www.wikidata.org/wiki/Q2516951",
+    "https://www.google.com/search?kgmid=/m/01jsvy",
+    "https://www.google.com/search?kgmid=/g/1yqccjth6",
+    "https://dbpedia.org/resource/Pricing"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#moving-cost-calculator",
+   "@type": "WebApplication",
+   "applicationCategory": "UtilitiesApplication",
+   "description": "Free online calculator that estimates the cost of a local or long-distance move.",
+   "isAccessibleForFree": true,
+   "name": "Lift My Boxes Moving Cost Calculator",
+   "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+   },
+   "operatingSystem": "Any",
+   "publisher": [
+    {
+     "@id": "http://localhost:8080/#organization"
+    }
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#hour",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q1790144",
+    "https://www.wikidata.org/wiki/Q106839753"
+   ],
+   "alternateName": [
+    "hours",
+    "Hours"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q25235"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/03mxv"
+    }
+   ],
+   "name": "Hour",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Hour",
+    "https://www.wikidata.org/wiki/Q25235",
+    "https://www.google.com/search?kgmid=/m/03mxv",
+    "https://dbpedia.org/resource/Hour"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#truck",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q140424465",
+    "https://www.wikidata.org/wiki/Q1515493"
+   ],
+   "alternateName": [
+    "trucks",
+    "Trucks"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q43193"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/07r04"
+    }
+   ],
+   "name": "Truck",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Truck",
+    "https://www.wikidata.org/wiki/Q43193",
+    "https://www.google.com/search?kgmid=/m/07r04",
+    "https://dbpedia.org/resource/Truck"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#tariff",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q130109687",
+    "https://www.wikidata.org/wiki/Q736288"
+   ],
+   "alternateName": [
+    "tariffs"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q52389"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0ffnx"
+    }
+   ],
+   "name": "Tariff",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Tariff",
+    "https://www.wikidata.org/wiki/Q52389",
+    "https://www.google.com/search?kgmid=/m/0ffnx",
+    "https://dbpedia.org/resource/Tariff"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#lake-washington",
+   "@type": "LakeBodyOfWater",
+   "additionalType": "https://www.wikidata.org/wiki/Q23397",
+   "alternateName": [
+    "Washington"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q1323525"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/01g3vn"
+    }
+   ],
+   "name": "Lake Washington",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Lake_Washington",
+    "https://www.wikidata.org/wiki/Q1323525",
+    "https://www.google.com/search?kgmid=/m/01g3vn",
+    "https://dbpedia.org/resource/Lake_Washington"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#zip-code",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q6545185",
+    "https://www.wikidata.org/wiki/Q126286955"
+   ],
+   "alternateName": [
+    "ZIP codes",
+    "ZIP"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q136208"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0dllr"
+    }
+   ],
+   "name": "ZIP Code",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/ZIP_Code",
+    "https://www.wikidata.org/wiki/Q136208",
+    "https://www.google.com/search?kgmid=/m/0dllr",
+    "https://dbpedia.org/resource/ZIP_Code"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#curb",
+   "@type": "Thing",
+   "additionalType": "https://www.wikidata.org/wiki/Q811430",
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q37442"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/09p3jz"
+    }
+   ],
+   "name": "Curb",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Curb",
+    "https://www.wikidata.org/wiki/Q37442",
+    "https://www.google.com/search?kgmid=/m/09p3jz",
+    "https://dbpedia.org/resource/Curb"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#goods",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q96251598",
+    "https://www.wikidata.org/wiki/Q53617407"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q28877"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/02s26t"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/g/121why_z"
+    }
+   ],
+   "name": "Goods",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Goods",
+    "https://www.wikidata.org/wiki/Q28877",
+    "https://www.google.com/search?kgmid=/m/02s26t",
+    "https://www.google.com/search?kgmid=/g/121why_z",
+    "https://dbpedia.org/resource/Goods"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#price",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q29028649",
+    "https://www.wikidata.org/wiki/Q1499548"
+   ],
+   "alternateName": [
+    "prices",
+    "Prices"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q160151"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/01d_1l"
+    }
+   ],
+   "name": "Price",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Price",
+    "https://www.wikidata.org/wiki/Q160151",
+    "https://www.google.com/search?kgmid=/m/01d_1l",
+    "https://dbpedia.org/resource/Price"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#stairs",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q391414",
+    "https://www.wikidata.org/wiki/Q30327093"
+   ],
+   "alternateName": [
+    "stair",
+    "flights of stairs",
+    "staircase",
+    "flight of stairs",
+    "stairway",
+    "staircases"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q12511"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/01lynh"
+    }
+   ],
+   "name": "Stairs",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Stairs",
+    "https://www.wikidata.org/wiki/Q12511",
+    "https://www.google.com/search?kgmid=/m/01lynh",
+    "https://dbpedia.org/resource/Stairs"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#apartment",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q1247867",
+    "https://www.wikidata.org/wiki/Q3305339"
+   ],
+   "alternateName": [
+    "apartment building",
+    "apartments",
+    "Flat",
+    "Apartment buildings",
+    "apartment buildings",
+    "flat",
+    "Apartment complexes",
+    "garden apartment",
+    "Apartments",
+    "apartment complexes"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q188507"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/01nblt"
+    }
+   ],
+   "name": "Apartment",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Apartment",
+    "https://www.wikidata.org/wiki/Q188507",
+    "https://www.google.com/search?kgmid=/m/01nblt",
+    "https://dbpedia.org/resource/Apartment"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#bureau-of-labor-statistics",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q20857065",
+    "https://www.wikidata.org/wiki/Q480242"
+   ],
+   "alternateName": [
+    "U.S. Bureau of Labor Statistics",
+    "BLS"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q2928428"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0jkf5"
+    }
+   ],
+   "name": "Bureau of Labor Statistics",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Bureau_of_Labor_Statistics",
+    "https://www.wikidata.org/wiki/Q2928428",
+    "https://www.google.com/search?kgmid=/m/0jkf5",
+    "https://dbpedia.org/resource/Bureau_of_Labor_Statistics"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#license",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q93288",
+    "https://www.wikidata.org/wiki/Q882991"
+   ],
+   "alternateName": [
+    "permit",
+    "licensing",
+    "licenses"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q79719"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0b25v"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/g/121ln515"
+    }
+   ],
+   "name": "License",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/License",
+    "https://www.wikidata.org/wiki/Q79719",
+    "https://www.google.com/search?kgmid=/m/0b25v",
+    "https://www.google.com/search?kgmid=/g/121ln515",
+    "https://dbpedia.org/resource/License"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#hill",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q271669",
+    "https://www.wikidata.org/wiki/Q106589819"
+   ],
+   "alternateName": [
+    "Hills"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q54050"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/04_5sg"
+    }
+   ],
+   "name": "Hill",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Hill",
+    "https://www.wikidata.org/wiki/Q54050",
+    "https://www.google.com/search?kgmid=/m/04_5sg",
+    "https://dbpedia.org/resource/Hill"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#washington-state",
+   "@type": "State",
+   "additionalType": "https://www.wikidata.org/wiki/Q35657",
+   "alternateName": [
+    "Washington",
+    "Washington State"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q1223"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/081yw"
+    }
+   ],
+   "name": "Washington (state)",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Washington_(state)",
+    "https://www.wikidata.org/wiki/Q1223",
+    "https://www.google.com/search?kgmid=/m/081yw",
+    "https://dbpedia.org/resource/Washington_(state)"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/seattle-movers-cost/#webpage",
+   "@type": "WebPage",
+   "about": [
+    {
+     "@id": "http://localhost:8080/#home-moving"
+    },
+    {
+     "@id": "http://localhost:8080/#moving-company"
+    },
+    {
+     "@id": "http://localhost:8080/#seattle"
+    },
+    {
+     "@id": "http://localhost:8080/#cost"
+    },
+    {
+     "@id": "http://localhost:8080/#seattle-metropolitan-area"
+    },
+    {
+     "@id": "http://localhost:8080/#seattle-department-of-transportation"
+    },
+    {
+     "@id": "http://localhost:8080/#pricing"
+    }
+   ],
+   "breadcrumb": {
+    "@id": "http://localhost:8080/seattle-movers-cost/#breadcrumb"
+   },
+   "dateModified": "2026-10-29T16:21:58Z",
+   "datePublished": "2026-10-29T16:21:58Z",
+   "description": "What Seattle movers cost depends on crew size, hills, curb space and Washington's rate tariff. Get a free estimate in about a minute and see what adds up.",
+   "inLanguage": "en-US",
+   "isPartOf": {
+    "@id": "http://localhost:8080/#website"
+   },
+   "keywords": [
+    "seattle movers cost"
+   ],
+   "mentions": [
+    {
+     "@id": "http://localhost:8080/#moving-cost-calculator"
+    },
+    {
+     "@id": "http://localhost:8080/#hour"
+    },
+    {
+     "@id": "http://localhost:8080/#truck"
+    },
+    {
+     "@id": "http://localhost:8080/#tariff"
+    },
+    {
+     "@id": "http://localhost:8080/#lake-washington"
+    },
+    {
+     "@id": "http://localhost:8080/#zip-code"
+    },
+    {
+     "@id": "http://localhost:8080/#curb"
+    },
+    {
+     "@id": "http://localhost:8080/#goods"
+    },
+    {
+     "@id": "http://localhost:8080/#price"
+    },
+    {
+     "@id": "http://localhost:8080/#stairs"
+    },
+    {
+     "@id": "http://localhost:8080/#apartment"
+    },
+    {
+     "@id": "http://localhost:8080/#bureau-of-labor-statistics"
+    },
+    {
+     "@id": "http://localhost:8080/#license"
+    },
+    {
+     "@id": "http://localhost:8080/#hill"
+    },
+    {
+     "@id": "http://localhost:8080/#washington-state"
+    }
+   ],
+   "name": "Seattle Movers Cost: Rates, Hills & Tariff | Lift My Boxes",
+   "spatialCoverage": {
+    "@type": "City",
+    "containedInPlace": {
+     "@type": "State",
+     "containedInPlace": {
+      "@type": "Country",
+      "name": "United States"
+     },
+     "name": "Washington"
+    },
+    "geo": {
+     "@type": "GeoCoordinates",
+     "latitude": 47.619335,
+     "longitude": -122.351538
+    },
+    "name": "Seattle"
+   },
+   "url": "http://localhost:8080/seattle-movers-cost/"
+  },
+  {
+   "@id": "http://localhost:8080/seattle-movers-cost/#breadcrumb",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/",
+     "name": "Home",
+     "position": 1
+    },
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/how-much-do-movers-cost/",
+     "name": "How much do movers cost",
+     "position": 2
+    },
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/local-movers-cost/",
+     "name": "What do local movers cost?",
+     "position": 3
+    },
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/local-moving-cost/",
+     "name": "Local moving cost, from full service to doing it yourself",
+     "position": 4
+    },
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/seattle-movers-cost/",
+     "name": "Seattle movers cost: what a crew charges and why",
+     "position": 5
+    }
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/seattle-movers-cost/#faq",
+   "@type": "FAQPage",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Ask about a minimum number of hours, travel time to your door, stairs, a long carry from the truck, packing materials, and any bridge toll or ferry fare. On a small job, those extras can make Seattle movers cost far more than the hourly rate suggests. Get every charge listed in the written estimate, which Washington movers must give you for free."
+     },
+     "name": "What hidden fees show up on a short Seattle move?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Tipping is up to you, and it sits outside what Seattle movers cost on the bill. Moving guides suggest $10.00–$20.00 per mover for a job of up to 4 hours, and $20.00–$65.00 per mover for each full working day. Tip toward the top after a walk-up, a long carry or a day of rain."
+     },
+     "name": "How much should you tip a Seattle moving crew?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Movers price what you own, not floor area, but as a rough rule of thumb 2,000 square feet is often a 3-bedroom house. A typical local 3-bedroom move costs $1,150–$2,850 at 10 road miles, off peak, with no stairs or extras, with 4 movers at $200–$300 an hour. Seattle movers cost more than that for a house with stairs, a steep driveway or a long carry."
+     },
+     "name": "What does a 2,000-square-foot Seattle house cost to move?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Usually, yes. The calculator prices any date from October through April as off peak, and crews have more open dates then. Rain slows the work a little, so Seattle movers cost less in winter mainly through lower rates and easier booking, not faster crews. A mid-month weekday is the cheapest slot in any season."
+     },
+     "name": "Do Seattle movers cost less in winter?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Yes: the calculator at the top of this page. Enter your ZIP codes, home size, date and stairs, and it shows a price range for your move in about a minute, with no email needed to see it. Use it to judge whether a written estimate of Seattle movers cost sits in a sensible range."
+     },
+     "name": "Is there a calculator for Seattle movers cost?"
+    }
+   ]
+  }
+ ]
+}

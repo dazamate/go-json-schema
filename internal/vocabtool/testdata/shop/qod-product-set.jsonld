@@ -1,0 +1,312 @@
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "ProductGroup",
+   "name": "2 PCs Ruby Red Crystal Enchanted Vines Leaf Ring Set",
+   "description": "6 - 16mm (inner diameter)\n\n7 - 17mm (inner diameter)\n\n8 - 18mm (inner diameter)\n\n9 - 19mm (inner diameter)\n\n10 - 20mm (inner diameter)",
+   "image": [
+    "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/IMG_6367.jpeg/:/rs=w:1200,h:1200",
+    "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/IMG_6365.jpeg/:/rs=w:1200,h:1200",
+    "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/IMG_6366.jpeg/:/rs=w:1200,h:1200",
+    "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/IMG_6364.jpeg/:/rs=w:1200,h:1200"
+   ],
+   "brand": {
+    "@type": "Brand",
+    "name": "Queen of Diamonds Jewellery"
+   },
+   "url": "http://localhost:8001/au/products/2-pcs-ruby-red-crystal-enchanted-vines-leaf-ring-set",
+   "productGroupID": "prod_01M63RXPT9WV256FQCNYEYREE6",
+   "variesBy": [
+    "Ring Size"
+   ],
+   "hasVariant": [
+    {
+     "@type": "Product",
+     "name": "2 PCs Ruby Red Crystal Enchanted Vines Leaf Ring Set - 6",
+     "sku": "2-PCS-RBY-RED-6",
+     "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/IMG_6367.jpeg/:/rs=w:1200,h:1200",
+     "additionalProperty": [
+      {
+       "@type": "PropertyValue",
+       "name": "Ring Size",
+       "value": "6"
+      }
+     ],
+     "offers": {
+      "@type": "Offer",
+      "url": "http://localhost:8001/au/products/2-pcs-ruby-red-crystal-enchanted-vines-leaf-ring-set?v_id=variant_01M63RXQWCGVYTD9N31MEF0DKE",
+      "sku": "2-PCS-RBY-RED-6",
+      "price": "14.95",
+      "priceCurrency": "AUD",
+      "availability": "https://schema.org/OutOfStock",
+      "itemCondition": "https://schema.org/NewCondition",
+      "shippingDetails": {
+       "@type": "OfferShippingDetails",
+       "shippingRate": {
+        "@type": "MonetaryAmount",
+        "value": 7.95,
+        "currency": "AUD"
+       },
+       "shippingDestination": {
+        "@type": "DefinedRegion",
+        "addressCountry": "AU"
+       },
+       "deliveryTime": {
+        "@type": "ShippingDeliveryTime",
+        "handlingTime": {
+         "@type": "QuantitativeValue",
+         "minValue": 0,
+         "maxValue": 1,
+         "unitCode": "DAY"
+        },
+        "transitTime": {
+         "@type": "QuantitativeValue",
+         "minValue": 2,
+         "maxValue": 6,
+         "unitCode": "DAY"
+        }
+       }
+      },
+      "hasMerchantReturnPolicy": {
+       "@type": "MerchantReturnPolicy",
+       "applicableCountry": "AU",
+       "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+       "merchantReturnDays": 14,
+       "returnMethod": "https://schema.org/ReturnByMail",
+       "returnFees": "https://schema.org/ReturnFeesCustomerResponsibility"
+      }
+     }
+    },
+    {
+     "@type": "Product",
+     "name": "2 PCs Ruby Red Crystal Enchanted Vines Leaf Ring Set - 7",
+     "sku": "2-PCS-RBY-RED-7",
+     "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/IMG_6367.jpeg/:/rs=w:1200,h:1200",
+     "additionalProperty": [
+      {
+       "@type": "PropertyValue",
+       "name": "Ring Size",
+       "value": "7"
+      }
+     ],
+     "offers": {
+      "@type": "Offer",
+      "url": "http://localhost:8001/au/products/2-pcs-ruby-red-crystal-enchanted-vines-leaf-ring-set?v_id=variant_01M63RXQWC9CHMWAQH07KJTBHJ",
+      "sku": "2-PCS-RBY-RED-7",
+      "price": "14.95",
+      "priceCurrency": "AUD",
+      "availability": "https://schema.org/OutOfStock",
+      "itemCondition": "https://schema.org/NewCondition",
+      "shippingDetails": {
+       "@type": "OfferShippingDetails",
+       "shippingRate": {
+        "@type": "MonetaryAmount",
+        "value": 7.95,
+        "currency": "AUD"
+       },
+       "shippingDestination": {
+        "@type": "DefinedRegion",
+        "addressCountry": "AU"
+       },
+       "deliveryTime": {
+        "@type": "ShippingDeliveryTime",
+        "handlingTime": {
+         "@type": "QuantitativeValue",
+         "minValue": 0,
+         "maxValue": 1,
+         "unitCode": "DAY"
+        },
+        "transitTime": {
+         "@type": "QuantitativeValue",
+         "minValue": 2,
+         "maxValue": 6,
+         "unitCode": "DAY"
+        }
+       }
+      },
+      "hasMerchantReturnPolicy": {
+       "@type": "MerchantReturnPolicy",
+       "applicableCountry": "AU",
+       "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+       "merchantReturnDays": 14,
+       "returnMethod": "https://schema.org/ReturnByMail",
+       "returnFees": "https://schema.org/ReturnFeesCustomerResponsibility"
+      }
+     }
+    },
+    {
+     "@type": "Product",
+     "name": "2 PCs Ruby Red Crystal Enchanted Vines Leaf Ring Set - 8",
+     "sku": "2-PCS-RBY-RED-8",
+     "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/IMG_6367.jpeg/:/rs=w:1200,h:1200",
+     "additionalProperty": [
+      {
+       "@type": "PropertyValue",
+       "name": "Ring Size",
+       "value": "8"
+      }
+     ],
+     "offers": {
+      "@type": "Offer",
+      "url": "http://localhost:8001/au/products/2-pcs-ruby-red-crystal-enchanted-vines-leaf-ring-set?v_id=variant_01M63RXQWCDFVYB649QJR5ZJJQ",
+      "sku": "2-PCS-RBY-RED-8",
+      "price": "14.95",
+      "priceCurrency": "AUD",
+      "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition",
+      "shippingDetails": {
+       "@type": "OfferShippingDetails",
+       "shippingRate": {
+        "@type": "MonetaryAmount",
+        "value": 7.95,
+        "currency": "AUD"
+       },
+       "shippingDestination": {
+        "@type": "DefinedRegion",
+        "addressCountry": "AU"
+       },
+       "deliveryTime": {
+        "@type": "ShippingDeliveryTime",
+        "handlingTime": {
+         "@type": "QuantitativeValue",
+         "minValue": 0,
+         "maxValue": 1,
+         "unitCode": "DAY"
+        },
+        "transitTime": {
+         "@type": "QuantitativeValue",
+         "minValue": 2,
+         "maxValue": 6,
+         "unitCode": "DAY"
+        }
+       }
+      },
+      "hasMerchantReturnPolicy": {
+       "@type": "MerchantReturnPolicy",
+       "applicableCountry": "AU",
+       "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+       "merchantReturnDays": 14,
+       "returnMethod": "https://schema.org/ReturnByMail",
+       "returnFees": "https://schema.org/ReturnFeesCustomerResponsibility"
+      }
+     }
+    },
+    {
+     "@type": "Product",
+     "name": "2 PCs Ruby Red Crystal Enchanted Vines Leaf Ring Set - 9",
+     "sku": "2-PCS-RBY-RED-9",
+     "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/IMG_6367.jpeg/:/rs=w:1200,h:1200",
+     "additionalProperty": [
+      {
+       "@type": "PropertyValue",
+       "name": "Ring Size",
+       "value": "9"
+      }
+     ],
+     "offers": {
+      "@type": "Offer",
+      "url": "http://localhost:8001/au/products/2-pcs-ruby-red-crystal-enchanted-vines-leaf-ring-set?v_id=variant_01M63RXQWC4RAW68GKFW71PQZJ",
+      "sku": "2-PCS-RBY-RED-9",
+      "price": "14.95",
+      "priceCurrency": "AUD",
+      "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition",
+      "shippingDetails": {
+       "@type": "OfferShippingDetails",
+       "shippingRate": {
+        "@type": "MonetaryAmount",
+        "value": 7.95,
+        "currency": "AUD"
+       },
+       "shippingDestination": {
+        "@type": "DefinedRegion",
+        "addressCountry": "AU"
+       },
+       "deliveryTime": {
+        "@type": "ShippingDeliveryTime",
+        "handlingTime": {
+         "@type": "QuantitativeValue",
+         "minValue": 0,
+         "maxValue": 1,
+         "unitCode": "DAY"
+        },
+        "transitTime": {
+         "@type": "QuantitativeValue",
+         "minValue": 2,
+         "maxValue": 6,
+         "unitCode": "DAY"
+        }
+       }
+      },
+      "hasMerchantReturnPolicy": {
+       "@type": "MerchantReturnPolicy",
+       "applicableCountry": "AU",
+       "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+       "merchantReturnDays": 14,
+       "returnMethod": "https://schema.org/ReturnByMail",
+       "returnFees": "https://schema.org/ReturnFeesCustomerResponsibility"
+      }
+     }
+    },
+    {
+     "@type": "Product",
+     "name": "2 PCs Ruby Red Crystal Enchanted Vines Leaf Ring Set - 10",
+     "sku": "2-PCS-RBY-RED-10",
+     "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/IMG_6367.jpeg/:/rs=w:1200,h:1200",
+     "additionalProperty": [
+      {
+       "@type": "PropertyValue",
+       "name": "Ring Size",
+       "value": "10"
+      }
+     ],
+     "offers": {
+      "@type": "Offer",
+      "url": "http://localhost:8001/au/products/2-pcs-ruby-red-crystal-enchanted-vines-leaf-ring-set?v_id=variant_01M63RXQWC98JNMMJ72TH6M5NH",
+      "sku": "2-PCS-RBY-RED-10",
+      "price": "14.95",
+      "priceCurrency": "AUD",
+      "availability": "https://schema.org/OutOfStock",
+      "itemCondition": "https://schema.org/NewCondition",
+      "shippingDetails": {
+       "@type": "OfferShippingDetails",
+       "shippingRate": {
+        "@type": "MonetaryAmount",
+        "value": 7.95,
+        "currency": "AUD"
+       },
+       "shippingDestination": {
+        "@type": "DefinedRegion",
+        "addressCountry": "AU"
+       },
+       "deliveryTime": {
+        "@type": "ShippingDeliveryTime",
+        "handlingTime": {
+         "@type": "QuantitativeValue",
+         "minValue": 0,
+         "maxValue": 1,
+         "unitCode": "DAY"
+        },
+        "transitTime": {
+         "@type": "QuantitativeValue",
+         "minValue": 2,
+         "maxValue": 6,
+         "unitCode": "DAY"
+        }
+       }
+      },
+      "hasMerchantReturnPolicy": {
+       "@type": "MerchantReturnPolicy",
+       "applicableCountry": "AU",
+       "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+       "merchantReturnDays": 14,
+       "returnMethod": "https://schema.org/ReturnByMail",
+       "returnFees": "https://schema.org/ReturnFeesCustomerResponsibility"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

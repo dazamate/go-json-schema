@@ -8,9 +8,11 @@ import (
 )
 
 // TestCalibrationTypes types the recorded calibration selections: in the
-// moving-cost page only real instances could be typed, and none is (moving
-// company is a kind of business, so it stays a Thing); in the forex page the
-// trading occupations are Occupations. Everything else stays a Thing.
+// moving-cost page only real instances are typed, the Federal Motor Carrier
+// Safety Administration (a United States federal agency) a
+// GovernmentOrganization (moving company is a kind of business, so it stays a
+// Thing); in the forex page the trading occupations are Occupations.
+// Everything else stays a Thing.
 func TestCalibrationTypes(t *testing.T) {
 	typed := func(rep SelectReport) map[string]string {
 		out := map[string]string{}
@@ -33,8 +35,8 @@ func TestCalibrationTypes(t *testing.T) {
 
 	w := loadWikiFixture(t, "select")
 	rep := runSelect(t, calibrationResearcher(t, fakeBrowser{selectPage(w, calibrationPage(t, calibrationURL), nil)}), calibrationQuery())
-	if got := typed(rep); len(got) != 0 {
-		t.Errorf("moving-cost page: typed %v, want every entity a Thing", got)
+	if got, want := typed(rep), map[string]string{"Federal Motor Carrier Safety Administration": "GovernmentOrganization"}; !maps.Equal(got, want) {
+		t.Errorf("moving-cost page: typed %v, want %v", got, want)
 	}
 
 	if _, err := os.Stat(forexFixturePath("wiki.json")); err != nil {

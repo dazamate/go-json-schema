@@ -51,6 +51,7 @@ type CheckOptions struct {
 	Pretty   bool   // indent the JSON inside the script tag
 	PageText string // the page's visible text; when set, about and mentions entities must be named in it
 	PageHTML string // the rendered page; its sections must be marked up, and it gives PageText when that is empty
+	PageURL  string // the page's address; links resolve against it when the page has no canonical link
 }
 
 // Check validates a JSON-LD draft against the vocabulary and returns it as
@@ -95,14 +96,21 @@ func (t *Tool) Check(draft json.RawMessage, opts CheckOptions) (Report, error) {
 		if text == "" {
 			text = htmlText(page)
 		}
-		elements = c.pageElements(all, page)
+	}
+	var facts *pageFacts
+	if strings.TrimSpace(text) != "" {
+		facts = newPageFacts(page, text, opts.PageURL)
+	}
+	if page != nil {
+		// a page search engines skip still lists its sections, unasked
+		elements = c.pageElements(all, page, facts == nil || facts.private == "")
 	}
 	c.pageEntities(all, text)
 	c.bare(all)
 	c.ownReviews(all)
 	c.reviews(all)
-	if strings.TrimSpace(text) != "" {
-		c.content(all, newPageFacts(page, text))
+	if facts != nil {
+		c.content(all, facts)
 	}
 	rep := Report{Issues: c.issues, PageElements: elements}
 	if rep.Issues == nil {
@@ -161,6 +169,10 @@ func (c *checker) walk(path string, v any) {
 		}
 	}
 }
+
+// googleAnnotation is a property such as query-input that Google's action
+// markup adds beside a schema.org Action.
+var googleAnnotation = regexp.MustCompile(`^[a-z]+-(?:input|output)$`)
 
 var wikidataItem = regexp.MustCompile(`^https?://(?:www\.)?wikidata\.org/(?:wiki|entity)/(Q[0-9]+)$`)
 
@@ -285,6 +297,10 @@ func (c *checker) unknown(path, kind, name string) {
 
 func (c *checker) property(path, key string, types []string, n *object) {
 	term := stripPrefix(key)
+	if googleAnnotation.MatchString(term) {
+		c.add(path, Info, "%s is Google's action annotation, not a schema.org property; kept", key)
+		return
+	}
 	if strings.Contains(term, ":") || strings.Contains(term, "/") {
 		c.add(path, Warning, "%q is not a schema.org term; left as is", key)
 		return

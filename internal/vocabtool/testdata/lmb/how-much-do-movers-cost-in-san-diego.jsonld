@@ -1,0 +1,1440 @@
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@id": "http://localhost:8080/#organization",
+   "@type": "Organization",
+   "contactPoint": {
+    "@type": "ContactPoint",
+    "areaServed": "US",
+    "availableLanguage": "en",
+    "contactType": "customer support",
+    "telephone": "+18334990939"
+   },
+   "description": "Lift My Boxes gives free moving cost estimates and, when asked, connects people with independent moving companies.",
+   "disambiguatingDescription": "An online moving cost estimator and referral service, not a moving company.",
+   "email": "hello@liftmyboxes.com",
+   "logo": "http://localhost:8080/favicon.svg",
+   "name": "Lift My Boxes",
+   "url": "http://localhost:8080/"
+  },
+  {
+   "@id": "http://localhost:8080/#website",
+   "@type": "WebSite",
+   "inLanguage": "en-US",
+   "name": "Lift My Boxes",
+   "publisher": {
+    "@id": "http://localhost:8080/#organization"
+   },
+   "url": "http://localhost:8080/"
+  },
+  {
+   "@id": "http://localhost:8080/#home-moving",
+   "@type": "Thing",
+   "alternateName": [
+    "Home move",
+    "Household move"
+   ],
+   "description": "Moving the contents of a house or apartment to a new home.",
+   "name": "Home moving"
+  },
+  {
+   "@id": "http://localhost:8080/#san-diego",
+   "@type": "City",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q1093829",
+    "https://www.wikidata.org/wiki/Q902814"
+   ],
+   "alternateName": [
+    "San Diego, CA"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q16552"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/071vr"
+    }
+   ],
+   "name": "San Diego",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/San_Diego",
+    "https://www.wikidata.org/wiki/Q16552",
+    "https://www.google.com/search?kgmid=/m/071vr",
+    "https://dbpedia.org/resource/San_Diego"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#san-diego-county-california",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q131427665",
+    "https://www.wikidata.org/wiki/Q13212489"
+   ],
+   "alternateName": [
+    "San Diego metro",
+    "San Diego County"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q108143"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0l2rj"
+    }
+   ],
+   "name": "San Diego County, California",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/San_Diego_County,_California",
+    "https://www.wikidata.org/wiki/Q108143",
+    "https://www.google.com/search?kgmid=/m/0l2rj",
+    "https://dbpedia.org/resource/San_Diego_County,_California"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#california",
+   "@type": "State",
+   "additionalType": "https://www.wikidata.org/wiki/Q35657",
+   "alternateName": [
+    "Californians"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q99"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/01n7q"
+    }
+   ],
+   "name": "California",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/California",
+    "https://www.wikidata.org/wiki/Q99",
+    "https://www.google.com/search?kgmid=/m/01n7q",
+    "https://dbpedia.org/resource/California"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#united-states",
+   "@type": "Country",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q3624078",
+    "https://www.wikidata.org/wiki/Q6256"
+   ],
+   "alternateName": [
+    "US",
+    "U.S.",
+    "American"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q30"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/09c7w0"
+    }
+   ],
+   "name": "United States",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/United_States",
+    "https://www.wikidata.org/wiki/Q30",
+    "https://www.google.com/search?kgmid=/m/09c7w0",
+    "https://dbpedia.org/resource/United_States"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#hillcrest-san-diego",
+   "@type": "Place",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q748198",
+    "https://www.wikidata.org/wiki/Q123705"
+   ],
+   "alternateName": [
+    "Hillcrest"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q3135663"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/05b44_"
+    }
+   ],
+   "name": "Hillcrest, San Diego",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Hillcrest,_San_Diego",
+    "https://www.wikidata.org/wiki/Q3135663",
+    "https://www.google.com/search?kgmid=/m/05b44_",
+    "https://dbpedia.org/resource/Hillcrest,_San_Diego"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#little-italy-san-diego",
+   "@type": "Place",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q123705",
+    "https://www.wikidata.org/wiki/Q15243209"
+   ],
+   "alternateName": [
+    "Little Italy"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q963087"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/063lxq"
+    }
+   ],
+   "name": "Little Italy, San Diego",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Little_Italy,_San_Diego",
+    "https://www.wikidata.org/wiki/Q963087",
+    "https://www.google.com/search?kgmid=/m/063lxq",
+    "https://dbpedia.org/resource/Little_Italy,_San_Diego"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#san-diego-state-university",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q62078547",
+    "https://www.wikidata.org/wiki/Q23002039"
+   ],
+   "alternateName": [
+    "San Diego State"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q913861"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/01q0kg"
+    }
+   ],
+   "name": "San Diego State University",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/San_Diego_State_University",
+    "https://www.wikidata.org/wiki/Q913861",
+    "https://www.google.com/search?kgmid=/m/01q0kg",
+    "https://dbpedia.org/resource/San_Diego_State_University"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#clairemont-san-diego",
+   "@type": "Place",
+   "additionalType": "https://www.wikidata.org/wiki/Q123705",
+   "alternateName": [
+    "Clairemont"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q2975157"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/02728kd"
+    }
+   ],
+   "name": "Clairemont, San Diego",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Clairemont,_San_Diego",
+    "https://www.wikidata.org/wiki/Q2975157",
+    "https://www.google.com/search?kgmid=/m/02728kd",
+    "https://dbpedia.org/resource/Clairemont,_San_Diego"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#pacific-beach-san-diego",
+   "@type": "Landform",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q271669",
+    "https://www.wikidata.org/wiki/Q123705"
+   ],
+   "alternateName": [
+    "Pacific Beach"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q1170473"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/062pm"
+    }
+   ],
+   "name": "Pacific Beach, San Diego",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Pacific_Beach,_San_Diego",
+    "https://www.wikidata.org/wiki/Q1170473",
+    "https://www.google.com/search?kgmid=/m/062pm",
+    "https://dbpedia.org/resource/Pacific_Beach,_San_Diego"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#mission-beach-san-diego",
+   "@type": "Place",
+   "additionalType": "https://www.wikidata.org/wiki/Q123705",
+   "alternateName": [
+    "Mission Beach"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q929138"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/02v3wn"
+    }
+   ],
+   "name": "Mission Beach, San Diego",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Mission_Beach,_San_Diego",
+    "https://www.wikidata.org/wiki/Q929138",
+    "https://www.google.com/search?kgmid=/m/02v3wn",
+    "https://dbpedia.org/resource/Mission_Beach,_San_Diego"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#ocean-beach-san-diego",
+   "@type": "Place",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q123705",
+    "https://www.wikidata.org/wiki/Q15243209"
+   ],
+   "alternateName": [
+    "Ocean Beach"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q3070530"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/03r7j3"
+    }
+   ],
+   "name": "Ocean Beach, San Diego",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Ocean_Beach,_San_Diego",
+    "https://www.wikidata.org/wiki/Q3070530",
+    "https://www.google.com/search?kgmid=/m/03r7j3",
+    "https://dbpedia.org/resource/Ocean_Beach,_San_Diego"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#mission-hills-san-diego",
+   "@type": "Place",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q123705",
+    "https://www.wikidata.org/wiki/Q15243209"
+   ],
+   "alternateName": [
+    "Mission Hills"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q593933"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0fcylx"
+    }
+   ],
+   "name": "Mission Hills, San Diego",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Mission_Hills,_San_Diego",
+    "https://www.wikidata.org/wiki/Q593933",
+    "https://www.google.com/search?kgmid=/m/0fcylx",
+    "https://dbpedia.org/resource/Mission_Hills,_San_Diego"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#bankers-hill-san-diego",
+   "@type": "Place",
+   "additionalType": "https://www.wikidata.org/wiki/Q123705",
+   "alternateName": [
+    "Bankers Hill"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q806738"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0bxlph"
+    }
+   ],
+   "name": "Bankers Hill, San Diego",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Bankers_Hill,_San_Diego",
+    "https://www.wikidata.org/wiki/Q806738",
+    "https://www.google.com/search?kgmid=/m/0bxlph",
+    "https://dbpedia.org/resource/Bankers_Hill,_San_Diego"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#chula-vista-california",
+   "@type": "City",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q13218357",
+    "https://www.wikidata.org/wiki/Q1549591"
+   ],
+   "alternateName": [
+    "Chula Vista"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q49270"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0r4xf"
+    }
+   ],
+   "name": "Chula Vista, California",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Chula_Vista,_California",
+    "https://www.wikidata.org/wiki/Q49270",
+    "https://www.google.com/search?kgmid=/m/0r4xf",
+    "https://dbpedia.org/resource/Chula_Vista,_California"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#tijuana",
+   "@type": "City",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q123440126",
+    "https://www.wikidata.org/wiki/Q20202352"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q124739"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0pswc"
+    }
+   ],
+   "name": "Tijuana",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Tijuana",
+    "https://www.wikidata.org/wiki/Q124739",
+    "https://www.google.com/search?kgmid=/m/0pswc",
+    "https://dbpedia.org/resource/Tijuana"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#los-angeles-county-california",
+   "@type": "Thing",
+   "additionalType": "https://www.wikidata.org/wiki/Q131427665",
+   "alternateName": [
+    "Los Angeles County, CA",
+    "Los Angeles"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q104994"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0kpys"
+    }
+   ],
+   "name": "Los Angeles County, California",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Los_Angeles_County,_California",
+    "https://www.wikidata.org/wiki/Q104994",
+    "https://www.google.com/search?kgmid=/m/0kpys",
+    "https://dbpedia.org/resource/Los_Angeles_County,_California"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#interstate-5-in-california",
+   "@type": "Thing",
+   "additionalType": "https://www.wikidata.org/wiki/Q34442",
+   "alternateName": [
+    "Interstate 5"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q270355"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/02d50v"
+    }
+   ],
+   "name": "Interstate 5 in California",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Interstate_5_in_California",
+    "https://www.wikidata.org/wiki/Q270355",
+    "https://www.google.com/search?kgmid=/m/02d50v",
+    "https://dbpedia.org/resource/Interstate_5_in_California"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#zip-code",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q6545185",
+    "https://www.wikidata.org/wiki/Q126286955"
+   ],
+   "alternateName": [
+    "ZIP codes",
+    "ZIP"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q136208"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0dllr"
+    }
+   ],
+   "name": "ZIP Code",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/ZIP_Code",
+    "https://www.wikidata.org/wiki/Q136208",
+    "https://www.google.com/search?kgmid=/m/0dllr",
+    "https://dbpedia.org/resource/ZIP_Code"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#united-states-census-bureau",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q20857065",
+    "https://www.wikidata.org/wiki/Q480242"
+   ],
+   "alternateName": [
+    "U.S. Census Bureau",
+    "Census Bureau"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q637413"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0fqj4"
+    }
+   ],
+   "name": "United States Census Bureau",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/United_States_Census_Bureau",
+    "https://www.wikidata.org/wiki/Q637413",
+    "https://www.google.com/search?kgmid=/m/0fqj4",
+    "https://dbpedia.org/resource/United_States_Census_Bureau"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#pacific-ocean",
+   "@type": "OceanBodyOfWater",
+   "additionalType": "https://www.wikidata.org/wiki/Q9430",
+   "alternateName": [
+    "Pacific"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q98"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/05rgl"
+    }
+   ],
+   "name": "Pacific Ocean",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Pacific_Ocean",
+    "https://www.wikidata.org/wiki/Q98",
+    "https://www.google.com/search?kgmid=/m/05rgl",
+    "https://dbpedia.org/resource/Pacific_Ocean"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#orange-county-california",
+   "@type": "Thing",
+   "additionalType": "https://www.wikidata.org/wiki/Q131427665",
+   "alternateName": [
+    "Orange County, CA"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q5925"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0cb4j"
+    }
+   ],
+   "name": "Orange County, California",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Orange_County,_California",
+    "https://www.wikidata.org/wiki/Q5925",
+    "https://www.google.com/search?kgmid=/m/0cb4j",
+    "https://dbpedia.org/resource/Orange_County,_California"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#university-of-california-san-diego",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q875538",
+    "https://www.wikidata.org/wiki/Q23002039"
+   ],
+   "alternateName": [
+    "UC San Diego"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q622664"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/07vjm"
+    }
+   ],
+   "name": "University of California, San Diego",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/University_of_California,_San_Diego",
+    "https://www.wikidata.org/wiki/Q622664",
+    "https://www.google.com/search?kgmid=/m/07vjm",
+    "https://dbpedia.org/resource/University_of_California,_San_Diego"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#riverside-county-california",
+   "@type": "Thing",
+   "additionalType": "https://www.wikidata.org/wiki/Q13212489",
+   "alternateName": [
+    "Riverside County, CA",
+    "Riverside"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q108111"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0l2q3"
+    }
+   ],
+   "name": "Riverside County, California",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Riverside_County,_California",
+    "https://www.wikidata.org/wiki/Q108111",
+    "https://www.google.com/search?kgmid=/m/0l2q3",
+    "https://dbpedia.org/resource/Riverside_County,_California"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#marine-corps-air-station-miramar",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q695850",
+    "https://www.wikidata.org/wiki/Q1516659"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q1029503"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/03xjl0"
+    }
+   ],
+   "name": "Marine Corps Air Station Miramar",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Marine_Corps_Air_Station_Miramar",
+    "https://www.wikidata.org/wiki/Q1029503",
+    "https://www.google.com/search?kgmid=/m/03xjl0",
+    "https://dbpedia.org/resource/Marine_Corps_Air_Station_Miramar"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#baja-california",
+   "@type": "Thing",
+   "additionalType": "https://www.wikidata.org/wiki/Q15149663",
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q58731"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/01ccgq"
+    }
+   ],
+   "name": "Baja California",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Baja_California",
+    "https://www.wikidata.org/wiki/Q58731",
+    "https://www.google.com/search?kgmid=/m/01ccgq",
+    "https://dbpedia.org/resource/Baja_California"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#nevada",
+   "@type": "State",
+   "additionalType": "https://www.wikidata.org/wiki/Q35657",
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q1227"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/059_c"
+    }
+   ],
+   "name": "Nevada",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Nevada",
+    "https://www.wikidata.org/wiki/Q1227",
+    "https://www.google.com/search?kgmid=/m/059_c",
+    "https://dbpedia.org/resource/Nevada"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#naval-base-san-diego",
+   "@type": "Thing",
+   "additionalType": "https://www.wikidata.org/wiki/Q245016",
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q743898"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/054z0w"
+    }
+   ],
+   "name": "Naval Base San Diego",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Naval_Base_San_Diego",
+    "https://www.wikidata.org/wiki/Q743898",
+    "https://www.google.com/search?kgmid=/m/054z0w",
+    "https://dbpedia.org/resource/Naval_Base_San_Diego"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#san-bernardino-county-california",
+   "@type": "Thing",
+   "additionalType": "https://www.wikidata.org/wiki/Q131427665",
+   "alternateName": [
+    "San Bernardino County, CA"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q108053"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0kvt9"
+    }
+   ],
+   "name": "San Bernardino County, California",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/San_Bernardino_County,_California",
+    "https://www.wikidata.org/wiki/Q108053",
+    "https://www.google.com/search?kgmid=/m/0kvt9",
+    "https://dbpedia.org/resource/San_Bernardino_County,_California"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#national-oceanic-and-atmospheric-administration",
+   "@type": "Thing",
+   "additionalType": "https://www.wikidata.org/wiki/Q20857065",
+   "alternateName": [
+    "NOAA"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q214700"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/09fyq"
+    }
+   ],
+   "name": "National Oceanic and Atmospheric Administration",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/National_Oceanic_and_Atmospheric_Administration",
+    "https://www.wikidata.org/wiki/Q214700",
+    "https://www.google.com/search?kgmid=/m/09fyq",
+    "https://dbpedia.org/resource/National_Oceanic_and_Atmospheric_Administration"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#denver",
+   "@type": "City",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q3301053",
+    "https://www.wikidata.org/wiki/Q1549591"
+   ],
+   "alternateName": [
+    "City and County of Denver",
+    "Denver Squares",
+    "Denver, CO"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q16554"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/02cl1"
+    }
+   ],
+   "name": "Denver",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Denver",
+    "https://www.wikidata.org/wiki/Q16554",
+    "https://www.google.com/search?kgmid=/m/02cl1",
+    "https://dbpedia.org/resource/Denver"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#interstate-805",
+   "@type": "Thing",
+   "additionalType": "https://www.wikidata.org/wiki/Q34442",
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q399988"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/024jb0"
+    }
+   ],
+   "name": "Interstate 805",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Interstate_805",
+    "https://www.wikidata.org/wiki/Q399988",
+    "https://www.google.com/search?kgmid=/m/024jb0",
+    "https://dbpedia.org/resource/Interstate_805"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#rosarito",
+   "@type": "City",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q1549591",
+    "https://www.wikidata.org/wiki/Q20202352"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q1020753"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/032kl4"
+    }
+   ],
+   "name": "Rosarito",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Rosarito",
+    "https://www.wikidata.org/wiki/Q1020753",
+    "https://www.google.com/search?kgmid=/m/032kl4",
+    "https://dbpedia.org/resource/Rosarito"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#united-states-marine-corps",
+   "@type": "Thing",
+   "additionalType": "https://www.wikidata.org/wiki/Q1898583",
+   "alternateName": [
+    "Marine Corps"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q11218"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/01skqzw"
+    }
+   ],
+   "name": "United States Marine Corps",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/United_States_Marine_Corps",
+    "https://www.wikidata.org/wiki/Q11218",
+    "https://www.google.com/search?kgmid=/m/01skqzw",
+    "https://dbpedia.org/resource/United_States_Marine_Corps"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#canyon",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q12046615",
+    "https://www.wikidata.org/wiki/Q55462971"
+   ],
+   "alternateName": [
+    "canyons"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q150784"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0kh8w"
+    }
+   ],
+   "name": "Canyon",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Canyon",
+    "https://www.wikidata.org/wiki/Q150784",
+    "https://www.google.com/search?kgmid=/m/0kh8w",
+    "https://dbpedia.org/resource/Canyon"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#mexico",
+   "@type": "Country",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q3624078",
+    "https://www.wikidata.org/wiki/Q6256"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q96"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0b90_r"
+    }
+   ],
+   "name": "Mexico",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Mexico",
+    "https://www.wikidata.org/wiki/Q96",
+    "https://www.google.com/search?kgmid=/m/0b90_r",
+    "https://dbpedia.org/resource/Mexico"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#arizona",
+   "@type": "State",
+   "additionalType": "https://www.wikidata.org/wiki/Q35657",
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q816"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0vmt"
+    }
+   ],
+   "name": "Arizona",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Arizona",
+    "https://www.wikidata.org/wiki/Q816",
+    "https://www.google.com/search?kgmid=/m/0vmt",
+    "https://dbpedia.org/resource/Arizona"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#marine-corps-base-camp-pendleton",
+   "@type": "Thing",
+   "additionalType": "https://www.wikidata.org/wiki/Q245016",
+   "alternateName": [
+    "Camp Pendleton"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q195334"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0155qn"
+    }
+   ],
+   "name": "Marine Corps Base Camp Pendleton",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Marine_Corps_Base_Camp_Pendleton",
+    "https://www.wikidata.org/wiki/Q195334",
+    "https://www.google.com/search?kgmid=/m/0155qn",
+    "https://dbpedia.org/resource/Marine_Corps_Base_Camp_Pendleton"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#los-angeles",
+   "@type": "City",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q13218391",
+    "https://www.wikidata.org/wiki/Q515"
+   ],
+   "alternateName": [
+    "City of Los Angeles",
+    "Los Angeles, CA"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q65"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/030qb3t"
+    }
+   ],
+   "name": "Los Angeles",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Los_Angeles",
+    "https://www.wikidata.org/wiki/Q65",
+    "https://www.google.com/search?kgmid=/m/030qb3t",
+    "https://dbpedia.org/resource/Los_Angeles"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#interstate-5",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q46622",
+    "https://www.wikidata.org/wiki/Q34442"
+   ],
+   "alternateName": [
+    "I-5"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q54725"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0kd_x"
+    }
+   ],
+   "name": "Interstate 5",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Interstate_5",
+    "https://www.wikidata.org/wiki/Q54725",
+    "https://www.google.com/search?kgmid=/m/0kd_x",
+    "https://dbpedia.org/resource/Interstate_5"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#moving-cost-calculator",
+   "@type": "WebApplication",
+   "applicationCategory": "UtilitiesApplication",
+   "description": "Free online calculator that estimates the cost of a local or long-distance move.",
+   "isAccessibleForFree": true,
+   "name": "Lift My Boxes Moving Cost Calculator",
+   "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+   },
+   "operatingSystem": "Any",
+   "publisher": [
+    {
+     "@id": "http://localhost:8080/#organization"
+    }
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#elevator",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q334166",
+    "https://www.wikidata.org/wiki/Q811979"
+   ],
+   "alternateName": [
+    "elevators",
+    "lifts",
+    "freight elevator"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q132911"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/02r60"
+    }
+   ],
+   "name": "Elevator",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Elevator",
+    "https://www.wikidata.org/wiki/Q132911",
+    "https://www.google.com/search?kgmid=/m/02r60",
+    "https://dbpedia.org/resource/Elevator"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/how-much-do-movers-cost-in-san-diego/#webpage",
+   "@type": "WebPage",
+   "about": [
+    {
+     "@id": "http://localhost:8080/#home-moving"
+    },
+    {
+     "@id": "http://localhost:8080/#san-diego"
+    },
+    {
+     "@id": "http://localhost:8080/#san-diego-county-california"
+    },
+    {
+     "@id": "http://localhost:8080/#california"
+    },
+    {
+     "@id": "http://localhost:8080/#united-states"
+    },
+    {
+     "@id": "http://localhost:8080/#hillcrest-san-diego"
+    },
+    {
+     "@id": "http://localhost:8080/#little-italy-san-diego"
+    },
+    {
+     "@id": "http://localhost:8080/#san-diego-state-university"
+    },
+    {
+     "@id": "http://localhost:8080/#clairemont-san-diego"
+    },
+    {
+     "@id": "http://localhost:8080/#pacific-beach-san-diego"
+    },
+    {
+     "@id": "http://localhost:8080/#mission-beach-san-diego"
+    },
+    {
+     "@id": "http://localhost:8080/#ocean-beach-san-diego"
+    },
+    {
+     "@id": "http://localhost:8080/#mission-hills-san-diego"
+    },
+    {
+     "@id": "http://localhost:8080/#bankers-hill-san-diego"
+    },
+    {
+     "@id": "http://localhost:8080/#chula-vista-california"
+    },
+    {
+     "@id": "http://localhost:8080/#tijuana"
+    },
+    {
+     "@id": "http://localhost:8080/#los-angeles-county-california"
+    },
+    {
+     "@id": "http://localhost:8080/#interstate-5-in-california"
+    },
+    {
+     "@id": "http://localhost:8080/#zip-code"
+    },
+    {
+     "@id": "http://localhost:8080/#united-states-census-bureau"
+    },
+    {
+     "@id": "http://localhost:8080/#pacific-ocean"
+    },
+    {
+     "@id": "http://localhost:8080/#orange-county-california"
+    },
+    {
+     "@id": "http://localhost:8080/#university-of-california-san-diego"
+    },
+    {
+     "@id": "http://localhost:8080/#riverside-county-california"
+    },
+    {
+     "@id": "http://localhost:8080/#marine-corps-air-station-miramar"
+    },
+    {
+     "@id": "http://localhost:8080/#baja-california"
+    },
+    {
+     "@id": "http://localhost:8080/#nevada"
+    },
+    {
+     "@id": "http://localhost:8080/#naval-base-san-diego"
+    },
+    {
+     "@id": "http://localhost:8080/#san-bernardino-county-california"
+    },
+    {
+     "@id": "http://localhost:8080/#national-oceanic-and-atmospheric-administration"
+    },
+    {
+     "@id": "http://localhost:8080/#denver"
+    },
+    {
+     "@id": "http://localhost:8080/#interstate-805"
+    },
+    {
+     "@id": "http://localhost:8080/#rosarito"
+    },
+    {
+     "@id": "http://localhost:8080/#united-states-marine-corps"
+    },
+    {
+     "@id": "http://localhost:8080/#canyon"
+    },
+    {
+     "@id": "http://localhost:8080/#mexico"
+    },
+    {
+     "@id": "http://localhost:8080/#arizona"
+    },
+    {
+     "@id": "http://localhost:8080/#marine-corps-base-camp-pendleton"
+    },
+    {
+     "@id": "http://localhost:8080/#los-angeles"
+    },
+    {
+     "@id": "http://localhost:8080/#interstate-5"
+    }
+   ],
+   "breadcrumb": {
+    "@id": "http://localhost:8080/how-much-do-movers-cost-in-san-diego/#breadcrumb"
+   },
+   "dateModified": "2026-10-29T16:21:58Z",
+   "datePublished": "2026-10-29T16:21:58Z",
+   "description": "How much do movers cost in San Diego? See crew rates and what condo elevators, beach parking and canyon driveways add. Get a free estimate in a minute.",
+   "inLanguage": "en-US",
+   "isPartOf": {
+    "@id": "http://localhost:8080/#website"
+   },
+   "keywords": [
+    "how much do movers cost in san diego"
+   ],
+   "mentions": [
+    {
+     "@id": "http://localhost:8080/#moving-cost-calculator"
+    },
+    {
+     "@id": "http://localhost:8080/#elevator"
+    }
+   ],
+   "name": "How Much Do Movers Cost in San Diego, CA? | Lift My Boxes",
+   "spatialCoverage": {
+    "@type": "City",
+    "containedInPlace": {
+     "@type": "State",
+     "containedInPlace": {
+      "@type": "Country",
+      "name": "United States"
+     },
+     "name": "California"
+    },
+    "geo": {
+     "@type": "GeoCoordinates",
+     "latitude": 32.830391,
+     "longitude": -117.120923
+    },
+    "name": "San Diego"
+   },
+   "url": "http://localhost:8080/how-much-do-movers-cost-in-san-diego/"
+  },
+  {
+   "@id": "http://localhost:8080/how-much-do-movers-cost-in-san-diego/#breadcrumb",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/",
+     "name": "Home",
+     "position": 1
+    },
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/how-much-do-movers-cost/",
+     "name": "How much do movers cost",
+     "position": 2
+    },
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/local-movers-cost/",
+     "name": "What do local movers cost?",
+     "position": 3
+    },
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/local-moving-cost/",
+     "name": "Local moving cost, from full service to doing it yourself",
+     "position": 4
+    },
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/how-much-do-movers-cost-in-san-diego/",
+     "name": "How much do movers cost in San Diego, from beach rentals to canyon homes?",
+     "position": 5
+    }
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/how-much-do-movers-cost-in-san-diego/#faq",
+   "@type": "FAQPage",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Movers generally refuse hazardous materials such as gasoline, propane tanks, paint, aerosols and cleaning chemicals, along with perishable food, plants and pets. Most also ask you to carry cash, jewelry and important papers yourself. Ask each company for its list before you pack, so nothing left behind on moving day adds a second trip to how much do movers cost in San Diego."
+     },
+     "name": "What items won't San Diego movers take on the truck?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Tipping is up to you. Many guides suggest 10% to 20% of the bill, shared among the crew, or $10.00–$20.00 per mover for a job of up to 4 hours. The tip calculator on this page works out both, and the tip comes on top of how much do movers cost in San Diego on the bill."
+     },
+     "name": "How much should you tip on a San Diego move of a few hundred dollars?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Each company sets its own hourly rate, minimum hours, base fee and travel charges, and some estimate the hours more honestly than others. A busy market like San Diego's widens the gaps between companies. Compare totals made after a visual inspection, not hourly rates alone, and hold them against the calculator's range for how much do movers cost in San Diego."
+     },
+     "name": "Why do San Diego moving quotes differ so much for the same home?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Los Angeles is about 120 road miles from San Diego, past California's 100-mile line, so the move is charged by weight and mileage rather than by the hour. It costs more than a move across town but well below a 1,000-mile move, which runs $2,600–$5,700 for a 2-bedroom home off peak. Enter both ZIP codes in the calculator to see how much do movers cost in San Diego for that route."
+     },
+     "name": "How much do movers cost in San Diego for a move to Los Angeles?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "The common ones are a base fee before the hourly billing starts, a minimum number of hours, stairs, a long carry or a shuttle truck where the big truck can't park, and packing materials. A building's move-in fee is separate again. Ask for every charge in writing before moving day."
+     },
+     "name": "What extra charges show up on San Diego moving bills?"
+    }
+   ]
+  }
+ ]
+}

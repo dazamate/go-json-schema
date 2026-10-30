@@ -153,3 +153,68 @@ them (the site origin plus #name), and every later use of it is a
     - a form as the Action that targets it, with the form's httpMethod;
     - tel: and mailto: links as telephone and email;
     - an ABN, VAT or licence number as taxID, vatID or identifier.
+- **Shops:** give build_jsonld the page's address as page_url too: with it
+  (or the canonical link) it knows a product page from a category, a policy
+  page or a cart, and asks for what each calls for.
+  - Every page: the WebSite (url, name, inLanguage, publisher, a
+    SearchAction when the page links the search page) and the business as
+    an OnlineStore, or the Store subtype its trade fits (JewelryStore,
+    ClothingStore) once it shows a street address, with logo, sameAs and a
+    FollowAction for each social profile it links, email, taxID,
+    hasOfferCatalog listing the menu's categories, hasMerchantReturnPolicy
+    and hasShippingService.
+  - The WebPage subtype the page is: ItemPage for a product,
+    CollectionPage for a category or collection, SearchResultsPage,
+    ContactPage, AboutPage, FAQPage, CheckoutPage.
+  - A product page: the Product as the ItemPage's mainEntity, its Offer
+    with seller, a was price as a UnitPriceSpecification whose priceType is
+    StrikethroughPrice, stock left as inventoryLevel with
+    LimitedAvailability (SoldOut, BackOrder, PreOrder as the page says), a
+    choice of size or colour as a ProductGroup with variesBy and a variant
+    for each value, a set as a ProductCollection, a size chart as
+    SizeSpecification, each detail it lists (material, color, size, or an
+    additionalProperty PropertyValue), the add-to-bag form as a BuyAction,
+    a wishlist button as a WantAction, and the related products as
+    isRelatedTo or isSimilarTo.
+  - A listing: an ItemList of its products as the CollectionPage's
+    mainEntity, each a ListItem holding a Product with an Offer, with
+    numberOfItems for the count it shows, itemListOrder for its sort, and a
+    "from" price as an AggregateOffer. A row of products on another page
+    (the home page's best sellers) is an ItemList in its hasPart.
+  - Policies, wherever the page states them: a shipping rate and a
+    free-shipping threshold as a ShippingService's ShippingConditions
+    (orderValue, shippingRate), handling and transit times, a return window,
+    fees and method as a MerchantReturnPolicy with merchantReturnLink, a
+    street address and hours, a map as GeoCoordinates, a customer service
+    contact as a ContactPoint, and the payment methods it takes.
+  - A cart, checkout, account, search results or noindex page gets no
+    warnings: search engines do not index it.
+- **Every site:** build_jsonld asks every page for the WebSite (the
+  WebPage's isPartOf, and its breadcrumb when the page has a breadcrumb
+  nav) and the node that publishes it. A business that shows no premises
+  and works through its website is an OnlineBusiness; a toll-free number
+  takes contactOption TollFree; a date the page gives itself ("Last
+  updated", "checked 28 October 2026") is a dateModified or lastReviewed;
+  and a long main copy is an Article.
+- **Content sites:** on a site that sells nothing, its prices are what
+  others charge. A rate ("$50–$75 an hour") is a UnitPriceSpecification, a
+  total broken into priced parts a CompoundPriceSpecification, a cost or
+  estimate a MonetaryAmount, and goods priced across sellers (boxes, tape)
+  a Product with an AggregateOffer. An Offer is only for what the business
+  itself sells. A page about what a service costs needs the Service.
+  - An FAQ section is an FAQPage in the WebPage's hasPart; a checklist of
+    timed phases a HowTo with a HowToSection for each phase; a guide's "In
+    this guide" list an ItemList in hasPart.
+  - A calculator or estimator is a WebApplication (url the page's URL +
+    its #id), and a quote tool's flow a QuoteAction targeting it.
+  - Sources: each cite and "Source:" credit is a citation, a rule cited
+    ("49 CFR 375.401") a Legislation, a permit or licence the page explains
+    a GovernmentPermit, a linked agency a GovernmentOrganization, and a
+    linked PDF a DigitalDocument.
+  - Data: a captioned chart or table with a statistical source is a
+    Dataset, its lead figure an Observation, a pay table an Occupation's
+    estimatedSalary, a drawn chart an ImageObject, and a measured quantity
+    a QuantitativeValue. A summary block (Key takeaways) is the Article's
+    abstract or a SpeakableSpecification, a table of vehicles Vehicles, a
+    term the copy defines a DefinedTerm, and options weighed by their pros
+    and cons a Guide.
