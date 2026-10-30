@@ -1089,9 +1089,10 @@ func attribution(n *xhtml.Node) string {
 }
 
 // quotes warns on a quotation the page shows that no string in the draft
-// carries: a testimonial is a Review, another quote a Quotation. A string of
-// three words or more carries a quote it contains; a shorter one only the
-// quote it is.
+// carries: a blockquote, or a paragraph that quotes someone it names. A
+// testimonial is a Review, another quote a Quotation. A string of three
+// words or more carries a quote it contains; a shorter one only the quote it
+// is.
 func (c *checker) quotes(p *pageFacts, d *draftIndex) {
 	if p.doc == nil {
 		return
@@ -1106,15 +1107,68 @@ func (c *checker) quotes(p *pageFacts, d *draftIndex) {
 		}
 	}
 	visit(p.doc, func(n *xhtml.Node) {
-		if n.DataAtom != atom.Blockquote {
+		text, who := htmlText(n), ""
+		switch {
+		case n.DataAtom == atom.Blockquote:
+			who = attribution(n)
+		case n.DataAtom == atom.P:
+			var ok bool
+			if text, who, ok = pullQuote(n); !ok {
+				return
+			}
+			who = " (" + who + ")"
+		default:
 			return
 		}
-		q := normWords(htmlText(n))
+		q := normWords(text)
 		if q == "" || exact[q] || slices.ContainsFunc(carried, func(s string) bool { return strings.Contains(s, " "+q+" ") }) {
 			return
 		}
-		c.add("html:"+selectorFor(p.doc, n), Warning, "the page quotes %q%s and no node carries it: a customer's opinion of a business, product or service is a Review of it (reviewBody, author, itemReviewed); another quotation is a Quotation (text, creator)", clip(htmlText(n), 60), attribution(n))
+		c.add("html:"+selectorFor(p.doc, n), Warning, "the page quotes %q%s and no node carries it: a customer's opinion of a business, product or service is a Review of it (reviewBody, author, itemReviewed); another quotation is a Quotation (text, creator)", clip(text, 60), who)
 	})
+}
+
+// quoteMarks pairs each opening quotation mark with its closing one.
+var quoteMarks = map[string]string{"“": "”", `"`: `"`, "«": "»", "「": "」"}
+
+// pullQuote is a paragraph, outside a blockquote, that quotes someone: its
+// text opens with a quotation mark, and a <cite> in it or beside it, or the
+// text after the closing mark when it starts with @ or a dash, says who. It
+// is the words between the marks and who said them.
+func pullQuote(n *xhtml.Node) (quote, who string, ok bool) {
+	for e := n.Parent; e != nil; e = e.Parent {
+		if e.DataAtom == atom.Blockquote {
+			return "", "", false
+		}
+	}
+	t := strings.TrimSpace(htmlText(n))
+	for open, shut := range quoteMarks {
+		if !strings.HasPrefix(t, open) {
+			continue
+		}
+		end := strings.Index(t[len(open):], shut)
+		if end < 0 {
+			return "", "", false
+		}
+		quote = strings.TrimSpace(t[len(open) : len(open)+end])
+		rest := strings.TrimSpace(t[len(open)+end+len(shut):])
+		cites := queryAll(n, "cite")
+		if n.Parent != nil {
+			for ch := n.Parent.FirstChild; ch != nil; ch = ch.NextSibling {
+				if ch.DataAtom == atom.Cite {
+					cites = append(cites, ch)
+				}
+			}
+		}
+		switch {
+		case len(cites) > 0:
+			who = strings.TrimSpace(htmlText(cites[0]))
+		case strings.HasPrefix(rest, "@") || strings.HasPrefix(rest, "—") || strings.HasPrefix(rest, "–") || strings.HasPrefix(rest, "-"):
+			who = strings.TrimSpace(strings.TrimLeft(rest, "—–- "))
+		}
+		return quote, who, quote != "" && who != ""
+	}
+	return "", "", false
 }
 
 var ratingShown = regexp.MustCompile(`(?i)\b(\d(?:\.\d)?)\s*(?:/\s*(?:5|10)\b|out of\s*(?:5|10)\b|stars?\b)`)

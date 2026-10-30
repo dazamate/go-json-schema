@@ -139,7 +139,8 @@ them (the site origin plus #name), and every later use of it is a
     - each content image as an ImageObject (contentUrl, width, height,
       description);
     - a video or audio embed as a VideoObject or AudioObject;
-    - prices, ratings and blockquotes, as above;
+    - prices, ratings and quotations, as above: a blockquote, or a
+      paragraph in quotation marks with a cite or an @handle after it;
     - terms given in another script with their romanisation, such as 飲勝
       (jam2 sing3), as DefinedTerms in a DefinedTermSet;
     - a heading that counts items ("16 ideas") as an ItemList with that

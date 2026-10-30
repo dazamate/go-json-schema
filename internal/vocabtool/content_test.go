@@ -174,6 +174,28 @@ func TestCheckFindsAShortQuoteItsReviewCarries(t *testing.T) {
 	}
 }
 
+func TestCheckFindsAQuoteInAParagraph(t *testing.T) {
+	page := `<!doctype html><html><head><link rel="canonical" href="https://x.test/"></head><body><main>
+<p class="proof">“Incredibly organised and prepared.” <span>@mingy14</span></p>
+<div class="quote"><cite>@mei</cite><p>“She made our day calm.”</p></div>
+<p>“A line in quotes, from no one.”</p>
+<p>He said “hi” to the room.</p>
+<blockquote><p>“Inside a blockquote.”</p><cite>@kim</cite></blockquote>
+</main></body></html>`
+	r := checkPage(t, `{"@context":"https://schema.org","@graph":[
+		{"@type":"WebPage","url":"https://x.test/","name":"Home"},
+		{"@type":"Review","reviewBody":"Incredibly organised and prepared.","author":{"@type":"Person","name":"@mingy14"},"itemReviewed":{"@type":"Organization","name":"Mo"}}]}`, page)
+	if !issueAt(r, Warning, "html:body > main > div > p", `quotes "She made our day calm." (@mei) and no node carries it`) {
+		t.Errorf("no warning on the quote in a paragraph: %+v", r.Issues)
+	}
+	// carried, unattributed, mid-sentence, or a blockquote's (warned once, as the blockquote)
+	for _, s := range []string{"Incredibly organised", "from no one", "hi", "Inside a blockquote"} {
+		if n := issueCount(r, s); n > map[string]int{"Inside a blockquote": 1}[s] {
+			t.Errorf("%d issues mention %q: %+v", n, s, r.Issues)
+		}
+	}
+}
+
 func TestCheckWarnsOnANumberWrittenAsText(t *testing.T) {
 	r := check(t, `{"@context":"https://schema.org","@graph":[
 		{"@type":"Article","headline":"Tea","wordCount":"900"},
