@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/dazamate/go-json-schema/internal/azurelang"
+	"github.com/dazamate/go-json-schema/internal/classtype"
 	"github.com/dazamate/go-json-schema/schema"
 )
 
@@ -120,7 +121,7 @@ func checkIdentity(it wdEntity, found bool, lang, title, freebase string) (ident
 		P9885:      first(it.ranked("P9885")),
 	}
 	id.KGMIDChecked = freebase != "" && id.KGMID == freebase
-	id.SchemaType = schemaType(p31, len(it.ranked("P279")) > 0)
+	id.SchemaType = classtype.Of(p31, len(it.ranked("P279")) > 0)
 	for _, c := range append(p31, it.ranked("P279")...) {
 		if len(id.Classes) == maxClasses {
 			break

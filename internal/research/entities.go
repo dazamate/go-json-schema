@@ -11,6 +11,7 @@ import (
 	"strings"
 
 	"github.com/dazamate/go-json-schema/internal/browser"
+	"github.com/dazamate/go-json-schema/internal/classtype"
 	"github.com/dazamate/go-json-schema/schema"
 )
 
@@ -542,7 +543,7 @@ func (r *resolver) wikidata(ents []Entity) error {
 		e.FreebaseID = first(it.values("P646"))
 		e.GoogleKGID = first(it.values("P2671"))
 		e.KGMID = orElse(e.FreebaseID, e.GoogleKGID)
-		e.SchemaType = schemaType(it.ranked("P31"), len(it.ranked("P279")) > 0)
+		e.SchemaType = classtype.Of(it.ranked("P31"), len(it.ranked("P279")) > 0)
 		for _, p := range []string{"P31", "P279"} {
 			vals := it.values(p)
 			for _, q := range vals[:min(len(vals), maxTypes)] {

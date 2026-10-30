@@ -1,8 +1,11 @@
-package research
+// Package classtype maps Wikidata classes to schema.org types. The research
+// tools type entity nodes with it, and build_jsonld checks Thing nodes against
+// it, so the two never disagree.
+package classtype
 
 import "slices"
 
-// classTypes maps Wikidata classes to the schema.org type of their instances,
+// table maps Wikidata classes to the schema.org type of their instances,
 // most specific type first: an item takes the first type that one of its own
 // P31 (instance of) classes is listed under. Only P31 counts. Walking P279
 // (subclass of) upward reaches classes like abstract entity or class, whose
@@ -16,7 +19,7 @@ import "slices"
 // so it stays a Thing too. Kinds marks the types whose Wikidata items are
 // always classes, languages and occupations, which take their type anyway.
 // Every ID was checked against its Wikidata label on 2026-10-30.
-var classTypes = []struct {
+var table = []struct {
 	Type    string
 	Kinds   bool
 	Classes []string
@@ -114,11 +117,11 @@ var classTypes = []struct {
 	}},
 }
 
-// schemaType is the schema.org type for an item with these P31 classes, or
-// "" (a Thing) when none is in classTypes. isClass reports that the item has
-// a P279 (subclass of) claim.
-func schemaType(p31 []string, isClass bool) string {
-	for _, t := range classTypes {
+// Of is the schema.org type for an item with these P31 classes, or "" (a
+// Thing) when none is in the table. isClass reports that the item has a P279
+// (subclass of) claim.
+func Of(p31 []string, isClass bool) string {
+	for _, t := range table {
 		if isClass && !t.Kinds {
 			continue
 		}
