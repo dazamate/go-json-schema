@@ -178,3 +178,24 @@ func TestSuggestPicksClosestTerm(t *testing.T) {
 		}
 	}
 }
+
+func TestCheckWarnsOnARepeatedWikidataItem(t *testing.T) {
+	r := check(t, `{"@context":"https://schema.org","@graph":[
+		{"@type":"City","@id":"https://x.test/#sydney","name":"Sydney","sameAs":["https://www.wikidata.org/wiki/Q3130"]},
+		{"@type":"WebPage","@id":"https://x.test/#webpage",
+		 "about":[{"@type":"City","name":"Sydney","sameAs":["https://en.wikipedia.org/wiki/Sydney","https://www.wikidata.org/wiki/Q3130"]},
+		          {"@id":"https://x.test/#sydney"},
+		          {"@type":"Thing","name":"Wedding","sameAs":"https://www.wikidata.org/wiki/Q49836"}]}]}`)
+	if !issueAt(r, Warning, "$.@graph[1].about[0]", `put {"@id": "https://x.test/#sydney"} here`) {
+		t.Errorf("no repeat warning on the inline Sydney: %+v", r.Issues)
+	}
+	n := 0
+	for _, i := range r.Issues {
+		if strings.Contains(i.Message, "same Wikidata item") {
+			n++
+		}
+	}
+	if n != 1 || r.Errors != 0 {
+		t.Errorf("%d repeat warnings, %d errors, want 1 and 0: %+v", n, r.Errors, r.Issues)
+	}
+}
