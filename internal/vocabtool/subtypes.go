@@ -114,7 +114,9 @@ func (c *checker) single(n *object) string {
 // Only the first class counts: it is an instance-of class, while a later one
 // may be a subclass-of class. An item that is itself a class (a kind of
 // thing) stays a Thing however, which the draft does not show, so this is a
-// warning to weigh, not an error.
+// warning to weigh, not an error. A node whose own item, in sameAs or a
+// Wikidata identifier, is a class in the table is a kind of thing for sure,
+// and only the types whose items are always classes apply to it.
 func (c *checker) classTypes(all []located) {
 	for _, l := range all {
 		ty := c.single(l.n)
@@ -137,11 +139,34 @@ func (c *checker) classTypes(all []located) {
 		}) {
 			continue
 		}
-		if want := classtype.Of([]string{m[1]}, false); want != "" && want != ty && slices.Contains(c.t.v.Ancestors(want), ty) {
-			c.add(l.path, Warning, "%s with the Wikidata class %s: type it %s, unless the item is a kind of thing rather than one", ty, m[1], want)
+		kind := slices.ContainsFunc(ownItems(l.n), func(q string) bool { return classtype.Of([]string{q}, false) != "" })
+		if want := classtype.Of([]string{m[1]}, kind); want != "" && want != ty && slices.Contains(c.t.v.Ancestors(want), ty) {
+			also := ""
+			if want == "LandmarksOrHistoricalBuildings" {
+				also = ", with TouristAttraction too when visitors go to see it"
+			}
+			c.add(l.path, Warning, "%s with the Wikidata class %s: type it %s%s, unless the item is a kind of thing rather than one", ty, m[1], want, also)
 			c.suggested[l.n] = true
 		}
 	}
+}
+
+// ownItems are the Wikidata items a node is: its sameAs links and its
+// identifiers whose propertyID is Wikidata.
+func ownItems(n *object) []string {
+	var out []string
+	for _, s := range strs(n, "sameAs") {
+		if m := wikidataItem.FindStringSubmatch(s); m != nil {
+			out = append(out, m[1])
+		}
+	}
+	raw, _ := n.get("identifier")
+	for _, v := range values(raw) {
+		if pv, ok := v.(*object); ok && slices.ContainsFunc(strs(pv, "propertyID"), func(s string) bool { return strings.EqualFold(s, "Wikidata") }) {
+			out = append(out, strs(pv, "value")...)
+		}
+	}
+	return out
 }
 
 // namedTypes warns about a node whose name, headline or URL path names a
@@ -150,11 +175,23 @@ func (c *checker) classTypes(all []located) {
 // Street Bakery" a Bakery. The most specific match wins. A Thing, a Wikidata
 // entity or a node with a Wikidata class (typed by its class) and a
 // WebPageElement (webPageElements checks those) are left out, as is a node
-// another signal already retyped.
+// another signal already retyped. A breadcrumb's items name the pages they
+// link, not what the items are.
 func (c *checker) namedTypes(all []located) {
+	crumbs := map[*object]bool{}
+	for _, l := range all {
+		if c.is(l.n, "BreadcrumbList") {
+			raw, _ := l.n.get("itemListElement")
+			for _, v := range values(raw) {
+				if o, ok := v.(*object); ok {
+					crumbs[o] = true
+				}
+			}
+		}
+	}
 	for _, l := range all {
 		ty := c.single(l.n)
-		if ty == "" || ty == "Thing" || c.suggested[l.n] || len(wikidataItems(l.n)) > 0 || hasWikidataClass(l.n) || slices.Contains(c.t.v.Ancestors(ty), "WebPageElement") {
+		if ty == "" || ty == "Thing" || c.suggested[l.n] || crumbs[l.n] || len(wikidataItems(l.n)) > 0 || hasWikidataClass(l.n) || slices.Contains(c.t.v.Ancestors(ty), "WebPageElement") {
 			continue
 		}
 		label := strings.Join(append(strs(l.n, "name"), strs(l.n, "headline")...), " ")
@@ -211,7 +248,9 @@ var typeStopWords = map[string]bool{"and": true, "of": true, "the": true, "for":
 // unnamedTypes are never suggested from a name: places of other kinds carry
 // their words in their proper names (Sydney Opera House, wine country, State
 // Theatre). Their Wikidata class still types them.
-var unnamedTypes = map[string]bool{"House": true, "Country": true, "State": true}
+var unnamedTypes = map[string]bool{"House": true, "Country": true, "State": true,
+	// "How to …" titles a guide, not a HowTo's supply or tool
+	"HowToItem": true, "HowToSupply": true, "HowToTool": true}
 
 // typeAlternatives are the ways a name can name the subtype sub of of: each a
 // list of words that must all appear. The subtype's name splits into words

@@ -120,7 +120,7 @@ func TestCheckFindsWhatThePageShowsThatTheMarkupLacks(t *testing.T) {
 
 func TestCheckPassesAPageWhoseMarkupShowsWhatThePageShows(t *testing.T) {
 	r := checkPage(t, `{"@context":"https://schema.org","@graph":[
-		{"@type":"WebPage","@id":"https://x.test/tea/#webpage","url":"https://x.test/tea/","name":"Tea ceremony",
+		{"@type":"WebPage","@id":"https://x.test/tea/#webpage","url":"https://x.test/tea/","name":"Tea ceremony","isPartOf":{"@id":"https://x.test/#website"},
 			"copyrightYear":2026,"copyrightHolder":{"@id":"https://x.test/#org"},"relatedLink":["https://x.test/door-games/"],
 			"breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://x.test/"}]},
 			"image":{"@type":"ImageObject","contentUrl":"https://x.test/img/tea-640.webp","width":640,"height":427,"description":"A couple serving tea to elders"},
@@ -143,6 +143,7 @@ func TestCheckPassesAPageWhoseMarkupShowsWhatThePageShows(t *testing.T) {
 			{"@type":"HowToStep","name":"Prepare the tea","text":"Boil water and steep the tea."},
 			{"@type":"HowToStep","name":"Serve the elders","text":"Serve the eldest first."}]},
 		{"@type":"Organization","@id":"https://x.test/#org","name":"Ann Lee Weddings","telephone":"0400 111 222","email":"ann@x.test","taxID":"12345678901",
+			"logo":{"@type":"ImageObject","url":"https://x.test/logo.png","width":40,"height":40},
 			"potentialAction":{"@type":"AskAction","target":{"@type":"EntryPoint","urlTemplate":"https://x.test/tea/#enquire","httpMethod":"POST"}},
 			"makesOffer":{"@type":"Offer","seller":{"@id":"https://x.test/#org"},"itemOffered":{"@type":"Service","name":"Hosting",
 				"availableChannel":{"@type":"ServiceChannel","name":"Enquiry form","processingTime":"P1D"}}},

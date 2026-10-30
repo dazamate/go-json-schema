@@ -1,0 +1,63 @@
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "Product",
+   "name": "Tree of Life Heart Essential Oil Diffuser Locket Pendant Necklace",
+   "description": "Includes 5 Diffuser Pads (Colours sent randomly)",
+   "image": [
+    "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/C983DB4D-F6F1-4BE2-AC43-2D29F87198CB.jpeg/:/rs=w:1200,h:1200"
+   ],
+   "brand": {
+    "@type": "Brand",
+    "name": "Queen of Diamonds Jewellery"
+   },
+   "sku": "TR-OF-LF-HRT",
+   "url": "http://localhost:8001/au/products/tree-of-life-heart-essential-oil-diffuser-locket-pendant-necklace",
+   "offers": {
+    "@type": "Offer",
+    "url": "http://localhost:8001/au/products/tree-of-life-heart-essential-oil-diffuser-locket-pendant-necklace",
+    "sku": "TR-OF-LF-HRT",
+    "price": "12.95",
+    "priceCurrency": "AUD",
+    "availability": "https://schema.org/InStock",
+    "itemCondition": "https://schema.org/NewCondition",
+    "shippingDetails": {
+     "@type": "OfferShippingDetails",
+     "shippingRate": {
+      "@type": "MonetaryAmount",
+      "value": 7.95,
+      "currency": "AUD"
+     },
+     "shippingDestination": {
+      "@type": "DefinedRegion",
+      "addressCountry": "AU"
+     },
+     "deliveryTime": {
+      "@type": "ShippingDeliveryTime",
+      "handlingTime": {
+       "@type": "QuantitativeValue",
+       "minValue": 0,
+       "maxValue": 1,
+       "unitCode": "DAY"
+      },
+      "transitTime": {
+       "@type": "QuantitativeValue",
+       "minValue": 2,
+       "maxValue": 6,
+       "unitCode": "DAY"
+      }
+     }
+    },
+    "hasMerchantReturnPolicy": {
+     "@type": "MerchantReturnPolicy",
+     "applicableCountry": "AU",
+     "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+     "merchantReturnDays": 14,
+     "returnMethod": "https://schema.org/ReturnByMail",
+     "returnFees": "https://schema.org/ReturnFeesCustomerResponsibility"
+    }
+   }
+  }
+ ]
+}

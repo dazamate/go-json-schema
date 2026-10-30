@@ -1,0 +1,668 @@
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@id": "http://localhost:8080/#organization",
+   "@type": "Organization",
+   "contactPoint": {
+    "@type": "ContactPoint",
+    "areaServed": "US",
+    "availableLanguage": "en",
+    "contactType": "customer support",
+    "telephone": "+18334990939"
+   },
+   "description": "Lift My Boxes gives free moving cost estimates and, when asked, connects people with independent moving companies.",
+   "disambiguatingDescription": "An online moving cost estimator and referral service, not a moving company.",
+   "email": "hello@liftmyboxes.com",
+   "logo": "http://localhost:8080/favicon.svg",
+   "name": "Lift My Boxes",
+   "url": "http://localhost:8080/"
+  },
+  {
+   "@id": "http://localhost:8080/#website",
+   "@type": "WebSite",
+   "inLanguage": "en-US",
+   "name": "Lift My Boxes",
+   "publisher": {
+    "@id": "http://localhost:8080/#organization"
+   },
+   "url": "http://localhost:8080/"
+  },
+  {
+   "@id": "http://localhost:8080/#home-moving",
+   "@type": "Thing",
+   "alternateName": [
+    "Home move",
+    "Household move"
+   ],
+   "description": "Moving the contents of a house or apartment to a new home.",
+   "name": "Home moving"
+  },
+  {
+   "@id": "http://localhost:8080/#boston",
+   "@type": "City",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q1093829",
+    "https://www.wikidata.org/wiki/Q1549591"
+   ],
+   "alternateName": [
+    "City of Boston"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q100"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/01cx_"
+    }
+   ],
+   "name": "Boston",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Boston",
+    "https://www.wikidata.org/wiki/Q100",
+    "https://www.google.com/search?kgmid=/m/01cx_",
+    "https://dbpedia.org/resource/Boston"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#moving-company",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q783794",
+    "https://www.wikidata.org/wiki/Q2169973"
+   ],
+   "alternateName": [
+    "movers",
+    "mover",
+    "Movers",
+    "moving companies",
+    "Moving companies",
+    "Moving Companies",
+    "moving van",
+    "moving vans",
+    "Mover"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q1757263"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/07ry5s"
+    }
+   ],
+   "name": "Moving company",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Moving_company",
+    "https://www.wikidata.org/wiki/Q1757263",
+    "https://www.google.com/search?kgmid=/m/07ry5s",
+    "https://dbpedia.org/resource/Moving_company"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#cost",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q151885",
+    "https://www.wikidata.org/wiki/Q29028649"
+   ],
+   "alternateName": [
+    "costs",
+    "Costs"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q240673"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0168hv"
+    }
+   ],
+   "name": "Cost",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Cost",
+    "https://www.wikidata.org/wiki/Q240673",
+    "https://www.google.com/search?kgmid=/m/0168hv",
+    "https://dbpedia.org/resource/Cost"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#freight-transport",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q627436",
+    "https://www.wikidata.org/wiki/Q1724915"
+   ],
+   "alternateName": [
+    "Shipping",
+    "shipment"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q651658"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/070qm"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/g/120_g24_"
+    }
+   ],
+   "name": "Freight transport",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Freight_transport",
+    "https://www.wikidata.org/wiki/Q651658",
+    "https://www.google.com/search?kgmid=/m/070qm",
+    "https://www.google.com/search?kgmid=/g/120_g24_",
+    "https://dbpedia.org/resource/Freight_transport"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#moving-cost-calculator",
+   "@type": "WebApplication",
+   "applicationCategory": "UtilitiesApplication",
+   "description": "Free online calculator that estimates the cost of a local or long-distance move.",
+   "isAccessibleForFree": true,
+   "name": "Lift My Boxes Moving Cost Calculator",
+   "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+   },
+   "operatingSystem": "Any",
+   "publisher": [
+    {
+     "@id": "http://localhost:8080/#organization"
+    }
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#moving-labor",
+   "@type": "Thing",
+   "alternateName": [
+    "Labor-only help",
+    "Labor-only movers",
+    "Labor-only"
+   ],
+   "description": "Hired help to load or unload a truck the customer provides.",
+   "name": "Moving labor"
+  },
+  {
+   "@id": "http://localhost:8080/#license",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q93288",
+    "https://www.wikidata.org/wiki/Q882991"
+   ],
+   "alternateName": [
+    "permit",
+    "licensing",
+    "licenses"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q79719"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0b25v"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/g/121ln515"
+    }
+   ],
+   "name": "License",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/License",
+    "https://www.wikidata.org/wiki/Q79719",
+    "https://www.google.com/search?kgmid=/m/0b25v",
+    "https://www.google.com/search?kgmid=/g/121ln515",
+    "https://dbpedia.org/resource/License"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#city",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q98966309",
+    "https://www.wikidata.org/wiki/Q137018865"
+   ],
+   "alternateName": [
+    "cities"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q515"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/01n32"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/g/113qb9rl1"
+    }
+   ],
+   "name": "City",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/City",
+    "https://www.wikidata.org/wiki/Q515",
+    "https://www.google.com/search?kgmid=/m/01n32",
+    "https://www.google.com/search?kgmid=/g/113qb9rl1",
+    "https://dbpedia.org/resource/City"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#truck",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q140424465",
+    "https://www.wikidata.org/wiki/Q1515493"
+   ],
+   "alternateName": [
+    "trucks",
+    "Trucks"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q43193"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/07r04"
+    }
+   ],
+   "name": "Truck",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Truck",
+    "https://www.wikidata.org/wiki/Q43193",
+    "https://www.google.com/search?kgmid=/m/07r04",
+    "https://dbpedia.org/resource/Truck"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#parking-space",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q27955379",
+    "https://www.wikidata.org/wiki/Q82794"
+   ],
+   "alternateName": [
+    "parking spaces"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q1433633"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/03pb_0"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/g/12301nrw"
+    }
+   ],
+   "name": "Parking space",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Parking_space",
+    "https://www.wikidata.org/wiki/Q1433633",
+    "https://www.google.com/search?kgmid=/m/03pb_0",
+    "https://www.google.com/search?kgmid=/g/12301nrw",
+    "https://dbpedia.org/resource/Parking_space"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#zip-code",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q6545185",
+    "https://www.wikidata.org/wiki/Q126286955"
+   ],
+   "alternateName": [
+    "ZIP codes",
+    "ZIP"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q136208"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0dllr"
+    }
+   ],
+   "name": "ZIP Code",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/ZIP_Code",
+    "https://www.wikidata.org/wiki/Q136208",
+    "https://www.google.com/search?kgmid=/m/0dllr",
+    "https://dbpedia.org/resource/ZIP_Code"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#parking",
+   "@type": "Thing",
+   "additionalType": "https://www.wikidata.org/wiki/Q999646",
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q267917"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/01jp76"
+    }
+   ],
+   "name": "Parking",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Parking",
+    "https://www.wikidata.org/wiki/Q267917",
+    "https://www.google.com/search?kgmid=/m/01jp76",
+    "https://dbpedia.org/resource/Parking"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#elevator",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q334166",
+    "https://www.wikidata.org/wiki/Q811979"
+   ],
+   "alternateName": [
+    "elevators",
+    "lifts",
+    "freight elevator"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q132911"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/02r60"
+    }
+   ],
+   "name": "Elevator",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Elevator",
+    "https://www.wikidata.org/wiki/Q132911",
+    "https://www.google.com/search?kgmid=/m/02r60",
+    "https://dbpedia.org/resource/Elevator"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#stairs",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q391414",
+    "https://www.wikidata.org/wiki/Q30327093"
+   ],
+   "alternateName": [
+    "stair",
+    "flights of stairs",
+    "staircase",
+    "flight of stairs",
+    "stairway",
+    "staircases"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q12511"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/01lynh"
+    }
+   ],
+   "name": "Stairs",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Stairs",
+    "https://www.wikidata.org/wiki/Q12511",
+    "https://www.google.com/search?kgmid=/m/01lynh",
+    "https://dbpedia.org/resource/Stairs"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#u-haul",
+   "@type": "Organization",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q4830453",
+    "https://www.wikidata.org/wiki/Q291240"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q7862902"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/054tqv"
+    }
+   ],
+   "name": "U-Haul",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/U-Haul",
+    "https://www.wikidata.org/wiki/Q7862902",
+    "https://www.google.com/search?kgmid=/m/054tqv",
+    "https://dbpedia.org/resource/U-Haul"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/boston-movers-cost/#webpage",
+   "@type": "WebPage",
+   "about": [
+    {
+     "@id": "http://localhost:8080/#home-moving"
+    },
+    {
+     "@id": "http://localhost:8080/#boston"
+    },
+    {
+     "@id": "http://localhost:8080/#moving-company"
+    },
+    {
+     "@id": "http://localhost:8080/#cost"
+    },
+    {
+     "@id": "http://localhost:8080/#freight-transport"
+    }
+   ],
+   "breadcrumb": {
+    "@id": "http://localhost:8080/boston-movers-cost/#breadcrumb"
+   },
+   "dateModified": "2026-10-29T16:21:58Z",
+   "datePublished": "2026-10-29T16:21:58Z",
+   "description": "What Boston movers cost depends on your date, stairs, parking and travel time. Get a free estimate in about a minute and see what pushes a Boston move up.",
+   "inLanguage": "en-US",
+   "isPartOf": {
+    "@id": "http://localhost:8080/#website"
+   },
+   "keywords": [
+    "boston movers cost"
+   ],
+   "mentions": [
+    {
+     "@id": "http://localhost:8080/#moving-cost-calculator"
+    },
+    {
+     "@id": "http://localhost:8080/#moving-labor"
+    },
+    {
+     "@id": "http://localhost:8080/#license"
+    },
+    {
+     "@id": "http://localhost:8080/#city"
+    },
+    {
+     "@id": "http://localhost:8080/#truck"
+    },
+    {
+     "@id": "http://localhost:8080/#parking-space"
+    },
+    {
+     "@id": "http://localhost:8080/#zip-code"
+    },
+    {
+     "@id": "http://localhost:8080/#parking"
+    },
+    {
+     "@id": "http://localhost:8080/#elevator"
+    },
+    {
+     "@id": "http://localhost:8080/#stairs"
+    },
+    {
+     "@id": "http://localhost:8080/#u-haul"
+    }
+   ],
+   "name": "Boston Movers Cost: Rates, Permits & Timing | Lift My Boxes",
+   "spatialCoverage": {
+    "@type": "City",
+    "containedInPlace": {
+     "@type": "State",
+     "containedInPlace": {
+      "@type": "Country",
+      "name": "United States"
+     },
+     "name": "Massachusetts"
+    },
+    "geo": {
+     "@type": "GeoCoordinates",
+     "latitude": 42.332735,
+     "longitude": -71.013513
+    },
+    "name": "Boston"
+   },
+   "url": "http://localhost:8080/boston-movers-cost/"
+  },
+  {
+   "@id": "http://localhost:8080/boston-movers-cost/#breadcrumb",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/",
+     "name": "Home",
+     "position": 1
+    },
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/how-much-do-movers-cost/",
+     "name": "How much do movers cost",
+     "position": 2
+    },
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/local-movers-cost/",
+     "name": "What do local movers cost?",
+     "position": 3
+    },
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/local-moving-cost/",
+     "name": "Local moving cost, from full service to doing it yourself",
+     "position": 4
+    },
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/boston-movers-cost/",
+     "name": "Boston movers cost: what you'll pay and why",
+     "position": 5
+    }
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/boston-movers-cost/#faq",
+   "@type": "FAQPage",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Most Boston leases turn over at the start of September, so a large share of the city's moves fall in a few days. Crews book up early, and Boston movers cost the most of the year then. The calculator prices any date from May through September as peak season, so a date from October through April gives you a lower range."
+     },
+     "name": "Why do Boston movers cost more around September 1?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Tipping is up to you, and it comes on top of what Boston movers cost on the bill. The tipping range most moving guides give is $10.00–$20.00 per mover for a half day of up to 4 hours, and $20.00–$65.00 per mover for each full working day. Tip toward the top of the range for a walk-up or a long carry from the truck."
+     },
+     "name": "How much should you tip movers in Boston?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Movers price what you own, not floor area. As a rough rule of thumb, 1,000 square feet is often a 2-bedroom home, and a typical local 2-bedroom move at 10 road miles, off peak and with no stairs costs $720–$1,800. In a walk-up, Boston movers cost more than that, because stairs add hours. Choose your home size in the calculator for your own range."
+     },
+     "name": "How much does it cost to move a 1,000-square-foot apartment?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Ask whether the quote includes travel time, a minimum number of hours, stairs, a long carry from the truck, packing materials and any charge for heavy items. Hidden extras like these are where Boston movers cost more than the quote, so ask how the bill changes if the move runs over the estimated hours. Get the answers in writing before moving day."
+     },
+     "name": "What hidden costs should you ask a moving company about?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Long-distance moves are priced on weight and distance, not hours, so Boston movers cost far more for them than for a move across town. A typical 2-bedroom move of 1,000 road miles, off peak and with no stairs or extras, costs $2,600–$5,700, or about $2.60–$5.70 per mile. Enter both ZIP codes in the calculator for your own route."
+     },
+     "name": "How much do long-distance movers charge from Boston?"
+    }
+   ]
+  }
+ ]
+}

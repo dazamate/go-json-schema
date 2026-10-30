@@ -1,0 +1,33 @@
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "Organization",
+   "name": "Queen of Diamonds Jewellery",
+   "url": "http://localhost:8001",
+   "hasMerchantReturnPolicy": [
+    {
+     "@type": "MerchantReturnPolicy",
+     "applicableCountry": "AU",
+     "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+     "merchantReturnDays": 14,
+     "returnMethod": "https://schema.org/ReturnByMail",
+     "returnFees": "https://schema.org/ReturnFeesCustomerResponsibility"
+    }
+   ]
+  },
+  {
+   "@type": "WebSite",
+   "name": "Queen of Diamonds Jewellery",
+   "url": "http://localhost:8001/au",
+   "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+     "@type": "EntryPoint",
+     "urlTemplate": "http://localhost:8001/au/search?q={search_term_string}"
+    },
+    "query-input": "required name=search_term_string"
+   }
+  }
+ ]
+}

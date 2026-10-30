@@ -1,0 +1,318 @@
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "ProductGroup",
+   "name": "The Twilight Saga Bella Swan Vampire Crystal Ring",
+   "description": "Ring Size Measurements:\n\n6 - (16mm inner diameter)\n\n7 - (17mm inner diameter)\n\n8 - (18mm inner diameter)\n\n9 - (19mm inner diameter)\n\n10 - (20mm inner diameter)",
+   "image": [
+    "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/B4FBDF1E-2E34-4B20-98A4-B24179AC4AF7.jpeg/:/rs=w:1200,h:1200",
+    "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/0FCA0FE3-CA60-48C4-9DF0-A18C31B81F48.jpeg/:/rs=w:1200,h:1200",
+    "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/E6FEC93C-3374-46B0-AD18-9C3831E83F4B.jpeg/:/rs=w:1200,h:1200",
+    "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/860D460C-E57C-40DC-87F1-2CF3FA02E443.jpeg/:/rs=w:1200,h:1200",
+    "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/5C46895E-78C4-41A7-93C5-CA9D0385CFB9.jpeg/:/rs=w:1200,h:1200",
+    "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/A906C989-B2F2-4E73-B8B5-681D86A867CE.jpeg/:/rs=w:1200,h:1200",
+    "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/2E2BF320-E643-48B0-981C-E42780C94386.jpeg/:/rs=w:1200,h:1200",
+    "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/027289EF-B53B-4F05-8759-616725B45D02.jpeg/:/rs=w:1200,h:1200",
+    "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/991D2B8D-EDCD-4283-A0FF-92B70B09EA2B.jpeg/:/rs=w:1200,h:1200",
+    "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/AA2C804D-D990-4AB2-92F5-48D0D7BC1283.jpeg/:/rs=w:1200,h:1200"
+   ],
+   "brand": {
+    "@type": "Brand",
+    "name": "Queen of Diamonds Jewellery"
+   },
+   "url": "http://localhost:8001/au/products/the-twilight-saga-bella-swan-vampire-crystal-ring",
+   "productGroupID": "prod_01M63RY94YPN6G71XJ1C66YWZP",
+   "variesBy": [
+    "Size"
+   ],
+   "hasVariant": [
+    {
+     "@type": "Product",
+     "name": "The Twilight Saga Bella Swan Vampire Crystal Ring - 6",
+     "sku": "THE-TWL-6",
+     "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/B4FBDF1E-2E34-4B20-98A4-B24179AC4AF7.jpeg/:/rs=w:1200,h:1200",
+     "additionalProperty": [
+      {
+       "@type": "PropertyValue",
+       "name": "Size",
+       "value": "6"
+      }
+     ],
+     "offers": {
+      "@type": "Offer",
+      "url": "http://localhost:8001/au/products/the-twilight-saga-bella-swan-vampire-crystal-ring?v_id=variant_01M63RYB27NEFJ0RR29F2SVXGS",
+      "sku": "THE-TWL-6",
+      "price": "14.50",
+      "priceCurrency": "AUD",
+      "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition",
+      "shippingDetails": {
+       "@type": "OfferShippingDetails",
+       "shippingRate": {
+        "@type": "MonetaryAmount",
+        "value": 7.95,
+        "currency": "AUD"
+       },
+       "shippingDestination": {
+        "@type": "DefinedRegion",
+        "addressCountry": "AU"
+       },
+       "deliveryTime": {
+        "@type": "ShippingDeliveryTime",
+        "handlingTime": {
+         "@type": "QuantitativeValue",
+         "minValue": 0,
+         "maxValue": 1,
+         "unitCode": "DAY"
+        },
+        "transitTime": {
+         "@type": "QuantitativeValue",
+         "minValue": 2,
+         "maxValue": 6,
+         "unitCode": "DAY"
+        }
+       }
+      },
+      "hasMerchantReturnPolicy": {
+       "@type": "MerchantReturnPolicy",
+       "applicableCountry": "AU",
+       "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+       "merchantReturnDays": 14,
+       "returnMethod": "https://schema.org/ReturnByMail",
+       "returnFees": "https://schema.org/ReturnFeesCustomerResponsibility"
+      }
+     }
+    },
+    {
+     "@type": "Product",
+     "name": "The Twilight Saga Bella Swan Vampire Crystal Ring - 7",
+     "sku": "THE-TWL-7",
+     "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/B4FBDF1E-2E34-4B20-98A4-B24179AC4AF7.jpeg/:/rs=w:1200,h:1200",
+     "additionalProperty": [
+      {
+       "@type": "PropertyValue",
+       "name": "Size",
+       "value": "7"
+      }
+     ],
+     "offers": {
+      "@type": "Offer",
+      "url": "http://localhost:8001/au/products/the-twilight-saga-bella-swan-vampire-crystal-ring?v_id=variant_01M63RYB2735D5WN5DGB49WR07",
+      "sku": "THE-TWL-7",
+      "price": "14.50",
+      "priceCurrency": "AUD",
+      "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition",
+      "shippingDetails": {
+       "@type": "OfferShippingDetails",
+       "shippingRate": {
+        "@type": "MonetaryAmount",
+        "value": 7.95,
+        "currency": "AUD"
+       },
+       "shippingDestination": {
+        "@type": "DefinedRegion",
+        "addressCountry": "AU"
+       },
+       "deliveryTime": {
+        "@type": "ShippingDeliveryTime",
+        "handlingTime": {
+         "@type": "QuantitativeValue",
+         "minValue": 0,
+         "maxValue": 1,
+         "unitCode": "DAY"
+        },
+        "transitTime": {
+         "@type": "QuantitativeValue",
+         "minValue": 2,
+         "maxValue": 6,
+         "unitCode": "DAY"
+        }
+       }
+      },
+      "hasMerchantReturnPolicy": {
+       "@type": "MerchantReturnPolicy",
+       "applicableCountry": "AU",
+       "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+       "merchantReturnDays": 14,
+       "returnMethod": "https://schema.org/ReturnByMail",
+       "returnFees": "https://schema.org/ReturnFeesCustomerResponsibility"
+      }
+     }
+    },
+    {
+     "@type": "Product",
+     "name": "The Twilight Saga Bella Swan Vampire Crystal Ring - 8",
+     "sku": "THE-TWL-8",
+     "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/B4FBDF1E-2E34-4B20-98A4-B24179AC4AF7.jpeg/:/rs=w:1200,h:1200",
+     "additionalProperty": [
+      {
+       "@type": "PropertyValue",
+       "name": "Size",
+       "value": "8"
+      }
+     ],
+     "offers": {
+      "@type": "Offer",
+      "url": "http://localhost:8001/au/products/the-twilight-saga-bella-swan-vampire-crystal-ring?v_id=variant_01M63RYB27Y2J4G7PCPK0A4CYY",
+      "sku": "THE-TWL-8",
+      "price": "14.50",
+      "priceCurrency": "AUD",
+      "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition",
+      "shippingDetails": {
+       "@type": "OfferShippingDetails",
+       "shippingRate": {
+        "@type": "MonetaryAmount",
+        "value": 7.95,
+        "currency": "AUD"
+       },
+       "shippingDestination": {
+        "@type": "DefinedRegion",
+        "addressCountry": "AU"
+       },
+       "deliveryTime": {
+        "@type": "ShippingDeliveryTime",
+        "handlingTime": {
+         "@type": "QuantitativeValue",
+         "minValue": 0,
+         "maxValue": 1,
+         "unitCode": "DAY"
+        },
+        "transitTime": {
+         "@type": "QuantitativeValue",
+         "minValue": 2,
+         "maxValue": 6,
+         "unitCode": "DAY"
+        }
+       }
+      },
+      "hasMerchantReturnPolicy": {
+       "@type": "MerchantReturnPolicy",
+       "applicableCountry": "AU",
+       "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+       "merchantReturnDays": 14,
+       "returnMethod": "https://schema.org/ReturnByMail",
+       "returnFees": "https://schema.org/ReturnFeesCustomerResponsibility"
+      }
+     }
+    },
+    {
+     "@type": "Product",
+     "name": "The Twilight Saga Bella Swan Vampire Crystal Ring - 9",
+     "sku": "THE-TWL-9",
+     "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/B4FBDF1E-2E34-4B20-98A4-B24179AC4AF7.jpeg/:/rs=w:1200,h:1200",
+     "additionalProperty": [
+      {
+       "@type": "PropertyValue",
+       "name": "Size",
+       "value": "9"
+      }
+     ],
+     "offers": {
+      "@type": "Offer",
+      "url": "http://localhost:8001/au/products/the-twilight-saga-bella-swan-vampire-crystal-ring?v_id=variant_01M63RYB277M6EW1G6FNJBCCBQ",
+      "sku": "THE-TWL-9",
+      "price": "14.50",
+      "priceCurrency": "AUD",
+      "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition",
+      "shippingDetails": {
+       "@type": "OfferShippingDetails",
+       "shippingRate": {
+        "@type": "MonetaryAmount",
+        "value": 7.95,
+        "currency": "AUD"
+       },
+       "shippingDestination": {
+        "@type": "DefinedRegion",
+        "addressCountry": "AU"
+       },
+       "deliveryTime": {
+        "@type": "ShippingDeliveryTime",
+        "handlingTime": {
+         "@type": "QuantitativeValue",
+         "minValue": 0,
+         "maxValue": 1,
+         "unitCode": "DAY"
+        },
+        "transitTime": {
+         "@type": "QuantitativeValue",
+         "minValue": 2,
+         "maxValue": 6,
+         "unitCode": "DAY"
+        }
+       }
+      },
+      "hasMerchantReturnPolicy": {
+       "@type": "MerchantReturnPolicy",
+       "applicableCountry": "AU",
+       "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+       "merchantReturnDays": 14,
+       "returnMethod": "https://schema.org/ReturnByMail",
+       "returnFees": "https://schema.org/ReturnFeesCustomerResponsibility"
+      }
+     }
+    },
+    {
+     "@type": "Product",
+     "name": "The Twilight Saga Bella Swan Vampire Crystal Ring - 10",
+     "sku": "THE-TWL-10",
+     "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/B4FBDF1E-2E34-4B20-98A4-B24179AC4AF7.jpeg/:/rs=w:1200,h:1200",
+     "additionalProperty": [
+      {
+       "@type": "PropertyValue",
+       "name": "Size",
+       "value": "10"
+      }
+     ],
+     "offers": {
+      "@type": "Offer",
+      "url": "http://localhost:8001/au/products/the-twilight-saga-bella-swan-vampire-crystal-ring?v_id=variant_01M63RYB27KWJ9K53B15H8KJNB",
+      "sku": "THE-TWL-10",
+      "price": "14.50",
+      "priceCurrency": "AUD",
+      "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition",
+      "shippingDetails": {
+       "@type": "OfferShippingDetails",
+       "shippingRate": {
+        "@type": "MonetaryAmount",
+        "value": 7.95,
+        "currency": "AUD"
+       },
+       "shippingDestination": {
+        "@type": "DefinedRegion",
+        "addressCountry": "AU"
+       },
+       "deliveryTime": {
+        "@type": "ShippingDeliveryTime",
+        "handlingTime": {
+         "@type": "QuantitativeValue",
+         "minValue": 0,
+         "maxValue": 1,
+         "unitCode": "DAY"
+        },
+        "transitTime": {
+         "@type": "QuantitativeValue",
+         "minValue": 2,
+         "maxValue": 6,
+         "unitCode": "DAY"
+        }
+       }
+      },
+      "hasMerchantReturnPolicy": {
+       "@type": "MerchantReturnPolicy",
+       "applicableCountry": "AU",
+       "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+       "merchantReturnDays": 14,
+       "returnMethod": "https://schema.org/ReturnByMail",
+       "returnFees": "https://schema.org/ReturnFeesCustomerResponsibility"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -369,8 +369,12 @@ func TestCheckListsThePageElements(t *testing.T) {
 	if !issueAt(r, Warning, "$.@graph[0]", "this WebPage has no url or name") {
 		t.Errorf("no url/name warning on the WebPage: %+v", r.Issues)
 	}
-	if n := r.Warnings; n != 7 || r.Errors != 0 {
-		t.Errorf("%d warnings, %d errors, want 7 and 0: %+v", n, r.Errors, r.Issues)
+	// every page carries the site's WebSite, and a node publishes it
+	if !issueAt(r, Warning, "html:body", "the draft has no WebSite") || !issueAt(r, Warning, "html:body", "no node publishes the page") {
+		t.Errorf("no WebSite or publisher warning: %+v", r.Issues)
+	}
+	if n := r.Warnings; n != 9 || r.Errors != 0 {
+		t.Errorf("%d warnings, %d errors, want 9 and 0: %+v", n, r.Errors, r.Issues)
 	}
 	if plain := check(t, draft); len(plain.PageElements) != 0 || issueCount(plain, "has no") != 0 {
 		t.Errorf("page elements without page_html: %+v", plain.PageElements)
@@ -413,6 +417,21 @@ func TestCheckSuggestsTheSubtypeItsWikidataClassGives(t *testing.T) {
 	// gives
 	if r.Warnings != 3 || r.Errors != 0 {
 		t.Errorf("%d warnings, %d errors, want 3 and 0: %+v", r.Warnings, r.Errors, r.Issues)
+	}
+}
+
+// An item that is itself a class in the table (moving company) is a kind of
+// thing: its instance-of class (company) does not type it.
+func TestCheckLeavesAKindOfThingAThing(t *testing.T) {
+	r := check(t, `{"@context":"https://schema.org","@graph":[
+		{"@type":"Thing","name":"Moving company","additionalType":["https://www.wikidata.org/wiki/Q783794","https://www.wikidata.org/wiki/Q2169973"],"sameAs":"https://www.wikidata.org/wiki/Q1757263"},
+		{"@type":"Thing","name":"Moving company","additionalType":"https://www.wikidata.org/wiki/Q783794","identifier":{"@type":"PropertyValue","propertyID":"Wikidata","value":"Q1757263"}},
+		{"@type":"Thing","name":"Harbour Removals","additionalType":"https://www.wikidata.org/wiki/Q783794"}]}`)
+	if issueAt(r, Warning, "$.@graph[0]", "type it Organization") || issueAt(r, Warning, "$.@graph[1]", "type it Organization") {
+		t.Errorf("a kind of business typed as one: %+v", r.Issues)
+	}
+	if !issueAt(r, Warning, "$.@graph[2]", "type it Organization") {
+		t.Errorf("one company left a Thing: %+v", r.Issues)
 	}
 }
 

@@ -1,0 +1,66 @@
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@id": "http://localhost:8080/#organization",
+   "@type": "Organization",
+   "contactPoint": {
+    "@type": "ContactPoint",
+    "areaServed": "US",
+    "availableLanguage": "en",
+    "contactType": "customer support",
+    "telephone": "+18334990939"
+   },
+   "description": "Lift My Boxes gives free moving cost estimates and, when asked, connects people with independent moving companies.",
+   "disambiguatingDescription": "An online moving cost estimator and referral service, not a moving company.",
+   "email": "hello@liftmyboxes.com",
+   "logo": "http://localhost:8080/favicon.svg",
+   "name": "Lift My Boxes",
+   "url": "http://localhost:8080/"
+  },
+  {
+   "@id": "http://localhost:8080/#website",
+   "@type": "WebSite",
+   "inLanguage": "en-US",
+   "name": "Lift My Boxes",
+   "publisher": {
+    "@id": "http://localhost:8080/#organization"
+   },
+   "url": "http://localhost:8080/"
+  },
+  {
+   "@id": "http://localhost:8080/contact-us/#webpage",
+   "@type": "ContactPage",
+   "breadcrumb": {
+    "@id": "http://localhost:8080/contact-us/#breadcrumb"
+   },
+   "dateModified": "2026-10-29T16:21:17Z",
+   "datePublished": "2026-10-29T16:21:17Z",
+   "description": "Questions about a moving estimate or the details you shared with us? Contact the Lift My Boxes team by email or with our contact form.",
+   "inLanguage": "en-US",
+   "isPartOf": {
+    "@id": "http://localhost:8080/#website"
+   },
+   "name": "Contact Lift My Boxes",
+   "url": "http://localhost:8080/contact-us/"
+  },
+  {
+   "@id": "http://localhost:8080/contact-us/#breadcrumb",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/",
+     "name": "Home",
+     "position": 1
+    },
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/contact-us/",
+     "name": "Contact us",
+     "position": 2
+    }
+   ]
+  }
+ ]
+}

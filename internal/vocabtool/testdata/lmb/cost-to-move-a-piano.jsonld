@@ -1,0 +1,543 @@
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@id": "http://localhost:8080/#organization",
+   "@type": "Organization",
+   "contactPoint": {
+    "@type": "ContactPoint",
+    "areaServed": "US",
+    "availableLanguage": "en",
+    "contactType": "customer support",
+    "telephone": "+18334990939"
+   },
+   "description": "Lift My Boxes gives free moving cost estimates and, when asked, connects people with independent moving companies.",
+   "disambiguatingDescription": "An online moving cost estimator and referral service, not a moving company.",
+   "email": "hello@liftmyboxes.com",
+   "logo": "http://localhost:8080/favicon.svg",
+   "name": "Lift My Boxes",
+   "url": "http://localhost:8080/"
+  },
+  {
+   "@id": "http://localhost:8080/#website",
+   "@type": "WebSite",
+   "inLanguage": "en-US",
+   "name": "Lift My Boxes",
+   "publisher": {
+    "@id": "http://localhost:8080/#organization"
+   },
+   "url": "http://localhost:8080/"
+  },
+  {
+   "@id": "http://localhost:8080/#piano-moving",
+   "@type": "Thing",
+   "description": "Moving an upright or grand piano, which needs a specialist crew and equipment.",
+   "name": "Piano moving"
+  },
+  {
+   "@id": "http://localhost:8080/#piano",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q110295396",
+    "https://www.wikidata.org/wiki/Q52954"
+   ],
+   "alternateName": [
+    "upright piano",
+    "Upright",
+    "Pianos",
+    "baby grand",
+    "acoustic pianos",
+    "uprights",
+    "grand piano",
+    "Concert grand",
+    "Baby grand",
+    "upright",
+    "GRAND PIANOS",
+    "pianos",
+    "Upright Piano",
+    "vertical piano",
+    "UPRIGHT PIANOS",
+    "Upright piano",
+    "Grand piano"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q5994"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/05r5c"
+    }
+   ],
+   "name": "Piano",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Piano",
+    "https://www.wikidata.org/wiki/Q5994",
+    "https://www.google.com/search?kgmid=/m/05r5c",
+    "https://dbpedia.org/resource/Piano"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#cost",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q151885",
+    "https://www.wikidata.org/wiki/Q29028649"
+   ],
+   "alternateName": [
+    "costs",
+    "Costs"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q240673"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0168hv"
+    }
+   ],
+   "name": "Cost",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Cost",
+    "https://www.wikidata.org/wiki/Q240673",
+    "https://www.google.com/search?kgmid=/m/0168hv",
+    "https://dbpedia.org/resource/Cost"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#transport",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q451967",
+    "https://www.wikidata.org/wiki/Q115095261"
+   ],
+   "alternateName": [
+    "transit"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q7590"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/07bsy"
+    }
+   ],
+   "name": "Transport",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Transport",
+    "https://www.wikidata.org/wiki/Q7590",
+    "https://www.google.com/search?kgmid=/m/07bsy",
+    "https://dbpedia.org/resource/Transport"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#moving-cost-calculator",
+   "@type": "WebApplication",
+   "applicationCategory": "UtilitiesApplication",
+   "description": "Free online calculator that estimates the cost of a local or long-distance move.",
+   "isAccessibleForFree": true,
+   "name": "Lift My Boxes Moving Cost Calculator",
+   "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+   },
+   "operatingSystem": "Any",
+   "publisher": [
+    {
+     "@id": "http://localhost:8080/#organization"
+    }
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#stairs",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q391414",
+    "https://www.wikidata.org/wiki/Q30327093"
+   ],
+   "alternateName": [
+    "stair",
+    "flights of stairs",
+    "staircase",
+    "flight of stairs",
+    "stairway",
+    "staircases"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q12511"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/01lynh"
+    }
+   ],
+   "name": "Stairs",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Stairs",
+    "https://www.wikidata.org/wiki/Q12511",
+    "https://www.google.com/search?kgmid=/m/01lynh",
+    "https://dbpedia.org/resource/Stairs"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#calculator",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q39546",
+    "https://www.wikidata.org/wiki/Q2858615"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q31087"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/024d2"
+    }
+   ],
+   "name": "Calculator",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Calculator",
+    "https://www.wikidata.org/wiki/Q31087",
+    "https://www.google.com/search?kgmid=/m/024d2",
+    "https://dbpedia.org/resource/Calculator"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#zip-code",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q6545185",
+    "https://www.wikidata.org/wiki/Q126286955"
+   ],
+   "alternateName": [
+    "ZIP codes",
+    "ZIP"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q136208"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0dllr"
+    }
+   ],
+   "name": "ZIP Code",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/ZIP_Code",
+    "https://www.wikidata.org/wiki/Q136208",
+    "https://www.google.com/search?kgmid=/m/0dllr",
+    "https://dbpedia.org/resource/ZIP_Code"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#price",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q29028649",
+    "https://www.wikidata.org/wiki/Q1499548"
+   ],
+   "alternateName": [
+    "prices",
+    "Prices"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q160151"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/01d_1l"
+    }
+   ],
+   "name": "Price",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Price",
+    "https://www.wikidata.org/wiki/Q160151",
+    "https://www.google.com/search?kgmid=/m/01d_1l",
+    "https://dbpedia.org/resource/Price"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#weight",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q141350722",
+    "https://www.wikidata.org/wiki/Q71550118"
+   ],
+   "alternateName": [
+    "weights",
+    "weighing"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q25288"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/085x_"
+    }
+   ],
+   "name": "Weight",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Weight",
+    "https://www.wikidata.org/wiki/Q25288",
+    "https://www.google.com/search?kgmid=/m/085x_",
+    "https://dbpedia.org/resource/Weight"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#hot-tub",
+   "@type": "Thing",
+   "additionalType": "https://www.wikidata.org/wiki/Q152095",
+   "alternateName": [
+    "Hot tubs",
+    "hot tubs"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q1936429"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/065h6l"
+    }
+   ],
+   "name": "Hot tub",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Hot_tub",
+    "https://www.wikidata.org/wiki/Q1936429",
+    "https://www.google.com/search?kgmid=/m/065h6l",
+    "https://dbpedia.org/resource/Hot_tub"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#slate",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q11871901",
+    "https://www.wikidata.org/wiki/Q141281350"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q207079"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0c1ml"
+    }
+   ],
+   "name": "Slate",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Slate",
+    "https://www.wikidata.org/wiki/Q207079",
+    "https://www.google.com/search?kgmid=/m/0c1ml",
+    "https://dbpedia.org/resource/Slate"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#billiard-table",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q768186",
+    "https://www.wikidata.org/wiki/Q14748"
+   ],
+   "alternateName": [
+    "pool tables",
+    "Pool table",
+    "pockets",
+    "Billiard",
+    "Pool tables",
+    "pool table",
+    "billiard",
+    "POOL TABLE"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q3500725"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/04p0qw"
+    }
+   ],
+   "name": "Billiard table",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Billiard_table",
+    "https://www.wikidata.org/wiki/Q3500725",
+    "https://www.google.com/search?kgmid=/m/04p0qw",
+    "https://dbpedia.org/resource/Billiard_table"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/cost-to-move-a-piano/#webpage",
+   "@type": "WebPage",
+   "about": [
+    {
+     "@id": "http://localhost:8080/#piano-moving"
+    },
+    {
+     "@id": "http://localhost:8080/#piano"
+    },
+    {
+     "@id": "http://localhost:8080/#cost"
+    },
+    {
+     "@id": "http://localhost:8080/#transport"
+    }
+   ],
+   "breadcrumb": {
+    "@id": "http://localhost:8080/cost-to-move-a-piano/#breadcrumb"
+   },
+   "dateModified": "2026-10-29T16:21:58Z",
+   "datePublished": "2026-10-29T16:21:17Z",
+   "description": "Get a free estimate of the cost to move a piano, upright or grand, local or long distance, and see how stairs, the mover, tuning and damage cover change it.",
+   "inLanguage": "en-US",
+   "isPartOf": {
+    "@id": "http://localhost:8080/#website"
+   },
+   "keywords": [
+    "cost to move a piano"
+   ],
+   "mentions": [
+    {
+     "@id": "http://localhost:8080/#moving-cost-calculator"
+    },
+    {
+     "@id": "http://localhost:8080/#stairs"
+    },
+    {
+     "@id": "http://localhost:8080/#calculator"
+    },
+    {
+     "@id": "http://localhost:8080/#zip-code"
+    },
+    {
+     "@id": "http://localhost:8080/#price"
+    },
+    {
+     "@id": "http://localhost:8080/#weight"
+    },
+    {
+     "@id": "http://localhost:8080/#hot-tub"
+    },
+    {
+     "@id": "http://localhost:8080/#slate"
+    },
+    {
+     "@id": "http://localhost:8080/#billiard-table"
+    }
+   ],
+   "name": "Cost to Move a Piano: Upright vs Grand | Lift My Boxes",
+   "url": "http://localhost:8080/cost-to-move-a-piano/"
+  },
+  {
+   "@id": "http://localhost:8080/cost-to-move-a-piano/#breadcrumb",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/",
+     "name": "Home",
+     "position": 1
+    },
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/moving-services-cost/",
+     "name": "Moving services cost",
+     "position": 2
+    },
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/cost-to-move-a-piano/",
+     "name": "Piano moving cost",
+     "position": 3
+    }
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/cost-to-move-a-piano/#faq",
+   "@type": "FAQPage",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "To cut the cost to move a piano, book an off-peak date, clear the route before the crew arrives and, if you're moving house anyway, ask whether adding the piano to the household move costs less than a separate trip. Doing it yourself saves the mover's fee, but piano.org's moving guide says it isn't a do-it-yourself job, because a piano weighs hundreds of pounds and is easily damaged. A cracked soundboard or a hurt helper can cost far more than the move."
+     },
+     "name": "What is the cheapest way to move a piano?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Often because the cost to move a piano is more than an old upright would sell for. A free piano still needs movers, so expect to pay for the move yourself: about $220–$490 for an upright going 10 road miles with no stairs. Have a piano technician look it over before you accept it, so you don't pay to move an instrument that can't be tuned or repaired."
+     },
+     "name": "Why do so many people give pianos away for free?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "It depends on the make, the condition and what replacing it would cost you. A piano technician can check the soundboard, pin block and action and tell you roughly what it's worth. Set what it's worth against the cost to move a piano like it, from the calculator above. If it needs repairs that cost more than it's worth, selling or donating it may make more sense than moving it."
+     },
+     "name": "Is an old upright piano worth moving?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "At 1,000 road miles, an upright costs about $1,050–$2,050 to move and a grand about $1,550–$3,200, off peak with no stairs. A coast-to-coast trip is far longer than that, so the cost to move a piano that far is higher, though each extra mile adds less on a long route. Enter both ZIP codes in the calculator above to price your exact route."
+     },
+     "name": "What is the cost to move a piano across the country?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "No. The weight guide at piano.org puts a digital piano at 25 to 150 pounds, against hundreds of pounds for an acoustic one, so it needs no piano board or specialist crew. Move it like any other piece of furniture, in its original box if you kept it. It never needs tuning after the trip."
+     },
+     "name": "Does a digital piano cost as much to move?"
+    }
+   ]
+  }
+ ]
+}

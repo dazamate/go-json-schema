@@ -1,0 +1,579 @@
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@id": "http://localhost:8080/#organization",
+   "@type": "Organization",
+   "contactPoint": {
+    "@type": "ContactPoint",
+    "areaServed": "US",
+    "availableLanguage": "en",
+    "contactType": "customer support",
+    "telephone": "+18334990939"
+   },
+   "description": "Lift My Boxes gives free moving cost estimates and, when asked, connects people with independent moving companies.",
+   "disambiguatingDescription": "An online moving cost estimator and referral service, not a moving company.",
+   "email": "hello@liftmyboxes.com",
+   "logo": "http://localhost:8080/favicon.svg",
+   "name": "Lift My Boxes",
+   "url": "http://localhost:8080/"
+  },
+  {
+   "@id": "http://localhost:8080/#website",
+   "@type": "WebSite",
+   "inLanguage": "en-US",
+   "name": "Lift My Boxes",
+   "publisher": {
+    "@id": "http://localhost:8080/#organization"
+   },
+   "url": "http://localhost:8080/"
+  },
+  {
+   "@id": "http://localhost:8080/#moving-company",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q783794",
+    "https://www.wikidata.org/wiki/Q2169973"
+   ],
+   "alternateName": [
+    "movers",
+    "mover",
+    "Movers",
+    "moving companies",
+    "Moving companies",
+    "Moving Companies",
+    "moving van",
+    "moving vans",
+    "Mover"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q1757263"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/07ry5s"
+    }
+   ],
+   "name": "Moving company",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Moving_company",
+    "https://www.wikidata.org/wiki/Q1757263",
+    "https://www.google.com/search?kgmid=/m/07ry5s",
+    "https://dbpedia.org/resource/Moving_company"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#cost",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q151885",
+    "https://www.wikidata.org/wiki/Q29028649"
+   ],
+   "alternateName": [
+    "costs",
+    "Costs"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q240673"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0168hv"
+    }
+   ],
+   "name": "Cost",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Cost",
+    "https://www.wikidata.org/wiki/Q240673",
+    "https://www.google.com/search?kgmid=/m/0168hv",
+    "https://dbpedia.org/resource/Cost"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#freight-transport",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q627436",
+    "https://www.wikidata.org/wiki/Q1724915"
+   ],
+   "alternateName": [
+    "Shipping",
+    "shipment"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q651658"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/070qm"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/g/120_g24_"
+    }
+   ],
+   "name": "Freight transport",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Freight_transport",
+    "https://www.wikidata.org/wiki/Q651658",
+    "https://www.google.com/search?kgmid=/m/070qm",
+    "https://www.google.com/search?kgmid=/g/120_g24_",
+    "https://dbpedia.org/resource/Freight_transport"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#moving-cost-calculator",
+   "@type": "WebApplication",
+   "applicationCategory": "UtilitiesApplication",
+   "description": "Free online calculator that estimates the cost of a local or long-distance move.",
+   "isAccessibleForFree": true,
+   "name": "Lift My Boxes Moving Cost Calculator",
+   "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+   },
+   "operatingSystem": "Any",
+   "publisher": [
+    {
+     "@id": "http://localhost:8080/#organization"
+    }
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#truck",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q140424465",
+    "https://www.wikidata.org/wiki/Q1515493"
+   ],
+   "alternateName": [
+    "trucks",
+    "Trucks"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q43193"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/07r04"
+    }
+   ],
+   "name": "Truck",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Truck",
+    "https://www.wikidata.org/wiki/Q43193",
+    "https://www.google.com/search?kgmid=/m/07r04",
+    "https://dbpedia.org/resource/Truck"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#hour",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q1790144",
+    "https://www.wikidata.org/wiki/Q106839753"
+   ],
+   "alternateName": [
+    "hours",
+    "Hours"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q25235"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/03mxv"
+    }
+   ],
+   "name": "Hour",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Hour",
+    "https://www.wikidata.org/wiki/Q25235",
+    "https://www.google.com/search?kgmid=/m/03mxv",
+    "https://dbpedia.org/resource/Hour"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#price",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q29028649",
+    "https://www.wikidata.org/wiki/Q1499548"
+   ],
+   "alternateName": [
+    "prices",
+    "Prices"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q160151"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/01d_1l"
+    }
+   ],
+   "name": "Price",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Price",
+    "https://www.wikidata.org/wiki/Q160151",
+    "https://www.google.com/search?kgmid=/m/01d_1l",
+    "https://dbpedia.org/resource/Price"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#federal-motor-carrier-safety-administration",
+   "@type": "Thing",
+   "additionalType": "https://www.wikidata.org/wiki/Q20857065",
+   "alternateName": [
+    "FMCSA",
+    "fmcsa.dot.gov"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q5440305"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/02wvdh3"
+    }
+   ],
+   "name": "Federal Motor Carrier Safety Administration",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Federal_Motor_Carrier_Safety_Administration",
+    "https://www.wikidata.org/wiki/Q5440305",
+    "https://www.google.com/search?kgmid=/m/02wvdh3",
+    "https://dbpedia.org/resource/Federal_Motor_Carrier_Safety_Administration"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#bedroom",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q13226383",
+    "https://www.wikidata.org/wiki/Q180516"
+   ],
+   "alternateName": [
+    "bedrooms",
+    "Bedrooms"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q193837"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/02_58j"
+    }
+   ],
+   "name": "Bedroom",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Bedroom",
+    "https://www.wikidata.org/wiki/Q193837",
+    "https://www.google.com/search?kgmid=/m/02_58j",
+    "https://dbpedia.org/resource/Bedroom"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#apartment",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q1247867",
+    "https://www.wikidata.org/wiki/Q3305339"
+   ],
+   "alternateName": [
+    "apartment building",
+    "apartments",
+    "Flat",
+    "Apartment buildings",
+    "apartment buildings",
+    "flat",
+    "Apartment complexes",
+    "garden apartment",
+    "Apartments",
+    "apartment complexes"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q188507"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/01nblt"
+    }
+   ],
+   "name": "Apartment",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Apartment",
+    "https://www.wikidata.org/wiki/Q188507",
+    "https://www.google.com/search?kgmid=/m/01nblt",
+    "https://dbpedia.org/resource/Apartment"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#mile",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q1978718",
+    "https://www.wikidata.org/wiki/Q16782623"
+   ],
+   "alternateName": [
+    "miles"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q253276"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/04vb3"
+    }
+   ],
+   "name": "Mile",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Mile",
+    "https://www.wikidata.org/wiki/Q253276",
+    "https://www.google.com/search?kgmid=/m/04vb3",
+    "https://dbpedia.org/resource/Mile"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#studio-apartment",
+   "@type": "Thing",
+   "additionalType": "https://www.wikidata.org/wiki/Q699405",
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q1335996"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/025tl34"
+    }
+   ],
+   "name": "Studio apartment",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Studio_apartment",
+    "https://www.wikidata.org/wiki/Q1335996",
+    "https://www.google.com/search?kgmid=/m/025tl34",
+    "https://dbpedia.org/resource/Studio_apartment"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#fuel-economy-in-automobiles",
+   "@type": "Thing",
+   "additionalType": "https://www.wikidata.org/wiki/Q106998002",
+   "alternateName": [
+    "mileage",
+    "miles per gallon",
+    "Mileage"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q931507"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0410vz6"
+    }
+   ],
+   "name": "Fuel economy in automobiles",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Fuel_economy_in_automobiles",
+    "https://www.wikidata.org/wiki/Q931507",
+    "https://www.google.com/search?kgmid=/m/0410vz6",
+    "https://dbpedia.org/resource/Fuel_economy_in_automobiles"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#u-haul",
+   "@type": "Organization",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q4830453",
+    "https://www.wikidata.org/wiki/Q291240"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q7862902"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/054tqv"
+    }
+   ],
+   "name": "U-Haul",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/U-Haul",
+    "https://www.wikidata.org/wiki/Q7862902",
+    "https://www.google.com/search?kgmid=/m/054tqv",
+    "https://dbpedia.org/resource/U-Haul"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/how-much-do-movers-cost/#webpage",
+   "@type": "WebPage",
+   "about": [
+    {
+     "@id": "http://localhost:8080/#moving-company"
+    },
+    {
+     "@id": "http://localhost:8080/#cost"
+    },
+    {
+     "@id": "http://localhost:8080/#freight-transport"
+    }
+   ],
+   "breadcrumb": {
+    "@id": "http://localhost:8080/how-much-do-movers-cost/#breadcrumb"
+   },
+   "dateModified": "2026-10-29T16:21:58Z",
+   "datePublished": "2026-10-29T16:21:17Z",
+   "description": "How much do movers cost? See local and long-distance prices by home size, what raises them, and get a free estimate for your own move in about a minute.",
+   "inLanguage": "en-US",
+   "isPartOf": {
+    "@id": "http://localhost:8080/#website"
+   },
+   "keywords": [
+    "how much do movers cost"
+   ],
+   "mentions": [
+    {
+     "@id": "http://localhost:8080/#moving-cost-calculator"
+    },
+    {
+     "@id": "http://localhost:8080/#truck"
+    },
+    {
+     "@id": "http://localhost:8080/#hour"
+    },
+    {
+     "@id": "http://localhost:8080/#price"
+    },
+    {
+     "@id": "http://localhost:8080/#federal-motor-carrier-safety-administration"
+    },
+    {
+     "@id": "http://localhost:8080/#bedroom"
+    },
+    {
+     "@id": "http://localhost:8080/#apartment"
+    },
+    {
+     "@id": "http://localhost:8080/#mile"
+    },
+    {
+     "@id": "http://localhost:8080/#studio-apartment"
+    },
+    {
+     "@id": "http://localhost:8080/#fuel-economy-in-automobiles"
+    },
+    {
+     "@id": "http://localhost:8080/#u-haul"
+    }
+   ],
+   "name": "How Much Do Movers Cost? Prices by Home Size | Lift My Boxes",
+   "url": "http://localhost:8080/how-much-do-movers-cost/"
+  },
+  {
+   "@id": "http://localhost:8080/how-much-do-movers-cost/#breadcrumb",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/",
+     "name": "Home",
+     "position": 1
+    },
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/how-much-do-movers-cost/",
+     "name": "How much do movers cost",
+     "position": 2
+    }
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/how-much-do-movers-cost/#faq",
+   "@type": "FAQPage",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Start with how much do movers cost for your home size and distance, then add what sits outside that price: packing, supplies, tips and any storage. For a local 2-bedroom move, the movers' part is $720–$1,800 at 10 road miles, off peak, with no stairs or extras. Stairs or a summer date raise the range itself, so budget at the top of it or above."
+     },
+     "name": "How much should you budget for a move?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "The usual extras are stairs, a long carry from the door to the truck, an elevator, a shuttle truck where a big truck can't park, travel time and fuel. Packing materials, storage and full-value protection are priced separately too. Ask the mover to list every fee in the written estimate, so how much do movers cost on moving day matches what you agreed."
+     },
+     "name": "What hidden fees can raise how much do movers cost?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Tipping is up to you. Moving guides suggest a tip per mover for a half day or a full day, a larger daily tip for a long-distance crew, or a share of the bill. The tip calculator on this page works those published ranges out for your crew."
+     },
+     "name": "How much should you tip movers?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "No. An online estimate, like the calculator on this page, shows how much do movers cost for a move like yours. A firm price is the mover's written estimate, made after it has seen your belongings in person or by video. Use the online estimate to spot a mover's price that looks far too low or too high."
+     },
+     "name": "Is an online moving cost estimate the same as a quote?"
+    }
+   ]
+  }
+ ]
+}

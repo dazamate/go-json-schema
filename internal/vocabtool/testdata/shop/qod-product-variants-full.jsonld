@@ -1,0 +1,878 @@
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "OnlineStore",
+   "@id": "http://localhost:8001/#store",
+   "name": "Queen of Diamonds Jewellery",
+   "url": "http://localhost:8001/",
+   "logo": {
+    "@type": "ImageObject",
+    "url": "http://localhost:8001/logo.png",
+    "width": 512,
+    "height": 512
+   },
+   "sameAs": [
+    "https://www.instagram.com/queen_of_diamonds_jewellery/",
+    "https://www.facebook.com/104992909320900"
+   ],
+   "potentialAction": [
+    {
+     "@type": "FollowAction",
+     "target": "https://www.instagram.com/queen_of_diamonds_jewellery/"
+    },
+    {
+     "@type": "FollowAction",
+     "target": "https://www.facebook.com/104992909320900"
+    }
+   ],
+   "email": "qodjewellery@gmail.com",
+   "taxID": "74 139 811 412",
+   "hasMerchantReturnPolicy": {
+    "@type": "MerchantReturnPolicy",
+    "applicableCountry": "AU",
+    "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+    "merchantReturnDays": 14,
+    "returnMethod": "https://schema.org/ReturnByMail",
+    "returnFees": "https://schema.org/ReturnFeesCustomerResponsibility",
+    "merchantReturnLink": "http://localhost:8001/au/returns"
+   },
+   "hasShippingService": {
+    "@type": "ShippingService",
+    "shippingConditions": [
+     {
+      "@type": "ShippingConditions",
+      "shippingDestination": {
+       "@type": "DefinedRegion",
+       "addressCountry": "AU"
+      },
+      "orderValue": {
+       "@type": "MonetaryAmount",
+       "maxValue": 59.99,
+       "currency": "AUD"
+      },
+      "shippingRate": {
+       "@type": "MonetaryAmount",
+       "value": 7.95,
+       "currency": "AUD"
+      },
+      "transitTime": {
+       "@type": "ServicePeriod",
+       "duration": {
+        "@type": "QuantitativeValue",
+        "minValue": 2,
+        "maxValue": 6,
+        "unitCode": "DAY"
+       },
+       "businessDays": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+         "https://schema.org/Monday",
+         "https://schema.org/Tuesday",
+         "https://schema.org/Wednesday",
+         "https://schema.org/Thursday",
+         "https://schema.org/Friday"
+        ]
+       }
+      }
+     },
+     {
+      "@type": "ShippingConditions",
+      "shippingDestination": {
+       "@type": "DefinedRegion",
+       "addressCountry": "AU"
+      },
+      "orderValue": {
+       "@type": "MonetaryAmount",
+       "minValue": 60,
+       "currency": "AUD"
+      },
+      "shippingRate": {
+       "@type": "MonetaryAmount",
+       "value": 0,
+       "currency": "AUD"
+      },
+      "transitTime": {
+       "@type": "ServicePeriod",
+       "duration": {
+        "@type": "QuantitativeValue",
+        "minValue": 2,
+        "maxValue": 6,
+        "unitCode": "DAY"
+       },
+       "businessDays": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+         "https://schema.org/Monday",
+         "https://schema.org/Tuesday",
+         "https://schema.org/Wednesday",
+         "https://schema.org/Thursday",
+         "https://schema.org/Friday"
+        ]
+       }
+      }
+     }
+    ],
+    "handlingTime": {
+     "@type": "QuantitativeValue",
+     "minValue": 0,
+     "maxValue": 1,
+     "unitCode": "DAY"
+    }
+   },
+   "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Jewellery",
+    "itemListElement": [
+     {
+      "@type": "ListItem",
+      "position": 1,
+      "item": {
+       "@type": "CollectionPage",
+       "name": "Necklaces",
+       "url": "http://localhost:8001/au/categories/necklace"
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 2,
+      "item": {
+       "@type": "CollectionPage",
+       "name": "Rings",
+       "url": "http://localhost:8001/au/categories/rings"
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 3,
+      "item": {
+       "@type": "CollectionPage",
+       "name": "Earrings",
+       "url": "http://localhost:8001/au/categories/earrings"
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 4,
+      "item": {
+       "@type": "CollectionPage",
+       "name": "Bracelets",
+       "url": "http://localhost:8001/au/categories/bracelet"
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 5,
+      "item": {
+       "@type": "CollectionPage",
+       "name": "Accessories",
+       "url": "http://localhost:8001/au/categories/jewellery-accessories"
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 6,
+      "item": {
+       "@type": "CollectionPage",
+       "name": "Aromatherapy jewellery",
+       "url": "http://localhost:8001/au/categories/aromatherapy-necklace"
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 7,
+      "item": {
+       "@type": "CollectionPage",
+       "name": "Angel caller necklaces",
+       "url": "http://localhost:8001/au/categories/harmony-ball-necklace"
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 8,
+      "item": {
+       "@type": "CollectionPage",
+       "name": "Chakra",
+       "url": "http://localhost:8001/au/categories/chakra-jewellery"
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 9,
+      "item": {
+       "@type": "CollectionPage",
+       "name": "Chakra bracelets",
+       "url": "http://localhost:8001/au/categories/chakra-bracelet"
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 10,
+      "item": {
+       "@type": "CollectionPage",
+       "name": "Inspirational jewellery",
+       "url": "http://localhost:8001/au/categories/inspirational-jewellery"
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 11,
+      "item": {
+       "@type": "CollectionPage",
+       "name": "Friends, family & pets",
+       "url": "http://localhost:8001/au/categories/friendship-necklaces"
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 12,
+      "item": {
+       "@type": "CollectionPage",
+       "name": "Photo lockets",
+       "url": "http://localhost:8001/au/categories/photo-locket-necklace"
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 13,
+      "item": {
+       "@type": "CollectionPage",
+       "name": "Glow in the dark",
+       "url": "http://localhost:8001/au/categories/glow-in-the-dark-necklace"
+      }
+     }
+    ]
+   },
+   "address": {
+    "@type": "PostalAddress",
+    "addressCountry": "AU"
+   },
+   "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "customer service",
+    "email": "qodjewellery@gmail.com",
+    "areaServed": "AU",
+    "availableLanguage": "en"
+   }
+  },
+  {
+   "@type": "WebSite",
+   "@id": "http://localhost:8001/#website",
+   "url": "http://localhost:8001/",
+   "name": "Queen of Diamonds Jewellery",
+   "inLanguage": "en-AU",
+   "publisher": {
+    "@id": "http://localhost:8001/#store"
+   },
+   "copyrightYear": 2026,
+   "copyrightHolder": {
+    "@id": "http://localhost:8001/#store"
+   },
+   "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+     "@type": "EntryPoint",
+     "urlTemplate": "http://localhost:8001/au/search?q={search_term_string}"
+    },
+    "query-input": "required name=search_term_string"
+   }
+  },
+  {
+   "@type": "ItemPage",
+   "@id": "http://localhost:8001/au/products/the-twilight-saga-bella-swan-vampire-crystal-ring",
+   "url": "http://localhost:8001/au/products/the-twilight-saga-bella-swan-vampire-crystal-ring",
+   "name": "The Twilight Saga Bella Swan Vampire Crystal Ring",
+   "isPartOf": {
+    "@id": "http://localhost:8001/#website"
+   },
+   "mainEntity": {
+    "@id": "http://localhost:8001/au/products/the-twilight-saga-bella-swan-vampire-crystal-ring#product"
+   },
+   "breadcrumb": {
+    "@id": "http://localhost:8001/au/products/the-twilight-saga-bella-swan-vampire-crystal-ring#breadcrumb"
+   },
+   "hasPart": [
+    {
+     "@type": "WPHeader",
+     "cssSelector": "body > main > div:nth-of-type(1) > header"
+    },
+    {
+     "@type": "SiteNavigationElement",
+     "cssSelector": "body > main > div:nth-of-type(1) > header > nav"
+    },
+    {
+     "@type": "WPFooter",
+     "cssSelector": "body > main > footer"
+    }
+   ]
+  },
+  {
+   "@type": "BreadcrumbList",
+   "@id": "http://localhost:8001/au/products/the-twilight-saga-bella-swan-vampire-crystal-ring#breadcrumb",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Home",
+     "item": "http://localhost:8001/au"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Rings",
+     "item": "http://localhost:8001/au/categories/rings"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "The Twilight Saga Bella Swan Vampire Crystal Ring"
+    }
+   ]
+  },
+  {
+   "@type": "ProductGroup",
+   "name": "The Twilight Saga Bella Swan Vampire Crystal Ring",
+   "description": "Ring Size Measurements:\n\n6 - (16mm inner diameter)\n\n7 - (17mm inner diameter)\n\n8 - (18mm inner diameter)\n\n9 - (19mm inner diameter)\n\n10 - (20mm inner diameter)",
+   "image": [
+    "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/B4FBDF1E-2E34-4B20-98A4-B24179AC4AF7.jpeg/:/rs=w:1200,h:1200",
+    "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/0FCA0FE3-CA60-48C4-9DF0-A18C31B81F48.jpeg/:/rs=w:1200,h:1200",
+    "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/E6FEC93C-3374-46B0-AD18-9C3831E83F4B.jpeg/:/rs=w:1200,h:1200",
+    "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/860D460C-E57C-40DC-87F1-2CF3FA02E443.jpeg/:/rs=w:1200,h:1200",
+    "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/5C46895E-78C4-41A7-93C5-CA9D0385CFB9.jpeg/:/rs=w:1200,h:1200",
+    "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/A906C989-B2F2-4E73-B8B5-681D86A867CE.jpeg/:/rs=w:1200,h:1200",
+    "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/2E2BF320-E643-48B0-981C-E42780C94386.jpeg/:/rs=w:1200,h:1200",
+    "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/027289EF-B53B-4F05-8759-616725B45D02.jpeg/:/rs=w:1200,h:1200",
+    "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/991D2B8D-EDCD-4283-A0FF-92B70B09EA2B.jpeg/:/rs=w:1200,h:1200",
+    "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/AA2C804D-D990-4AB2-92F5-48D0D7BC1283.jpeg/:/rs=w:1200,h:1200"
+   ],
+   "brand": {
+    "@type": "Brand",
+    "name": "Queen of Diamonds Jewellery"
+   },
+   "url": "http://localhost:8001/au/products/the-twilight-saga-bella-swan-vampire-crystal-ring",
+   "productGroupID": "prod_01M63RY94YPN6G71XJ1C66YWZP",
+   "variesBy": [
+    "https://schema.org/size"
+   ],
+   "hasVariant": [
+    {
+     "@type": "Product",
+     "name": "The Twilight Saga Bella Swan Vampire Crystal Ring - 6",
+     "sku": "THE-TWL-6",
+     "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/B4FBDF1E-2E34-4B20-98A4-B24179AC4AF7.jpeg/:/rs=w:1200,h:1200",
+     "additionalProperty": [
+      {
+       "@type": "PropertyValue",
+       "name": "Size",
+       "value": "6"
+      }
+     ],
+     "offers": {
+      "@type": "Offer",
+      "url": "http://localhost:8001/au/products/the-twilight-saga-bella-swan-vampire-crystal-ring?v_id=variant_01M63RYB27NEFJ0RR29F2SVXGS",
+      "sku": "THE-TWL-6",
+      "price": "14.50",
+      "priceCurrency": "AUD",
+      "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition",
+      "shippingDetails": {
+       "@type": "OfferShippingDetails",
+       "shippingRate": {
+        "@type": "MonetaryAmount",
+        "value": 7.95,
+        "currency": "AUD"
+       },
+       "shippingDestination": {
+        "@type": "DefinedRegion",
+        "addressCountry": "AU"
+       },
+       "deliveryTime": {
+        "@type": "ShippingDeliveryTime",
+        "handlingTime": {
+         "@type": "QuantitativeValue",
+         "minValue": 0,
+         "maxValue": 1,
+         "unitCode": "DAY"
+        },
+        "transitTime": {
+         "@type": "QuantitativeValue",
+         "minValue": 2,
+         "maxValue": 6,
+         "unitCode": "DAY"
+        }
+       }
+      },
+      "hasMerchantReturnPolicy": {
+       "@type": "MerchantReturnPolicy",
+       "applicableCountry": "AU",
+       "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+       "merchantReturnDays": 14,
+       "returnMethod": "https://schema.org/ReturnByMail",
+       "returnFees": "https://schema.org/ReturnFeesCustomerResponsibility",
+       "merchantReturnLink": "http://localhost:8001/au/returns"
+      },
+      "seller": {
+       "@id": "http://localhost:8001/#store"
+      },
+      "priceSpecification": {
+       "@type": "UnitPriceSpecification",
+       "price": "14.50",
+       "priceCurrency": "AUD",
+       "valueAddedTaxIncluded": true
+      },
+      "potentialAction": {
+       "@type": "BuyAction",
+       "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "http://localhost:8001/au/cart/add",
+        "httpMethod": "POST",
+        "actionPlatform": [
+         "https://schema.org/DesktopWebPlatform",
+         "https://schema.org/MobileWebPlatform"
+        ]
+       }
+      }
+     },
+     "size": {
+      "@type": "SizeSpecification",
+      "name": "6",
+      "hasMeasurement": {
+       "@type": "QuantitativeValue",
+       "value": 16,
+       "unitCode": "MMT"
+      },
+      "sizeSystem": "https://schema.org/WearableSizeSystemUS",
+      "sizeGroup": "https://schema.org/WearableSizeGroupRegular"
+     }
+    },
+    {
+     "@type": "Product",
+     "name": "The Twilight Saga Bella Swan Vampire Crystal Ring - 7",
+     "sku": "THE-TWL-7",
+     "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/B4FBDF1E-2E34-4B20-98A4-B24179AC4AF7.jpeg/:/rs=w:1200,h:1200",
+     "additionalProperty": [
+      {
+       "@type": "PropertyValue",
+       "name": "Size",
+       "value": "7"
+      }
+     ],
+     "offers": {
+      "@type": "Offer",
+      "url": "http://localhost:8001/au/products/the-twilight-saga-bella-swan-vampire-crystal-ring?v_id=variant_01M63RYB2735D5WN5DGB49WR07",
+      "sku": "THE-TWL-7",
+      "price": "14.50",
+      "priceCurrency": "AUD",
+      "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition",
+      "shippingDetails": {
+       "@type": "OfferShippingDetails",
+       "shippingRate": {
+        "@type": "MonetaryAmount",
+        "value": 7.95,
+        "currency": "AUD"
+       },
+       "shippingDestination": {
+        "@type": "DefinedRegion",
+        "addressCountry": "AU"
+       },
+       "deliveryTime": {
+        "@type": "ShippingDeliveryTime",
+        "handlingTime": {
+         "@type": "QuantitativeValue",
+         "minValue": 0,
+         "maxValue": 1,
+         "unitCode": "DAY"
+        },
+        "transitTime": {
+         "@type": "QuantitativeValue",
+         "minValue": 2,
+         "maxValue": 6,
+         "unitCode": "DAY"
+        }
+       }
+      },
+      "hasMerchantReturnPolicy": {
+       "@type": "MerchantReturnPolicy",
+       "applicableCountry": "AU",
+       "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+       "merchantReturnDays": 14,
+       "returnMethod": "https://schema.org/ReturnByMail",
+       "returnFees": "https://schema.org/ReturnFeesCustomerResponsibility",
+       "merchantReturnLink": "http://localhost:8001/au/returns"
+      },
+      "seller": {
+       "@id": "http://localhost:8001/#store"
+      },
+      "priceSpecification": {
+       "@type": "UnitPriceSpecification",
+       "price": "14.50",
+       "priceCurrency": "AUD",
+       "valueAddedTaxIncluded": true
+      },
+      "potentialAction": {
+       "@type": "BuyAction",
+       "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "http://localhost:8001/au/cart/add",
+        "httpMethod": "POST",
+        "actionPlatform": [
+         "https://schema.org/DesktopWebPlatform",
+         "https://schema.org/MobileWebPlatform"
+        ]
+       }
+      }
+     },
+     "size": {
+      "@type": "SizeSpecification",
+      "name": "7",
+      "hasMeasurement": {
+       "@type": "QuantitativeValue",
+       "value": 17,
+       "unitCode": "MMT"
+      },
+      "sizeSystem": "https://schema.org/WearableSizeSystemUS",
+      "sizeGroup": "https://schema.org/WearableSizeGroupRegular"
+     }
+    },
+    {
+     "@type": "Product",
+     "name": "The Twilight Saga Bella Swan Vampire Crystal Ring - 8",
+     "sku": "THE-TWL-8",
+     "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/B4FBDF1E-2E34-4B20-98A4-B24179AC4AF7.jpeg/:/rs=w:1200,h:1200",
+     "additionalProperty": [
+      {
+       "@type": "PropertyValue",
+       "name": "Size",
+       "value": "8"
+      }
+     ],
+     "offers": {
+      "@type": "Offer",
+      "url": "http://localhost:8001/au/products/the-twilight-saga-bella-swan-vampire-crystal-ring?v_id=variant_01M63RYB27Y2J4G7PCPK0A4CYY",
+      "sku": "THE-TWL-8",
+      "price": "14.50",
+      "priceCurrency": "AUD",
+      "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition",
+      "shippingDetails": {
+       "@type": "OfferShippingDetails",
+       "shippingRate": {
+        "@type": "MonetaryAmount",
+        "value": 7.95,
+        "currency": "AUD"
+       },
+       "shippingDestination": {
+        "@type": "DefinedRegion",
+        "addressCountry": "AU"
+       },
+       "deliveryTime": {
+        "@type": "ShippingDeliveryTime",
+        "handlingTime": {
+         "@type": "QuantitativeValue",
+         "minValue": 0,
+         "maxValue": 1,
+         "unitCode": "DAY"
+        },
+        "transitTime": {
+         "@type": "QuantitativeValue",
+         "minValue": 2,
+         "maxValue": 6,
+         "unitCode": "DAY"
+        }
+       }
+      },
+      "hasMerchantReturnPolicy": {
+       "@type": "MerchantReturnPolicy",
+       "applicableCountry": "AU",
+       "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+       "merchantReturnDays": 14,
+       "returnMethod": "https://schema.org/ReturnByMail",
+       "returnFees": "https://schema.org/ReturnFeesCustomerResponsibility",
+       "merchantReturnLink": "http://localhost:8001/au/returns"
+      },
+      "seller": {
+       "@id": "http://localhost:8001/#store"
+      },
+      "priceSpecification": {
+       "@type": "UnitPriceSpecification",
+       "price": "14.50",
+       "priceCurrency": "AUD",
+       "valueAddedTaxIncluded": true
+      },
+      "potentialAction": {
+       "@type": "BuyAction",
+       "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "http://localhost:8001/au/cart/add",
+        "httpMethod": "POST",
+        "actionPlatform": [
+         "https://schema.org/DesktopWebPlatform",
+         "https://schema.org/MobileWebPlatform"
+        ]
+       }
+      }
+     },
+     "size": {
+      "@type": "SizeSpecification",
+      "name": "8",
+      "hasMeasurement": {
+       "@type": "QuantitativeValue",
+       "value": 18,
+       "unitCode": "MMT"
+      },
+      "sizeSystem": "https://schema.org/WearableSizeSystemUS",
+      "sizeGroup": "https://schema.org/WearableSizeGroupRegular"
+     }
+    },
+    {
+     "@type": "Product",
+     "name": "The Twilight Saga Bella Swan Vampire Crystal Ring - 9",
+     "sku": "THE-TWL-9",
+     "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/B4FBDF1E-2E34-4B20-98A4-B24179AC4AF7.jpeg/:/rs=w:1200,h:1200",
+     "additionalProperty": [
+      {
+       "@type": "PropertyValue",
+       "name": "Size",
+       "value": "9"
+      }
+     ],
+     "offers": {
+      "@type": "Offer",
+      "url": "http://localhost:8001/au/products/the-twilight-saga-bella-swan-vampire-crystal-ring?v_id=variant_01M63RYB277M6EW1G6FNJBCCBQ",
+      "sku": "THE-TWL-9",
+      "price": "14.50",
+      "priceCurrency": "AUD",
+      "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition",
+      "shippingDetails": {
+       "@type": "OfferShippingDetails",
+       "shippingRate": {
+        "@type": "MonetaryAmount",
+        "value": 7.95,
+        "currency": "AUD"
+       },
+       "shippingDestination": {
+        "@type": "DefinedRegion",
+        "addressCountry": "AU"
+       },
+       "deliveryTime": {
+        "@type": "ShippingDeliveryTime",
+        "handlingTime": {
+         "@type": "QuantitativeValue",
+         "minValue": 0,
+         "maxValue": 1,
+         "unitCode": "DAY"
+        },
+        "transitTime": {
+         "@type": "QuantitativeValue",
+         "minValue": 2,
+         "maxValue": 6,
+         "unitCode": "DAY"
+        }
+       }
+      },
+      "hasMerchantReturnPolicy": {
+       "@type": "MerchantReturnPolicy",
+       "applicableCountry": "AU",
+       "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+       "merchantReturnDays": 14,
+       "returnMethod": "https://schema.org/ReturnByMail",
+       "returnFees": "https://schema.org/ReturnFeesCustomerResponsibility",
+       "merchantReturnLink": "http://localhost:8001/au/returns"
+      },
+      "seller": {
+       "@id": "http://localhost:8001/#store"
+      },
+      "priceSpecification": {
+       "@type": "UnitPriceSpecification",
+       "price": "14.50",
+       "priceCurrency": "AUD",
+       "valueAddedTaxIncluded": true
+      },
+      "potentialAction": {
+       "@type": "BuyAction",
+       "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "http://localhost:8001/au/cart/add",
+        "httpMethod": "POST",
+        "actionPlatform": [
+         "https://schema.org/DesktopWebPlatform",
+         "https://schema.org/MobileWebPlatform"
+        ]
+       }
+      }
+     },
+     "size": {
+      "@type": "SizeSpecification",
+      "name": "9",
+      "hasMeasurement": {
+       "@type": "QuantitativeValue",
+       "value": 19,
+       "unitCode": "MMT"
+      },
+      "sizeSystem": "https://schema.org/WearableSizeSystemUS",
+      "sizeGroup": "https://schema.org/WearableSizeGroupRegular"
+     }
+    },
+    {
+     "@type": "Product",
+     "name": "The Twilight Saga Bella Swan Vampire Crystal Ring - 10",
+     "sku": "THE-TWL-10",
+     "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/B4FBDF1E-2E34-4B20-98A4-B24179AC4AF7.jpeg/:/rs=w:1200,h:1200",
+     "additionalProperty": [
+      {
+       "@type": "PropertyValue",
+       "name": "Size",
+       "value": "10"
+      }
+     ],
+     "offers": {
+      "@type": "Offer",
+      "url": "http://localhost:8001/au/products/the-twilight-saga-bella-swan-vampire-crystal-ring?v_id=variant_01M63RYB27KWJ9K53B15H8KJNB",
+      "sku": "THE-TWL-10",
+      "price": "14.50",
+      "priceCurrency": "AUD",
+      "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition",
+      "shippingDetails": {
+       "@type": "OfferShippingDetails",
+       "shippingRate": {
+        "@type": "MonetaryAmount",
+        "value": 7.95,
+        "currency": "AUD"
+       },
+       "shippingDestination": {
+        "@type": "DefinedRegion",
+        "addressCountry": "AU"
+       },
+       "deliveryTime": {
+        "@type": "ShippingDeliveryTime",
+        "handlingTime": {
+         "@type": "QuantitativeValue",
+         "minValue": 0,
+         "maxValue": 1,
+         "unitCode": "DAY"
+        },
+        "transitTime": {
+         "@type": "QuantitativeValue",
+         "minValue": 2,
+         "maxValue": 6,
+         "unitCode": "DAY"
+        }
+       }
+      },
+      "hasMerchantReturnPolicy": {
+       "@type": "MerchantReturnPolicy",
+       "applicableCountry": "AU",
+       "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+       "merchantReturnDays": 14,
+       "returnMethod": "https://schema.org/ReturnByMail",
+       "returnFees": "https://schema.org/ReturnFeesCustomerResponsibility",
+       "merchantReturnLink": "http://localhost:8001/au/returns"
+      },
+      "seller": {
+       "@id": "http://localhost:8001/#store"
+      },
+      "priceSpecification": {
+       "@type": "UnitPriceSpecification",
+       "price": "14.50",
+       "priceCurrency": "AUD",
+       "valueAddedTaxIncluded": true
+      },
+      "potentialAction": {
+       "@type": "BuyAction",
+       "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "http://localhost:8001/au/cart/add",
+        "httpMethod": "POST",
+        "actionPlatform": [
+         "https://schema.org/DesktopWebPlatform",
+         "https://schema.org/MobileWebPlatform"
+        ]
+       }
+      }
+     },
+     "size": {
+      "@type": "SizeSpecification",
+      "name": "10",
+      "hasMeasurement": {
+       "@type": "QuantitativeValue",
+       "value": 20,
+       "unitCode": "MMT"
+      },
+      "sizeSystem": "https://schema.org/WearableSizeSystemUS",
+      "sizeGroup": "https://schema.org/WearableSizeGroupRegular"
+     }
+    }
+   ],
+   "@id": "http://localhost:8001/au/products/the-twilight-saga-bella-swan-vampire-crystal-ring#product",
+   "material": [
+    "Silver Plated",
+    "Cubic Zirconia"
+   ],
+   "potentialAction": {
+    "@type": "WantAction",
+    "target": "http://localhost:8001/au/wishlist"
+   },
+   "isRelatedTo": [
+    {
+     "@type": "Product",
+     "name": "Celtic Knot Drop Earrings",
+     "url": "http://localhost:8001/au/products/celtic-knot-drop-earrings",
+     "image": "https://isteam.wsimg.com/ip/6b858395-ba12-481e-a912-553919a178cd/ols/2150_original/:/rs=w:600,h:600",
+     "offers": {
+      "@type": "Offer",
+      "price": "11.95",
+      "priceCurrency": "AUD",
+      "seller": {
+       "@id": "http://localhost:8001/#store"
+      }
+     }
+    },
+    {
+     "@type": "Product",
+     "name": "Blue Fire Opal Black Ring",
+     "url": "http://localhost:8001/au/products/blue-fire-opal-black-ring",
+     "image": "https://isteam.wsimg.com/ip/6b858395-ba12-481e-a912-553919a178cd/ols/2918_original/:/rs=w:600,h:600",
+     "offers": {
+      "@type": "Offer",
+      "price": "12.95",
+      "priceCurrency": "AUD",
+      "seller": {
+       "@id": "http://localhost:8001/#store"
+      }
+     }
+    },
+    {
+     "@type": "Product",
+     "name": "Angel Wing Crystal Cuff",
+     "url": "http://localhost:8001/au/products/angel-wing-crystal-cuff",
+     "image": "https://isteam.wsimg.com/ip/6b858395-ba12-481e-a912-553919a178cd/ols/2311_original/:/rs=w:600,h:600",
+     "offers": {
+      "@type": "Offer",
+      "price": "9.95",
+      "priceCurrency": "AUD",
+      "seller": {
+       "@id": "http://localhost:8001/#store"
+      }
+     }
+    },
+    {
+     "@type": "Product",
+     "name": "Butterfly Fire Opal Ring",
+     "url": "http://localhost:8001/au/products/butterfly-fire-opal-ring",
+     "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/E70F4BF4-401A-479E-BE30-7DECBF029244.jpeg/:/rs=w:600,h:600",
+     "offers": {
+      "@type": "Offer",
+      "price": "11.95",
+      "priceCurrency": "AUD",
+      "seller": {
+       "@id": "http://localhost:8001/#store"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

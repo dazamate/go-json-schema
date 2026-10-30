@@ -2,6 +2,7 @@ package vocabtool
 
 import (
 	"fmt"
+	"net/url"
 	"regexp"
 	"slices"
 	"strings"
@@ -43,7 +44,17 @@ func skipped(n *html.Node) bool {
 	}
 	_, hidden := attr(n, "hidden")
 	aria, _ := attr(n, "aria-hidden")
-	return hidden || aria == "true"
+	return (hidden && !streamed(n)) || aria == "true"
+}
+
+var reactSegment = regexp.MustCompile(`^S:\d+$`)
+
+// streamed reports a hidden div React's streaming server render sends a
+// part of the page in (id "S:0"), which its script moves into place: the
+// served HTML hides it, the rendered page shows it.
+func streamed(n *html.Node) bool {
+	id, _ := attr(n, "id")
+	return n.DataAtom == atom.Div && reactSegment.MatchString(id)
 }
 
 // attr is an attribute's value and whether the element has it.
@@ -116,6 +127,9 @@ func sectionType(n *html.Node) string {
 		}
 		return "WPFooter"
 	case atom.Aside:
+		if inTool(n) || summaryBlock(n) {
+			return ""
+		}
 		return "WPSideBar"
 	case atom.Table:
 		return "Table"
@@ -138,14 +152,90 @@ func isBreadcrumb(n *html.Node) bool {
 	return false
 }
 
+// scoped reports a header or footer that belongs to a part of the page. One
+// inside main is the site's own when the page wraps everything in main: a
+// header that links to the home page and holds no h1, or a footer with a
+// copyright line.
 func scoped(n *html.Node) bool {
 	for p := n.Parent; p != nil; p = p.Parent {
 		switch p.DataAtom {
-		case atom.Article, atom.Aside, atom.Main, atom.Nav, atom.Section:
+		case atom.Article, atom.Aside, atom.Nav, atom.Section:
+			return true
+		case atom.Main:
+			return !siteChrome(n)
+		}
+	}
+	return false
+}
+
+// siteChrome reports a header or footer that is the site's, not its section's.
+func siteChrome(n *html.Node) bool {
+	switch n.DataAtom {
+	case atom.Header:
+		if len(cascadia.QueryAll(n, cascadia.MustCompile("h1"))) > 0 {
+			return false
+		}
+		for _, a := range cascadia.QueryAll(n, cascadia.MustCompile("a[href]")) {
+			h, _ := attr(a, "href")
+			if u, err := url.Parse(strings.TrimSpace(h)); err == nil && h != "" && (u.Host == "" || u.Path == "" || u.Path == "/") {
+				if segs := segments(u); len(segs) == 0 || (len(segs) == 1 && localeSegment.MatchString(segs[0])) {
+					return true
+				}
+			}
+		}
+	case atom.Footer:
+		return copyrightLine.MatchString(htmlText(n))
+	}
+	return false
+}
+
+// inTool reports an element inside a form or a tool: a block of the same
+// section that holds two or more form controls, outside any form, besides
+// the element's own. An aside beside a contact form is still a sidebar.
+func inTool(n *html.Node) bool {
+	for p := n.Parent; p != nil; p = p.Parent {
+		switch p.DataAtom {
+		case atom.Form:
+			return true
+		case atom.Main, atom.Body, atom.Article, atom.Section, atom.Html:
+			return false
+		}
+		if controls(p)-controls(n) >= 2 {
 			return true
 		}
 	}
 	return false
+}
+
+// controls counts the visible form controls under n outside forms.
+func controls(n *html.Node) int {
+	k := 0
+	visit(n, func(c *html.Node) {
+		for e := c.Parent; e != nil && e != n.Parent; e = e.Parent {
+			if e.DataAtom == atom.Form {
+				return
+			}
+		}
+		switch c.DataAtom {
+		case atom.Input:
+			if t, _ := attr(c, "type"); !strings.EqualFold(t, "hidden") {
+				k++
+			}
+		case atom.Select, atom.Textarea:
+			k++
+		}
+	})
+	return k
+}
+
+var summaryLabel = regexp.MustCompile(`(?i)\bkey (?:takeaways?|points)\b|\btakeaways\b|\bsummary\b|\btl;?dr\b|\bat a glance\b|\bin brief\b|\bin short\b`)
+
+// summaryBlock reports a block that sums the page up (Key takeaways, TL;DR,
+// At a glance), by its label, class or heading.
+func summaryBlock(n *html.Node) bool {
+	label, _ := attr(n, "aria-label")
+	class, _ := attr(n, "class")
+	return summaryLabel.MatchString(label) || summaryLabel.MatchString(class) || summaryLabel.MatchString(sectionName(n))
 }
 
 // isAd reports an ad slot: an AdSense ins, an element with an ad slot or
@@ -255,7 +345,16 @@ func pageSections(doc *html.Node) []*section {
 // BreadcrumbList marks the breadcrumb navs. It warns on every section left
 // unmarked and on a cssSelector that is not valid CSS, selects nothing, or
 // selects only sections of another type.
-func (c *checker) pageElements(all []located, doc *html.Node) []PageElement {
+func (c *checker) pageElements(all []located, doc *html.Node, warn bool) []PageElement {
+	if !warn {
+		// a page search engines skip: list its sections, ask for nothing
+		sections := pageSections(doc)
+		out := make([]PageElement, len(sections))
+		for i, s := range sections {
+			out[i] = s.PageElement
+		}
+		return out
+	}
 	sections := pageSections(doc)
 	byType := map[string][]*section{}
 	for _, s := range sections {

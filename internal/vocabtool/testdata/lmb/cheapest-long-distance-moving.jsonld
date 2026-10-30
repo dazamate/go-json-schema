@@ -1,0 +1,717 @@
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@id": "http://localhost:8080/#organization",
+   "@type": "Organization",
+   "contactPoint": {
+    "@type": "ContactPoint",
+    "areaServed": "US",
+    "availableLanguage": "en",
+    "contactType": "customer support",
+    "telephone": "+18334990939"
+   },
+   "description": "Lift My Boxes gives free moving cost estimates and, when asked, connects people with independent moving companies.",
+   "disambiguatingDescription": "An online moving cost estimator and referral service, not a moving company.",
+   "email": "hello@liftmyboxes.com",
+   "logo": "http://localhost:8080/favicon.svg",
+   "name": "Lift My Boxes",
+   "url": "http://localhost:8080/"
+  },
+  {
+   "@id": "http://localhost:8080/#website",
+   "@type": "WebSite",
+   "inLanguage": "en-US",
+   "name": "Lift My Boxes",
+   "publisher": {
+    "@id": "http://localhost:8080/#organization"
+   },
+   "url": "http://localhost:8080/"
+  },
+  {
+   "@id": "http://localhost:8080/#home-moving",
+   "@type": "Thing",
+   "alternateName": [
+    "Home move",
+    "Household move"
+   ],
+   "description": "Moving the contents of a house or apartment to a new home.",
+   "name": "Home moving"
+  },
+  {
+   "@id": "http://localhost:8080/#moving-company",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q783794",
+    "https://www.wikidata.org/wiki/Q2169973"
+   ],
+   "alternateName": [
+    "movers",
+    "mover",
+    "Movers",
+    "moving companies",
+    "Moving companies",
+    "Moving Companies",
+    "moving van",
+    "moving vans",
+    "Mover"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q1757263"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/07ry5s"
+    }
+   ],
+   "name": "Moving company",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Moving_company",
+    "https://www.wikidata.org/wiki/Q1757263",
+    "https://www.google.com/search?kgmid=/m/07ry5s",
+    "https://dbpedia.org/resource/Moving_company"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#distance",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q181175",
+    "https://www.wikidata.org/wiki/Q30241068"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q126017"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/09t22"
+    }
+   ],
+   "name": "Distance",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Distance",
+    "https://www.wikidata.org/wiki/Q126017",
+    "https://www.google.com/search?kgmid=/m/09t22",
+    "https://dbpedia.org/resource/Distance"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#transport",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q451967",
+    "https://www.wikidata.org/wiki/Q115095261"
+   ],
+   "alternateName": [
+    "transit"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q7590"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/07bsy"
+    }
+   ],
+   "name": "Transport",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Transport",
+    "https://www.wikidata.org/wiki/Q7590",
+    "https://www.google.com/search?kgmid=/m/07bsy",
+    "https://dbpedia.org/resource/Transport"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#freight-transport",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q627436",
+    "https://www.wikidata.org/wiki/Q1724915"
+   ],
+   "alternateName": [
+    "Shipping",
+    "shipment"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q651658"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/070qm"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/g/120_g24_"
+    }
+   ],
+   "name": "Freight transport",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Freight_transport",
+    "https://www.wikidata.org/wiki/Q651658",
+    "https://www.google.com/search?kgmid=/m/070qm",
+    "https://www.google.com/search?kgmid=/g/120_g24_",
+    "https://dbpedia.org/resource/Freight_transport"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#moving-cost-calculator",
+   "@type": "WebApplication",
+   "applicationCategory": "UtilitiesApplication",
+   "description": "Free online calculator that estimates the cost of a local or long-distance move.",
+   "isAccessibleForFree": true,
+   "name": "Lift My Boxes Moving Cost Calculator",
+   "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+   },
+   "operatingSystem": "Any",
+   "publisher": [
+    {
+     "@id": "http://localhost:8080/#organization"
+    }
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#price",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q29028649",
+    "https://www.wikidata.org/wiki/Q1499548"
+   ],
+   "alternateName": [
+    "prices",
+    "Prices"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q160151"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/01d_1l"
+    }
+   ],
+   "name": "Price",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Price",
+    "https://www.wikidata.org/wiki/Q160151",
+    "https://www.google.com/search?kgmid=/m/01d_1l",
+    "https://dbpedia.org/resource/Price"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#calculator",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q39546",
+    "https://www.wikidata.org/wiki/Q2858615"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q31087"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/024d2"
+    }
+   ],
+   "name": "Calculator",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Calculator",
+    "https://www.wikidata.org/wiki/Q31087",
+    "https://www.google.com/search?kgmid=/m/024d2",
+    "https://dbpedia.org/resource/Calculator"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#zip-code",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q6545185",
+    "https://www.wikidata.org/wiki/Q126286955"
+   ],
+   "alternateName": [
+    "ZIP codes",
+    "ZIP"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q136208"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0dllr"
+    }
+   ],
+   "name": "ZIP Code",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/ZIP_Code",
+    "https://www.wikidata.org/wiki/Q136208",
+    "https://www.google.com/search?kgmid=/m/0dllr",
+    "https://dbpedia.org/resource/ZIP_Code"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#federal-motor-carrier-safety-administration",
+   "@type": "Thing",
+   "additionalType": "https://www.wikidata.org/wiki/Q20857065",
+   "alternateName": [
+    "FMCSA",
+    "fmcsa.dot.gov"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q5440305"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/02wvdh3"
+    }
+   ],
+   "name": "Federal Motor Carrier Safety Administration",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Federal_Motor_Carrier_Safety_Administration",
+    "https://www.wikidata.org/wiki/Q5440305",
+    "https://www.google.com/search?kgmid=/m/02wvdh3",
+    "https://dbpedia.org/resource/Federal_Motor_Carrier_Safety_Administration"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#truck",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q140424465",
+    "https://www.wikidata.org/wiki/Q1515493"
+   ],
+   "alternateName": [
+    "trucks",
+    "Trucks"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q43193"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/07r04"
+    }
+   ],
+   "name": "Truck",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Truck",
+    "https://www.wikidata.org/wiki/Q43193",
+    "https://www.google.com/search?kgmid=/m/07r04",
+    "https://dbpedia.org/resource/Truck"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#stairs",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q391414",
+    "https://www.wikidata.org/wiki/Q30327093"
+   ],
+   "alternateName": [
+    "stair",
+    "flights of stairs",
+    "staircase",
+    "flight of stairs",
+    "stairway",
+    "staircases"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q12511"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/01lynh"
+    }
+   ],
+   "name": "Stairs",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Stairs",
+    "https://www.wikidata.org/wiki/Q12511",
+    "https://www.google.com/search?kgmid=/m/01lynh",
+    "https://dbpedia.org/resource/Stairs"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#bedroom",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q13226383",
+    "https://www.wikidata.org/wiki/Q180516"
+   ],
+   "alternateName": [
+    "bedrooms",
+    "Bedrooms"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q193837"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/02_58j"
+    }
+   ],
+   "name": "Bedroom",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Bedroom",
+    "https://www.wikidata.org/wiki/Q193837",
+    "https://www.google.com/search?kgmid=/m/02_58j",
+    "https://dbpedia.org/resource/Bedroom"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#box",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q987767",
+    "https://www.wikidata.org/wiki/Q8205328"
+   ],
+   "alternateName": [
+    "boxes",
+    "Boxes"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q188075"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/025dyy"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/g/1232c43s"
+    }
+   ],
+   "name": "Box",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Box",
+    "https://www.wikidata.org/wiki/Q188075",
+    "https://www.google.com/search?kgmid=/m/025dyy",
+    "https://www.google.com/search?kgmid=/g/1232c43s",
+    "https://dbpedia.org/resource/Box"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#pound-mass",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q3647172",
+    "https://www.wikidata.org/wiki/Q82047057"
+   ],
+   "alternateName": [
+    "lb",
+    "pounds",
+    "pound"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q100995"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/05t56"
+    }
+   ],
+   "name": "Pound (mass)",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Pound_(mass)",
+    "https://www.wikidata.org/wiki/Q100995",
+    "https://www.google.com/search?kgmid=/m/05t56",
+    "https://dbpedia.org/resource/Pound_(mass)"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#fuel-economy-in-automobiles",
+   "@type": "Thing",
+   "additionalType": "https://www.wikidata.org/wiki/Q106998002",
+   "alternateName": [
+    "mileage",
+    "miles per gallon",
+    "Mileage"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q931507"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0410vz6"
+    }
+   ],
+   "name": "Fuel economy in automobiles",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Fuel_economy_in_automobiles",
+    "https://www.wikidata.org/wiki/Q931507",
+    "https://www.google.com/search?kgmid=/m/0410vz6",
+    "https://dbpedia.org/resource/Fuel_economy_in_automobiles"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#mile",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q1978718",
+    "https://www.wikidata.org/wiki/Q16782623"
+   ],
+   "alternateName": [
+    "miles"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q253276"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/04vb3"
+    }
+   ],
+   "name": "Mile",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Mile",
+    "https://www.wikidata.org/wiki/Q253276",
+    "https://www.google.com/search?kgmid=/m/04vb3",
+    "https://dbpedia.org/resource/Mile"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#pickup-truck",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q15729598",
+    "https://www.wikidata.org/wiki/Q108759237"
+   ],
+   "alternateName": [
+    "pickup",
+    "truck bed"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q215601"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0cvq3"
+    }
+   ],
+   "name": "Pickup truck",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Pickup_truck",
+    "https://www.wikidata.org/wiki/Q215601",
+    "https://www.google.com/search?kgmid=/m/0cvq3",
+    "https://dbpedia.org/resource/Pickup_truck"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/cheapest-long-distance-moving/#webpage",
+   "@type": "WebPage",
+   "about": [
+    {
+     "@id": "http://localhost:8080/#home-moving"
+    },
+    {
+     "@id": "http://localhost:8080/#moving-company"
+    },
+    {
+     "@id": "http://localhost:8080/#distance"
+    },
+    {
+     "@id": "http://localhost:8080/#transport"
+    },
+    {
+     "@id": "http://localhost:8080/#freight-transport"
+    }
+   ],
+   "breadcrumb": {
+    "@id": "http://localhost:8080/cheapest-long-distance-moving/#breadcrumb"
+   },
+   "dateModified": "2026-10-29T16:21:58Z",
+   "datePublished": "2026-10-29T16:21:58Z",
+   "description": "Find the cheapest long distance moving price for your home: how weight, miles and dates shape a mover's quote, plus a free estimate in about a minute.",
+   "inLanguage": "en-US",
+   "isPartOf": {
+    "@id": "http://localhost:8080/#website"
+   },
+   "keywords": [
+    "cheapest long distance moving"
+   ],
+   "mentions": [
+    {
+     "@id": "http://localhost:8080/#moving-cost-calculator"
+    },
+    {
+     "@id": "http://localhost:8080/#price"
+    },
+    {
+     "@id": "http://localhost:8080/#calculator"
+    },
+    {
+     "@id": "http://localhost:8080/#zip-code"
+    },
+    {
+     "@id": "http://localhost:8080/#federal-motor-carrier-safety-administration"
+    },
+    {
+     "@id": "http://localhost:8080/#truck"
+    },
+    {
+     "@id": "http://localhost:8080/#stairs"
+    },
+    {
+     "@id": "http://localhost:8080/#bedroom"
+    },
+    {
+     "@id": "http://localhost:8080/#box"
+    },
+    {
+     "@id": "http://localhost:8080/#pound-mass"
+    },
+    {
+     "@id": "http://localhost:8080/#fuel-economy-in-automobiles"
+    },
+    {
+     "@id": "http://localhost:8080/#mile"
+    },
+    {
+     "@id": "http://localhost:8080/#pickup-truck"
+    }
+   ],
+   "name": "Cheapest Long Distance Moving With Movers | Lift My Boxes",
+   "url": "http://localhost:8080/cheapest-long-distance-moving/"
+  },
+  {
+   "@id": "http://localhost:8080/cheapest-long-distance-moving/#breadcrumb",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/",
+     "name": "Home",
+     "position": 1
+    },
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/how-much-do-movers-cost/",
+     "name": "How much do movers cost",
+     "position": 2
+    },
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/long-distance-moving-cost/",
+     "name": "What is the long distance moving cost for your home?",
+     "position": 3
+    },
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/cheapest-long-distance-moving-options/",
+     "name": "What are the cheapest long distance moving options?",
+     "position": 4
+    },
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/cheapest-long-distance-moving/",
+     "name": "How to get the cheapest long distance moving quote",
+     "position": 5
+    }
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/cheapest-long-distance-moving/#faq",
+   "@type": "FAQPage",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "No single company is cheapest on every route. Prices shift with your load's weight, the distance, the date and how full a mover's trucks are, so the cheapest long distance moving company for one household can be the dearest for the next. Compare written estimates for the same inventory and dates."
+     },
+     "name": "Who is the cheapest long-distance mover?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Give every mover the same inventory, dates and services, and ask for a written estimate after an in-home or video survey. Check whether each is binding, what valuation it includes and how long the delivery window is. A quote far below the rest is a reason to ask questions, not to sign."
+     },
+     "name": "How do you compare the cheapest long distance moving quotes?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "They cost most of any way to move: $5,700–$11,800 for a home of 4 or more bedrooms over 1,000 road miles, off peak. They are worth it when a self-move would mean weeks of packing, a large truck you'd rather not drive, or heavy pieces you can't lift. Packing yourself is the usual way to bring the bill down."
+     },
+     "name": "Are full-service long-distance movers worth the price?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "No. A calculator, like the one on this page, gives a range for homes like yours, based on size, distance and date. A mover's written estimate, made after it has seen your belongings, is the price you can hold it to. Use the range to spot a cheapest long distance moving quote that looks too good to be true."
+     },
+     "name": "Is a long-distance moving calculator as good as a quote?"
+    }
+   ]
+  }
+ ]
+}

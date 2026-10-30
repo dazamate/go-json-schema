@@ -1,0 +1,768 @@
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@id": "http://localhost:8080/#organization",
+   "@type": "Organization",
+   "contactPoint": {
+    "@type": "ContactPoint",
+    "areaServed": "US",
+    "availableLanguage": "en",
+    "contactType": "customer support",
+    "telephone": "+18334990939"
+   },
+   "description": "Lift My Boxes gives free moving cost estimates and, when asked, connects people with independent moving companies.",
+   "disambiguatingDescription": "An online moving cost estimator and referral service, not a moving company.",
+   "email": "hello@liftmyboxes.com",
+   "logo": "http://localhost:8080/favicon.svg",
+   "name": "Lift My Boxes",
+   "url": "http://localhost:8080/"
+  },
+  {
+   "@id": "http://localhost:8080/#website",
+   "@type": "WebSite",
+   "inLanguage": "en-US",
+   "name": "Lift My Boxes",
+   "publisher": {
+    "@id": "http://localhost:8080/#organization"
+   },
+   "url": "http://localhost:8080/"
+  },
+  {
+   "@id": "http://localhost:8080/#home-moving",
+   "@type": "Thing",
+   "alternateName": [
+    "Home move",
+    "Household move"
+   ],
+   "description": "Moving the contents of a house or apartment to a new home.",
+   "name": "Home moving"
+  },
+  {
+   "@id": "http://localhost:8080/#san-francisco-bay-area",
+   "@type": "Place",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q1907114",
+    "https://www.wikidata.org/wiki/Q2221906"
+   ],
+   "alternateName": [
+    "BAY AREA",
+    "San Francisco"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q213205"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/06pvr"
+    }
+   ],
+   "name": "San Francisco Bay Area",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/San_Francisco_Bay_Area",
+    "https://www.wikidata.org/wiki/Q213205",
+    "https://www.google.com/search?kgmid=/m/06pvr",
+    "https://dbpedia.org/resource/San_Francisco_Bay_Area"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#san-francisco",
+   "@type": "City",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q13218382",
+    "https://www.wikidata.org/wiki/Q1093829"
+   ],
+   "alternateName": [
+    "San Francisco, CA"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q62"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0d6lp"
+    }
+   ],
+   "name": "San Francisco",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/San_Francisco",
+    "https://www.wikidata.org/wiki/Q62",
+    "https://www.google.com/search?kgmid=/m/0d6lp",
+    "https://dbpedia.org/resource/San_Francisco"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#california",
+   "@type": "State",
+   "additionalType": "https://www.wikidata.org/wiki/Q35657",
+   "alternateName": [
+    "Californians"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q99"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/01n7q"
+    }
+   ],
+   "name": "California",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/California",
+    "https://www.wikidata.org/wiki/Q99",
+    "https://www.google.com/search?kgmid=/m/01n7q",
+    "https://dbpedia.org/resource/California"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#oakland-california",
+   "@type": "City",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q1549591",
+    "https://www.wikidata.org/wiki/Q1093829"
+   ],
+   "alternateName": [
+    "Oakland"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q17042"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0dc95"
+    }
+   ],
+   "name": "Oakland, California",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Oakland,_California",
+    "https://www.wikidata.org/wiki/Q17042",
+    "https://www.google.com/search?kgmid=/m/0dc95",
+    "https://dbpedia.org/resource/Oakland,_California"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#berkeley-california",
+   "@type": "City",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q13218357",
+    "https://www.wikidata.org/wiki/Q1187811"
+   ],
+   "alternateName": [
+    "Berkeley"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q484678"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/01jr6"
+    }
+   ],
+   "name": "Berkeley, California",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Berkeley,_California",
+    "https://www.wikidata.org/wiki/Q484678",
+    "https://www.google.com/search?kgmid=/m/01jr6",
+    "https://dbpedia.org/resource/Berkeley,_California"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#marin-county-california",
+   "@type": "Thing",
+   "additionalType": "https://www.wikidata.org/wiki/Q13212489",
+   "alternateName": [
+    "Marin"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q108117"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0l2hf"
+    }
+   ],
+   "name": "Marin County, California",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Marin_County,_California",
+    "https://www.wikidata.org/wiki/Q108117",
+    "https://www.google.com/search?kgmid=/m/0l2hf",
+    "https://dbpedia.org/resource/Marin_County,_California"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#san-francisco-peninsula",
+   "@type": "Thing",
+   "additionalType": "https://www.wikidata.org/wiki/Q34763",
+   "alternateName": [
+    "the Peninsula"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q1827082"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/06pvb"
+    }
+   ],
+   "name": "San Francisco Peninsula",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/San_Francisco_Peninsula",
+    "https://www.wikidata.org/wiki/Q1827082",
+    "https://www.google.com/search?kgmid=/m/06pvb",
+    "https://dbpedia.org/resource/San_Francisco_Peninsula"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#san-jose-california",
+   "@type": "City",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q1549591",
+    "https://www.wikidata.org/wiki/Q13218391"
+   ],
+   "alternateName": [
+    "San Jose"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q16553"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0f04v"
+    }
+   ],
+   "name": "San Jose, California",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/San_Jose,_California",
+    "https://www.wikidata.org/wiki/Q16553",
+    "https://www.google.com/search?kgmid=/m/0f04v",
+    "https://dbpedia.org/resource/San_Jose,_California"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#east-bay",
+   "@type": "Place",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q618123",
+    "https://www.wikidata.org/wiki/Q82794"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q2617944"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/04rn4w"
+    }
+   ],
+   "name": "East Bay",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/East_Bay",
+    "https://www.wikidata.org/wiki/Q2617944",
+    "https://www.google.com/search?kgmid=/m/04rn4w",
+    "https://dbpedia.org/resource/East_Bay"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#golden-gate",
+   "@type": "Thing",
+   "additionalType": "https://www.wikidata.org/wiki/Q37901",
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q220032"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/011wgf"
+    }
+   ],
+   "name": "Golden Gate",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Golden_Gate",
+    "https://www.wikidata.org/wiki/Q220032",
+    "https://www.google.com/search?kgmid=/m/011wgf",
+    "https://dbpedia.org/resource/Golden_Gate"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#san-mateo-county-california",
+   "@type": "Thing",
+   "additionalType": "https://www.wikidata.org/wiki/Q131427665",
+   "alternateName": [
+    "San Mateo"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q108101"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0l2vz"
+    }
+   ],
+   "name": "San Mateo County, California",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/San_Mateo_County,_California",
+    "https://www.wikidata.org/wiki/Q108101",
+    "https://www.google.com/search?kgmid=/m/0l2vz",
+    "https://dbpedia.org/resource/San_Mateo_County,_California"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#walnut-creek-california",
+   "@type": "Thing",
+   "additionalType": "https://www.wikidata.org/wiki/Q13218357",
+   "alternateName": [
+    "Walnut Creek"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q493261"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0qyzb"
+    }
+   ],
+   "name": "Walnut Creek, California",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Walnut_Creek,_California",
+    "https://www.wikidata.org/wiki/Q493261",
+    "https://www.google.com/search?kgmid=/m/0qyzb",
+    "https://dbpedia.org/resource/Walnut_Creek,_California"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#san-francisco-oakland-bay-bridge",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q19941854",
+    "https://www.wikidata.org/wiki/Q110848334"
+   ],
+   "alternateName": [
+    "Bay Bridge"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q771404"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0163pw"
+    }
+   ],
+   "name": "San Francisco–Oakland Bay Bridge",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/San_Francisco–Oakland_Bay_Bridge",
+    "https://www.wikidata.org/wiki/Q771404",
+    "https://www.google.com/search?kgmid=/m/0163pw",
+    "https://dbpedia.org/resource/San_Francisco–Oakland_Bay_Bridge"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#palo-alto-california",
+   "@type": "City",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q13218357",
+    "https://www.wikidata.org/wiki/Q13218391"
+   ],
+   "alternateName": [
+    "Palo Alto"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q47265"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0f04c"
+    }
+   ],
+   "name": "Palo Alto, California",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Palo_Alto,_California",
+    "https://www.wikidata.org/wiki/Q47265",
+    "https://www.google.com/search?kgmid=/m/0f04c",
+    "https://dbpedia.org/resource/Palo_Alto,_California"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#southern-california",
+   "@type": "Place",
+   "additionalType": "https://www.wikidata.org/wiki/Q82794",
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q844837"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0gx1l"
+    }
+   ],
+   "name": "Southern California",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Southern_California",
+    "https://www.wikidata.org/wiki/Q844837",
+    "https://www.google.com/search?kgmid=/m/0gx1l",
+    "https://dbpedia.org/resource/Southern_California"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#california-state-university",
+   "@type": "CollegeOrUniversity",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q1075106",
+    "https://www.wikidata.org/wiki/Q3918"
+   ],
+   "alternateName": [
+    "CalState"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q815352"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0fnmz"
+    }
+   ],
+   "name": "California State University",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/California_State_University",
+    "https://www.wikidata.org/wiki/Q815352",
+    "https://www.google.com/search?kgmid=/m/0fnmz",
+    "https://dbpedia.org/resource/California_State_University"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#dumbarton-bridge-california",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q7814330",
+    "https://www.wikidata.org/wiki/Q537127"
+   ],
+   "alternateName": [
+    "Dumbarton bridge"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q2683895"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0288h"
+    }
+   ],
+   "name": "Dumbarton Bridge (California)",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Dumbarton_Bridge_(California)",
+    "https://www.wikidata.org/wiki/Q2683895",
+    "https://www.google.com/search?kgmid=/m/0288h",
+    "https://dbpedia.org/resource/Dumbarton_Bridge_(California)"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#san-francisco-municipal-railway",
+   "@type": "Thing",
+   "additionalType": "https://www.wikidata.org/wiki/Q7835189",
+   "alternateName": [
+    "SFMTA"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q1140138"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/01lk7v"
+    }
+   ],
+   "name": "San Francisco Municipal Railway",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/San_Francisco_Municipal_Railway",
+    "https://www.wikidata.org/wiki/Q1140138",
+    "https://www.google.com/search?kgmid=/m/01lk7v",
+    "https://dbpedia.org/resource/San_Francisco_Municipal_Railway"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#zip-code",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q6545185",
+    "https://www.wikidata.org/wiki/Q126286955"
+   ],
+   "alternateName": [
+    "ZIP codes",
+    "ZIP"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q136208"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0dllr"
+    }
+   ],
+   "name": "ZIP Code",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/ZIP_Code",
+    "https://www.wikidata.org/wiki/Q136208",
+    "https://www.google.com/search?kgmid=/m/0dllr",
+    "https://dbpedia.org/resource/ZIP_Code"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#moving-cost-calculator",
+   "@type": "WebApplication",
+   "applicationCategory": "UtilitiesApplication",
+   "description": "Free online calculator that estimates the cost of a local or long-distance move.",
+   "isAccessibleForFree": true,
+   "name": "Lift My Boxes Moving Cost Calculator",
+   "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+   },
+   "operatingSystem": "Any",
+   "publisher": [
+    {
+     "@id": "http://localhost:8080/#organization"
+    }
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/how-much-do-movers-cost-bay-area/#webpage",
+   "@type": "WebPage",
+   "about": [
+    {
+     "@id": "http://localhost:8080/#home-moving"
+    },
+    {
+     "@id": "http://localhost:8080/#san-francisco-bay-area"
+    },
+    {
+     "@id": "http://localhost:8080/#san-francisco"
+    },
+    {
+     "@id": "http://localhost:8080/#california"
+    },
+    {
+     "@id": "http://localhost:8080/#oakland-california"
+    },
+    {
+     "@id": "http://localhost:8080/#berkeley-california"
+    },
+    {
+     "@id": "http://localhost:8080/#marin-county-california"
+    },
+    {
+     "@id": "http://localhost:8080/#san-francisco-peninsula"
+    },
+    {
+     "@id": "http://localhost:8080/#san-jose-california"
+    },
+    {
+     "@id": "http://localhost:8080/#east-bay"
+    },
+    {
+     "@id": "http://localhost:8080/#golden-gate"
+    },
+    {
+     "@id": "http://localhost:8080/#san-mateo-county-california"
+    },
+    {
+     "@id": "http://localhost:8080/#walnut-creek-california"
+    },
+    {
+     "@id": "http://localhost:8080/#san-francisco-oakland-bay-bridge"
+    },
+    {
+     "@id": "http://localhost:8080/#palo-alto-california"
+    },
+    {
+     "@id": "http://localhost:8080/#southern-california"
+    },
+    {
+     "@id": "http://localhost:8080/#california-state-university"
+    },
+    {
+     "@id": "http://localhost:8080/#dumbarton-bridge-california"
+    },
+    {
+     "@id": "http://localhost:8080/#san-francisco-municipal-railway"
+    },
+    {
+     "@id": "http://localhost:8080/#zip-code"
+    }
+   ],
+   "breadcrumb": {
+    "@id": "http://localhost:8080/how-much-do-movers-cost-bay-area/#breadcrumb"
+   },
+   "dateModified": "2026-10-29T16:21:58Z",
+   "datePublished": "2026-10-29T16:21:58Z",
+   "description": "How much do movers cost Bay Area households? Get a free estimate in about a minute and see how hills, stairs, bridges, parking and California rules add up.",
+   "inLanguage": "en-US",
+   "isPartOf": {
+    "@id": "http://localhost:8080/#website"
+   },
+   "keywords": [
+    "how much do movers cost bay area"
+   ],
+   "mentions": [
+    {
+     "@id": "http://localhost:8080/#moving-cost-calculator"
+    }
+   ],
+   "name": "How Much Do Movers Cost Bay Area? SF to San Jose | Lift My Boxes",
+   "url": "http://localhost:8080/how-much-do-movers-cost-bay-area/"
+  },
+  {
+   "@id": "http://localhost:8080/how-much-do-movers-cost-bay-area/#breadcrumb",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/",
+     "name": "Home",
+     "position": 1
+    },
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/how-much-do-movers-cost/",
+     "name": "How much do movers cost",
+     "position": 2
+    },
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/local-movers-cost/",
+     "name": "What do local movers cost?",
+     "position": 3
+    },
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/local-moving-cost/",
+     "name": "Local moving cost, from full service to doing it yourself",
+     "position": 4
+    },
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/how-much-do-movers-cost-bay-area/",
+     "name": "How much do movers cost Bay Area households?",
+     "position": 5
+    }
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/how-much-do-movers-cost-bay-area/#faq",
+   "@type": "FAQPage",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "The hourly rate depends more on the mover than the city, but an Oakland or East Bay move often takes fewer hours: more driveways, easier parking and fewer steep blocks. A San Francisco flat with front steps and no curb space takes longer, so how much do movers cost Bay Area renters tends to be higher in the city even at the same rate. Enter both addresses in the calculator to compare."
+     },
+     "name": "Is moving in Oakland cheaper than in San Francisco?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Within California, a move of over 100 miles must be charged by weight and mileage, not by the hour, so the size of the load and the distance set the price. For scale, a 1-bedroom home moved 1,000 road miles typically costs $1,400–$3,300 off peak, with no stairs or extras, about $1.45–$3.28 per mile. Enter both ZIP codes for a range on your own route."
+     },
+     "name": "How much do movers cost Bay Area households moving more than 100 miles?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Be careful. BHGS tells consumers to be wary of companies that ask for a large deposit, or a deposit by electronic or digital transfer, and to get a receipt for any deposit they pay. Check that the company named on the receipt is the mover you meant to hire. The full charges belong in the mover's agreement, with its Not to Exceed Price."
+     },
+     "name": "Should you pay a large deposit to a Bay Area mover?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Usually, on paper. A 20-foot rental truck costs $39.95–$40.00 a day plus $0.69–$2.49 per mile in town, by published rental prices, against $720–$1,800 for movers on a baseline 2-bedroom move. But you load it, drive it over the hills and find somewhere to park it, so weigh how much do movers cost Bay Area households against a long day of your own work."
+     },
+     "name": "Is renting a truck cheaper than hiring Bay Area movers?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Give yourself several weeks. The mover needs time for a visual inspection and must deliver your agreement at least three days before the move, and San Francisco parking signs take at least 5 business days to arrange. Summer is the busiest season, when how much do movers cost Bay Area households is at its highest, so book earliest for a date from May through September."
+     },
+     "name": "How far ahead should you book Bay Area movers?"
+    }
+   ]
+  }
+ ]
+}

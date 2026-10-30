@@ -1,0 +1,861 @@
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@id": "http://localhost:8080/#organization",
+   "@type": "Organization",
+   "contactPoint": {
+    "@type": "ContactPoint",
+    "areaServed": "US",
+    "availableLanguage": "en",
+    "contactType": "customer support",
+    "telephone": "+18334990939"
+   },
+   "description": "Lift My Boxes gives free moving cost estimates and, when asked, connects people with independent moving companies.",
+   "disambiguatingDescription": "An online moving cost estimator and referral service, not a moving company.",
+   "email": "hello@liftmyboxes.com",
+   "logo": "http://localhost:8080/favicon.svg",
+   "name": "Lift My Boxes",
+   "url": "http://localhost:8080/"
+  },
+  {
+   "@id": "http://localhost:8080/#website",
+   "@type": "WebSite",
+   "inLanguage": "en-US",
+   "name": "Lift My Boxes",
+   "publisher": {
+    "@id": "http://localhost:8080/#organization"
+   },
+   "url": "http://localhost:8080/"
+  },
+  {
+   "@id": "http://localhost:8080/#home-moving",
+   "@type": "Thing",
+   "alternateName": [
+    "Home move",
+    "Household move"
+   ],
+   "description": "Moving the contents of a house or apartment to a new home.",
+   "name": "Home moving"
+  },
+  {
+   "@id": "http://localhost:8080/#moving-company",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q783794",
+    "https://www.wikidata.org/wiki/Q2169973"
+   ],
+   "alternateName": [
+    "movers",
+    "mover",
+    "Movers",
+    "moving companies",
+    "Moving companies",
+    "Moving Companies",
+    "moving van",
+    "moving vans",
+    "Mover"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q1757263"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/07ry5s"
+    }
+   ],
+   "name": "Moving company",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Moving_company",
+    "https://www.wikidata.org/wiki/Q1757263",
+    "https://www.google.com/search?kgmid=/m/07ry5s",
+    "https://dbpedia.org/resource/Moving_company"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#pods-company",
+   "@type": "Organization",
+   "additionalType": "https://www.wikidata.org/wiki/Q4830453",
+   "alternateName": [
+    "PODS"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q7119908"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/07kj4pz"
+    }
+   ],
+   "name": "PODS (company)",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/PODS_(company)",
+    "https://www.wikidata.org/wiki/Q7119908",
+    "https://www.google.com/search?kgmid=/m/07kj4pz",
+    "https://dbpedia.org/resource/PODS_(company)"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#federal-motor-carrier-safety-administration",
+   "@type": "Thing",
+   "additionalType": "https://www.wikidata.org/wiki/Q20857065",
+   "alternateName": [
+    "FMCSA",
+    "fmcsa.dot.gov"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q5440305"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/02wvdh3"
+    }
+   ],
+   "name": "Federal Motor Carrier Safety Administration",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Federal_Motor_Carrier_Safety_Administration",
+    "https://www.wikidata.org/wiki/Q5440305",
+    "https://www.google.com/search?kgmid=/m/02wvdh3",
+    "https://dbpedia.org/resource/Federal_Motor_Carrier_Safety_Administration"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#united-states-postal-service",
+   "@type": "Organization",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q1752939",
+    "https://www.wikidata.org/wiki/Q1529128"
+   ],
+   "alternateName": [
+    "USPS",
+    "U.S. Postal Service"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q668687"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0dcms"
+    }
+   ],
+   "name": "United States Postal Service",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/United_States_Postal_Service",
+    "https://www.wikidata.org/wiki/Q668687",
+    "https://www.google.com/search?kgmid=/m/0dcms",
+    "https://dbpedia.org/resource/United_States_Postal_Service"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#cargo",
+   "@type": "Thing",
+   "additionalType": "https://www.wikidata.org/wiki/Q2449671",
+   "alternateName": [
+    "freight",
+    "lading"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q319224"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/023cbk"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/g/121p72v3"
+    }
+   ],
+   "name": "Cargo",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Cargo",
+    "https://www.wikidata.org/wiki/Q319224",
+    "https://www.google.com/search?kgmid=/m/023cbk",
+    "https://www.google.com/search?kgmid=/g/121p72v3",
+    "https://dbpedia.org/resource/Cargo"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#renting",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q10710183",
+    "https://www.wikidata.org/wiki/Q8187769"
+   ],
+   "alternateName": [
+    "rent",
+    "Renters",
+    "Rented",
+    "renter",
+    "Rental",
+    "Rent",
+    "Rentals",
+    "rents",
+    "renters",
+    "rental",
+    "rentals"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q157171"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/01y857"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/g/120lqn3n"
+    }
+   ],
+   "name": "Renting",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Renting",
+    "https://www.wikidata.org/wiki/Q157171",
+    "https://www.google.com/search?kgmid=/m/01y857",
+    "https://www.google.com/search?kgmid=/g/120lqn3n",
+    "https://dbpedia.org/resource/Renting"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#insurance",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q268592",
+    "https://www.wikidata.org/wiki/Q63981612"
+   ],
+   "alternateName": [
+    "insurer",
+    "Insurers"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q43183"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/03xks"
+    }
+   ],
+   "name": "Insurance",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Insurance",
+    "https://www.wikidata.org/wiki/Q43183",
+    "https://www.google.com/search?kgmid=/m/03xks",
+    "https://dbpedia.org/resource/Insurance"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#u-haul",
+   "@type": "Organization",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q4830453",
+    "https://www.wikidata.org/wiki/Q291240"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q7862902"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/054tqv"
+    }
+   ],
+   "name": "U-Haul",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/U-Haul",
+    "https://www.wikidata.org/wiki/Q7862902",
+    "https://www.google.com/search?kgmid=/m/054tqv",
+    "https://dbpedia.org/resource/U-Haul"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#retail",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q54445847",
+    "https://www.wikidata.org/wiki/Q601401"
+   ],
+   "alternateName": [
+    "retailers"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q126793"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0191_7"
+    }
+   ],
+   "name": "Retail",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Retail",
+    "https://www.wikidata.org/wiki/Q126793",
+    "https://www.google.com/search?kgmid=/m/0191_7",
+    "https://dbpedia.org/resource/Retail"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#truck",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q140424465",
+    "https://www.wikidata.org/wiki/Q1515493"
+   ],
+   "alternateName": [
+    "trucks",
+    "Trucks"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q43193"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/07r04"
+    }
+   ],
+   "name": "Truck",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Truck",
+    "https://www.wikidata.org/wiki/Q43193",
+    "https://www.google.com/search?kgmid=/m/07r04",
+    "https://dbpedia.org/resource/Truck"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#apartment",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q1247867",
+    "https://www.wikidata.org/wiki/Q3305339"
+   ],
+   "alternateName": [
+    "apartment building",
+    "apartments",
+    "Flat",
+    "Apartment buildings",
+    "apartment buildings",
+    "flat",
+    "Apartment complexes",
+    "garden apartment",
+    "Apartments",
+    "apartment complexes"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q188507"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/01nblt"
+    }
+   ],
+   "name": "Apartment",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Apartment",
+    "https://www.wikidata.org/wiki/Q188507",
+    "https://www.google.com/search?kgmid=/m/01nblt",
+    "https://dbpedia.org/resource/Apartment"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#surface-transportation-board",
+   "@type": "Thing",
+   "additionalType": "https://www.wikidata.org/wiki/Q1752939",
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q2368496"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/03tytm"
+    }
+   ],
+   "name": "Surface Transportation Board",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Surface_Transportation_Board",
+    "https://www.wikidata.org/wiki/Q2368496",
+    "https://www.google.com/search?kgmid=/m/03tytm",
+    "https://dbpedia.org/resource/Surface_Transportation_Board"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#budget-truck-rental",
+   "@type": "Organization",
+   "additionalType": "https://www.wikidata.org/wiki/Q4830453",
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q4985029"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0277sp6"
+    }
+   ],
+   "name": "Budget Truck Rental",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Budget_Truck_Rental",
+    "https://www.wikidata.org/wiki/Q4985029",
+    "https://www.google.com/search?kgmid=/m/0277sp6",
+    "https://dbpedia.org/resource/Budget_Truck_Rental"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#united-states",
+   "@type": "Country",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q3624078",
+    "https://www.wikidata.org/wiki/Q6256"
+   ],
+   "alternateName": [
+    "US",
+    "U.S.",
+    "American"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q30"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/09c7w0"
+    }
+   ],
+   "name": "United States",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/United_States",
+    "https://www.wikidata.org/wiki/Q30",
+    "https://www.google.com/search?kgmid=/m/09c7w0",
+    "https://dbpedia.org/resource/United_States"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#intermodal-container",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q124838920",
+    "https://www.wikidata.org/wiki/Q1180158"
+   ],
+   "alternateName": [
+    "container",
+    "containers",
+    "Containers"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q187956"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0642w22"
+    }
+   ],
+   "name": "Intermodal container",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Intermodal_container",
+    "https://www.wikidata.org/wiki/Q187956",
+    "https://www.google.com/search?kgmid=/m/0642w22",
+    "https://dbpedia.org/resource/Intermodal_container"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#fee",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q30242023",
+    "https://www.wikidata.org/wiki/Q1344851"
+   ],
+   "alternateName": [
+    "Fees",
+    "Fuel surcharge",
+    "fees",
+    "fuel surcharge",
+    "service charge",
+    "surcharge"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q11765"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/03fk6m"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/g/1215c8gf"
+    }
+   ],
+   "name": "Fee",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Fee",
+    "https://www.wikidata.org/wiki/Q11765",
+    "https://www.google.com/search?kgmid=/m/03fk6m",
+    "https://www.google.com/search?kgmid=/g/1215c8gf",
+    "https://dbpedia.org/resource/Fee"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#warehouse",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q655686",
+    "https://www.wikidata.org/wiki/Q63873440"
+   ],
+   "alternateName": [
+    "storage",
+    "Storage"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q181623"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/02nzw0"
+    }
+   ],
+   "name": "Warehouse",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Warehouse",
+    "https://www.wikidata.org/wiki/Q181623",
+    "https://www.google.com/search?kgmid=/m/02nzw0",
+    "https://dbpedia.org/resource/Warehouse"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#national-van-lines",
+   "@type": "Organization",
+   "additionalType": "https://www.wikidata.org/wiki/Q783794",
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q18151716"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/g/1hfsvq8vp"
+    }
+   ],
+   "name": "National Van Lines",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/National_Van_Lines",
+    "https://www.wikidata.org/wiki/Q18151716",
+    "https://www.google.com/search?kgmid=/g/1hfsvq8vp",
+    "https://dbpedia.org/resource/National_Van_Lines"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#college-hunks-hauling-junk",
+   "@type": "Thing",
+   "additionalType": "https://www.wikidata.org/wiki/Q1757263",
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q5146455"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/04ldkw_"
+    }
+   ],
+   "name": "College Hunks Hauling Junk",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/College_Hunks_Hauling_Junk",
+    "https://www.wikidata.org/wiki/Q5146455",
+    "https://www.google.com/search?kgmid=/m/04ldkw_",
+    "https://dbpedia.org/resource/College_Hunks_Hauling_Junk"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#household-goods",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q2184715",
+    "https://www.wikidata.org/wiki/Q59679273"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q369594"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/080f_8b"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/g/122kc0vr"
+    }
+   ],
+   "name": "Household goods",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Household_goods",
+    "https://www.wikidata.org/wiki/Q369594",
+    "https://www.google.com/search?kgmid=/m/080f_8b",
+    "https://www.google.com/search?kgmid=/g/122kc0vr",
+    "https://dbpedia.org/resource/Household_goods"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#moving-cost-calculator",
+   "@type": "WebApplication",
+   "applicationCategory": "UtilitiesApplication",
+   "description": "Free online calculator that estimates the cost of a local or long-distance move.",
+   "isAccessibleForFree": true,
+   "name": "Lift My Boxes Moving Cost Calculator",
+   "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+   },
+   "operatingSystem": "Any",
+   "publisher": [
+    {
+     "@id": "http://localhost:8080/#organization"
+    }
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#moving-labor",
+   "@type": "Thing",
+   "alternateName": [
+    "Labor-only help",
+    "Labor-only movers",
+    "Labor-only"
+   ],
+   "description": "Hired help to load or unload a truck the customer provides.",
+   "name": "Moving labor"
+  },
+  {
+   "@id": "http://localhost:8080/how-much-does-a-moving-company-cost/#webpage",
+   "@type": "WebPage",
+   "about": [
+    {
+     "@id": "http://localhost:8080/#home-moving"
+    },
+    {
+     "@id": "http://localhost:8080/#moving-company"
+    },
+    {
+     "@id": "http://localhost:8080/#pods-company"
+    },
+    {
+     "@id": "http://localhost:8080/#federal-motor-carrier-safety-administration"
+    },
+    {
+     "@id": "http://localhost:8080/#united-states-postal-service"
+    },
+    {
+     "@id": "http://localhost:8080/#cargo"
+    },
+    {
+     "@id": "http://localhost:8080/#renting"
+    },
+    {
+     "@id": "http://localhost:8080/#insurance"
+    },
+    {
+     "@id": "http://localhost:8080/#u-haul"
+    },
+    {
+     "@id": "http://localhost:8080/#retail"
+    },
+    {
+     "@id": "http://localhost:8080/#truck"
+    },
+    {
+     "@id": "http://localhost:8080/#apartment"
+    },
+    {
+     "@id": "http://localhost:8080/#surface-transportation-board"
+    },
+    {
+     "@id": "http://localhost:8080/#budget-truck-rental"
+    },
+    {
+     "@id": "http://localhost:8080/#united-states"
+    },
+    {
+     "@id": "http://localhost:8080/#intermodal-container"
+    },
+    {
+     "@id": "http://localhost:8080/#fee"
+    },
+    {
+     "@id": "http://localhost:8080/#warehouse"
+    },
+    {
+     "@id": "http://localhost:8080/#national-van-lines"
+    },
+    {
+     "@id": "http://localhost:8080/#college-hunks-hauling-junk"
+    },
+    {
+     "@id": "http://localhost:8080/#household-goods"
+    }
+   ],
+   "breadcrumb": {
+    "@id": "http://localhost:8080/how-much-does-a-moving-company-cost/#breadcrumb"
+   },
+   "dateModified": "2026-10-29T16:21:58Z",
+   "datePublished": "2026-10-29T16:21:58Z",
+   "description": "How much does a moving company cost? See what a mover's bill covers, local and long-distance prices, and get a free estimate for your move in a minute.",
+   "inLanguage": "en-US",
+   "isPartOf": {
+    "@id": "http://localhost:8080/#website"
+   },
+   "keywords": [
+    "how much does a moving company cost"
+   ],
+   "mentions": [
+    {
+     "@id": "http://localhost:8080/#moving-cost-calculator"
+    },
+    {
+     "@id": "http://localhost:8080/#moving-labor"
+    }
+   ],
+   "name": "How Much Does a Moving Company Cost? | Lift My Boxes",
+   "url": "http://localhost:8080/how-much-does-a-moving-company-cost/"
+  },
+  {
+   "@id": "http://localhost:8080/how-much-does-a-moving-company-cost/#breadcrumb",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/",
+     "name": "Home",
+     "position": 1
+    },
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/how-much-do-movers-cost/",
+     "name": "How much do movers cost",
+     "position": 2
+    },
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/how-much-does-a-moving-company-cost/",
+     "name": "How much does a moving company cost for your move?",
+     "position": 3
+    }
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/how-much-does-a-moving-company-cost/#faq",
+   "@type": "FAQPage",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "A 2,000 sq ft house usually has about 3 bedrooms, so a local move costs $1,150–$2,850 for 10 road miles, off peak, with no stairs or add-ons. Moved 1,000 road miles, it costs $4,000–$8,550. A full basement, a packed garage or heavy furniture can push how much does a moving company cost above those ranges."
+     },
+     "name": "How much does a moving company cost to move a 2,000 sq ft house?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Plan for what the quote leaves out: tips, packing supplies if you pack yourself, cleaning, utility deposits, and travel or a hotel night on a long move. On an interstate move, add full-value protection if the price includes only basic released value. A cushion on top of how much does a moving company cost also covers access fees that only show up on moving day."
+     },
+     "name": "How much should you set aside beyond the moving company's bill?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Many local companies do, often two to four hours, and some add a trip fee for the drive to your home. On a small job the minimum can matter more than the hourly rate, because you pay for it even if the crew finishes early. Ask for the minimum and the travel policy in writing."
+     },
+     "name": "Do moving companies charge a minimum number of hours?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Yes. Many companies sell labor only: a crew loads or unloads a truck or container you rent, and you drive. It costs less than a full-service move because the company supplies no truck and no driver. The comparison on this page can add loading help to the rental-truck price, so you can set it beside a full-service crew."
+     },
+     "name": "Can you hire a moving company without its truck?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Not always. On a local hourly move, the final bill follows the hours the crew actually works, plus any fees for access or extra services. On an interstate move, ask whether the written estimate is binding or non-binding before you compare how much does a moving company cost from one company to the next."
+     },
+     "name": "Is a moving company's quote the final price?"
+    }
+   ]
+  }
+ ]
+}

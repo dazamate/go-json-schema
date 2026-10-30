@@ -1,0 +1,1103 @@
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "OnlineStore",
+   "@id": "http://localhost:8001/#store",
+   "name": "Queen of Diamonds Jewellery",
+   "url": "http://localhost:8001/",
+   "logo": {
+    "@type": "ImageObject",
+    "url": "http://localhost:8001/logo.png",
+    "width": 512,
+    "height": 512
+   },
+   "sameAs": [
+    "https://www.instagram.com/queen_of_diamonds_jewellery/",
+    "https://www.facebook.com/104992909320900"
+   ],
+   "potentialAction": [
+    {
+     "@type": "FollowAction",
+     "target": "https://www.instagram.com/queen_of_diamonds_jewellery/"
+    },
+    {
+     "@type": "FollowAction",
+     "target": "https://www.facebook.com/104992909320900"
+    }
+   ],
+   "email": "qodjewellery@gmail.com",
+   "taxID": "74 139 811 412",
+   "hasMerchantReturnPolicy": {
+    "@type": "MerchantReturnPolicy",
+    "applicableCountry": "AU",
+    "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+    "merchantReturnDays": 14,
+    "returnMethod": "https://schema.org/ReturnByMail",
+    "returnFees": "https://schema.org/ReturnFeesCustomerResponsibility",
+    "merchantReturnLink": "http://localhost:8001/au/returns"
+   },
+   "hasShippingService": {
+    "@type": "ShippingService",
+    "shippingConditions": [
+     {
+      "@type": "ShippingConditions",
+      "shippingDestination": {
+       "@type": "DefinedRegion",
+       "addressCountry": "AU"
+      },
+      "orderValue": {
+       "@type": "MonetaryAmount",
+       "maxValue": 59.99,
+       "currency": "AUD"
+      },
+      "shippingRate": {
+       "@type": "MonetaryAmount",
+       "value": 7.95,
+       "currency": "AUD"
+      }
+     },
+     {
+      "@type": "ShippingConditions",
+      "shippingDestination": {
+       "@type": "DefinedRegion",
+       "addressCountry": "AU"
+      },
+      "orderValue": {
+       "@type": "MonetaryAmount",
+       "minValue": 60,
+       "currency": "AUD"
+      },
+      "shippingRate": {
+       "@type": "MonetaryAmount",
+       "value": 0,
+       "currency": "AUD"
+      }
+     }
+    ],
+    "handlingTime": {
+     "@type": "QuantitativeValue",
+     "minValue": 0,
+     "maxValue": 1,
+     "unitCode": "DAY"
+    }
+   },
+   "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Jewellery",
+    "itemListElement": [
+     {
+      "@type": "ListItem",
+      "position": 1,
+      "item": {
+       "@type": "CollectionPage",
+       "name": "Necklaces",
+       "url": "http://localhost:8001/au/categories/necklace"
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 2,
+      "item": {
+       "@type": "CollectionPage",
+       "name": "Rings",
+       "url": "http://localhost:8001/au/categories/rings"
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 3,
+      "item": {
+       "@type": "CollectionPage",
+       "name": "Earrings",
+       "url": "http://localhost:8001/au/categories/earrings"
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 4,
+      "item": {
+       "@type": "CollectionPage",
+       "name": "Bracelets",
+       "url": "http://localhost:8001/au/categories/bracelet"
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 5,
+      "item": {
+       "@type": "CollectionPage",
+       "name": "Accessories",
+       "url": "http://localhost:8001/au/categories/jewellery-accessories"
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 6,
+      "item": {
+       "@type": "CollectionPage",
+       "name": "Aromatherapy jewellery",
+       "url": "http://localhost:8001/au/categories/aromatherapy-necklace"
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 7,
+      "item": {
+       "@type": "CollectionPage",
+       "name": "Angel caller necklaces",
+       "url": "http://localhost:8001/au/categories/harmony-ball-necklace"
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 8,
+      "item": {
+       "@type": "CollectionPage",
+       "name": "Chakra",
+       "url": "http://localhost:8001/au/categories/chakra-jewellery"
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 9,
+      "item": {
+       "@type": "CollectionPage",
+       "name": "Chakra bracelets",
+       "url": "http://localhost:8001/au/categories/chakra-bracelet"
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 10,
+      "item": {
+       "@type": "CollectionPage",
+       "name": "Inspirational jewellery",
+       "url": "http://localhost:8001/au/categories/inspirational-jewellery"
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 11,
+      "item": {
+       "@type": "CollectionPage",
+       "name": "Friends, family & pets",
+       "url": "http://localhost:8001/au/categories/friendship-necklaces"
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 12,
+      "item": {
+       "@type": "CollectionPage",
+       "name": "Photo lockets",
+       "url": "http://localhost:8001/au/categories/photo-locket-necklace"
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 13,
+      "item": {
+       "@type": "CollectionPage",
+       "name": "Glow in the dark",
+       "url": "http://localhost:8001/au/categories/glow-in-the-dark-necklace"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "@type": "WebSite",
+   "@id": "http://localhost:8001/#website",
+   "url": "http://localhost:8001/",
+   "name": "Queen of Diamonds Jewellery",
+   "inLanguage": "en-AU",
+   "publisher": {
+    "@id": "http://localhost:8001/#store"
+   },
+   "copyrightYear": 2026,
+   "copyrightHolder": {
+    "@id": "http://localhost:8001/#store"
+   },
+   "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+     "@type": "EntryPoint",
+     "urlTemplate": "http://localhost:8001/au/search?q={search_term_string}"
+    },
+    "query-input": "required name=search_term_string"
+   }
+  },
+  {
+   "@type": "CollectionPage",
+   "@id": "http://localhost:8001/au/categories/necklace",
+   "url": "http://localhost:8001/au/categories/necklace",
+   "name": "Necklace styles: pendants, lockets and chains",
+   "isPartOf": {
+    "@id": "http://localhost:8001/#website"
+   },
+   "mainEntity": {
+    "@type": "ItemList",
+    "numberOfItems": 1153,
+    "itemListOrder": "https://schema.org/ItemListUnordered",
+    "itemListElement": [
+     {
+      "@type": "ListItem",
+      "position": 1,
+      "url": "http://localhost:8001/au/products/tree-of-life-heart-essential-oil-diffuser-locket-pendant-necklace",
+      "item": {
+       "@type": "Product",
+       "name": "Tree of Life Heart Essential Oil Diffuser Locket Pendant Necklace",
+       "url": "http://localhost:8001/au/products/tree-of-life-heart-essential-oil-diffuser-locket-pendant-necklace",
+       "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/C983DB4D-F6F1-4BE2-AC43-2D29F87198CB.jpeg/:/rs=w:1200,h:1200",
+       "offers": {
+        "@type": "Offer",
+        "price": "12.95",
+        "priceCurrency": "AUD",
+        "availability": "https://schema.org/InStock",
+        "seller": {
+         "@id": "http://localhost:8001/#store"
+        },
+        "priceSpecification": [
+         {
+          "@type": "UnitPriceSpecification",
+          "price": "12.95",
+          "priceCurrency": "AUD",
+          "valueAddedTaxIncluded": true
+         },
+         {
+          "@type": "UnitPriceSpecification",
+          "priceType": "https://schema.org/StrikethroughPrice",
+          "price": "15.95",
+          "priceCurrency": "AUD"
+         }
+        ]
+       },
+       "potentialAction": {
+        "@type": "WantAction",
+        "target": "http://localhost:8001/au/wishlist"
+       }
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 2,
+      "url": "http://localhost:8001/au/products/the-vampire-diaries-katherine-pierce-lapis-lazuli-daylight-necklace",
+      "item": {
+       "@type": "Product",
+       "name": "The Vampire Diaries Katherine Pierce Lapis Lazuli Daylight Necklace",
+       "url": "http://localhost:8001/au/products/the-vampire-diaries-katherine-pierce-lapis-lazuli-daylight-necklace",
+       "image": "https://isteam.wsimg.com/ip/6b858395-ba12-481e-a912-553919a178cd/ols/1473_original/:/rs=w:1200,h:1200",
+       "offers": {
+        "@type": "Offer",
+        "price": "13.95",
+        "priceCurrency": "AUD",
+        "availability": "https://schema.org/InStock",
+        "seller": {
+         "@id": "http://localhost:8001/#store"
+        },
+        "priceSpecification": [
+         {
+          "@type": "UnitPriceSpecification",
+          "price": "13.95",
+          "priceCurrency": "AUD",
+          "valueAddedTaxIncluded": true
+         }
+        ]
+       },
+       "potentialAction": {
+        "@type": "WantAction",
+        "target": "http://localhost:8001/au/wishlist"
+       }
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 3,
+      "url": "http://localhost:8001/au/products/opal-moonstone-teardrop-pendant-necklace",
+      "item": {
+       "@type": "Product",
+       "name": "Opal Moonstone Teardrop Pendant Necklace",
+       "url": "http://localhost:8001/au/products/opal-moonstone-teardrop-pendant-necklace",
+       "image": "https://isteam.wsimg.com/ip/6b858395-ba12-481e-a912-553919a178cd/ols/81_original/:/rs=w:1200,h:1200",
+       "offers": {
+        "@type": "Offer",
+        "price": "15.95",
+        "priceCurrency": "AUD",
+        "availability": "https://schema.org/InStock",
+        "seller": {
+         "@id": "http://localhost:8001/#store"
+        },
+        "priceSpecification": [
+         {
+          "@type": "UnitPriceSpecification",
+          "price": "15.95",
+          "priceCurrency": "AUD",
+          "valueAddedTaxIncluded": true
+         }
+        ]
+       },
+       "potentialAction": {
+        "@type": "WantAction",
+        "target": "http://localhost:8001/au/wishlist"
+       }
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 4,
+      "url": "http://localhost:8001/au/products/7-chakra-stone-moon-healing-energy-pendant-necklace",
+      "item": {
+       "@type": "Product",
+       "name": "7 Chakra Stone Moon Healing Energy Pendant Necklace",
+       "url": "http://localhost:8001/au/products/7-chakra-stone-moon-healing-energy-pendant-necklace",
+       "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/IMG_8458.jpeg/:/rs=w:1200,h:1200",
+       "offers": {
+        "@type": "Offer",
+        "price": "15.95",
+        "priceCurrency": "AUD",
+        "availability": "https://schema.org/InStock",
+        "seller": {
+         "@id": "http://localhost:8001/#store"
+        },
+        "priceSpecification": [
+         {
+          "@type": "UnitPriceSpecification",
+          "price": "15.95",
+          "priceCurrency": "AUD",
+          "valueAddedTaxIncluded": true
+         }
+        ]
+       },
+       "potentialAction": {
+        "@type": "WantAction",
+        "target": "http://localhost:8001/au/wishlist"
+       }
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 5,
+      "url": "http://localhost:8001/au/products/blue-hummingbird-glass-cabochon-pendant-necklace",
+      "item": {
+       "@type": "Product",
+       "name": "Blue Hummingbird Glass Cabochon Pendant Necklace",
+       "url": "http://localhost:8001/au/products/blue-hummingbird-glass-cabochon-pendant-necklace",
+       "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/80ED996B-918D-4EA6-9846-D65CC345ECF1.jpeg/:/rs=w:1200,h:1200",
+       "offers": {
+        "@type": "Offer",
+        "price": "12.95",
+        "priceCurrency": "AUD",
+        "availability": "https://schema.org/InStock",
+        "seller": {
+         "@id": "http://localhost:8001/#store"
+        },
+        "priceSpecification": [
+         {
+          "@type": "UnitPriceSpecification",
+          "price": "12.95",
+          "priceCurrency": "AUD",
+          "valueAddedTaxIncluded": true
+         }
+        ]
+       },
+       "potentialAction": {
+        "@type": "WantAction",
+        "target": "http://localhost:8001/au/wishlist"
+       }
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 6,
+      "url": "http://localhost:8001/au/products/axolotl-blue-crystal1-heart-pendant-necklace",
+      "item": {
+       "@type": "Product",
+       "name": "Axolotl Blue Crystal Heart Pendant Necklace",
+       "url": "http://localhost:8001/au/products/axolotl-blue-crystal1-heart-pendant-necklace",
+       "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/IMG_9642.jpeg/:/rs=w:1200,h:1200",
+       "offers": {
+        "@type": "Offer",
+        "price": "15.95",
+        "priceCurrency": "AUD",
+        "availability": "https://schema.org/InStock",
+        "seller": {
+         "@id": "http://localhost:8001/#store"
+        },
+        "priceSpecification": [
+         {
+          "@type": "UnitPriceSpecification",
+          "price": "15.95",
+          "priceCurrency": "AUD",
+          "valueAddedTaxIncluded": true
+         }
+        ]
+       },
+       "potentialAction": {
+        "@type": "WantAction",
+        "target": "http://localhost:8001/au/wishlist"
+       }
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 7,
+      "url": "http://localhost:8001/au/products/egyptian-ankh-cross-pendant-necklace",
+      "item": {
+       "@type": "Product",
+       "name": "Egyptian Ankh Cross Pendant Necklace",
+       "url": "http://localhost:8001/au/products/egyptian-ankh-cross-pendant-necklace",
+       "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/IMG_8020.jpeg/:/rs=w:1200,h:1200",
+       "offers": {
+        "@type": "Offer",
+        "price": "14.95",
+        "priceCurrency": "AUD",
+        "availability": "https://schema.org/InStock",
+        "seller": {
+         "@id": "http://localhost:8001/#store"
+        },
+        "priceSpecification": [
+         {
+          "@type": "UnitPriceSpecification",
+          "price": "14.95",
+          "priceCurrency": "AUD",
+          "valueAddedTaxIncluded": true
+         }
+        ]
+       },
+       "potentialAction": {
+        "@type": "WantAction",
+        "target": "http://localhost:8001/au/wishlist"
+       }
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 8,
+      "url": "http://localhost:8001/au/products/crystal-teardrop-pentagram-triple-moon-pendant-necklace",
+      "item": {
+       "@type": "Product",
+       "name": "Crystal Teardrop Pentagram Triple Moon Pendant Necklace",
+       "url": "http://localhost:8001/au/products/crystal-teardrop-pentagram-triple-moon-pendant-necklace",
+       "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/49491A1E-0A22-47C1-B600-201AE87245E8.jpeg/:/rs=w:1200,h:1200",
+       "offers": {
+        "@type": "Offer",
+        "price": "13.95",
+        "priceCurrency": "AUD",
+        "availability": "https://schema.org/InStock",
+        "seller": {
+         "@id": "http://localhost:8001/#store"
+        },
+        "priceSpecification": [
+         {
+          "@type": "UnitPriceSpecification",
+          "price": "13.95",
+          "priceCurrency": "AUD",
+          "valueAddedTaxIncluded": true
+         }
+        ]
+       },
+       "potentialAction": {
+        "@type": "WantAction",
+        "target": "http://localhost:8001/au/wishlist"
+       }
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 9,
+      "url": "http://localhost:8001/au/products/pink-crystal-melting-love-heart-pendant-necklace",
+      "item": {
+       "@type": "Product",
+       "name": "Pink Crystal Melting Love Heart Pendant Necklace",
+       "url": "http://localhost:8001/au/products/pink-crystal-melting-love-heart-pendant-necklace",
+       "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/IMG_1676.jpeg/:/rs=w:1200,h:1200",
+       "offers": {
+        "@type": "Offer",
+        "price": "14.95",
+        "priceCurrency": "AUD",
+        "availability": "https://schema.org/InStock",
+        "seller": {
+         "@id": "http://localhost:8001/#store"
+        },
+        "priceSpecification": [
+         {
+          "@type": "UnitPriceSpecification",
+          "price": "14.95",
+          "priceCurrency": "AUD",
+          "valueAddedTaxIncluded": true
+         }
+        ]
+       },
+       "potentialAction": {
+        "@type": "WantAction",
+        "target": "http://localhost:8001/au/wishlist"
+       }
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 10,
+      "url": "http://localhost:8001/au/products/7-chakra-crystal-elephant-pendant-necklace",
+      "item": {
+       "@type": "Product",
+       "name": "7 Chakra Crystal Elephant Pendant Necklace",
+       "url": "http://localhost:8001/au/products/7-chakra-crystal-elephant-pendant-necklace",
+       "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/IMG_9036.jpeg/:/rs=w:1200,h:1200",
+       "offers": {
+        "@type": "Offer",
+        "price": "14.95",
+        "priceCurrency": "AUD",
+        "availability": "https://schema.org/InStock",
+        "seller": {
+         "@id": "http://localhost:8001/#store"
+        },
+        "priceSpecification": [
+         {
+          "@type": "UnitPriceSpecification",
+          "price": "14.95",
+          "priceCurrency": "AUD",
+          "valueAddedTaxIncluded": true
+         }
+        ]
+       },
+       "potentialAction": {
+        "@type": "WantAction",
+        "target": "http://localhost:8001/au/wishlist"
+       }
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 11,
+      "url": "http://localhost:8001/au/products/vintage-bohemian-leaf-wrapped-blue-moonstone-pendant-necklace",
+      "item": {
+       "@type": "Product",
+       "name": "Vintage Bohemian Leaf Wrapped Blue Moonstone Pendant Necklace",
+       "url": "http://localhost:8001/au/products/vintage-bohemian-leaf-wrapped-blue-moonstone-pendant-necklace",
+       "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/IMG_6990.jpeg/:/rs=w:1200,h:1200",
+       "offers": {
+        "@type": "Offer",
+        "price": "15.95",
+        "priceCurrency": "AUD",
+        "availability": "https://schema.org/InStock",
+        "seller": {
+         "@id": "http://localhost:8001/#store"
+        },
+        "priceSpecification": [
+         {
+          "@type": "UnitPriceSpecification",
+          "price": "15.95",
+          "priceCurrency": "AUD",
+          "valueAddedTaxIncluded": true
+         }
+        ]
+       },
+       "potentialAction": {
+        "@type": "WantAction",
+        "target": "http://localhost:8001/au/wishlist"
+       }
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 12,
+      "url": "http://localhost:8001/au/products/blue-crystal-sea-turtle-love-heart-pendant-necklace",
+      "item": {
+       "@type": "Product",
+       "name": "Blue Crystal Sea Turtle Love Heart Pendant Necklace",
+       "url": "http://localhost:8001/au/products/blue-crystal-sea-turtle-love-heart-pendant-necklace",
+       "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/66C221BF-C679-4D1F-A724-56F1656F413D.jpeg/:/rs=w:1200,h:1200",
+       "offers": {
+        "@type": "Offer",
+        "price": "15.95",
+        "priceCurrency": "AUD",
+        "availability": "https://schema.org/InStock",
+        "seller": {
+         "@id": "http://localhost:8001/#store"
+        },
+        "priceSpecification": [
+         {
+          "@type": "UnitPriceSpecification",
+          "price": "15.95",
+          "priceCurrency": "AUD",
+          "valueAddedTaxIncluded": true
+         }
+        ]
+       },
+       "potentialAction": {
+        "@type": "WantAction",
+        "target": "http://localhost:8001/au/wishlist"
+       }
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 13,
+      "url": "http://localhost:8001/au/products/7-stone-chakra-angel-pendant-necklace",
+      "item": {
+       "@type": "Product",
+       "name": "7 Stone Chakra Angel Pendant Necklace",
+       "url": "http://localhost:8001/au/products/7-stone-chakra-angel-pendant-necklace",
+       "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/IMG_8518.jpeg/:/rs=w:1200,h:1200",
+       "offers": {
+        "@type": "Offer",
+        "price": "14.95",
+        "priceCurrency": "AUD",
+        "availability": "https://schema.org/InStock",
+        "seller": {
+         "@id": "http://localhost:8001/#store"
+        },
+        "priceSpecification": [
+         {
+          "@type": "UnitPriceSpecification",
+          "price": "14.95",
+          "priceCurrency": "AUD",
+          "valueAddedTaxIncluded": true
+         }
+        ]
+       },
+       "potentialAction": {
+        "@type": "WantAction",
+        "target": "http://localhost:8001/au/wishlist"
+       }
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 14,
+      "url": "http://localhost:8001/au/products/dolphin-crystal-love-heart-pendant-necklace",
+      "item": {
+       "@type": "Product",
+       "name": "Dolphin Crystal Love Heart Pendant Necklace",
+       "url": "http://localhost:8001/au/products/dolphin-crystal-love-heart-pendant-necklace",
+       "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/B4855601-324E-4F65-B849-FC0B0617B8E1.jpeg/:/rs=w:1200,h:1200",
+       "offers": {
+        "@type": "Offer",
+        "price": "12.95",
+        "priceCurrency": "AUD",
+        "availability": "https://schema.org/InStock",
+        "seller": {
+         "@id": "http://localhost:8001/#store"
+        },
+        "priceSpecification": [
+         {
+          "@type": "UnitPriceSpecification",
+          "price": "12.95",
+          "priceCurrency": "AUD",
+          "valueAddedTaxIncluded": true
+         },
+         {
+          "@type": "UnitPriceSpecification",
+          "priceType": "https://schema.org/StrikethroughPrice",
+          "price": "15.95",
+          "priceCurrency": "AUD"
+         }
+        ]
+       },
+       "potentialAction": {
+        "@type": "WantAction",
+        "target": "http://localhost:8001/au/wishlist"
+       }
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 15,
+      "url": "http://localhost:8001/au/products/crystal-love-heart1-angel-wings-pendant-necklace",
+      "item": {
+       "@type": "Product",
+       "name": "Crystal Love Heart Angel Wings Pendant Necklace",
+       "url": "http://localhost:8001/au/products/crystal-love-heart1-angel-wings-pendant-necklace",
+       "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/IMG_1849.jpeg/:/rs=w:1200,h:1200",
+       "offers": {
+        "@type": "Offer",
+        "price": "13.95",
+        "priceCurrency": "AUD",
+        "availability": "https://schema.org/InStock",
+        "seller": {
+         "@id": "http://localhost:8001/#store"
+        },
+        "priceSpecification": [
+         {
+          "@type": "UnitPriceSpecification",
+          "price": "13.95",
+          "priceCurrency": "AUD",
+          "valueAddedTaxIncluded": true
+         }
+        ]
+       },
+       "potentialAction": {
+        "@type": "WantAction",
+        "target": "http://localhost:8001/au/wishlist"
+       }
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 16,
+      "url": "http://localhost:8001/au/products/moonstone-triquetra-cat-fox-pendant-necklace",
+      "item": {
+       "@type": "Product",
+       "name": "Moonstone Triquetra Cat Fox Pendant Necklace",
+       "url": "http://localhost:8001/au/products/moonstone-triquetra-cat-fox-pendant-necklace",
+       "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/IMG_3205.jpeg/:/rs=w:1200,h:1200",
+       "offers": {
+        "@type": "Offer",
+        "price": "14.95",
+        "priceCurrency": "AUD",
+        "availability": "https://schema.org/InStock",
+        "seller": {
+         "@id": "http://localhost:8001/#store"
+        },
+        "priceSpecification": [
+         {
+          "@type": "UnitPriceSpecification",
+          "price": "14.95",
+          "priceCurrency": "AUD",
+          "valueAddedTaxIncluded": true
+         }
+        ]
+       },
+       "potentialAction": {
+        "@type": "WantAction",
+        "target": "http://localhost:8001/au/wishlist"
+       }
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 17,
+      "url": "http://localhost:8001/au/products/crescent-moon-triquetra-celtic-knot-pendant-necklace",
+      "item": {
+       "@type": "Product",
+       "name": "Crescent Moon Triquetra Celtic Knot Pendant Necklace",
+       "url": "http://localhost:8001/au/products/crescent-moon-triquetra-celtic-knot-pendant-necklace",
+       "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/IMG_9886.jpeg/:/rs=w:1200,h:1200",
+       "offers": {
+        "@type": "Offer",
+        "price": "14.95",
+        "priceCurrency": "AUD",
+        "availability": "https://schema.org/InStock",
+        "seller": {
+         "@id": "http://localhost:8001/#store"
+        },
+        "priceSpecification": [
+         {
+          "@type": "UnitPriceSpecification",
+          "price": "14.95",
+          "priceCurrency": "AUD",
+          "valueAddedTaxIncluded": true
+         }
+        ]
+       },
+       "potentialAction": {
+        "@type": "WantAction",
+        "target": "http://localhost:8001/au/wishlist"
+       }
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 18,
+      "url": "http://localhost:8001/au/products/7-chakra-rainbow-crystal-lotus-pendant-necklace",
+      "item": {
+       "@type": "Product",
+       "name": "7 Chakra Rainbow Crystal Lotus Pendant Necklace",
+       "url": "http://localhost:8001/au/products/7-chakra-rainbow-crystal-lotus-pendant-necklace",
+       "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/IMG_7887.jpeg/:/rs=w:1200,h:1200",
+       "offers": {
+        "@type": "Offer",
+        "price": "15.95",
+        "priceCurrency": "AUD",
+        "availability": "https://schema.org/InStock",
+        "seller": {
+         "@id": "http://localhost:8001/#store"
+        },
+        "priceSpecification": [
+         {
+          "@type": "UnitPriceSpecification",
+          "price": "15.95",
+          "priceCurrency": "AUD",
+          "valueAddedTaxIncluded": true
+         }
+        ]
+       },
+       "potentialAction": {
+        "@type": "WantAction",
+        "target": "http://localhost:8001/au/wishlist"
+       }
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 19,
+      "url": "http://localhost:8001/au/products/wolf-viking-talisman-amulet-tribal-crystal-swirl-pendant-necklace",
+      "item": {
+       "@type": "Product",
+       "name": "Wolf Viking Talisman Amulet Tribal Crystal Swirl Pendant Necklace",
+       "url": "http://localhost:8001/au/products/wolf-viking-talisman-amulet-tribal-crystal-swirl-pendant-necklace",
+       "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/647380EE-C48A-433D-90A8-1B310EA16483.jpeg/:/rs=w:1200,h:1200",
+       "offers": {
+        "@type": "Offer",
+        "price": "13.95",
+        "priceCurrency": "AUD",
+        "availability": "https://schema.org/InStock",
+        "seller": {
+         "@id": "http://localhost:8001/#store"
+        },
+        "priceSpecification": [
+         {
+          "@type": "UnitPriceSpecification",
+          "price": "13.95",
+          "priceCurrency": "AUD",
+          "valueAddedTaxIncluded": true
+         }
+        ]
+       },
+       "potentialAction": {
+        "@type": "WantAction",
+        "target": "http://localhost:8001/au/wishlist"
+       }
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 20,
+      "url": "http://localhost:8001/au/products/pentagram-crescent-moon-witch-amulet-pendant-necklace",
+      "item": {
+       "@type": "Product",
+       "name": "Pentagram Crescent Moon Witch Amulet Pendant Necklace",
+       "url": "http://localhost:8001/au/products/pentagram-crescent-moon-witch-amulet-pendant-necklace",
+       "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/IMG_1716.jpeg/:/rs=w:1200,h:1200",
+       "offers": {
+        "@type": "Offer",
+        "price": "12.95",
+        "priceCurrency": "AUD",
+        "availability": "https://schema.org/InStock",
+        "seller": {
+         "@id": "http://localhost:8001/#store"
+        },
+        "priceSpecification": [
+         {
+          "@type": "UnitPriceSpecification",
+          "price": "12.95",
+          "priceCurrency": "AUD",
+          "valueAddedTaxIncluded": true
+         }
+        ]
+       },
+       "potentialAction": {
+        "@type": "WantAction",
+        "target": "http://localhost:8001/au/wishlist"
+       }
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 21,
+      "url": "http://localhost:8001/au/products/rainbow-crystal-dolphin-pendant-necklace",
+      "item": {
+       "@type": "Product",
+       "name": "Rainbow Crystal Dolphin Pendant Necklace",
+       "url": "http://localhost:8001/au/products/rainbow-crystal-dolphin-pendant-necklace",
+       "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/IMG_9321.jpeg/:/rs=w:1200,h:1200",
+       "offers": {
+        "@type": "Offer",
+        "price": "14.95",
+        "priceCurrency": "AUD",
+        "availability": "https://schema.org/InStock",
+        "seller": {
+         "@id": "http://localhost:8001/#store"
+        },
+        "priceSpecification": [
+         {
+          "@type": "UnitPriceSpecification",
+          "price": "14.95",
+          "priceCurrency": "AUD",
+          "valueAddedTaxIncluded": true
+         }
+        ]
+       },
+       "potentialAction": {
+        "@type": "WantAction",
+        "target": "http://localhost:8001/au/wishlist"
+       }
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 22,
+      "url": "http://localhost:8001/au/products/rainbow-topaz-crystal-teardrop-necklace-earrings-set",
+      "item": {
+       "@type": "Product",
+       "name": "Rainbow Topaz Crystal Teardrop Necklace & Earrings Set",
+       "url": "http://localhost:8001/au/products/rainbow-topaz-crystal-teardrop-necklace-earrings-set",
+       "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/IMG_3384.jpeg/:/rs=w:1200,h:1200",
+       "offers": {
+        "@type": "Offer",
+        "price": "14.95",
+        "priceCurrency": "AUD",
+        "availability": "https://schema.org/InStock",
+        "seller": {
+         "@id": "http://localhost:8001/#store"
+        },
+        "priceSpecification": [
+         {
+          "@type": "UnitPriceSpecification",
+          "price": "14.95",
+          "priceCurrency": "AUD",
+          "valueAddedTaxIncluded": true
+         }
+        ]
+       },
+       "potentialAction": {
+        "@type": "WantAction",
+        "target": "http://localhost:8001/au/wishlist"
+       }
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 23,
+      "url": "http://localhost:8001/au/products/horse-head-silver-pendant-necklace",
+      "item": {
+       "@type": "Product",
+       "name": "Horse Head Silver Pendant Necklace",
+       "url": "http://localhost:8001/au/products/horse-head-silver-pendant-necklace",
+       "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/FE85730E-2718-43AC-87B9-437BE94CE0CF.jpeg/:/rs=w:1200,h:1200",
+       "offers": {
+        "@type": "Offer",
+        "price": "14.95",
+        "priceCurrency": "AUD",
+        "availability": "https://schema.org/InStock",
+        "seller": {
+         "@id": "http://localhost:8001/#store"
+        },
+        "priceSpecification": [
+         {
+          "@type": "UnitPriceSpecification",
+          "price": "14.95",
+          "priceCurrency": "AUD",
+          "valueAddedTaxIncluded": true
+         }
+        ]
+       },
+       "potentialAction": {
+        "@type": "WantAction",
+        "target": "http://localhost:8001/au/wishlist"
+       }
+      }
+     },
+     {
+      "@type": "ListItem",
+      "position": 24,
+      "url": "http://localhost:8001/au/products/cheshire-cat-aromatherapy-essential-oil-diffuser-locket-pendant-necklace",
+      "item": {
+       "@type": "Product",
+       "name": "Cheshire Cat Aromatherapy Essential Oil Diffuser Locket Pendant Necklace",
+       "url": "http://localhost:8001/au/products/cheshire-cat-aromatherapy-essential-oil-diffuser-locket-pendant-necklace",
+       "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/97D7CE51-BC64-4E10-8BFA-A35D69FBE968.jpeg/:/rs=w:1200,h:1200",
+       "offers": {
+        "@type": "Offer",
+        "price": "19.95",
+        "priceCurrency": "AUD",
+        "availability": "https://schema.org/LimitedAvailability",
+        "seller": {
+         "@id": "http://localhost:8001/#store"
+        },
+        "inventoryLevel": {
+         "@type": "QuantitativeValue",
+         "value": 3
+        },
+        "priceSpecification": [
+         {
+          "@type": "UnitPriceSpecification",
+          "price": "19.95",
+          "priceCurrency": "AUD",
+          "valueAddedTaxIncluded": true
+         }
+        ]
+       },
+       "potentialAction": {
+        "@type": "WantAction",
+        "target": "http://localhost:8001/au/wishlist"
+       }
+      }
+     }
+    ]
+   },
+   "offers": {
+    "@type": "AggregateOffer",
+    "lowPrice": 7.95,
+    "highPrice": 24.95,
+    "priceCurrency": "AUD",
+    "offerCount": 1153
+   },
+   "hasPart": [
+    {
+     "@type": "WPHeader",
+     "cssSelector": "body > main > div:nth-of-type(1) > header"
+    },
+    {
+     "@type": "SiteNavigationElement",
+     "cssSelector": "body > main > div:nth-of-type(1) > header > nav"
+    },
+    {
+     "@type": "SiteNavigationElement",
+     "cssSelector": "nav[aria-label=\"Shop by theme\"]"
+    },
+    {
+     "@type": "SiteNavigationElement",
+     "cssSelector": "nav[aria-label=\"Pages\"]"
+    },
+    {
+     "@type": "WPFooter",
+     "cssSelector": "body > main > footer"
+    },
+    {
+     "@type": "FAQPage",
+     "isPartOf": {
+      "@id": "http://localhost:8001/au/categories/necklace"
+     },
+     "mainEntity": [
+      {
+       "@type": "Question",
+       "name": "What length are the necklace chains?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Most listings use a 50 cm chain. Some are 45 cm, and a few are 55 cm or 60 cm. The chain length is in each product description."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "What are the necklaces made of?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Mostly silver-plated alloy, with some stainless steel, glass and faux stones. Each description lists the pendant and chain material."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "How much is shipping?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Shipping within Australia is a flat $7.95, and free on orders over $60."
+       }
+      },
+      {
+       "@type": "Question",
+       "name": "Can I return a necklace?",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, you can return items within 14 days."
+       }
+      }
+     ],
+     "name": "Questions",
+     "url": "http://localhost:8001/au/categories/necklace"
+    }
+   ]
+  }
+ ]
+}

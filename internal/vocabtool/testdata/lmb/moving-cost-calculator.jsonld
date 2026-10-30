@@ -1,0 +1,828 @@
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@id": "http://localhost:8080/#organization",
+   "@type": "Organization",
+   "contactPoint": {
+    "@type": "ContactPoint",
+    "areaServed": "US",
+    "availableLanguage": "en",
+    "contactType": "customer support",
+    "telephone": "+18334990939"
+   },
+   "description": "Lift My Boxes gives free moving cost estimates and, when asked, connects people with independent moving companies.",
+   "disambiguatingDescription": "An online moving cost estimator and referral service, not a moving company.",
+   "email": "hello@liftmyboxes.com",
+   "logo": "http://localhost:8080/favicon.svg",
+   "name": "Lift My Boxes",
+   "url": "http://localhost:8080/"
+  },
+  {
+   "@id": "http://localhost:8080/#website",
+   "@type": "WebSite",
+   "inLanguage": "en-US",
+   "name": "Lift My Boxes",
+   "publisher": {
+    "@id": "http://localhost:8080/#organization"
+   },
+   "url": "http://localhost:8080/"
+  },
+  {
+   "@id": "http://localhost:8080/#calculator",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q39546",
+    "https://www.wikidata.org/wiki/Q2858615"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q31087"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/024d2"
+    }
+   ],
+   "name": "Calculator",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Calculator",
+    "https://www.wikidata.org/wiki/Q31087",
+    "https://www.google.com/search?kgmid=/m/024d2",
+    "https://dbpedia.org/resource/Calculator"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#cost",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q151885",
+    "https://www.wikidata.org/wiki/Q29028649"
+   ],
+   "alternateName": [
+    "costs",
+    "Costs"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q240673"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0168hv"
+    }
+   ],
+   "name": "Cost",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Cost",
+    "https://www.wikidata.org/wiki/Q240673",
+    "https://www.google.com/search?kgmid=/m/0168hv",
+    "https://dbpedia.org/resource/Cost"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#moving-company",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q783794",
+    "https://www.wikidata.org/wiki/Q2169973"
+   ],
+   "alternateName": [
+    "movers",
+    "mover",
+    "Movers",
+    "moving companies",
+    "Moving companies",
+    "Moving Companies",
+    "moving van",
+    "moving vans",
+    "Mover"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q1757263"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/07ry5s"
+    }
+   ],
+   "name": "Moving company",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Moving_company",
+    "https://www.wikidata.org/wiki/Q1757263",
+    "https://www.google.com/search?kgmid=/m/07ry5s",
+    "https://dbpedia.org/resource/Moving_company"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#freight-transport",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q627436",
+    "https://www.wikidata.org/wiki/Q1724915"
+   ],
+   "alternateName": [
+    "Shipping",
+    "shipment"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q651658"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/070qm"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/g/120_g24_"
+    }
+   ],
+   "name": "Freight transport",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Freight_transport",
+    "https://www.wikidata.org/wiki/Q651658",
+    "https://www.google.com/search?kgmid=/m/070qm",
+    "https://www.google.com/search?kgmid=/g/120_g24_",
+    "https://dbpedia.org/resource/Freight_transport"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#moving-cost-calculator",
+   "@type": "WebApplication",
+   "applicationCategory": "UtilitiesApplication",
+   "description": "Free online calculator that estimates the cost of a local or long-distance move.",
+   "isAccessibleForFree": true,
+   "name": "Lift My Boxes Moving Cost Calculator",
+   "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+   },
+   "operatingSystem": "Any",
+   "publisher": [
+    {
+     "@id": "http://localhost:8080/#organization"
+    }
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#price",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q29028649",
+    "https://www.wikidata.org/wiki/Q1499548"
+   ],
+   "alternateName": [
+    "prices",
+    "Prices"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q160151"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/01d_1l"
+    }
+   ],
+   "name": "Price",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Price",
+    "https://www.wikidata.org/wiki/Q160151",
+    "https://www.google.com/search?kgmid=/m/01d_1l",
+    "https://dbpedia.org/resource/Price"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#truck",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q140424465",
+    "https://www.wikidata.org/wiki/Q1515493"
+   ],
+   "alternateName": [
+    "trucks",
+    "Trucks"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q43193"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/07r04"
+    }
+   ],
+   "name": "Truck",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Truck",
+    "https://www.wikidata.org/wiki/Q43193",
+    "https://www.google.com/search?kgmid=/m/07r04",
+    "https://dbpedia.org/resource/Truck"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#zip-code",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q6545185",
+    "https://www.wikidata.org/wiki/Q126286955"
+   ],
+   "alternateName": [
+    "ZIP codes",
+    "ZIP"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q136208"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0dllr"
+    }
+   ],
+   "name": "ZIP Code",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/ZIP_Code",
+    "https://www.wikidata.org/wiki/Q136208",
+    "https://www.google.com/search?kgmid=/m/0dllr",
+    "https://dbpedia.org/resource/ZIP_Code"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#fee",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q30242023",
+    "https://www.wikidata.org/wiki/Q1344851"
+   ],
+   "alternateName": [
+    "Fees",
+    "Fuel surcharge",
+    "fees",
+    "fuel surcharge",
+    "service charge",
+    "surcharge"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q11765"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/03fk6m"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/g/1215c8gf"
+    }
+   ],
+   "name": "Fee",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Fee",
+    "https://www.wikidata.org/wiki/Q11765",
+    "https://www.google.com/search?kgmid=/m/03fk6m",
+    "https://www.google.com/search?kgmid=/g/1215c8gf",
+    "https://dbpedia.org/resource/Fee"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#road",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q123035442",
+    "https://www.wikidata.org/wiki/Q113519195"
+   ],
+   "alternateName": [
+    "roads"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q34442"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/06gfj"
+    }
+   ],
+   "name": "Road",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Road",
+    "https://www.wikidata.org/wiki/Q34442",
+    "https://www.google.com/search?kgmid=/m/06gfj",
+    "https://dbpedia.org/resource/Road"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#fuel-economy-in-automobiles",
+   "@type": "Thing",
+   "additionalType": "https://www.wikidata.org/wiki/Q106998002",
+   "alternateName": [
+    "mileage",
+    "miles per gallon",
+    "Mileage"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q931507"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/0410vz6"
+    }
+   ],
+   "name": "Fuel economy in automobiles",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Fuel_economy_in_automobiles",
+    "https://www.wikidata.org/wiki/Q931507",
+    "https://www.google.com/search?kgmid=/m/0410vz6",
+    "https://dbpedia.org/resource/Fuel_economy_in_automobiles"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#room",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q1299240",
+    "https://www.wikidata.org/wiki/Q13226383"
+   ],
+   "alternateName": [
+    "rooms",
+    "Rooms"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q180516"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/06ht1"
+    }
+   ],
+   "name": "Room",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Room",
+    "https://www.wikidata.org/wiki/Q180516",
+    "https://www.google.com/search?kgmid=/m/06ht1",
+    "https://dbpedia.org/resource/Room"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#u-haul",
+   "@type": "Organization",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q4830453",
+    "https://www.wikidata.org/wiki/Q291240"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q7862902"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/054tqv"
+    }
+   ],
+   "name": "U-Haul",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/U-Haul",
+    "https://www.wikidata.org/wiki/Q7862902",
+    "https://www.google.com/search?kgmid=/m/054tqv",
+    "https://dbpedia.org/resource/U-Haul"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#mile",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q1978718",
+    "https://www.wikidata.org/wiki/Q16782623"
+   ],
+   "alternateName": [
+    "miles"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q253276"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/04vb3"
+    }
+   ],
+   "name": "Mile",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Mile",
+    "https://www.wikidata.org/wiki/Q253276",
+    "https://www.google.com/search?kgmid=/m/04vb3",
+    "https://dbpedia.org/resource/Mile"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#apartment",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q1247867",
+    "https://www.wikidata.org/wiki/Q3305339"
+   ],
+   "alternateName": [
+    "apartment building",
+    "apartments",
+    "Flat",
+    "Apartment buildings",
+    "apartment buildings",
+    "flat",
+    "Apartment complexes",
+    "garden apartment",
+    "Apartments",
+    "apartment complexes"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q188507"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/01nblt"
+    }
+   ],
+   "name": "Apartment",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Apartment",
+    "https://www.wikidata.org/wiki/Q188507",
+    "https://www.google.com/search?kgmid=/m/01nblt",
+    "https://dbpedia.org/resource/Apartment"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#billiard-table",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q768186",
+    "https://www.wikidata.org/wiki/Q14748"
+   ],
+   "alternateName": [
+    "pool tables",
+    "Pool table",
+    "pockets",
+    "Billiard",
+    "Pool tables",
+    "pool table",
+    "billiard",
+    "POOL TABLE"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q3500725"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/04p0qw"
+    }
+   ],
+   "name": "Billiard table",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Billiard_table",
+    "https://www.wikidata.org/wiki/Q3500725",
+    "https://www.google.com/search?kgmid=/m/04p0qw",
+    "https://dbpedia.org/resource/Billiard_table"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#piano",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q110295396",
+    "https://www.wikidata.org/wiki/Q52954"
+   ],
+   "alternateName": [
+    "upright piano",
+    "Upright",
+    "Pianos",
+    "baby grand",
+    "acoustic pianos",
+    "uprights",
+    "grand piano",
+    "Concert grand",
+    "Baby grand",
+    "upright",
+    "GRAND PIANOS",
+    "pianos",
+    "Upright Piano",
+    "vertical piano",
+    "UPRIGHT PIANOS",
+    "Upright piano",
+    "Grand piano"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q5994"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/05r5c"
+    }
+   ],
+   "name": "Piano",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Piano",
+    "https://www.wikidata.org/wiki/Q5994",
+    "https://www.google.com/search?kgmid=/m/05r5c",
+    "https://dbpedia.org/resource/Piano"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#hot-tub",
+   "@type": "Thing",
+   "additionalType": "https://www.wikidata.org/wiki/Q152095",
+   "alternateName": [
+    "Hot tubs",
+    "hot tubs"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q1936429"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/065h6l"
+    }
+   ],
+   "name": "Hot tub",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Hot_tub",
+    "https://www.wikidata.org/wiki/Q1936429",
+    "https://www.google.com/search?kgmid=/m/065h6l",
+    "https://dbpedia.org/resource/Hot_tub"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#mobile-home",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q2742119",
+    "https://www.wikidata.org/wiki/Q216040"
+   ],
+   "alternateName": [
+    "mobile homes"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q1434998"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/02x_6w"
+    }
+   ],
+   "name": "Mobile home",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Mobile_home",
+    "https://www.wikidata.org/wiki/Q1434998",
+    "https://www.google.com/search?kgmid=/m/02x_6w",
+    "https://dbpedia.org/resource/Mobile_home"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/#bedroom",
+   "@type": "Thing",
+   "additionalType": [
+    "https://www.wikidata.org/wiki/Q13226383",
+    "https://www.wikidata.org/wiki/Q180516"
+   ],
+   "alternateName": [
+    "bedrooms",
+    "Bedrooms"
+   ],
+   "identifier": [
+    {
+     "@type": "PropertyValue",
+     "propertyID": "Wikidata",
+     "value": "Q193837"
+    },
+    {
+     "@type": "PropertyValue",
+     "propertyID": "GoogleMachineID",
+     "value": "kg:/m/02_58j"
+    }
+   ],
+   "name": "Bedroom",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Bedroom",
+    "https://www.wikidata.org/wiki/Q193837",
+    "https://www.google.com/search?kgmid=/m/02_58j",
+    "https://dbpedia.org/resource/Bedroom"
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/moving-cost-calculator/#webpage",
+   "@type": "WebPage",
+   "about": [
+    {
+     "@id": "http://localhost:8080/#calculator"
+    },
+    {
+     "@id": "http://localhost:8080/#cost"
+    },
+    {
+     "@id": "http://localhost:8080/#moving-company"
+    },
+    {
+     "@id": "http://localhost:8080/#freight-transport"
+    }
+   ],
+   "breadcrumb": {
+    "@id": "http://localhost:8080/moving-cost-calculator/#breadcrumb"
+   },
+   "dateModified": "2026-10-29T16:21:58Z",
+   "datePublished": "2026-10-29T16:21:17Z",
+   "description": "Use the free moving cost calculator for a price range in about a minute. See what the range assumes, which extras change it, and how to test a quote against it.",
+   "inLanguage": "en-US",
+   "isPartOf": {
+    "@id": "http://localhost:8080/#website"
+   },
+   "keywords": [
+    "moving cost calculator"
+   ],
+   "mainEntity": [
+    {
+     "@id": "http://localhost:8080/#moving-cost-calculator"
+    }
+   ],
+   "mentions": [
+    {
+     "@id": "http://localhost:8080/#moving-cost-calculator"
+    },
+    {
+     "@id": "http://localhost:8080/#price"
+    },
+    {
+     "@id": "http://localhost:8080/#truck"
+    },
+    {
+     "@id": "http://localhost:8080/#zip-code"
+    },
+    {
+     "@id": "http://localhost:8080/#fee"
+    },
+    {
+     "@id": "http://localhost:8080/#road"
+    },
+    {
+     "@id": "http://localhost:8080/#fuel-economy-in-automobiles"
+    },
+    {
+     "@id": "http://localhost:8080/#room"
+    },
+    {
+     "@id": "http://localhost:8080/#u-haul"
+    },
+    {
+     "@id": "http://localhost:8080/#mile"
+    },
+    {
+     "@id": "http://localhost:8080/#apartment"
+    },
+    {
+     "@id": "http://localhost:8080/#billiard-table"
+    },
+    {
+     "@id": "http://localhost:8080/#piano"
+    },
+    {
+     "@id": "http://localhost:8080/#hot-tub"
+    },
+    {
+     "@id": "http://localhost:8080/#mobile-home"
+    },
+    {
+     "@id": "http://localhost:8080/#bedroom"
+    }
+   ],
+   "name": "Free Moving Cost Calculator, No Email Needed | Lift My Boxes",
+   "url": "http://localhost:8080/moving-cost-calculator/"
+  },
+  {
+   "@id": "http://localhost:8080/moving-cost-calculator/#breadcrumb",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/",
+     "name": "Home",
+     "position": 1
+    },
+    {
+     "@type": "ListItem",
+     "item": "http://localhost:8080/moving-cost-calculator/",
+     "name": "Moving cost calculator",
+     "position": 2
+    }
+   ]
+  },
+  {
+   "@id": "http://localhost:8080/moving-cost-calculator/#faq",
+   "@type": "FAQPage",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Start with a moving cost calculator: enter both ZIP codes, your home size, the date and any extras to get a range. A studio apartment moved 10 road miles, off peak with no stairs or extras, comes to $280–$740. Then add the costs movers don't charge for, such as tips, supplies and travel, and ask movers for written estimates to firm it up."
+     },
+     "name": "How do you estimate the cost of a move?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "It's free, and the range appears on the page without an email or a sign-up. The moving cost calculator takes about a minute: you enter ZIP codes, home size, date and extras, and the price range shows straight away. Asking to be put in touch with a mover afterwards is up to you."
+     },
+     "name": "Is the moving cost calculator free, and does it need an email?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "With movers, a 3-bedroom home moved 10 road miles costs $1,150–$2,850, and moved 1,000 road miles it costs $4,000–$8,550, both off peak with no stairs or extras. Smaller homes cost less and bigger ones more. Run the moving cost calculator with your own ZIP codes and date for a range that fits your move."
+     },
+     "name": "How much should I expect to pay to move?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "For a local move, multiply the crew size by the hourly rate and the hours: one mover typically costs $50–$75 an hour, truck included, so a 3-mover crew costs three times that. For a long move, the sum uses the weight of the shipment and the miles instead. A moving cost calculator does both sums from your inputs, and gives a range rather than one average figure."
+     },
+     "name": "How is an average moving cost calculated?"
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Not directly. The moving cost calculator asks for your home size and uses that as a stand-in for weight. Movers weigh a long-distance shipment, or estimate it after a survey, so their figure can differ if your rooms are fuller or emptier than most. Tell each mover about heavy pieces, such as a gun safe or a piano, at the survey."
+     },
+     "name": "Can a moving cost calculator price a move by weight?"
+    }
+   ]
+  }
+ ]
+}
