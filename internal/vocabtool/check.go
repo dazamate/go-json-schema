@@ -7,6 +7,8 @@ import (
 	"regexp"
 	"slices"
 	"strings"
+
+	"golang.org/x/net/html"
 )
 
 // Issue severities. Only errors stop a draft being valid schema.org.
@@ -16,7 +18,8 @@ const (
 	Info    = "info"
 )
 
-// Issue is one finding about a draft, located by a JSONPath-like path.
+// Issue is one finding about a draft, located by a JSONPath-like path, or for
+// a finding on the page itself, by "html:" and the element's CSS selector.
 type Issue struct {
 	Path     string `json:"path"`
 	Severity string `json:"severity"`
@@ -25,16 +28,28 @@ type Issue struct {
 
 // Report is the checked draft, ready to publish, plus what was found.
 type Report struct {
-	Errors    int     `json:"errors"`
-	Warnings  int     `json:"warnings"`
-	Issues    []Issue `json:"issues"`
-	ScriptTag string  `json:"script_tag"`
+	Errors       int           `json:"errors"`
+	Warnings     int           `json:"warnings"`
+	Issues       []Issue       `json:"issues"`
+	PageElements []PageElement `json:"page_elements,omitempty"`
+	ScriptTag    string        `json:"script_tag"`
+}
+
+// PageElement is a section of the page that a specific schema.org type
+// describes: a WebPageElement subtype, or a BreadcrumbList for a breadcrumb
+// nav. MarkedBy is the path of the draft node that marks it up, "" for none.
+type PageElement struct {
+	Type     string `json:"type"`
+	Selector string `json:"selector"`
+	Name     string `json:"name,omitempty"`
+	MarkedBy string `json:"marked_by,omitempty"`
 }
 
 // CheckOptions controls the published form and the page checks.
 type CheckOptions struct {
 	Pretty   bool   // indent the JSON inside the script tag
 	PageText string // the page's visible text; when set, about and mentions entities must be named in it
+	PageHTML string // the rendered page; its sections must be marked up, and it gives PageText when that is empty
 }
 
 // Check validates a JSON-LD draft against the vocabulary and returns it as
@@ -68,8 +83,20 @@ func (t *Tool) Check(draft json.RawMessage, opts CheckOptions) (Report, error) {
 	all := nodes("$", doc)
 	c.thingTypes(all)
 	c.webPageElements(all)
-	c.pageEntities(all, opts.PageText)
-	rep := Report{Issues: c.issues}
+	text := opts.PageText
+	var elements []PageElement
+	if strings.TrimSpace(opts.PageHTML) != "" {
+		page, err := html.Parse(strings.NewReader(opts.PageHTML))
+		if err != nil {
+			return Report{}, fmt.Errorf("page_html: %w", err)
+		}
+		if text == "" {
+			text = htmlText(page)
+		}
+		elements = c.pageElements(all, page)
+	}
+	c.pageEntities(all, text)
+	rep := Report{Issues: c.issues, PageElements: elements}
 	if rep.Issues == nil {
 		rep.Issues = []Issue{}
 	}

@@ -137,6 +137,27 @@ func TestBuildJSONLDChecksEntitiesAgainstPageText(t *testing.T) {
 	}
 }
 
+func TestBuildJSONLDListsPageElements(t *testing.T) {
+	cs := connect(t, nil)
+	page := `<html><body><header><nav id="site-nav">Home</nav></header><main><p>Lemon tart</p></main><footer>ABN</footer></body></html>`
+	draft := `{"@type":"WebPage","about":{"@type":"Thing","name":"Lemon"},"hasPart":{"@type":"SiteNavigationElement","cssSelector":"#site-nav"}}`
+	out, isErr := callText(t, cs, "build_jsonld", map[string]any{"draft": draft, "page_html": page})
+	if isErr {
+		t.Fatal(out)
+	}
+	var rep vocabtool.Report
+	if err := json.Unmarshal([]byte(out), &rep); err != nil {
+		t.Fatal(err)
+	}
+	if len(rep.PageElements) != 3 || rep.PageElements[1].MarkedBy != "$.hasPart" {
+		t.Fatalf("page elements = %+v, want header, the marked nav and footer", rep.PageElements)
+	}
+	// header and footer unmarked; Lemon named by the page's text
+	if rep.Warnings != 2 || !strings.Contains(out, "has no WPHeader") || !strings.Contains(out, "has no WPFooter") {
+		t.Fatalf("issues = %+v", rep.Issues)
+	}
+}
+
 func TestLookupErrorsAreToolErrors(t *testing.T) {
 	cs := connect(t, nil)
 	out, isErr := callText(t, cs, "type_properties", map[string]any{"type": "recipe"})
@@ -508,7 +529,7 @@ func TestPageGraphGuidance(t *testing.T) {
 		t.Fatal("guide has no Page graph section")
 	}
 	section := guide[i:]
-	for _, want := range []string{"hasPart", "isPartOf", "mainEntityOfPage", "Brand", "potentialAction", "DesktopWebPlatform", "{\"@id\": ...}", "stays a Thing", "match the visible text", "page_text"} {
+	for _, want := range []string{"hasPart", "isPartOf", "mainEntityOfPage", "Brand", "potentialAction", "DesktopWebPlatform", "{\"@id\": ...}", "stays a Thing", "match the visible text", "page_text", "page_html", "SiteNavigationElement", "WPHeader", "WPFooter", "WPSideBar", "cssSelector"} {
 		if !strings.Contains(section, want) {
 			t.Errorf("Page graph section does not say %q", want)
 		}
@@ -516,7 +537,7 @@ func TestPageGraphGuidance(t *testing.T) {
 	if !strings.Contains(guide, "| FAQPage mainEntity |") || strings.Contains(guide, "| mainEntity / FAQPage |") {
 		t.Error("guide's FAQ row is not the FAQPage-as-part-of-the-page row")
 	}
-	for _, want := range []string{"retype none", `{"@id"}`, "Page graph section", "6. build_jsonld(draft, page_text)"} {
+	for _, want := range []string{"retype none", `{"@id"}`, "Page graph section", "6. build_jsonld(draft, page_html)"} {
 		if !strings.Contains(instructions, want) {
 			t.Errorf("instructions do not say %q", want)
 		}
@@ -531,7 +552,7 @@ func TestPageGraphGuidance(t *testing.T) {
 	if step := selectStep(t, text); !strings.Contains(step, `{"@id"}`) {
 		t.Errorf("select_entities step does not say to reference graph nodes by @id: %s", step)
 	}
-	for _, want := range []string{"5. Shape the graph", "FAQPage that is a part of the page", "6. Call build_jsonld", "as page_text", "## Page graph"} {
+	for _, want := range []string{"5. Shape the graph", "FAQPage that is a part of the page", "6. Call build_jsonld", "as page_html", "## Page graph"} {
 		if !strings.Contains(text, want) {
 			t.Errorf("prompt does not say %q", want)
 		}

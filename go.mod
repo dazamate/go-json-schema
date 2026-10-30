@@ -3,11 +3,13 @@ module github.com/dazamate/go-json-schema
 go 1.26
 
 require (
+	github.com/andybalholm/cascadia v1.3.3
 	github.com/google/jsonschema-go v0.4.3
 	github.com/modelcontextprotocol/go-sdk v1.8.0
 	github.com/sugarme/tokenizer v0.3.0
 	github.com/yalue/onnxruntime_go v1.38.0
 	go.yaml.in/yaml/v3 v3.0.5
+	golang.org/x/net v0.33.0
 	golang.org/x/sys v0.41.0
 )
 

@@ -296,3 +296,79 @@ func TestCheckWarnsOnAWebPageElementWithAMoreSpecificType(t *testing.T) {
 		t.Errorf("%d WebPageElement warnings, want 7 (none on Gallery or the specific types): %+v", n, r.Issues)
 	}
 }
+
+// elementsPage has one of each section a specific type describes, plus the
+// ones that must be skipped: an article's own header, a presentation table,
+// a template, a hidden nav and a script.
+const elementsPage = `<!doctype html><html><head><title>Run sheet</title><style>nav{}</style></head><body>
+<header id="top"><nav id="site-nav" aria-label="Main"><a href="/">Home</a></nav></header>
+<nav aria-label="Breadcrumb"><ol><li>Home</li></ol></nav>
+<main><article><header><h1>Banquet run sheet</h1></header>
+<table><tr><td>6pm</td><td>Doors open</td></tr></table>
+<table role="presentation"><tr><td>layout</td></tr></table>
+<aside><h2>Related guides</h2><p>Tea ceremony</p></aside>
+<ins class="adsbygoogle" data-ad-slot="1"></ins>
+</article></main>
+<footer><nav><a href="/contact/">Contact</a></nav><nav><a href="/privacy/">Privacy</a></nav></footer>
+<template><nav id="ghost"></nav></template>
+<nav hidden id="hidden-nav"></nav>
+<script>var x = "<nav>Kitchen</nav>";</script>
+</body></html>`
+
+func TestCheckListsThePageElements(t *testing.T) {
+	draft := `{"@context":"https://schema.org","@graph":[
+		{"@type":"WebPage","@id":"https://x.test/#webpage","about":[{"@type":"Thing","name":"Tea ceremony"},{"@type":"Thing","name":"Kitchen"}],"hasPart":[
+			{"@type":"WPHeader","cssSelector":"#top"},
+			{"@type":"SiteNavigationElement","cssSelector":["#site-nav","footer nav"]},
+			{"@type":"WPFooter"},
+			{"@type":"Table","cssSelector":"#nothing"},
+			{"@type":"WPSideBar","cssSelector":"#site-nav"}]},
+		{"@type":"BreadcrumbList","itemListElement":[]}]}`
+	r, err := newTool(t).Check(json.RawMessage(draft), CheckOptions{PageHTML: elementsPage})
+	if err != nil {
+		t.Fatal(err)
+	}
+	type want struct{ typ, selector, name, markedBy string }
+	wants := []want{
+		{"WPHeader", "#top", "", "$.@graph[0].hasPart[0]"},
+		{"SiteNavigationElement", "#site-nav", "Main", "$.@graph[0].hasPart[1]"},
+		{"BreadcrumbList", `nav[aria-label="Breadcrumb"]`, "Breadcrumb", "$.@graph[1]"},
+		{"Table", "body > main > article > table:nth-of-type(1)", "", ""},
+		{"WPSideBar", "body > main > article > aside", "Related guides", ""},
+		{"WPAdBlock", "body > main > article > ins", "", ""},
+		{"WPFooter", "body > footer", "", "$.@graph[0].hasPart[2]"},
+		{"SiteNavigationElement", "body > footer > nav:nth-of-type(1)", "", "$.@graph[0].hasPart[1]"},
+		{"SiteNavigationElement", "body > footer > nav:nth-of-type(2)", "", "$.@graph[0].hasPart[1]"},
+	}
+	if len(r.PageElements) != len(wants) {
+		t.Fatalf("%d page elements, want %d: %+v", len(r.PageElements), len(wants), r.PageElements)
+	}
+	for i, w := range wants {
+		got := r.PageElements[i]
+		if got.Type != w.typ || got.Selector != w.selector || got.Name != w.name || got.MarkedBy != w.markedBy {
+			t.Errorf("element %d = %+v, want %+v", i, got, w)
+		}
+	}
+	for path, msg := range map[string]string{
+		"html:body > main > article > table:nth-of-type(1)": "has no Table",
+		"html:body > main > article > aside":                "has no WPSideBar",
+		"html:body > main > article > ins":                  "has no WPAdBlock",
+		"$.@graph[0].hasPart[3]":                            `cssSelector "#nothing" matches nothing on the page`,
+		"$.@graph[0].hasPart[4]":                            `cssSelector "#site-nav" selects a SiteNavigationElement, not a WPSideBar`,
+	} {
+		if !issueAt(r, Warning, path, msg) {
+			t.Errorf("no warning %q at %s: %+v", msg, path, r.Issues)
+		}
+	}
+	// page_text comes from the HTML when it is not given: the aside's "Tea
+	// ceremony" is on the page, the script's "Kitchen" is not.
+	if n := issueCount(r, "is not named on the page"); n != 1 || !issueAt(r, Warning, "$.@graph[0].about[1]", "Kitchen is not named") {
+		t.Errorf("%d not-on-page warnings, want 1 for Kitchen: %+v", n, r.Issues)
+	}
+	if n := r.Warnings; n != 6 || r.Errors != 0 {
+		t.Errorf("%d warnings, %d errors, want 6 and 0: %+v", n, r.Errors, r.Issues)
+	}
+	if plain := check(t, draft); len(plain.PageElements) != 0 || issueCount(plain, "has no") != 0 {
+		t.Errorf("page elements without page_html: %+v", plain.PageElements)
+	}
+}
