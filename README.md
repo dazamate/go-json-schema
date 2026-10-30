@@ -197,8 +197,8 @@ Without a checkout, the repo is private, so set
 |---|---|---|
 | `serp(keyword, country, language, …)` | yes | Top 10 Google results, People also ask, related searches, autocomplete, and `bold_terms`: the words Google bolds in snippets as matches for the keyword. Falls back to DuckDuckGo, then Bing, on a bot wall. |
 | `page_terms(links)` | yes | Words and 2–3 word phrases ranked across the ranking pages, each with its rank correlation `rho`; with a TextRazor key, the pages' `entities` and `topics` linked to Wikipedia in context; each page's title, headings and JSON-LD summary; competitors' about/mentions/knowsAbout/keywords merged. |
-| `resolve_entities(phrases)` | yes | Wikipedia title, Wikidata QID, aliases, types, `/m/` (P646) and `/g/` (P2671) IDs, and a ready `Thing` node. Status: `exact`, `redirect`, `section`, `ambiguous` or `missing`, with candidates for the last two. |
-| `select_entities(url, keyword)` | yes | The `about` and `mentions` entities for your own page and its keyword, each with a ready `Thing` node. Needs a TextRazor key; Bing IDs and themes are optional. See [Entity selection](#entity-selection-select_entities). |
+| `resolve_entities(phrases)` | yes | Wikipedia title, Wikidata QID, aliases, types, `/m/` (P646) and `/g/` (P2671) IDs, and a ready node, typed from the item's Wikidata class (`schema_type`). Status: `exact`, `redirect`, `section`, `ambiguous` or `missing`, with candidates for the last two. |
+| `select_entities(url, keyword)` | yes | The `about` and `mentions` entities for your own page and its keyword, each with a ready node typed from its Wikidata class. Needs a TextRazor key; Bing IDs and themes are optional. See [Entity selection](#entity-selection-select_entities). |
 | `type_properties(type)` | no | Every property a type takes, inherited ones included. |
 | `enum_values(enum)` | no | Members, sub-enumerations included. |
 | `property_info(property)` | no | Domains, expected types, Go field and block. |
@@ -346,7 +346,18 @@ reads your own page, `localhost` included, and chooses its `about` and
   [the keyword graph](docs/superpowers/specs/2026-10-25-keyword-graph-design.md).
 - Neither list has a cap beyond that one. `dropped` lists what was rejected
   and why (`off_graph`, `below_graph_similarity`).
-- Each entry has a `thing` node to use as given.
+- Each entry has a `thing` node to use as given. Its `@type` comes from the
+  item's own Wikidata P31 (instance of) classes through a checked table
+  (`internal/research/schematype.go`): `Language`, `City`, `Country`,
+  `State`, `AdministrativeArea`, `Place`, `Landform`, `Occupation`,
+  `Person`, `Organization` and their kin, also given as `schema_type`. A
+  general idea, or an item that is itself a class (it has a P279 claim, like
+  "moving company"), stays a `Thing`; languages and occupations are classes
+  in Wikidata and are typed anyway. The one exception to "as given": an
+  entity that is the same Wikidata item as a node already in your graph is
+  replaced by a reference to that node's `@id`.
+- Topic links from TextRazor that leave out `/wiki/`
+  (`http://en.wikipedia.org/Bride`) are returned with it.
 
 **Defaults:** `min_relevance` 0.3, `min_topic` 0.5, `min_keyword_similarity`
 0.40, `min_page_similarity` 0.55 and `min_link_confidence` 1.5. The first

@@ -482,3 +482,42 @@ func TestGuideEntityRows(t *testing.T) {
 		t.Error("guide still has the about volume target")
 	}
 }
+
+// TestPageGraphGuidance keeps the three places that tell an agent how to
+// shape the graph in step: the guide's Page graph section, the server
+// instructions and the entity_schema prompt.
+func TestPageGraphGuidance(t *testing.T) {
+	i := strings.Index(guide, "## Page graph")
+	if i < 0 {
+		t.Fatal("guide has no Page graph section")
+	}
+	section := guide[i:]
+	for _, want := range []string{"hasPart", "isPartOf", "mainEntityOfPage", "Brand", "potentialAction", "DesktopWebPlatform", "{\"@id\": ...}", "stays a Thing", "match the visible text"} {
+		if !strings.Contains(section, want) {
+			t.Errorf("Page graph section does not say %q", want)
+		}
+	}
+	if !strings.Contains(guide, "| FAQPage mainEntity |") || strings.Contains(guide, "| mainEntity / FAQPage |") {
+		t.Error("guide's FAQ row is not the FAQPage-as-part-of-the-page row")
+	}
+	for _, want := range []string{"retype none", `{"@id"}`, "Page graph section", "6. build_jsonld"} {
+		if !strings.Contains(instructions, want) {
+			t.Errorf("instructions do not say %q", want)
+		}
+	}
+
+	cs := connect(t, nil)
+	res, err := cs.GetPrompt(context.Background(), &mcp.GetPromptParams{Name: "entity_schema", Arguments: map[string]string{"keyword": "plumber", "page_url": "http://localhost:8080/p/"}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	text := res.Messages[0].Content.(*mcp.TextContent).Text
+	if step := selectStep(t, text); !strings.Contains(step, `{"@id"}`) {
+		t.Errorf("select_entities step does not say to reference graph nodes by @id: %s", step)
+	}
+	for _, want := range []string{"5. Shape the graph", "FAQPage that is a part of the page", "6. Call build_jsonld", "## Page graph"} {
+		if !strings.Contains(text, want) {
+			t.Errorf("prompt does not say %q", want)
+		}
+	}
+}
