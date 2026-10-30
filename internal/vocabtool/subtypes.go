@@ -163,6 +163,9 @@ func (c *checker) namedTypes(all []located) {
 			for _, s := range strs(l.n, k) {
 				if u, err := url.Parse(s); err == nil {
 					words += " " + u.Path
+					if label == "" {
+						label = s // a node without a name is named by its URL
+					}
 				}
 			}
 		}
@@ -189,11 +192,15 @@ func (c *checker) namedTypes(all []located) {
 	}
 }
 
-// hasWikidataClass reports a Wikidata class in the node's additionalType:
-// classTypes types such a node, not its name (the Blue Mountains are a
-// region, not a Mountain).
+// hasWikidataClass reports a Wikidata class in the node's additionalType that
+// the classtype table maps: classTypes types such a node, not its name (the
+// Blue Mountains are a region, not a Mountain). A topic class the table does
+// not map, such as wedding on a WebPage, leaves the name signal on.
 func hasWikidataClass(n *object) bool {
-	return slices.ContainsFunc(strs(n, "additionalType"), wikidataItem.MatchString)
+	return slices.ContainsFunc(strs(n, "additionalType"), func(cl string) bool {
+		m := wikidataItem.FindStringSubmatch(cl)
+		return m != nil && classtype.Of([]string{m[1]}, false) != ""
+	})
 }
 
 // typeStopWords are not distinguishing words of a type name; "WP" abbreviates

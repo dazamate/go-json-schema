@@ -430,7 +430,8 @@ func TestCheckSuggestsTheSubtypeItsNameOrURLNames(t *testing.T) {
 		{"@type":"Place","name":"Hunter Valley wine country"},
 		{"@type":"Place","name":"State Theatre"},
 		{"@type":"CreativeWork","name":"How we plan your day"},
-		{"@type":"Event","name":"Supply and demand talk"}]}`)
+		{"@type":"Event","name":"Supply and demand talk"},
+		{"@type":"WebPage","url":"https://x.test/contact/","additionalType":["https://www.wikidata.org/wiki/Q49836","https://schema.org/WebPage"]}]}`)
 	for path, want := range map[string]string{
 		"$.@graph[0]": "AboutPage",
 		"$.@graph[1]": "ContactPage",
@@ -438,6 +439,9 @@ func TestCheckSuggestsTheSubtypeItsNameOrURLNames(t *testing.T) {
 		"$.@graph[3]": "Bakery",
 		"$.@graph[4]": "CollegeOrUniversity",
 		"$.@graph[5]": "Beach",
+		// a Wikidata topic class the classtype table does not map (wedding)
+		// leaves the name signal on
+		"$.@graph[17]": "ContactPage",
 	} {
 		if !issueAt(r, Warning, path, "type it "+want) {
 			t.Errorf("no %s warning at %s: %+v", want, path, r.Issues)
@@ -448,7 +452,7 @@ func TestCheckSuggestsTheSubtypeItsNameOrURLNames(t *testing.T) {
 	// stemmed to "new"; House, Country and State are left to other signals,
 	// since venues, regions and theatres carry those words in their names;
 	// HowTo needs "how" and "to", OnDemandEvent "on" and "demand".
-	if r.Warnings != 6 || r.Errors != 0 {
-		t.Errorf("%d warnings, %d errors, want 6 and 0: %+v", r.Warnings, r.Errors, r.Issues)
+	if r.Warnings != 7 || r.Errors != 0 {
+		t.Errorf("%d warnings, %d errors, want 7 and 0: %+v", r.Warnings, r.Errors, r.Issues)
 	}
 }
