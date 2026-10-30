@@ -157,6 +157,23 @@ func TestCheckPassesAPageWhoseMarkupShowsWhatThePageShows(t *testing.T) {
 	}
 }
 
+func TestCheckFindsAShortQuoteItsReviewCarries(t *testing.T) {
+	page := `<!doctype html><html><head><link rel="canonical" href="https://x.test/"></head><body><main>
+<figure><blockquote>“Cracker MC!!!”</blockquote><figcaption><cite>@jay</cite></figcaption></figure>
+<figure><blockquote>“Great night”</blockquote><figcaption><cite>@kim</cite></figcaption></figure>
+</main></body></html>`
+	r := checkPage(t, `{"@context":"https://schema.org","@graph":[
+		{"@type":"WebPage","url":"https://x.test/","name":"Home"},
+		{"@type":"Review","reviewBody":"Cracker MC!!!","author":{"@type":"Person","name":"@jay"},"itemReviewed":{"@type":"Organization","name":"Mo"}}]}`, page)
+	if n := issueCount(r, "Cracker MC"); n != 0 {
+		t.Errorf("%d issues on the quote its Review carries: %+v", n, r.Issues)
+	}
+	// a short quote no node carries still warns
+	if !issueAt(r, Warning, "html:body > main > figure:nth-of-type(2) > blockquote", `quotes "“Great night”" (@kim) and no node carries it`) {
+		t.Errorf("no warning on the quote no node carries: %+v", r.Issues)
+	}
+}
+
 func TestCheckWarnsOnANumberWrittenAsText(t *testing.T) {
 	r := check(t, `{"@context":"https://schema.org","@graph":[
 		{"@type":"Article","headline":"Tea","wordCount":"900"},
