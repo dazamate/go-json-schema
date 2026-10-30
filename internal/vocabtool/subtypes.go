@@ -129,6 +129,14 @@ func (c *checker) classTypes(all []located) {
 		if m == nil {
 			continue
 		}
+		// another class that gives the node its type backs it: the Blue
+		// Mountains are a mountain range and a region, so a Place
+		if slices.ContainsFunc(classes[1:], func(cl string) bool {
+			o := wikidataItem.FindStringSubmatch(cl)
+			return o != nil && classtype.Of([]string{o[1]}, false) == ty
+		}) {
+			continue
+		}
 		if want := classtype.Of([]string{m[1]}, false); want != "" && want != ty && slices.Contains(c.t.v.Ancestors(want), ty) {
 			c.add(l.path, Warning, "%s with the Wikidata class %s: type it %s, unless the item is a kind of thing rather than one", ty, m[1], want)
 			c.suggested[l.n] = true
@@ -140,12 +148,13 @@ func (c *checker) classTypes(all []located) {
 // strict subtype of its type, by every distinguishing word of the subtype's
 // name: a WebPage at /about/ is an AboutPage, a LocalBusiness named "Park
 // Street Bakery" a Bakery. The most specific match wins. A Thing, a Wikidata
-// entity (typed by its class) and a WebPageElement (webPageElements checks
-// those) are left out, as is a node another signal already retyped.
+// entity or a node with a Wikidata class (typed by its class) and a
+// WebPageElement (webPageElements checks those) are left out, as is a node
+// another signal already retyped.
 func (c *checker) namedTypes(all []located) {
 	for _, l := range all {
 		ty := c.single(l.n)
-		if ty == "" || ty == "Thing" || c.suggested[l.n] || len(wikidataItems(l.n)) > 0 || slices.Contains(c.t.v.Ancestors(ty), "WebPageElement") {
+		if ty == "" || ty == "Thing" || c.suggested[l.n] || len(wikidataItems(l.n)) > 0 || hasWikidataClass(l.n) || slices.Contains(c.t.v.Ancestors(ty), "WebPageElement") {
 			continue
 		}
 		label := strings.Join(append(strs(l.n, "name"), strs(l.n, "headline")...), " ")
@@ -178,6 +187,13 @@ func (c *checker) namedTypes(all []located) {
 			c.add(l.path, Warning, "%s %q: its name or URL names the subtype %s; type it %s", ty, label, strings.Join(best, " or "), strings.Join(best, " or "))
 		}
 	}
+}
+
+// hasWikidataClass reports a Wikidata class in the node's additionalType:
+// classTypes types such a node, not its name (the Blue Mountains are a
+// region, not a Mountain).
+func hasWikidataClass(n *object) bool {
+	return slices.ContainsFunc(strs(n, "additionalType"), wikidataItem.MatchString)
 }
 
 // typeStopWords are not distinguishing words of a type name; "WP" abbreviates

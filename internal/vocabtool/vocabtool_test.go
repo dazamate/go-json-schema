@@ -398,12 +398,15 @@ func TestCheckSuggestsTheSubtypeItsWikidataClassGives(t *testing.T) {
 		{"@type":"AdministrativeArea","name":"Sydney",`+q("Q515")+`},
 		{"@type":"Organization","name":"University of Sydney",`+q("Q3918")+`},
 		{"@type":"City","name":"Sydney",`+q("Q515")+`},
-		{"@type":"Place","name":"East Asia",`+q("Q82794")+`}]}`)
+		{"@type":"Place","name":"East Asia",`+q("Q82794")+`},
+		{"@type":"Place","name":"Blue Mountains","additionalType":["https://www.wikidata.org/wiki/Q46831","https://www.wikidata.org/wiki/Q82794"]}]}`)
 	for path, want := range map[string]string{"$.@graph[0]": "City", "$.@graph[1]": "City", "$.@graph[2]": "CollegeOrUniversity"} {
 		if !issueAt(r, Warning, path, "type it "+want) {
 			t.Errorf("no %s warning at %s: %+v", want, path, r.Issues)
 		}
 	}
+	// a mountain range that is also a region keeps the Place its region class
+	// gives
 	if r.Warnings != 3 || r.Errors != 0 {
 		t.Errorf("%d warnings, %d errors, want 3 and 0: %+v", r.Warnings, r.Errors, r.Issues)
 	}
