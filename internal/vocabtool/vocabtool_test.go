@@ -421,7 +421,13 @@ func TestCheckSuggestsTheSubtypeItsNameOrURLNames(t *testing.T) {
 		{"@type":"Thing","name":"Wedding customs by country"},
 		{"@type":"Place","name":"Hyde Park","sameAs":"https://www.wikidata.org/wiki/Q1"},
 		{"@type":"EntertainmentBusiness","name":"Andrew Mo, Sydney Wedding MC"},
-		{"@type":"Service","name":"Chinese wedding MC"}]}`)
+		{"@type":"Service","name":"Chinese wedding MC"},
+		{"@type":"Article","headline":"New wedding traditions for 2027"},
+		{"@type":"Place","name":"Sydney Opera House"},
+		{"@type":"Place","name":"Hunter Valley wine country"},
+		{"@type":"Place","name":"State Theatre"},
+		{"@type":"CreativeWork","name":"How we plan your day"},
+		{"@type":"Event","name":"Supply and demand talk"}]}`)
 	for path, want := range map[string]string{
 		"$.@graph[0]": "AboutPage",
 		"$.@graph[1]": "ContactPage",
@@ -435,7 +441,10 @@ func TestCheckSuggestsTheSubtypeItsNameOrURLNames(t *testing.T) {
 		}
 	}
 	// a page about weddings, a Thing (typed by its Wikidata class instead),
-	// a Wikidata entity, and names no subtype matches get none
+	// a Wikidata entity, and names no subtype matches get none. News is not
+	// stemmed to "new"; House, Country and State are left to other signals,
+	// since venues, regions and theatres carry those words in their names;
+	// HowTo needs "how" and "to", OnDemandEvent "on" and "demand".
 	if r.Warnings != 6 || r.Errors != 0 {
 		t.Errorf("%d warnings, %d errors, want 6 and 0: %+v", r.Warnings, r.Errors, r.Issues)
 	}

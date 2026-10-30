@@ -164,7 +164,7 @@ func (c *checker) namedTypes(all []located) {
 		var best []string
 		depth := 0
 		for _, d := range c.t.descendants(ty) {
-			if !namesType(text, typeAlternatives(d, ty)) {
+			if unnamedTypes[d] || !namesType(text, typeAlternatives(d, ty)) {
 				continue
 			}
 			switch n := len(c.t.v.Ancestors(d)); {
@@ -181,8 +181,14 @@ func (c *checker) namedTypes(all []located) {
 }
 
 // typeStopWords are not distinguishing words of a type name; "WP" abbreviates
-// WebPage in WPHeader and its kin.
-var typeStopWords = map[string]bool{"and": true, "of": true, "the": true, "for": true, "to": true, "in": true, "on": true, "a": true, "wp": true}
+// WebPage in WPHeader and its kin. To, In and On stay: HowTo needs "how to",
+// OnDemandEvent "on demand".
+var typeStopWords = map[string]bool{"and": true, "of": true, "the": true, "for": true, "a": true, "wp": true}
+
+// unnamedTypes are never suggested from a name: places of other kinds carry
+// their words in their proper names (Sydney Opera House, wine country, State
+// Theatre). Their Wikidata class still types them.
+var unnamedTypes = map[string]bool{"House": true, "Country": true, "State": true}
 
 // typeAlternatives are the ways a name can name the subtype sub of of: each a
 // list of words that must all appear. The subtype's name splits into words
@@ -210,10 +216,14 @@ func typeAlternatives(sub, of string) [][]string {
 }
 
 // namesType reports whether the padded text has every word of one
-// alternative, each in the singular or the plural.
+// alternative, each as written or in the plural. A type word is never
+// stemmed the way names stems page words: News would become "new".
 func namesType(text string, alts [][]string) bool {
+	has := func(w string) bool {
+		return slices.ContainsFunc([]string{w, w + "s", w + "es"}, func(f string) bool { return strings.Contains(text, " "+f+" ") })
+	}
 	return slices.ContainsFunc(alts, func(words []string) bool {
-		return !slices.ContainsFunc(words, func(w string) bool { return !names(text, w) })
+		return !slices.ContainsFunc(words, func(w string) bool { return !has(w) })
 	})
 }
 
