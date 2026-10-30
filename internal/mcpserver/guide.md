@@ -74,6 +74,14 @@ them (the site origin plus #name), and every later use of it is a
   Answer are schema.org's only FAQ types. Google stopped showing FAQ rich
   results on 7 May 2026, but the markup is still valid, and Bing and AI
   systems read it.
+- **Page sections:** mark up each section of the page that a specific type
+  describes, as a part of the WebPage (in its hasPart) with a cssSelector
+  that finds it: each nav as SiteNavigationElement, the page's own header
+  and footer as WPHeader and WPFooter, an aside as WPSideBar, a data table
+  as Table and an ad slot as WPAdBlock. A breadcrumb nav is the
+  BreadcrumbList. Give build_jsonld the rendered page as page_html: its
+  page_elements list each section with a selector, and it warns on any the
+  draft leaves unmarked.
 - **Entity types:** select_entities and resolve_entities type each thing node
   from its Wikidata class: Language, City, Country, State,
   AdministrativeArea, Place, Landform, Occupation, Person, Organization and
