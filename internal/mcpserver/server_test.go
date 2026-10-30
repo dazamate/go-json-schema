@@ -123,7 +123,7 @@ func TestBuildJSONLDAcceptsDraftAsString(t *testing.T) {
 
 func TestBuildJSONLDChecksEntitiesAgainstPageText(t *testing.T) {
 	cs := connect(t, nil)
-	draft := `{"@type":"WebPage","about":[{"@type":"Thing","name":"Lemon"},{"@type":"Thing","name":"Hajong marriage"}]}`
+	draft := `{"@type":"WebPage","url":"https://x.test/lemon/","name":"Lemon tart","about":[{"@type":"Thing","name":"Lemon"},{"@type":"Thing","name":"Hajong marriage"}]}`
 	out, isErr := callText(t, cs, "build_jsonld", map[string]any{"draft": draft, "page_text": "A lemon tart."})
 	if isErr {
 		t.Fatal(out)
@@ -140,7 +140,7 @@ func TestBuildJSONLDChecksEntitiesAgainstPageText(t *testing.T) {
 func TestBuildJSONLDListsPageElements(t *testing.T) {
 	cs := connect(t, nil)
 	page := `<html><body><header><nav id="site-nav">Home</nav></header><main><p>Lemon tart</p></main><footer>ABN</footer></body></html>`
-	draft := `{"@type":"WebPage","about":{"@type":"Thing","name":"Lemon"},"hasPart":{"@type":"SiteNavigationElement","cssSelector":"#site-nav"}}`
+	draft := `{"@type":"WebPage","url":"https://x.test/lemon/","name":"Lemon tart","about":{"@type":"Thing","name":"Lemon"},"hasPart":{"@type":"SiteNavigationElement","cssSelector":"#site-nav"}}`
 	out, isErr := callText(t, cs, "build_jsonld", map[string]any{"draft": draft, "page_html": page})
 	if isErr {
 		t.Fatal(out)
@@ -529,15 +529,18 @@ func TestPageGraphGuidance(t *testing.T) {
 		t.Fatal("guide has no Page graph section")
 	}
 	section := guide[i:]
-	for _, want := range []string{"hasPart", "isPartOf", "mainEntityOfPage", "Brand", "potentialAction", "DesktopWebPlatform", "{\"@id\": ...}", "stays a Thing", "match the visible text", "page_text", "page_html", "SiteNavigationElement", "WPHeader", "WPFooter", "WPSideBar", "cssSelector"} {
+	for _, want := range []string{"hasPart", "isPartOf", "mainEntityOfPage", "Brand", "potentialAction", "DesktopWebPlatform", "{\"@id\": ...}", "stays a Thing", "match the visible text", "page_text", "page_html", "SiteNavigationElement", "WPHeader", "WPFooter", "WPSideBar", "cssSelector", "**Specific types:**", "AboutPage", "openingHours", "**What the page shows:**", "valueAddedTaxIncluded", "DefinedTermSet", "relatedLink", "timeRequired", "copyrightYear", "reviewBody"} {
 		if !strings.Contains(section, want) {
 			t.Errorf("Page graph section does not say %q", want)
 		}
 	}
+	if strings.Contains(guide, "no Review") {
+		t.Error("guide still bans Review markup; testimonials the page shows are Reviews")
+	}
 	if !strings.Contains(guide, "| FAQPage mainEntity |") || strings.Contains(guide, "| mainEntity / FAQPage |") {
 		t.Error("guide's FAQ row is not the FAQPage-as-part-of-the-page row")
 	}
-	for _, want := range []string{"retype none", `{"@id"}`, "Page graph section", "6. build_jsonld(draft, page_html)"} {
+	for _, want := range []string{"retype none", `{"@id"}`, "Page graph section", "6. build_jsonld(draft, page_html)", "a more specific subtype fits", "what the page shows"} {
 		if !strings.Contains(instructions, want) {
 			t.Errorf("instructions do not say %q", want)
 		}
@@ -552,7 +555,7 @@ func TestPageGraphGuidance(t *testing.T) {
 	if step := selectStep(t, text); !strings.Contains(step, `{"@id"}`) {
 		t.Errorf("select_entities step does not say to reference graph nodes by @id: %s", step)
 	}
-	for _, want := range []string{"5. Shape the graph", "FAQPage that is a part of the page", "6. Call build_jsonld", "as page_html", "## Page graph"} {
+	for _, want := range []string{"5. Shape the graph", "FAQPage that is a part of the page", "6. Call build_jsonld", "as page_html", "the subtype a warning names", "every price, quote", "## Page graph"} {
 		if !strings.Contains(text, want) {
 			t.Errorf("prompt does not say %q", want)
 		}

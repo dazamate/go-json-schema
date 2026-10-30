@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"regexp"
 	"slices"
+	"strconv"
 	"strings"
 
 	"golang.org/x/net/html"
@@ -77,17 +78,18 @@ func (t *Tool) Check(draft json.RawMessage, opts CheckOptions) (Report, error) {
 	default:
 		return Report{}, fmt.Errorf("draft must be a JSON object or array")
 	}
-	c := checker{t: t}
+	c := checker{t: t, suggested: map[*object]bool{}}
 	c.walk("$", doc)
 	c.repeats(doc)
 	all := nodes("$", doc)
-	c.thingTypes(all)
+	c.classTypes(all)
+	c.namedTypes(all)
 	c.webPageElements(all)
 	text := opts.PageText
 	var elements []PageElement
+	var page *html.Node
 	if strings.TrimSpace(opts.PageHTML) != "" {
-		page, err := html.Parse(strings.NewReader(opts.PageHTML))
-		if err != nil {
+		if page, err = html.Parse(strings.NewReader(opts.PageHTML)); err != nil {
 			return Report{}, fmt.Errorf("page_html: %w", err)
 		}
 		if text == "" {
@@ -96,6 +98,12 @@ func (t *Tool) Check(draft json.RawMessage, opts CheckOptions) (Report, error) {
 		elements = c.pageElements(all, page)
 	}
 	c.pageEntities(all, text)
+	c.bare(all)
+	c.ownReviews(all)
+	c.reviews(all)
+	if strings.TrimSpace(text) != "" {
+		c.content(all, newPageFacts(page, text))
+	}
 	rep := Report{Issues: c.issues, PageElements: elements}
 	if rep.Issues == nil {
 		rep.Issues = []Issue{}
@@ -118,8 +126,9 @@ func (t *Tool) Check(draft json.RawMessage, opts CheckOptions) (Report, error) {
 }
 
 type checker struct {
-	t      *Tool
-	issues []Issue
+	t         *Tool
+	issues    []Issue
+	suggested map[*object]bool // nodes already told to take a more specific type
 }
 
 func (c *checker) add(path, severity, format string, args ...any) {
@@ -288,8 +297,27 @@ func (c *checker) property(path, key string, types []string, n *object) {
 	if len(p.SupersededBy) > 0 {
 		c.add(path, Warning, "property %s is superseded by %s", term, strings.Join(p.SupersededBy, ", "))
 	}
+	if numericOnly(p.Ranges) {
+		for _, v := range values(n.vals[key]) {
+			if s, ok := v.(string); ok {
+				if _, err := strconv.ParseFloat(strings.TrimSpace(s), 64); err == nil {
+					c.add(path, Warning, "%s takes a number: write %s, not %q", term, strings.TrimSpace(s), s)
+				}
+			}
+		}
+	}
 	if len(types) > 0 && !slices.ContainsFunc(types, func(ty string) bool { return c.t.applicable[ty][term] }) {
-		c.add(path, Info, "%s is not listed for %s (domains: %s); kept, since schema.org domains are guidelines rather than rules", term, strings.Join(types, ", "), strings.Join(p.Domains, ", "))
+		// a subtype that takes the property is the type the node means
+		if subs := c.t.subtypesTaking(types, term); len(subs) > 0 {
+			noun := "subtype"
+			if len(subs) > 1 {
+				noun = "subtypes"
+			}
+			c.add(path, Warning, "%s is not listed for %s but is for its %s %s: type it %s", term, strings.Join(types, ", "), noun, strings.Join(subs, " and "), strings.Join(subs, " or "))
+			c.suggested[n] = true
+		} else {
+			c.add(path, Info, "%s is not listed for %s (domains: %s); kept, since schema.org domains are guidelines rather than rules", term, strings.Join(types, ", "), strings.Join(p.Domains, ", "))
+		}
 	}
 	val := n.vals[key]
 	switch x := val.(type) {
