@@ -11,6 +11,7 @@ import (
 	"strings"
 
 	"github.com/dazamate/go-json-schema/internal/browser"
+	"github.com/dazamate/go-json-schema/internal/classtype"
 	"github.com/dazamate/go-json-schema/schema"
 )
 
@@ -52,6 +53,7 @@ type Entity struct {
 	KGMID       string          `json:"kgmid,omitempty"`        // FreebaseID, else GoogleKGID
 	KGMIDFrom   string          `json:"kgmid_from,omitempty"`   // item the kgmid was taken from, when not QID
 	Types       []Ref           `json:"types,omitempty"`        // P31 instance of and P279 subclass of
+	SchemaType  string          `json:"schema_type,omitempty"`  // thing's @type, from the P31 classes; absent for a Thing
 	Thing       json.RawMessage `json:"thing,omitempty"`        // ready schema.org node for about/mentions
 	Candidates  []Candidate     `json:"candidates,omitempty"`
 	Cached      bool            `json:"cached,omitempty"`
@@ -541,6 +543,7 @@ func (r *resolver) wikidata(ents []Entity) error {
 		e.FreebaseID = first(it.values("P646"))
 		e.GoogleKGID = first(it.values("P2671"))
 		e.KGMID = orElse(e.FreebaseID, e.GoogleKGID)
+		e.SchemaType = classtype.Of(it.ranked("P31"), len(it.ranked("P279")) > 0)
 		for _, p := range []string{"P31", "P279"} {
 			vals := it.values(p)
 			for _, q := range vals[:min(len(vals), maxTypes)] {
@@ -607,13 +610,18 @@ func orElse(a, b string) string {
 	return b
 }
 
-// thing builds the entity's schema.org node with every sameAs URL and its
-// GoogleMachineID, named after the section when the phrase is one.
+// thing builds the entity's schema.org node, typed e.SchemaType (Thing when
+// empty), with every sameAs URL and its GoogleMachineID, named after the
+// section when the phrase is one. A section is part of an article, so it
+// stays a Thing.
 func (r *resolver) thing(e Entity) json.RawMessage {
 	if e.QID == "" && e.Title == "" {
 		return nil
 	}
 	se := schema.Entity{Name: orElse(e.Section, e.Title), Wikidata: e.QID, KGMID: e.KGMID}
+	if e.Section == "" {
+		se.Type = e.SchemaType
+	}
 	if r.lang == "en" {
 		article := e.Title
 		if e.Section != "" {

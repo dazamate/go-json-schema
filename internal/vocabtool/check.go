@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"regexp"
 	"slices"
 	"strings"
 )
@@ -30,9 +31,10 @@ type Report struct {
 	ScriptTag string  `json:"script_tag"`
 }
 
-// CheckOptions controls the published form.
+// CheckOptions controls the published form and the page checks.
 type CheckOptions struct {
-	Pretty bool // indent the JSON inside the script tag
+	Pretty   bool   // indent the JSON inside the script tag
+	PageText string // the page's visible text; when set, about and mentions entities must be named in it
 }
 
 // Check validates a JSON-LD draft against the vocabulary and returns it as
@@ -62,6 +64,11 @@ func (t *Tool) Check(draft json.RawMessage, opts CheckOptions) (Report, error) {
 	}
 	c := checker{t: t}
 	c.walk("$", doc)
+	c.repeats(doc)
+	all := nodes("$", doc)
+	c.thingTypes(all)
+	c.webPageElements(all)
+	c.pageEntities(all, opts.PageText)
 	rep := Report{Issues: c.issues}
 	if rep.Issues == nil {
 		rep.Issues = []Issue{}
@@ -117,6 +124,86 @@ func (c *checker) walk(path string, v any) {
 			c.add(path, Warning, "node has properties but no @type")
 		}
 	}
+}
+
+var wikidataItem = regexp.MustCompile(`^https?://(?:www\.)?wikidata\.org/(?:wiki|entity)/(Q[0-9]+)$`)
+
+// wikidataItems are the Wikidata items a node's sameAs names.
+func wikidataItems(n *object) []string {
+	raw, ok := n.get("sameAs")
+	if !ok {
+		return nil
+	}
+	vals, isList := raw.([]any)
+	if !isList {
+		vals = []any{raw}
+	}
+	var out []string
+	for _, v := range vals {
+		if s, ok := v.(string); ok {
+			if m := wikidataItem.FindStringSubmatch(s); m != nil {
+				out = append(out, m[1])
+			}
+		}
+	}
+	return out
+}
+
+// repeats warns about a node without an @id that names the same Wikidata
+// item as a node with one: it repeats that node, which a {"@id"} reference
+// says once.
+func (c *checker) repeats(doc *object) {
+	byItem := map[string]string{}
+	var collect func(v any)
+	collect = func(v any) {
+		switch x := v.(type) {
+		case []any:
+			for _, item := range x {
+				collect(item)
+			}
+		case *object:
+			if id, ok := x.get("@id"); ok && len(x.keys) > 1 {
+				if s, ok := id.(string); ok {
+					for _, q := range wikidataItems(x) {
+						if _, seen := byItem[q]; !seen {
+							byItem[q] = s
+						}
+					}
+				}
+			}
+			for _, k := range x.keys {
+				collect(x.vals[k])
+			}
+		}
+	}
+	collect(doc)
+	if len(byItem) == 0 {
+		return
+	}
+	var check func(path string, v any)
+	check = func(path string, v any) {
+		switch x := v.(type) {
+		case []any:
+			for i, item := range x {
+				check(fmt.Sprintf("%s[%d]", path, i), item)
+			}
+		case *object:
+			if _, ok := x.get("@id"); !ok {
+				for _, q := range wikidataItems(x) {
+					if id, ok := byItem[q]; ok {
+						c.add(path, Warning, "same Wikidata item (%s) as the node %s: put {\"@id\": %q} here instead of repeating it", q, id, id)
+						break
+					}
+				}
+			}
+			for _, k := range x.keys {
+				if k != "@context" {
+					check(path+"."+k, x.vals[k])
+				}
+			}
+		}
+	}
+	check("$", doc)
 }
 
 // types returns the node's known schema.org types, reporting unknown ones.

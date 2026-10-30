@@ -135,6 +135,7 @@ type Selected struct {
 	KGMIDChecked bool   `json:"kgmid_checked"`
 	BingID       string `json:"bing_id,omitempty"`
 	BingChecked  bool   `json:"bing_checked"`
+	SchemaType   string `json:"schema_type,omitempty"` // the thing's @type, from the item's P31 classes; absent for a Thing
 
 	Relevance         *float64 `json:"relevance,omitempty"`
 	Topic             *float64 `json:"topic,omitempty"`
@@ -302,6 +303,7 @@ func (r *Researcher) SelectEntities(ctx context.Context, q SelectQuery) (SelectR
 		}
 		c.Name, c.Wikipedia = id.Title, string(schema.WikipediaLang(lang, id.Title))
 		c.KGMID, c.GoogleKGID, c.KGMIDChecked, c.classes = id.KGMID, id.GoogleKGID, id.KGMIDChecked, id.Classes
+		c.SchemaType = id.SchemaType
 		p9885[c.QID] = id.P9885
 		if c.role == roleTheme {
 			themes = append(themes, c)

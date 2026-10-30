@@ -28,9 +28,10 @@ const instructions = `Builds entity-stuffed schema.org JSON-LD for a keyword, Zi
 Workflow:
 1. serp(keyword, country, language, near for a city, and any other Google params): top Google results, People also ask, related searches, autocomplete, and bold_terms: the words Google bolds in snippets as matches for the keyword (variants, synonyms, entity names).
 2. page_terms(each result's url, or its link where serp gave no url, in rank order, junk such as videos or forums dropped): words and 2-3 word phrases ranked across the pages, the entities competitors already put in their schema, and, when a TextRazor key is configured, the pages' entities and topics linked to Wikipedia in context. rho is each term's rank correlation, as in Cora SEO Software: negative means higher-ranked pages use it more; significant marks the ones that pass the 95% test.
-3. select_entities(page_url, keyword): the about and mentions entities for our page, each with a ready thing node. Use them as given: add none, drop none. page_terms entities and resolve_entities lookups no longer feed about or mentions; use resolve_entities for other entity properties such as areaServed.
+3. select_entities(page_url, keyword): the about and mentions entities for our page, each with a ready thing node typed from its Wikidata class (Language, City, Country, Occupation, Organization, Person and the like; a general idea stays a Thing). Use them as given: add none, drop none, retype none. The one exception: when an entity is the same Wikidata item as a node already in the graph (a served area, a language, the person's occupation), put that node's {"@id"} in its place. page_terms entities and resolve_entities lookups no longer feed about or mentions; use resolve_entities for other entity properties such as areaServed.
 4. type_properties, enum_values, property_info: every property a type takes, so nothing applicable is left out.
-5. build_jsonld(draft): errors to fix and the final script tag.
+5. Shape the graph as the stuffing guide's Page graph section says: the sitewide nodes on every page, the page's main entity, an FAQ as an FAQPage that is a part of the page, @id references for repeated nodes, and only the actions the page supports.
+6. build_jsonld(draft, page_text): errors to fix, warnings to weigh, and the final script tag. Give it the page's visible text as page_text, so it can warn on any about or mentions entity the page does not name. It also warns on a repeated Wikidata item, a Thing its class could type, and a plain WebPageElement a more specific type fits.
 
 serp, page_terms, resolve_entities and select_entities fetch through the ChromiumFish browser and fail with install steps if it is missing. The only calls outside it are page_terms and select_entities sending page text they already fetched to TextRazor, and select_entities sending it to Azure AI Language when that is configured. Every request to Google (a search, or a Google redirect link that is followed) waits for a cooldown since the previous one, shared by all schema-mcp processes, so Google is never hit in bursts. Cached results skip it. The vocabulary tools work offline. The stuffing guide is the stuffing_guide prompt.`
 
@@ -58,8 +59,9 @@ type propArgs struct {
 }
 
 type buildArgs struct {
-	Draft  any  `json:"draft" jsonschema:"JSON-LD draft: one node object, an object with @graph, or an array of nodes. A JSON string is accepted too."`
-	Pretty bool `json:"pretty,omitempty" jsonschema:"indent the JSON inside the script tag"`
+	Draft    any    `json:"draft" jsonschema:"JSON-LD draft: one node object, an object with @graph, or an array of nodes. A JSON string is accepted too."`
+	Pretty   bool   `json:"pretty,omitempty" jsonschema:"indent the JSON inside the script tag"`
+	PageText string `json:"page_text,omitempty" jsonschema:"the page's visible text; when given, every about and mentions entity must be named in it"`
 }
 
 func addVocabTools(s *mcp.Server, v *vocabtool.Tool) {
@@ -90,36 +92,38 @@ func addVocabTools(s *mcp.Server, v *vocabtool.Tool) {
 	mcp.AddTool(s, &mcp.Tool{
 		Name: "build_jsonld",
 		Description: "Check a JSON-LD draft against the schema.org vocabulary and return it as a script tag. Unknown types, properties and enumeration members are errors (with suggestions). " +
-			"A property used outside its listed domains is only info and is kept: schema.org says domains are closer to guidelines than formal rules. Bare enum names such as InStock become full schema.org URLs. Key order is kept.",
+			"A property used outside its listed domains is only info and is kept: schema.org says domains are closer to guidelines than formal rules. These are warnings: a node without an @id that names the same Wikidata item as a node with one (reference that @id instead); a Thing whose first Wikidata class in additionalType has a schema.org type (type it, unless the item is a kind of thing); a plain WebPageElement that a more specific type fits (a section of Questions is an FAQPage that is a part of the page); and, with page_text, an about or mentions entity the page does not name. Bare enum names such as InStock become full schema.org URLs. Key order is kept.",
 		Annotations: readOnly(false),
 	}, func(_ context.Context, req *mcp.CallToolRequest, _ buildArgs) (*mcp.CallToolResult, vocabtool.Report, error) {
-		draft, pretty, err := rawDraft(req.Params.Arguments)
+		draft, opts, err := rawDraft(req.Params.Arguments)
 		if err != nil {
 			return nil, vocabtool.Report{}, err
 		}
-		rep, err := v.Check(draft, vocabtool.CheckOptions{Pretty: pretty})
+		rep, err := v.Check(draft, opts)
 		return nil, rep, err
 	})
 }
 
 // rawDraft reads the draft straight from the arguments, since decoding it
-// into Go maps would lose its key order.
-func rawDraft(args json.RawMessage) (json.RawMessage, bool, error) {
+// into Go maps would lose its key order, and the check options beside it.
+func rawDraft(args json.RawMessage) (json.RawMessage, vocabtool.CheckOptions, error) {
 	var in struct {
-		Draft  json.RawMessage `json:"draft"`
-		Pretty bool            `json:"pretty"`
+		Draft    json.RawMessage `json:"draft"`
+		Pretty   bool            `json:"pretty"`
+		PageText string          `json:"page_text"`
 	}
 	if err := json.Unmarshal(args, &in); err != nil {
-		return nil, false, err
+		return nil, vocabtool.CheckOptions{}, err
 	}
+	opts := vocabtool.CheckOptions{Pretty: in.Pretty, PageText: in.PageText}
 	if len(in.Draft) == 0 || string(in.Draft) == "null" {
-		return nil, false, errors.New("draft is empty")
+		return nil, opts, errors.New("draft is empty")
 	}
 	var text string
 	if json.Unmarshal(in.Draft, &text) == nil {
-		return json.RawMessage(text), in.Pretty, nil
+		return json.RawMessage(text), opts, nil
 	}
-	return in.Draft, in.Pretty, nil
+	return in.Draft, opts, nil
 }
 
 type serpArgs struct {
@@ -221,7 +225,7 @@ func addResearchTools(s *mcp.Server, r *research.Researcher) {
 	mcp.AddTool(s, &mcp.Tool{
 		Name:         "resolve_entities",
 		OutputSchema: outputSchema[research.EntityReport](),
-		Description: "Look phrases up as Wikipedia articles (following redirects) and Wikidata items: QID, label, description, aliases, Freebase /m/ ID (P646), Google KG /g/ ID (P2671), types, and a ready schema.org Thing node with every sameAs URL and its GoogleMachineID. " +
+		Description: "Look phrases up as Wikipedia articles (following redirects) and Wikidata items: QID, label, description, aliases, Freebase /m/ ID (P646), Google KG /g/ ID (P2671), types, and a ready schema.org node with every sameAs URL and its GoogleMachineID, typed from the item's Wikidata class (P31) when it is one place, language, occupation, organization or person, and a Thing otherwise. " +
 			"status is exact, redirect, section (the phrase is a section of a broader article), ambiguous or missing; the last two list candidates to retry with. Never invent IDs a lookup did not return. Cached for 30 days.",
 		Annotations: readOnly(true),
 	}, func(ctx context.Context, _ *mcp.CallToolRequest, in entityArgs) (*mcp.CallToolResult, research.EntityReport, error) {
@@ -234,7 +238,7 @@ func addResearchTools(s *mcp.Server, r *research.Researcher) {
 		Description: "Choose the about and mentions entities for OUR page and its target keyword. The page is read through the browser (localhost works), its title and text are linked to Wikipedia and Wikidata by TextRazor in context, and every entity is checked by its Wikidata item. " +
 			"about is the keyword's own entities (found on the page, and looked up as exact Wikipedia titles from the keyword's words and phrases) plus the page's themes, which the page may not name. mentions holds only entities the page names. There are no caps on either. " +
 			"When the keyword has its own Wikipedia article (the whole keyword, or a phrase of 2 or more of its words), about is instead that article, the articles linked to or from it that are close to the keyword or named on the page (at most max_graph_neighbours unnamed ones), and the page entities well linked into that graph; mentions then holds only page entities linked into it, and graph reports its size. " +
-			"Each entry comes with its ready schema.org thing node (Wikipedia, Wikidata and Google kgmid sameAs, Bing ID, alternateName from the words the page uses, additionalType): use it as given. dropped lists what was rejected and why, so a looser cutoff can be judged. " +
+			"Each entry comes with its ready schema.org thing node (Wikipedia, Wikidata and Google kgmid sameAs, Bing ID, alternateName from the words the page uses, additionalType), typed from the item's Wikidata class (schema_type: Language, City, Country, Occupation, Organization, Person and the like; a general idea stays a Thing): use it as given, except that an entity already in the graph as a node with an @id is referenced by that @id. dropped lists what was rejected and why, so a looser cutoff can be judged. " +
 			"The defaults (min_relevance 0.3, min_topic 0.5, min_keyword_similarity 0.40, min_page_similarity 0.55, min_link_confidence 1.5, min_graph_similarity 0.40, min_graph_links 3, min_graph_links_ungated 10, min_mention_graph_links 2, max_graph_neighbours 30) are our judgement, set by eye from two calibration pages (the moving page for the base settings, the forex page for the five graph settings), not from any Google source (the cap was set by the owner); each similarity is a number from 0 to 1, except min_link_confidence, a TextRazor confidence of 0 or more that an entity kept only by a link to another page of our site must reach. min_graph_links and min_graph_links_ungated are whole numbers of 1 or more, and min_mention_graph_links and max_graph_neighbours are whole numbers of 0 or more. A page entity that qualifies on its own needs min_graph_links links to join about; one that does not, and a keyword lookup hit TextRazor did not link, needs min_graph_links_ungated. " +
 			"It needs a TextRazor key (textrazor.api_key; free plan: 500 requests a day) and fails without one. An Azure AI Language key (Bing IDs) and the local embedding model (it scores the page's themes and the graph's neighbours; without it the graph keeps only the neighbours the page names; about 220 MB downloaded on first use) are optional, and note says which are missing and why. " +
 			"The page text goes to TextRazor and, when configured, Azure; Wikipedia and Wikidata calls go through the browser. Results are cached for a week by the text sent, and the graph neighbourhood of a keyword article for 30 days, but the page itself is always read fresh.",
@@ -322,9 +326,10 @@ func addPrompts(s *mcp.Server) {
 
 1. Call serp with keyword %[1]q, country %[3]s and language %[4]s (add near for a city when the page is local). Note People also ask questions for an FAQ, related searches as keywords, and bold_terms as the variants Google matches for the keyword.
 2. Call page_terms with each organic result's url, or its link where serp gave no url, in rank order, leaving out videos, forums and other junk. Favour terms whose rho is negative and significant: higher-ranked pages use them more. Its entities and topics show what competitors cover: use them for keywords and the page's copy, not for about or mentions.
-3. Call select_entities with %[5]s. Put its about and mentions in the graph as given.
+3. Call select_entities with %[5]s. Put its about and mentions in the graph as given, typed as they come; where an entity is the same Wikidata item as a node already in the graph, put that node's {"@id"} in its place.
 4. Call type_properties for %[2]s and fill every property that fits: keywords, knowsAbout, alternateName, additionalType, disambiguatingDescription and the type's own properties. Use resolve_entities for other entity properties such as areaServed.
-5. Call build_jsonld with the draft, fix every error, and return the script tag.
+5. Shape the graph as the Page graph section below says: the WebSite, business, Person, Brand and BreadcrumbList on every page, the WebPage's mainEntity and its mainEntityOfPage back, the FAQ as an FAQPage that is a part of the page (hasPart and isPartOf), @id references for repeated nodes, and potentialAction only for what the page lets a visitor do.
+6. Call build_jsonld with the draft and the page's visible text as page_text. Fix every error, weigh every warning, and return the script tag.
 
 %[6]s`, a["keyword"], pageType, country, lang, selectWith, guide)
 		return &mcp.GetPromptResult{Messages: []*mcp.PromptMessage{{Role: "user", Content: &mcp.TextContent{Text: text}}}}, nil

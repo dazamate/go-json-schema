@@ -194,3 +194,20 @@ func TestAnalyzeCachesByTextHash(t *testing.T) {
 		t.Errorf("linker calls = %d, entities %d vs %d", len(linker.texts), len(second.Entities), len(first.Entities))
 	}
 }
+
+func TestArticleLink(t *testing.T) {
+	for in, want := range map[string]string{
+		"http://en.wikipedia.org/wiki/Moving_company":  "https://en.wikipedia.org/wiki/Moving_company",
+		"http://en.wikipedia.org/Bride":                "https://en.wikipedia.org/wiki/Bride", // a TextRazor topic link
+		"http://en.wikipedia.org/Toast_(honor)":        "https://en.wikipedia.org/wiki/Toast_(honor)",
+		"http://de.wikipedia.org/Hochzeit":             "https://de.wikipedia.org/wiki/Hochzeit",
+		"http://en.wikipedia.org/Category:Logistics":   "",
+		"http://en.wikipedia.org/wiki/Category:Health": "",
+		"http://en.wikipedia.org/":                     "",
+		"https://example.com/wiki/Bride":               "",
+	} {
+		if got := articleLink(in); got != want {
+			t.Errorf("articleLink(%q) = %q, want %q", in, got, want)
+		}
+	}
+}
