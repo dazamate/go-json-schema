@@ -241,8 +241,8 @@ func TestCheckWarnsOnEntitiesThePageDoesNotName(t *testing.T) {
 		{"@type":"WebPage","@id":"https://x.test/#webpage",
 		 "about":[{"@type":"Thing","name":"Toast (honor)"},{"@type":"Thing","name":"Bride"},{"@id":"https://x.test/#sydney"},
 		          {"@type":"Thing","name":"Groomsman","alternateName":["groomsmen"]},{"@type":"Thing","name":"Hajong marriage"}],
-		 "mentions":[{"@type":"Thing","name":"Pre-wedding customs"},{"@id":"https://x.test/#chef"},"Kitchen"]}]}`
-	text := "Our Sydney MC gives the toast, guides the brides and the groomsmen through pre wedding customs."
+		 "mentions":[{"@type":"Thing","name":"Pre-wedding customs"},{"@id":"https://x.test/#chef"},"Kitchen",{"@type":"Thing","name":"Chinese Australians"}]}]}`
+	text := "Our Sydney MC gives the toast, guides the brides and the groomsmen through pre wedding customs for Chinese-Australian families."
 	r, err := newTool(t).Check(json.RawMessage(draft), CheckOptions{PageText: text})
 	if err != nil {
 		t.Fatal(err)
@@ -256,8 +256,8 @@ func TestCheckWarnsOnEntitiesThePageDoesNotName(t *testing.T) {
 			t.Errorf("no not-on-page warning for %s at %s: %+v", name, path, r.Issues)
 		}
 	}
-	// Toast (honor), brides, the groomsmen alias, #sydney by its node's name
-	// and "pre wedding" are all on the page; the WebSite's about and
+	// Toast (honor), brides, the groomsmen alias, #sydney by its node's name,
+	// "pre wedding" and Chinese-Australian are all on the page; the WebSite's about and
 	// knowsAbout are about the whole site, not this page.
 	if n := issueCount(r, "is not named on the page"); n != 3 || r.Errors != 0 {
 		t.Errorf("%d not-on-page warnings, %d errors, want 3 and 0: %+v", n, r.Errors, r.Issues)

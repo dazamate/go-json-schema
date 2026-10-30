@@ -179,13 +179,23 @@ func normWords(s string) string {
 }
 
 // names reports whether the padded, normalized page text has the form as
-// whole words, or its plural with s or es.
+// whole words, in the singular or the plural: "Bride" names "brides", and
+// "Chinese Australians" names "Chinese-Australian".
 func names(page, form string) bool {
 	f := normWords(form)
 	if f == "" {
 		return false
 	}
-	return strings.Contains(page, " "+f+" ") || strings.Contains(page, " "+f+"s ") || strings.Contains(page, " "+f+"es ")
+	stem := f
+	if s, ok := strings.CutSuffix(f, "s"); ok && s != "" {
+		stem = s
+	}
+	for _, v := range []string{f, stem, stem + "s", stem + "es"} {
+		if strings.Contains(page, " "+v+" ") {
+			return true
+		}
+	}
+	return false
 }
 
 // elementTypes are the WebPageElement subtypes a section's name points to,
