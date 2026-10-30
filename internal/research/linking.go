@@ -270,11 +270,21 @@ func mergeLinked(results []*textrazor.Result, minPages int) ([]PageEntity, []Pag
 }
 
 // articleLink returns a Wikipedia article link over https, or "" for a
-// category page or anything that is not a Wikipedia link.
+// category page or anything that is not a Wikipedia link. TextRazor's topic
+// links leave out /wiki/ (http://en.wikipedia.org/Bride), which Wikipedia
+// answers with "page not found", so it is put back.
 func articleLink(link string) string {
 	u, err := url.Parse(link)
 	if err != nil || !strings.HasSuffix(u.Hostname(), "wikipedia.org") || strings.Contains(u.Path, "Category:") {
 		return ""
+	}
+	if !strings.HasPrefix(u.Path, "/wiki/") {
+		title := strings.TrimPrefix(u.Path, "/")
+		if title == "" {
+			return ""
+		}
+		// keep the title as written: (honor), not %28honor%29
+		u.Path, u.RawPath = "/wiki/"+title, "/wiki/"+strings.TrimPrefix(u.EscapedPath(), "/")
 	}
 	u.Scheme = "https"
 	return u.String()
