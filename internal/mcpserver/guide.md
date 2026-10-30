@@ -101,4 +101,6 @@ them (the site origin plus #name), and every later use of it is a
 - **Only what the page shows:** structured data must match the visible text.
   No price, priceRange or tax keys unless the page shows the price; no Review
   or AggregateRating about yourself (self-serving reviews are not eligible);
-  no email or telephone the page does not show.
+  no email or telephone the page does not show. Every about and mentions
+  entity is named on the page; build_jsonld warns on one that is not when
+  it is given the page's visible text as page_text.

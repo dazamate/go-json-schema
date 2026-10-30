@@ -199,3 +199,100 @@ func TestCheckWarnsOnARepeatedWikidataItem(t *testing.T) {
 		t.Errorf("%d repeat warnings, %d errors, want 1 and 0: %+v", n, r.Errors, r.Issues)
 	}
 }
+
+// issueCount counts the issues whose message contains the text.
+func issueCount(r Report, contains string) int {
+	n := 0
+	for _, i := range r.Issues {
+		if strings.Contains(i.Message, contains) {
+			n++
+		}
+	}
+	return n
+}
+
+func TestCheckWarnsOnAThingWithATypedClass(t *testing.T) {
+	r := check(t, `{"@context":"https://schema.org","@graph":[{"@type":"WebPage","about":[
+		{"@type":"Thing","name":"Sydney","additionalType":["https://www.wikidata.org/wiki/Q515","https://www.wikidata.org/wiki/Q200250"]},
+		{"@type":"Thing","name":"Mandarin Chinese","additionalType":"https://www.wikidata.org/wiki/Q34770"},
+		{"@type":"Thing","name":"Varieties of Chinese","additionalType":["https://www.wikidata.org/wiki/Q7850","https://www.wikidata.org/wiki/Q33384"]},
+		{"@type":"Thing","name":"Wedding","additionalType":"https://www.wikidata.org/wiki/Q2245405"},
+		{"@type":"Thing","name":"Tea"},
+		{"@type":"City","name":"Sydney","additionalType":"https://www.wikidata.org/wiki/Q515"}]}]}`)
+	if !issueAt(r, Warning, "$.@graph[0].about[0]", "type it City") {
+		t.Errorf("no City warning on the Sydney Thing: %+v", r.Issues)
+	}
+	if !issueAt(r, Warning, "$.@graph[0].about[1]", "type it Language") {
+		t.Errorf("no Language warning on the Mandarin Thing: %+v", r.Issues)
+	}
+	// Only the first class counts: it is an instance-of class, while a second
+	// may be a subclass-of one (Varieties of Chinese is a subclass of dialect).
+	if n := issueCount(r, "type it"); n != 2 || r.Errors != 0 {
+		t.Errorf("%d type warnings, %d errors, want 2 and 0: %+v", n, r.Errors, r.Issues)
+	}
+}
+
+func TestCheckWarnsOnEntitiesThePageDoesNotName(t *testing.T) {
+	draft := `{"@context":"https://schema.org","@graph":[
+		{"@type":"City","@id":"https://x.test/#sydney","name":"Sydney"},
+		{"@type":"Occupation","@id":"https://x.test/#chef","name":"Chef"},
+		{"@type":"WebSite","@id":"https://x.test/#website","about":[{"@type":"Thing","name":"Catering"}]},
+		{"@type":"Organization","@id":"https://x.test/#org","knowsAbout":[{"@type":"Thing","name":"Catering"}]},
+		{"@type":"WebPage","@id":"https://x.test/#webpage",
+		 "about":[{"@type":"Thing","name":"Toast (honor)"},{"@type":"Thing","name":"Bride"},{"@id":"https://x.test/#sydney"},
+		          {"@type":"Thing","name":"Groomsman","alternateName":["groomsmen"]},{"@type":"Thing","name":"Hajong marriage"}],
+		 "mentions":[{"@type":"Thing","name":"Pre-wedding customs"},{"@id":"https://x.test/#chef"},"Kitchen"]}]}`
+	text := "Our Sydney MC gives the toast, guides the brides and the groomsmen through pre wedding customs."
+	r, err := newTool(t).Check(json.RawMessage(draft), CheckOptions{PageText: text})
+	if err != nil {
+		t.Fatal(err)
+	}
+	for path, name := range map[string]string{
+		"$.@graph[4].about[4]":    "Hajong marriage",
+		"$.@graph[4].mentions[1]": "Chef",
+		"$.@graph[4].mentions[2]": "Kitchen",
+	} {
+		if !issueAt(r, Warning, path, name+" is not named on the page") {
+			t.Errorf("no not-on-page warning for %s at %s: %+v", name, path, r.Issues)
+		}
+	}
+	// Toast (honor), brides, the groomsmen alias, #sydney by its node's name
+	// and "pre wedding" are all on the page; the WebSite's about and
+	// knowsAbout are about the whole site, not this page.
+	if n := issueCount(r, "is not named on the page"); n != 3 || r.Errors != 0 {
+		t.Errorf("%d not-on-page warnings, %d errors, want 3 and 0: %+v", n, r.Errors, r.Issues)
+	}
+	if n := issueCount(check(t, draft), "is not named on the page"); n != 0 {
+		t.Errorf("%d not-on-page warnings without page text, want 0", n)
+	}
+}
+
+func TestCheckWarnsOnAWebPageElementWithAMoreSpecificType(t *testing.T) {
+	r := check(t, `{"@context":"https://schema.org","@graph":[
+		{"@type":"WebPageElement","@id":"https://x.test/#faq","mainEntity":[{"@type":"Question","name":"Q?","acceptedAnswer":{"@type":"Answer","text":"A."}}]},
+		{"@type":"WebPageElement","name":"Frequently asked questions"},
+		{"@type":"WebPageElement","name":"Main navigation"},
+		{"@type":"WebPageElement","name":"Site header"},
+		{"@type":"WebPageElement","name":"Footer"},
+		{"@type":"WebPageElement","name":"Sidebar"},
+		{"@type":"WebPageElement","name":"Price table"},
+		{"@type":"WebPageElement","name":"Gallery"},
+		{"@type":"FAQPage","@id":"https://x.test/#faq2","mainEntity":[{"@type":"Question","name":"Q?","acceptedAnswer":{"@type":"Answer","text":"A."}}]},
+		{"@type":"SiteNavigationElement","name":"Main navigation"}]}`)
+	for path, want := range map[string]string{
+		"$.@graph[0]": "FAQPage",
+		"$.@graph[1]": "FAQPage",
+		"$.@graph[2]": "SiteNavigationElement",
+		"$.@graph[3]": "WPHeader",
+		"$.@graph[4]": "WPFooter",
+		"$.@graph[5]": "WPSideBar",
+		"$.@graph[6]": "Table",
+	} {
+		if !issueAt(r, Warning, path, "use "+want) {
+			t.Errorf("no %s warning at %s: %+v", want, path, r.Issues)
+		}
+	}
+	if n := issueCount(r, "WebPageElement is generic"); n != 7 {
+		t.Errorf("%d WebPageElement warnings, want 7 (none on Gallery or the specific types): %+v", n, r.Issues)
+	}
+}

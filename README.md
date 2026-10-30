@@ -202,7 +202,7 @@ Without a checkout, the repo is private, so set
 | `type_properties(type)` | no | Every property a type takes, inherited ones included. |
 | `enum_values(enum)` | no | Members, sub-enumerations included. |
 | `property_info(property)` | no | Domains, expected types, Go field and block. |
-| `build_jsonld(draft)` | no | Errors for unknown types, properties and enum members; info for off-domain properties, which are kept. The draft comes back as a script tag. |
+| `build_jsonld(draft, page_text)` | no | Errors for unknown types, properties and enum members; info for off-domain properties, which are kept. Warnings for a node repeating a Wikidata item that has an `@id` node, a Thing whose first Wikidata class has a schema.org type, a plain WebPageElement a more specific type fits (an FAQ section is an FAQPage), and, with `page_text` (the page's visible text), an `about` or `mentions` entity the page does not name. The draft comes back as a script tag. |
 
 `serp` takes these Google search params. Only `keyword` is required.
 

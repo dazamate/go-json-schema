@@ -31,9 +31,10 @@ type Report struct {
 	ScriptTag string  `json:"script_tag"`
 }
 
-// CheckOptions controls the published form.
+// CheckOptions controls the published form and the page checks.
 type CheckOptions struct {
-	Pretty bool // indent the JSON inside the script tag
+	Pretty   bool   // indent the JSON inside the script tag
+	PageText string // the page's visible text; when set, about and mentions entities must be named in it
 }
 
 // Check validates a JSON-LD draft against the vocabulary and returns it as
@@ -64,6 +65,10 @@ func (t *Tool) Check(draft json.RawMessage, opts CheckOptions) (Report, error) {
 	c := checker{t: t}
 	c.walk("$", doc)
 	c.repeats(doc)
+	all := nodes("$", doc)
+	c.thingTypes(all)
+	c.webPageElements(all)
+	c.pageEntities(all, opts.PageText)
 	rep := Report{Issues: c.issues}
 	if rep.Issues == nil {
 		rep.Issues = []Issue{}

@@ -31,7 +31,7 @@ Workflow:
 3. select_entities(page_url, keyword): the about and mentions entities for our page, each with a ready thing node typed from its Wikidata class (Language, City, Country, Occupation, Organization, Person and the like; a general idea stays a Thing). Use them as given: add none, drop none, retype none. The one exception: when an entity is the same Wikidata item as a node already in the graph (a served area, a language, the person's occupation), put that node's {"@id"} in its place. page_terms entities and resolve_entities lookups no longer feed about or mentions; use resolve_entities for other entity properties such as areaServed.
 4. type_properties, enum_values, property_info: every property a type takes, so nothing applicable is left out.
 5. Shape the graph as the stuffing guide's Page graph section says: the sitewide nodes on every page, the page's main entity, an FAQ as an FAQPage that is a part of the page, @id references for repeated nodes, and only the actions the page supports.
-6. build_jsonld(draft): errors to fix and the final script tag.
+6. build_jsonld(draft, page_text): errors to fix, warnings to weigh, and the final script tag. Give it the page's visible text as page_text, so it can warn on any about or mentions entity the page does not name. It also warns on a repeated Wikidata item, a Thing its class could type, and a plain WebPageElement a more specific type fits.
 
 serp, page_terms, resolve_entities and select_entities fetch through the ChromiumFish browser and fail with install steps if it is missing. The only calls outside it are page_terms and select_entities sending page text they already fetched to TextRazor, and select_entities sending it to Azure AI Language when that is configured. Every request to Google (a search, or a Google redirect link that is followed) waits for a cooldown since the previous one, shared by all schema-mcp processes, so Google is never hit in bursts. Cached results skip it. The vocabulary tools work offline. The stuffing guide is the stuffing_guide prompt.`
 
@@ -59,8 +59,9 @@ type propArgs struct {
 }
 
 type buildArgs struct {
-	Draft  any  `json:"draft" jsonschema:"JSON-LD draft: one node object, an object with @graph, or an array of nodes. A JSON string is accepted too."`
-	Pretty bool `json:"pretty,omitempty" jsonschema:"indent the JSON inside the script tag"`
+	Draft    any    `json:"draft" jsonschema:"JSON-LD draft: one node object, an object with @graph, or an array of nodes. A JSON string is accepted too."`
+	Pretty   bool   `json:"pretty,omitempty" jsonschema:"indent the JSON inside the script tag"`
+	PageText string `json:"page_text,omitempty" jsonschema:"the page's visible text; when given, every about and mentions entity must be named in it"`
 }
 
 func addVocabTools(s *mcp.Server, v *vocabtool.Tool) {
@@ -91,36 +92,38 @@ func addVocabTools(s *mcp.Server, v *vocabtool.Tool) {
 	mcp.AddTool(s, &mcp.Tool{
 		Name: "build_jsonld",
 		Description: "Check a JSON-LD draft against the schema.org vocabulary and return it as a script tag. Unknown types, properties and enumeration members are errors (with suggestions). " +
-			"A property used outside its listed domains is only info and is kept: schema.org says domains are closer to guidelines than formal rules. A node without an @id that names the same Wikidata item as a node with one is a warning: reference that @id instead of repeating it. Bare enum names such as InStock become full schema.org URLs. Key order is kept.",
+			"A property used outside its listed domains is only info and is kept: schema.org says domains are closer to guidelines than formal rules. These are warnings: a node without an @id that names the same Wikidata item as a node with one (reference that @id instead); a Thing whose first Wikidata class in additionalType has a schema.org type (type it, unless the item is a kind of thing); a plain WebPageElement that a more specific type fits (a section of Questions is an FAQPage that is a part of the page); and, with page_text, an about or mentions entity the page does not name. Bare enum names such as InStock become full schema.org URLs. Key order is kept.",
 		Annotations: readOnly(false),
 	}, func(_ context.Context, req *mcp.CallToolRequest, _ buildArgs) (*mcp.CallToolResult, vocabtool.Report, error) {
-		draft, pretty, err := rawDraft(req.Params.Arguments)
+		draft, opts, err := rawDraft(req.Params.Arguments)
 		if err != nil {
 			return nil, vocabtool.Report{}, err
 		}
-		rep, err := v.Check(draft, vocabtool.CheckOptions{Pretty: pretty})
+		rep, err := v.Check(draft, opts)
 		return nil, rep, err
 	})
 }
 
 // rawDraft reads the draft straight from the arguments, since decoding it
-// into Go maps would lose its key order.
-func rawDraft(args json.RawMessage) (json.RawMessage, bool, error) {
+// into Go maps would lose its key order, and the check options beside it.
+func rawDraft(args json.RawMessage) (json.RawMessage, vocabtool.CheckOptions, error) {
 	var in struct {
-		Draft  json.RawMessage `json:"draft"`
-		Pretty bool            `json:"pretty"`
+		Draft    json.RawMessage `json:"draft"`
+		Pretty   bool            `json:"pretty"`
+		PageText string          `json:"page_text"`
 	}
 	if err := json.Unmarshal(args, &in); err != nil {
-		return nil, false, err
+		return nil, vocabtool.CheckOptions{}, err
 	}
+	opts := vocabtool.CheckOptions{Pretty: in.Pretty, PageText: in.PageText}
 	if len(in.Draft) == 0 || string(in.Draft) == "null" {
-		return nil, false, errors.New("draft is empty")
+		return nil, opts, errors.New("draft is empty")
 	}
 	var text string
 	if json.Unmarshal(in.Draft, &text) == nil {
-		return json.RawMessage(text), in.Pretty, nil
+		return json.RawMessage(text), opts, nil
 	}
-	return in.Draft, in.Pretty, nil
+	return in.Draft, opts, nil
 }
 
 type serpArgs struct {
@@ -326,7 +329,7 @@ func addPrompts(s *mcp.Server) {
 3. Call select_entities with %[5]s. Put its about and mentions in the graph as given, typed as they come; where an entity is the same Wikidata item as a node already in the graph, put that node's {"@id"} in its place.
 4. Call type_properties for %[2]s and fill every property that fits: keywords, knowsAbout, alternateName, additionalType, disambiguatingDescription and the type's own properties. Use resolve_entities for other entity properties such as areaServed.
 5. Shape the graph as the Page graph section below says: the WebSite, business, Person, Brand and BreadcrumbList on every page, the WebPage's mainEntity and its mainEntityOfPage back, the FAQ as an FAQPage that is a part of the page (hasPart and isPartOf), @id references for repeated nodes, and potentialAction only for what the page lets a visitor do.
-6. Call build_jsonld with the draft, fix every error, and return the script tag.
+6. Call build_jsonld with the draft and the page's visible text as page_text. Fix every error, weigh every warning, and return the script tag.
 
 %[6]s`, a["keyword"], pageType, country, lang, selectWith, guide)
 		return &mcp.GetPromptResult{Messages: []*mcp.PromptMessage{{Role: "user", Content: &mcp.TextContent{Text: text}}}}, nil
