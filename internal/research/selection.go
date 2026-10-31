@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"maps"
 	"math"
 	"net/url"
 	"slices"
@@ -27,6 +28,7 @@ const (
 	SourceKeyword = "keyword" // a keyword word or phrase looked up as a Wikipedia title
 	SourceTheme   = "theme"   // a TextRazor topic of the page
 	SourceGraph   = "graph"   // an article linked to or from the keyword's centre
+	SourceRequire = "require" // an item the caller named in require, which TextRazor did not link
 )
 
 // Reasons an entity is dropped, besides the identity reasons.
@@ -69,6 +71,10 @@ type SelectQuery struct {
 	Language     string // Wikipedia edition; default the page's lang, else en
 	Settings     SelectSettings
 	Exclude      []string // QIDs or names of entities to leave out, such as competitors
+	// Require is the QIDs of the keyword's own entities, as the caller knows
+	// them (its place, its service, the price it asks about): each the page
+	// names goes first in about, whatever its scores or graph links.
+	Require []string
 }
 
 // SelectReport is the entities chosen for our page's about and mentions,
@@ -226,8 +232,9 @@ func (r *Researcher) SelectEntities(ctx context.Context, q SelectQuery) (SelectR
 		rep.TextRazor.Units = res.Units
 	}
 	s := newSelection(res, page.Text, page.Links, page.Page.URL, words, q.Settings)
-
 	grams := keywordGrams(keyword)
+	s.markKeywordTitles(grams)
+
 	var cands []*candidate
 	var g *builtGraph
 	var items map[string]wdEntity
@@ -268,15 +275,31 @@ func (r *Researcher) SelectEntities(ctx context.Context, q SelectQuery) (SelectR
 		} else {
 			cands = s.candidates(hits, grams)
 		}
-		var qids []string
+		cands = s.require(cands, q.Require)
+		var qids, named []string
 		for _, c := range cands {
 			if c.id == nil {
 				qids = append(qids, c.QID)
 			}
+			if c.checkNames {
+				named = append(named, c.QID)
+			}
 		}
 		progress(ctx, fmt.Sprintf("checking %d entities by their Wikidata items", len(qids)))
-		items, err = wr.articleItems(qids)
-		return err
+		if items, err = wr.articleItems(qids); err != nil {
+			return err
+		}
+		// A required item TextRazor did not link is named on the page by its
+		// title, its label or one of its aliases, which the identity check does
+		// not fetch.
+		if len(named) > 0 {
+			labelled, err := wr.labelledItems(named)
+			if err != nil {
+				return err
+			}
+			maps.Copy(items, labelled)
+		}
+		return nil
 	})
 	if err != nil {
 		return SelectReport{}, err
@@ -298,6 +321,11 @@ func (r *Researcher) SelectEntities(ctx context.Context, q SelectQuery) (SelectR
 		} else {
 			it, found := items[c.QID]
 			id, reason = checkIdentity(it, found, lang, c.title, c.freebase)
+		}
+		if reason == "" && c.checkNames {
+			if c.Matched = foundNames(s.text, itemNames(items[c.QID], id.Title, lang)); len(c.Matched) == 0 {
+				c.Name, reason = id.Title, ReasonNotInPageText
+			}
 		}
 		if reason != "" {
 			rep.Dropped = append(rep.Dropped, c.drop(reason))
@@ -367,6 +395,13 @@ func (r *Researcher) SelectEntities(ctx context.Context, q SelectQuery) (SelectR
 		c.Thing = entityThing(lang, c.Selected, c.classes)
 		rep.Mentions = append(rep.Mentions, c.Selected)
 	}
+	// A required item the gate or the graph dropped, and then took back, is
+	// listed once: as chosen.
+	chosen := map[string]bool{}
+	for _, s := range slices.Concat(rep.About, rep.Mentions) {
+		chosen[s.QID] = true
+	}
+	rep.Dropped = slices.DeleteFunc(rep.Dropped, func(d Dropped) bool { return chosen[d.QID] && slices.Contains(q.Require, d.QID) })
 	rep.Note = strings.Join(notes, "; ")
 	return rep, nil
 }
@@ -379,6 +414,11 @@ func (q SelectQuery) check() error {
 	}
 	if strings.TrimSpace(q.Keyword) == "" {
 		return errors.New("no keyword given")
+	}
+	for _, qid := range q.Require {
+		if !qidRE.MatchString(qid) {
+			return fmt.Errorf("bad require entry %q: want a Wikidata QID such as Q44989", qid)
+		}
 	}
 	s := q.Settings
 	for _, v := range []struct {
@@ -453,11 +493,13 @@ type pageEntity struct {
 	mentions             int
 	matched, links       []string
 	byScores, keyword    bool
+	named                bool // the keyword names it outright (keywordTitle)
 }
 
 // Roles a candidate is chosen for, in about order and then mentions.
 const (
 	roleKeyword = iota // a keyword page entity
+	roleNamed          // a page entity the keyword names outright, or a required item: first in about
 	roleLookup         // a keyword lookup hit
 	roleTheme
 	roleMention
@@ -478,6 +520,9 @@ type candidate struct {
 	gram     int    // a lookup's place in the keyword
 	classes  []string
 	id       *identity // a graph member's identity, already checked
+
+	required   int  // its place in the query's require list, from 1; 0 when not required
+	checkNames bool // a required item with no words from the page yet: its names are checked against the text
 }
 
 func (c *candidate) drop(reason string) Dropped {
@@ -579,6 +624,12 @@ func (s *selection) candidates(hits []lookupHit, grams []string) []*candidate {
 			continue
 		}
 		by := e.qualifiers(s.set)
+		if e.named {
+			c := &candidate{role: roleNamed, title: e.title, freebase: e.freebase, Selected: e.selected(SourcePage)}
+			c.QualifiedBy = append(by, "keyword_title")
+			out = append(out, c)
+			continue
+		}
 		if len(by) == 0 {
 			reason := ReasonBelowTopic
 			switch {
@@ -776,6 +827,24 @@ func roles(cands []*candidate) (about, mentions []*candidate) {
 		}
 		return cmp.Or(cmp.Compare(sim(b), sim(a)), strings.Compare(a.Name, b.Name))
 	})
+	// The keyword's own entities: the required ones in the caller's order,
+	// then those the keyword names, by relevance.
+	named := group(roleNamed)
+	slices.SortFunc(named, func(a, b *candidate) int {
+		req := func(c *candidate) int {
+			if c.required == 0 {
+				return math.MaxInt
+			}
+			return c.required
+		}
+		rel := func(c *candidate) float64 {
+			if c.Relevance == nil {
+				return 0
+			}
+			return *c.Relevance
+		}
+		return cmp.Or(cmp.Compare(req(a), req(b)), cmp.Compare(rel(b), rel(a)), strings.Compare(a.Name, b.Name))
+	})
 	keyword, lookups, themes := group(roleKeyword), group(roleLookup), group(roleTheme)
 	mentions = group(roleMention)
 	slices.SortFunc(keyword, byRelevance)
@@ -784,7 +853,7 @@ func roles(cands []*candidate) (about, mentions []*candidate) {
 		return cmp.Or(cmp.Compare(*b.Topic, *a.Topic), strings.Compare(a.Name, b.Name))
 	})
 	slices.SortFunc(mentions, byRelevance)
-	return slices.Concat(centres, graphPage, graphLinked, neighbours, keyword, lookups, themes), mentions
+	return slices.Concat(centres, named, graphPage, graphLinked, neighbours, keyword, lookups, themes), mentions
 }
 
 // bingLink links the text with Azure, or returns the cached result for the

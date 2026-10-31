@@ -496,6 +496,7 @@ func TestSelectEntitiesRejectsBadQueries(t *testing.T) {
 		"max_graph_neighbours is -1: want 0 or more": func(q *SelectQuery) {
 			q.Settings.MaxGraphNeighbours = -1
 		},
+		`bad require entry "Tulsa"`: func(q *SelectQuery) { q.Require = []string{"Q1", "Tulsa"} },
 	} {
 		query := selectQuery()
 		q(&query)
