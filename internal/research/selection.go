@@ -68,6 +68,7 @@ type SelectQuery struct {
 	URL, Keyword string
 	Language     string // Wikipedia edition; default the page's lang, else en
 	Settings     SelectSettings
+	Exclude      []string // QIDs or names of entities to leave out, such as competitors
 }
 
 // SelectReport is the entities chosen for our page's about and mentions,
@@ -136,6 +137,7 @@ type Selected struct {
 	BingID       string `json:"bing_id,omitempty"`
 	BingChecked  bool   `json:"bing_checked"`
 	SchemaType   string `json:"schema_type,omitempty"` // the thing's @type, from the item's P31 classes; absent for a Thing
+	Company      bool   `json:"company,omitempty"`     // a business, which may be a competitor: exclude it if so
 
 	Relevance         *float64 `json:"relevance,omitempty"`
 	Topic             *float64 `json:"topic,omitempty"`
@@ -322,8 +324,19 @@ func (r *Researcher) SelectEntities(ctx context.Context, q SelectQuery) (SelectR
 		}
 		kept = append(kept, themes...)
 	}
+	kept = slices.DeleteFunc(kept, func(c *candidate) bool {
+		if excluded(q.Exclude, c) {
+			rep.Dropped = append(rep.Dropped, c.drop(ReasonExcluded))
+			return true
+		}
+		return false
+	})
 
 	about, mentions := roles(kept)
+	about, mentions = placeOrganizations(keyword, about, mentions, &rep)
+	if n := companyNote(about, mentions); n != "" {
+		notes = append(notes, n)
+	}
 	var sel []*Selected
 	for _, c := range slices.Concat(about, mentions) {
 		sel = append(sel, &c.Selected)

@@ -241,7 +241,33 @@ type wikiResp struct {
 			Title string `json:"title"`
 		} `json:"search"`
 	} `json:"query"`
-	Continue map[string]string `json:"continue"`
+	Continue wikiContinue `json:"continue"`
+}
+
+// wikiContinue is the API's continue block: the parameters to send back for
+// the next batch. Its values are strings, except list=search's sroffset, which
+// is a number; both are kept as the string sent back.
+type wikiContinue map[string]string
+
+func (w *wikiContinue) UnmarshalJSON(data []byte) error {
+	var raw map[string]json.RawMessage
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+	*w = wikiContinue{}
+	for k, v := range raw {
+		var s string
+		if json.Unmarshal(v, &s) == nil {
+			(*w)[k] = s
+			continue
+		}
+		var n json.Number
+		if err := json.Unmarshal(v, &n); err != nil {
+			return fmt.Errorf("continue.%s: %w", k, err)
+		}
+		(*w)[k] = n.String()
+	}
+	return nil
 }
 
 type wikiRespPage struct {

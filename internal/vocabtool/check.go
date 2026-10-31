@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"net/url"
 	"regexp"
 	"slices"
 	"strconv"
@@ -52,6 +53,12 @@ type CheckOptions struct {
 	PageText string // the page's visible text; when set, about and mentions entities must be named in it
 	PageHTML string // the rendered page; its sections must be marked up, and it gives PageText when that is empty
 	PageURL  string // the page's address; links resolve against it when the page has no canonical link
+	// Keyword is the page's target keyword; when set, the page's names,
+	// headlines and descriptions must carry it at KeywordDensity.
+	Keyword string
+	// KeywordDensity is the keyword's target share of the words, in percent;
+	// 0 is DefaultKeywordDensity.
+	KeywordDensity float64
 }
 
 // Check validates a JSON-LD draft against the vocabulary and returns it as
@@ -111,6 +118,18 @@ func (t *Tool) Check(draft json.RawMessage, opts CheckOptions) (Report, error) {
 	c.reviews(all)
 	if facts != nil {
 		c.content(all, facts)
+	}
+	known := facts
+	if known == nil {
+		known = &pageFacts{}
+		if u, err := url.Parse(strings.TrimSpace(opts.PageURL)); err == nil && u.IsAbs() {
+			known.url = u
+		}
+	}
+	c.organizations(all, opts.Keyword)
+	c.looseNodes(all, known)
+	if strings.TrimSpace(opts.Keyword) != "" {
+		c.keyword(all, doc, opts.Keyword, opts.KeywordDensity, known)
 	}
 	rep := Report{Issues: c.issues, PageElements: elements}
 	if rep.Issues == nil {
