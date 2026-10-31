@@ -66,8 +66,29 @@ func newPageFacts(doc *xhtml.Node, text, address string) *pageFacts {
 }
 
 // mainText is the visible text outside the site's header, footer and navs.
-func mainText(doc *xhtml.Node) string {
+func mainText(doc *xhtml.Node) string { return strings.Join(mainLines(doc), " ") }
+
+// lineBreaks are the elements that start and end a line of text.
+var lineBreaks = map[atom.Atom]bool{
+	atom.Address: true, atom.Article: true, atom.Aside: true, atom.Blockquote: true, atom.Br: true, atom.Caption: true,
+	atom.Dd: true, atom.Details: true, atom.Div: true, atom.Dl: true, atom.Dt: true, atom.Fieldset: true,
+	atom.Figcaption: true, atom.Figure: true, atom.Footer: true, atom.Form: true, atom.H1: true, atom.H2: true,
+	atom.H3: true, atom.H4: true, atom.H5: true, atom.H6: true, atom.Header: true, atom.Hr: true, atom.Legend: true,
+	atom.Li: true, atom.Main: true, atom.Ol: true, atom.P: true, atom.Pre: true, atom.Section: true, atom.Summary: true,
+	atom.Table: true, atom.Td: true, atom.Th: true, atom.Tr: true, atom.Ul: true,
+}
+
+// mainLines is mainText a line at a time: a block element starts and ends a
+// line, so a line never runs into the next block's words.
+func mainLines(doc *xhtml.Node) []string {
+	var lines []string
 	var b strings.Builder
+	end := func() {
+		if l := strings.Join(strings.Fields(b.String()), " "); l != "" {
+			lines = append(lines, l)
+		}
+		b.Reset()
+	}
 	var walk func(*xhtml.Node)
 	walk = func(n *xhtml.Node) {
 		for ch := n.FirstChild; ch != nil; ch = ch.NextSibling {
@@ -78,11 +99,19 @@ func mainText(doc *xhtml.Node) string {
 				b.WriteString(ch.Data)
 				b.WriteByte(' ')
 			}
+			block := ch.Type == xhtml.ElementNode && lineBreaks[ch.DataAtom]
+			if block {
+				end()
+			}
 			walk(ch)
+			if block {
+				end()
+			}
 		}
 	}
 	walk(doc)
-	return strings.Join(strings.Fields(b.String()), " ")
+	end()
+	return lines
 }
 
 // canonical is the page's canonical link, or its og:url.

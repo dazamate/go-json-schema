@@ -24,6 +24,7 @@ var (
 	rentalSource = regexp.MustCompile(`(?i)\bu-haul\b|\bpenske\b|\bbudget truck\b|\benterprise truck\b|\bhertz\b|\bavis\b|\bryder\b|\btruck rental\b`)
 	quoted       = regexp.MustCompile(`“[^”]{3,}”|"[^"]{3,}"`)
 	sourceLine   = regexp.MustCompile(`\bSources?:\s+([^.(;]{3,100}?)(?:\s*[.(;]|\s*$)`)
+	sourceLabel  = regexp.MustCompile(`^Sources?:$`)
 )
 
 // sources runs the source checks.
@@ -209,8 +210,15 @@ func (c *checker) citations(p *pageFacts, d *draftIndex) {
 		}
 		add(htmlText(n))
 	}
-	for _, m := range sourceLine.FindAllStringSubmatch(p.main, -1) {
-		add(m[1])
+	for _, line := range mainLines(p.doc) { // a source line ends with its block
+		for _, m := range sourceLine.FindAllStringSubmatch(line, -1) {
+			add(m[1])
+		}
+	}
+	for _, s := range labelledSources(p.doc) {
+		if m := sourceLine.FindStringSubmatch("Source: " + s); m != nil {
+			add(m[1])
+		}
 	}
 	if len(list) > 0 {
 		rental := ""
@@ -220,4 +228,36 @@ func (c *checker) citations(p *pageFacts, d *draftIndex) {
 		c.add(pagePath, Warning, "the page credits %d sources (%s) that no citation names: list each as a citation of the WebPage, Article or Dataset (a CreativeWork with name, url when linked, and publisher the Organization behind it, a NewsMediaOrganization for a news publisher%s)", len(list), examples(list), rental)
 	}
 	c.documents(p, d)
+}
+
+// labelledSources are the sources a "Sources:" label on a line of its own
+// credits, outside the site's header, footer and navs: the next block's words,
+// or each item of the list after it.
+func labelledSources(doc *xhtml.Node) []string {
+	var out []string
+	var walk func(*xhtml.Node)
+	walk = func(n *xhtml.Node) {
+		for ch := n.FirstChild; ch != nil; ch = ch.NextSibling {
+			if ch.Type != xhtml.ElementNode || skipped(ch) {
+				continue
+			}
+			if !lineBreaks[ch.DataAtom] || chrome(ch) || !sourceLabel.MatchString(htmlText(ch)) {
+				walk(ch)
+				continue
+			}
+			switch next := nextElement(ch); {
+			case next == nil:
+			case next.DataAtom == atom.Ul || next.DataAtom == atom.Ol:
+				for li := next.FirstChild; li != nil; li = li.NextSibling {
+					if li.DataAtom == atom.Li && !skipped(li) {
+						out = append(out, htmlText(li))
+					}
+				}
+			default:
+				out = append(out, htmlText(next))
+			}
+		}
+	}
+	walk(doc)
+	return out
 }
