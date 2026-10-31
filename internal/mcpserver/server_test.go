@@ -535,13 +535,22 @@ func TestPageGraphGuidance(t *testing.T) {
 			t.Errorf("Page graph section does not say %q", want)
 		}
 	}
+	j := strings.Index(guide, "## Target keyword")
+	if j < 0 {
+		t.Fatal("guide has no Target keyword section")
+	}
+	for _, want := range []string{"alternateName", "disambiguatingDescription", "alternativeHeadline", "keywords", "FAQPage", "keyword_density", "3%", "never in about", "mentions", "competitor", "exclude", "Nested, not flat", "@id"} {
+		if !strings.Contains(guide[j:], want) {
+			t.Errorf("Target keyword section does not say %q", want)
+		}
+	}
 	if strings.Contains(guide, "no Review") {
 		t.Error("guide still bans Review markup; testimonials the page shows are Reviews")
 	}
 	if !strings.Contains(guide, "| FAQPage mainEntity |") || strings.Contains(guide, "| mainEntity / FAQPage |") {
 		t.Error("guide's FAQ row is not the FAQPage-as-part-of-the-page row")
 	}
-	for _, want := range []string{"retype none", `{"@id"}`, "Page graph section", "6. build_jsonld(draft, page_html, page_url)", "a more specific subtype fits", "what the page shows", "OnlineStore"} {
+	for _, want := range []string{"retype none", `{"@id"}`, "Page graph section", "6. build_jsonld(draft, page_html, page_url, keyword)", "keyword_density", "exclude", "nested where it is first referenced", "a more specific subtype fits", "what the page shows", "OnlineStore"} {
 		if !strings.Contains(instructions, want) {
 			t.Errorf("instructions do not say %q", want)
 		}
@@ -556,7 +565,7 @@ func TestPageGraphGuidance(t *testing.T) {
 	if step := selectStep(t, text); !strings.Contains(step, `{"@id"}`) {
 		t.Errorf("select_entities step does not say to reference graph nodes by @id: %s", step)
 	}
-	for _, want := range []string{"5. Shape the graph", "FAQPage that is a part of the page", "6. Call build_jsonld", "as page_html", `"http://localhost:8080/p/" as page_url`, "the subtype a warning names", "every price, quote", "## Page graph"} {
+	for _, want := range []string{"5. Shape the graph", "FAQPage that is a part of the page", "6. Call build_jsonld", "as page_html", `"http://localhost:8080/p/" as page_url and "plumber" as keyword`, "the subtype a warning names", "## Target keyword", "every price, quote", "## Page graph"} {
 		if !strings.Contains(text, want) {
 			t.Errorf("prompt does not say %q", want)
 		}

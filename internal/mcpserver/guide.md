@@ -1,6 +1,6 @@
 # Entity schema stuffing guide
 
-<!-- Adapted from SEO_FIELD_GUIDE in recipe-create-pipeline/scripts/lib/pipeline_common.py (2026-10-24). Update both together, except the about, mentions, alternateName and additionalType rules, which are schema-mcp's own since 2026-10-25, and the FAQPage row and the Page graph section, schema-mcp's own since 2026-10-30. -->
+<!-- Adapted from SEO_FIELD_GUIDE in recipe-create-pipeline/scripts/lib/pipeline_common.py (2026-10-24). Update both together, except the about, mentions, alternateName and additionalType rules, which are schema-mcp's own since 2026-10-25, the FAQPage row and the Page graph section, schema-mcp's own since 2026-10-30, and the Target keyword section, schema-mcp's own since 2026-10-31. -->
 
 Pump these properties hard for knowledge-graph and topical coverage. Prefer real,
 authoritative URLs: Wikidata, Wikipedia, Google KG machine-ID search links, DBpedia,
@@ -39,6 +39,49 @@ select_entities or resolve_entities returns, or leave them out.
 - To get more about entries, lower min_graph_similarity or min_graph_links, or raise max_graph_neighbours; for fewer, do the opposite. Read dropped (off_graph, below_graph_similarity) before changing them
 - **knowsAbout** = topical expertise (on Person, Organization and their subtypes; usable anywhere)
 - **keywords** = raw keyword list; may overlap knowsAbout
+
+## Target keyword
+
+The page's target keyword goes, verbatim, into the text properties of the
+page's own nodes, and build_jsonld checks each one when it is given the
+keyword:
+
+- **The WebPage:** name (the title), alternateName (the H1),
+  description (the meta description), disambiguatingDescription (the
+  intro or summary) and keywords, with the target keyword first.
+- **The Article:** headline (the H1), alternativeHeadline (the title
+  without the brand) and description.
+- **The Service** the page prices or describes: description and
+  disambiguatingDescription. Its name stays the service's own name.
+- **The FAQPage:** name, the same as the FAQ's heading on the page.
+- **Every description and disambiguatingDescription** on the page's own
+  content nodes (the WebPage, its sections, Article, HowTo, tools, Service)
+  reaches the target density: each use counts as many words as the keyword
+  has, against all the text's words. The default target is 3%, one site
+  owner's floor for page copy and not a Google figure; pass another as
+  keyword_density. There is no ceiling. The markup's text as a whole is held
+  to the same target.
+- **Not the keyword:** entities (about, mentions, knowsAbout), data nodes
+  (MonetaryAmount, Dataset, Observation, DefinedTerm), citations and nodes
+  other pages share (the business, the WebSite, a sitewide tool). They
+  describe something else, and the page's keyword would make them false.
+
+Organizations and the graph's shape:
+
+- **An organization is never in about** unless the keyword names it: a page
+  is about its topic, not an agency it cites or a company it names. An
+  organization the page names is in mentions. The site's own business is
+  the exception: the home and About pages are about it. select_entities
+  places them so.
+- **No competitor.** Another business's node carries its own sameAs and
+  Knowledge Graph ID, so in validator.schema.org it reads as if the page
+  were about that business. select_entities marks each business it keeps
+  company: pass the QID of any competitor in exclude. build_jsonld warns on
+  every business in about or mentions.
+- **Nested, not flat.** validator.schema.org lists every top-level node as
+  an item of its own. Nest each entity and section where it is first
+  referenced, keeping its @id, and leave only the page, the WebSite and the
+  business at the top; later references stay {"@id": ...}.
 
 ## URL sources to prefer
 
