@@ -3,12 +3,15 @@ package browser
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"io"
 	"net"
 	"os/exec"
 	"strconv"
 	"strings"
 	"sync"
+	"syscall"
 	"time"
 
 	"github.com/modelcontextprotocol/go-sdk/mcp"
@@ -98,11 +101,65 @@ func (c *Client) spawn(ctx context.Context) (*mcp.ClientSession, error) {
 	c.stderr.reset()
 	cmd.Stderr = &c.stderr
 	client := mcp.NewClient(&mcp.Implementation{Name: "schema-mcp", Version: "0.1.0"}, nil)
-	s, err := client.Connect(ctx, &mcp.CommandTransport{Command: cmd}, nil)
+	t, err := processTransport(cmd)
+	if err != nil {
+		return nil, fmt.Errorf("start %s mcp: %w\n%s", path, err, c.stderr.String())
+	}
+	s, err := client.Connect(ctx, t, nil)
 	if err != nil {
 		return nil, fmt.Errorf("start %s mcp: %w\n%s", path, err, c.stderr.String())
 	}
 	return s, nil
+}
+
+// maxFrame is the largest reply chromiumfish may send: a Wikidata batch of
+// big cities' items (every claim of Los Angeles, San Diego, New York City…)
+// runs past the SDK's 16 MB default.
+const maxFrame = 256 << 20
+
+// processTransport starts cmd and talks to it over its stdin and stdout, as
+// mcp.CommandTransport does, with replies up to maxFrame.
+func processTransport(cmd *exec.Cmd) (*mcp.IOTransport, error) {
+	stdout, err := cmd.StdoutPipe()
+	if err != nil {
+		return nil, err
+	}
+	stdin, err := cmd.StdinPipe()
+	if err != nil {
+		return nil, err
+	}
+	if err := cmd.Start(); err != nil {
+		return nil, err
+	}
+	return &mcp.IOTransport{Reader: io.NopCloser(stdout), Writer: &procStdin{stdin, cmd}, MaxLineLength: maxFrame}, nil
+}
+
+// procStdin closes the connection the way the MCP spec asks of a client:
+// stdin first, then a wait for the server to exit, then SIGTERM, then SIGKILL.
+type procStdin struct {
+	io.WriteCloser
+	cmd *exec.Cmd
+}
+
+func (p *procStdin) Close() error {
+	err := p.WriteCloser.Close()
+	done := make(chan error, 1)
+	go func() { done <- p.cmd.Wait() }()
+	for _, stop := range []func() error{
+		func() error { return nil },
+		func() error { return p.cmd.Process.Signal(syscall.SIGTERM) },
+		p.cmd.Process.Kill,
+	} {
+		if stop() != nil {
+			continue
+		}
+		select {
+		case werr := <-done:
+			return errors.Join(err, werr)
+		case <-time.After(5 * time.Second):
+		}
+	}
+	return errors.Join(err, errors.New("chromiumfish did not exit"))
 }
 
 func freePort() (int, error) {
