@@ -44,3 +44,45 @@ func TestCheckFindsTheSourcesAPageCites(t *testing.T) {
 		}
 	}
 }
+
+// checklistPage ends a task's last line with a "Source:" credit and no full stop;
+// the next task, and the note under the list, are other blocks.
+const checklistPage = `<!doctype html><html><body><main><h1>Moving checklist</h1>
+<ul><li><label><input type="checkbox"> <span>Keep your moving receipts</span></label>
+<p>The IRS says you may be able to deduct them.</p>
+<small>Source: <cite>Internal Revenue Service</cite></small></li>
+<li><label><input type="checkbox"> <span>Register to vote at your new address</span></label>
+<p>Do it well before the next election.</p></li></ul>
+<p>Source: Bureau of Labor Statistics</p>
+<p>Your ticks never leave this device.</p>
+<p>Source: <cite>U-Haul</cite> and <a href="https://www.penske.com/">Penske</a>; read 2026-10-28.</p>
+</main></body></html>`
+
+// A "Source:" line ends where its block does: the next block's words are not
+// part of the source's name.
+func TestCheckSourceLineEndsAtItsBlock(t *testing.T) {
+	draft := `{"@context":"https://schema.org","@type":"WebPage","url":"https://movers.test/checklist/","name":"Moving checklist",
+		"citation":[{"@type":"CreativeWork","name":"Internal Revenue Service"},{"@type":"CreativeWork","name":"U-Haul"}]}`
+	r := checkSite(t, draft, checklistPage, "https://movers.test/checklist/")
+	expectWarnings(t, r, [][]string{
+		{"credits 2 sources (Bureau of Labor Statistics, U-Haul and Penske)", "that no citation names"},
+	})
+	for _, w := range []string{"Register to vote", "Your ticks"} {
+		if warns(r, "credits", w) {
+			t.Errorf("the next block read as part of a source: %+v", r.Issues)
+		}
+	}
+}
+
+// A "Sources:" label on a line of its own credits the next block, or each item
+// of the list after it.
+func TestCheckSourceLabelCreditsTheNextBlock(t *testing.T) {
+	page := `<!doctype html><html><body><main><h1>Truck sizes</h1><p>A 15 ft truck holds two rooms.</p>
+<p><strong>Sources:</strong></p><ul><li>U-Haul</li><li>Penske</li></ul>
+<dl><dt>Source:</dt><dd>Bureau of Labor Statistics</dd></dl></main></body></html>`
+	bare := `{"@context":"https://schema.org","@type":"WebPage","url":"https://movers.test/trucks/","name":"Truck sizes"}`
+	r := checkSite(t, bare, page, "https://movers.test/trucks/")
+	expectWarnings(t, r, [][]string{
+		{"credits 3 sources (U-Haul, Penske, Bureau of Labor Statistics)", "that no citation names"},
+	})
+}
