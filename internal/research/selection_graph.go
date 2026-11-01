@@ -542,6 +542,9 @@ func (s *selection) graphCandidates(g *builtGraph, hits []lookupHit, set SelectS
 		case e != nil:
 			c.role, c.Selected, c.freebase = roleGraphPage, e.selected(SourcePage), e.freebase
 			c.GraphLinks = len(g.Links[e.title])
+			if e.named {
+				c.role, c.QualifiedBy = roleNamed, append(e.qualifiers(set), "keyword_title")
+			}
 		default:
 			c.role, c.Selected = roleNeighbour, Selected{QID: m.QID, Source: SourceGraph, Matched: append([]string{}, m.Named...), LinkedTo: []string{}}
 			if m.Sim != nil {
@@ -569,6 +572,9 @@ func (s *selection) graphCandidates(g *builtGraph, hits []lookupHit, set SelectS
 		c := &candidate{title: e.title, freebase: e.freebase, Selected: e.selected(SourcePage)}
 		c.GraphLinks = n
 		switch {
+		case e.named:
+			// The keyword names it outright: it needs no links into the graph.
+			c.role, c.QualifiedBy = roleNamed, append(by, "keyword_title")
 		case len(by) > 0 && n >= set.MinGraphLinks, len(by) == 0 && n >= set.MinGraphLinksUngated:
 			c.role, c.QualifiedBy = roleGraphLinked, append(by, "graph_links")
 		case len(by) > 0 && n >= set.MinMentionGraphLinks:

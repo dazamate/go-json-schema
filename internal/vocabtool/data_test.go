@@ -61,3 +61,26 @@ func TestCheckFindsTheDataAPageShows(t *testing.T) {
 		}
 	}
 }
+
+// A ratio's sentence leads with its base ("1 in 6", "For every 10"), which is
+// no figure of its own: an Observation named by the sentence carries it.
+func TestCheckObservationNamedBySentence(t *testing.T) {
+	page := `<!doctype html><html><body><main><h1>Moving in Tulsa</h1>
+<section id="place-moves"><h2>How often Tulsans move</h2>
+<p>1 in 6 people in Tulsa moved in the last year</p>
+<figure><figcaption>People who moved in the last year, as a share of residents, 2020-2024</figcaption><svg></svg></figure>
+<p><small>Source: <cite>U.S. Census Bureau, American Community Survey, 2020-2024</cite>.</small></p></section>
+</main></body></html>`
+	draft := func(obs string) string {
+		return `{"@context":"https://schema.org","@graph":[{"@type":"WebPage","url":"https://movers.test/tulsa/","name":"Moving in Tulsa"},
+			{"@type":"Dataset","name":"People who moved in the last year, as a share of residents, 2020-2024","mainEntity":` + obs + `}]}`
+	}
+	r := checkSite(t, draft(`{"@type":"Observation","value":17,"unitCode":"P1"}`), page, "https://movers.test/tulsa/")
+	if n := issueCount(r, "add an Observation"); n != 1 {
+		t.Errorf("unnamed Observation: %d asks, want 1: %+v", n, r.Issues)
+	}
+	r = checkSite(t, draft(`{"@type":"Observation","name":"1 in 6 people in  Tulsa moved in the last year","value":17,"unitCode":"P1"}`), page, "https://movers.test/tulsa/")
+	if n := issueCount(r, "add an Observation"); n != 0 {
+		t.Errorf("Observation named by the sentence: %+v", r.Issues)
+	}
+}

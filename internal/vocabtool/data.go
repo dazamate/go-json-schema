@@ -68,10 +68,15 @@ func (p *pageFacts) dataBlocks() []dataBlock {
 // figures that no Observation carries, and a pay table that no Occupation's
 // estimatedSalary carries. A pay table's amounts are wages, not prices.
 func (c *checker) data(all []located, p *pageFacts, d *draftIndex) {
-	var observed []string
+	var observed, stated []string
 	for _, l := range all {
 		if c.is(l.n, "Observation") {
 			observed = append(observed, scalars(l.n, "value")...)
+			// An Observation named by the sentence carries it: "1 in 6 people
+			// moved" leads with 1, which is no figure of its own.
+			for _, n := range scalars(l.n, "name") {
+				stated = append(stated, strings.Join(strings.Fields(n), " "))
+			}
 		}
 	}
 	for _, b := range p.dataBlocks() {
@@ -115,7 +120,7 @@ func (c *checker) data(all []located, p *pageFacts, d *draftIndex) {
 			if n == "" {
 				continue
 			}
-			if !slices.Contains(observed, strings.ReplaceAll(n, ",", "")) {
+			if !slices.Contains(observed, strings.ReplaceAll(n, ",", "")) && !slices.Contains(stated, strings.Join(strings.Fields(t), " ")) {
 				home := ""
 				if bedrooms.MatchString(t) {
 					home = "; a FloorPlan (numberOfBedrooms, numberOfRooms) describes the home it counts"

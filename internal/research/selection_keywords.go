@@ -87,6 +87,55 @@ func sharesStem(title string, words []string) bool {
 	return false
 }
 
+// singular is a word without its plural ending, for comparing a title's
+// words with the keyword's: "companies" is "company", "homes" is "home".
+func singular(w string) string {
+	n := utf8.RuneCountInString(w)
+	switch {
+	case n > 4 && strings.HasSuffix(w, "ies"):
+		return strings.TrimSuffix(w, "ies") + "y"
+	case n > 4 && (strings.HasSuffix(w, "ches") || strings.HasSuffix(w, "shes") || strings.HasSuffix(w, "sses") || strings.HasSuffix(w, "xes")):
+		return strings.TrimSuffix(w, "es")
+	case n > 3 && strings.HasSuffix(w, "s") && !strings.HasSuffix(w, "ss"):
+		return strings.TrimSuffix(w, "s")
+	}
+	return w
+}
+
+// keywordTitle reports whether the keyword names the entity outright: its
+// title, without a disambiguation and without what follows a comma ("Tulsa,
+// Oklahoma" is Tulsa), is one of the keyword's phrases word for word, plurals
+// aside. Phrases of only one- and two-letter words ("la", "dc") are left out:
+// they are abbreviations, which a title never spells.
+func keywordTitle(title string, grams []string) bool {
+	if i := strings.LastIndex(title, " ("); i > 0 && strings.HasSuffix(title, ")") {
+		title = title[:i]
+	}
+	head, _, _ := strings.Cut(title, ",")
+	want := singulars(head)
+	if len(want) == 0 {
+		return false
+	}
+	for _, g := range grams {
+		words := wordsOf(g)
+		if !slices.ContainsFunc(words, func(w string) bool { return utf8.RuneCountInString(w) > 2 }) {
+			continue
+		}
+		if slices.Equal(singulars(g), want) {
+			return true
+		}
+	}
+	return false
+}
+
+func singulars(s string) []string {
+	var out []string
+	for _, w := range wordsOf(s) {
+		out = append(out, singular(w))
+	}
+	return out
+}
+
 // keywordGrams returns every run of adjacent words, by start index and then
 // length, except runs that start or end with a stop word.
 func keywordGrams(keyword string) []string {
