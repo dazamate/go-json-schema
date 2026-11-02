@@ -176,6 +176,20 @@ search.Extra = map[string]schema.Values{"query-input": schema.Texts("required na
 - `schema.ScriptTag(v)` gives a `<script type="application/ld+json">`
   element, with `<` and `>` escaped so values can't close the tag.
 
+## Checking JSON-LD that isn't built from the structs
+
+The structs only take properties a type has, so a typo fails to compile.
+JSON-LD from anywhere else, such as nodes stored as data, goes through
+package `check`, which applies the vocabulary rules build_jsonld starts
+with:
+
+```go
+import "github.com/dazamate/go-json-schema/check"
+
+err := check.Errors(raw)          // unknown types, properties and enum members, joined; nil when clean
+issues, err := check.Vocabulary(raw) // every issue: errors, warnings (superseded terms, a subtype's property) and info
+```
+
 ## MCP server: schema-mcp
 
 `cmd/schema-mcp` is an MCP server that researches a keyword the way Zizta's
