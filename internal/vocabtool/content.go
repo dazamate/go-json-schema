@@ -1384,7 +1384,7 @@ func (c *checker) prices(all []located, p *pageFacts) {
 	switch {
 	case len(missing) == 0:
 	case p.sells():
-		c.add(pagePath, Warning, "the page shows prices (%s) that no price property carries: mark each up on the item it is the price of, as an Offer's price or, for a range, an AggregateOffer's lowPrice and highPrice, with priceCurrency", strings.Join(missing, ", "))
+		c.add(pagePath, Warning, "the page shows prices (%s) that no price property carries: mark each up on the item it is the price of, as an Offer's price or, for a range, an AggregateOffer's lowPrice and highPrice, with priceCurrency and offerCount", strings.Join(missing, ", "))
 	default:
 		// a site that sells nothing shows what others charge
 		c.add(pagePath, Warning, "the page shows prices (%s) that no price property carries: mark each up on the thing it is the price of, as a MonetaryAmount (value, or minValue and maxValue, currency) for a cost or estimate of what others charge, or an Offer's price only for what the business itself sells", strings.Join(missing, ", "))

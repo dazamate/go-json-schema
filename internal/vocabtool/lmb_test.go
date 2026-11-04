@@ -42,7 +42,7 @@ var lmbTests = []lmbTest{
 	{"G02", "want", lmbSD, "bare", ``, `the draft has no WebSite`},
 	{"G03", "want", lmbSD, "bare", ``, `no node publishes the page`},
 	{"G04", "want", "home", "current", ``, `type it OnlineBusiness`},
-	{"G05", "want", "moving-cost-calculator", "bare", ``, `but no WebApplication`},
+	{"G05", "want", "moving-cost-calculator-live", "bare", ``, `but no WebApplication`},
 	{"G06", "want", lmbSD, "bare", `^html:#calculator`, `has no QuoteAction`},
 	{"G07", "want", lmbSD, "bare", ``, `no node is an Article`},
 	{"G08", "want", lmbSD, "bare", ``, `no Dataset describes it`},
@@ -76,6 +76,13 @@ var lmbTests = []lmbTest{
 	{"B04", "want", "cheapest-long-distance-moving-options", "bare", ``, `DefinedTerm`},
 	{"B05", "want", "how-much-do-movers-cost", "bare", ``, `CollectionPage`},
 	{"B06", "want", lmbSD, "bare", ``, `QuantitativeValue`},
+
+	// Search Console's Product snippets report on the live calculator page, 2026-11-04
+	{"P01", "want", "moving-cost-calculator-live", "current", `itemListElement`, `critical: Either "offers", "review", or "aggregateRating" should be specified\. This node is a Vehicle`},
+	{"P02", "want", "moving-cost-calculator-live", "current", `\.offers$`, `non-critical: Missing field "offerCount" \(in "offers"\)`},
+	{"P03", "want", "moving-cost-calculator-live", "current", ``, `non-critical: Missing field "review"; Missing field "aggregateRating"`},
+	{"P04", "want", "2-movers-cost", "bare", `truck-picker`, `marks one without offers, review or aggregateRating invalid`},
+	{"P05", "want", "moving-cost-calculator-live", "bare", ``, `AggregateOffer \(lowPrice, highPrice, priceCurrency, and offerCount`},
 
 	// what the checker must not say
 	{"M1", "never", lmbSD, "bare", `Key takeaways|calc|#calculator`, `WPSideBar`},

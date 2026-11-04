@@ -116,6 +116,7 @@ func (t *Tool) Check(draft json.RawMessage, opts CheckOptions) (Report, error) {
 	c.bare(all)
 	c.ownReviews(all)
 	c.reviews(all)
+	c.productSnippets(all)
 	if facts != nil {
 		c.content(all, facts)
 	}

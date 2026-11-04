@@ -1,0 +1,2152 @@
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@id": "https://liftmyboxes.com/#organization",
+   "@type": "OnlineBusiness",
+   "alternateName": [
+    "LiftMyBoxes"
+   ],
+   "areaServed": [
+    {
+     "@id": "https://liftmyboxes.com/#united-states",
+     "@type": "Country",
+     "additionalType": [
+      "https://www.wikidata.org/wiki/Q3624078",
+      "https://www.wikidata.org/wiki/Q6256"
+     ],
+     "alternateName": [
+      "U.S.",
+      "US",
+      "American"
+     ],
+     "identifier": [
+      {
+       "@type": "PropertyValue",
+       "propertyID": "Wikidata",
+       "value": "Q30"
+      },
+      {
+       "@type": "PropertyValue",
+       "propertyID": "GoogleMachineID",
+       "value": "kg:/m/09c7w0"
+      }
+     ],
+     "name": "United States",
+     "sameAs": [
+      "https://en.wikipedia.org/wiki/United_States",
+      "https://www.wikidata.org/wiki/Q30",
+      "https://www.google.com/search?kgmid=/m/09c7w0",
+      "https://dbpedia.org/resource/United_States"
+     ]
+    }
+   ],
+   "contactPoint": {
+    "@type": "ContactPoint",
+    "areaServed": "US",
+    "availableLanguage": "en",
+    "contactType": "customer support",
+    "email": "howdy@liftmyboxes.com"
+   },
+   "description": "Lift My Boxes gives free moving cost estimates.",
+   "disambiguatingDescription": "An online moving cost estimator.",
+   "email": "howdy@liftmyboxes.com",
+   "knowsAbout": [
+    {
+     "@id": "https://liftmyboxes.com/#relocation-personal",
+     "@type": "Thing",
+     "additionalType": [
+      "https://www.wikidata.org/wiki/Q1914636",
+      "https://www.wikidata.org/wiki/Q27949697"
+     ],
+     "alternateName": [
+      "Household Moving",
+      "household moving",
+      "moving house",
+      "relocation"
+     ],
+     "identifier": [
+      {
+       "@type": "PropertyValue",
+       "propertyID": "Wikidata",
+       "value": "Q2918584"
+      },
+      {
+       "@type": "PropertyValue",
+       "propertyID": "GoogleMachineID",
+       "value": "kg:/m/043rxy0"
+      }
+     ],
+     "name": "Relocation (personal)",
+     "sameAs": [
+      "https://en.wikipedia.org/wiki/Relocation_(personal)",
+      "https://www.wikidata.org/wiki/Q2918584",
+      "https://www.google.com/search?kgmid=/m/043rxy0",
+      "https://dbpedia.org/resource/Relocation_(personal)"
+     ]
+    },
+    {
+     "@id": "https://liftmyboxes.com/#moving-company"
+    },
+    {
+     "@id": "https://liftmyboxes.com/#cost-estimate",
+     "@type": "Thing",
+     "additionalType": "https://www.wikidata.org/wiki/Q791801",
+     "identifier": [
+      {
+       "@type": "PropertyValue",
+       "propertyID": "Wikidata",
+       "value": "Q795053"
+      },
+      {
+       "@type": "PropertyValue",
+       "propertyID": "GoogleMachineID",
+       "value": "kg:/m/0j9m1l8"
+      },
+      {
+       "@type": "PropertyValue",
+       "propertyID": "GoogleMachineID",
+       "value": "kg:/g/12301ngy"
+      }
+     ],
+     "name": "Cost estimate",
+     "sameAs": [
+      "https://en.wikipedia.org/wiki/Cost_estimate",
+      "https://www.wikidata.org/wiki/Q795053",
+      "https://www.google.com/search?kgmid=/m/0j9m1l8",
+      "https://www.google.com/search?kgmid=/g/12301ngy",
+      "https://dbpedia.org/resource/Cost_estimate"
+     ]
+    },
+    {
+     "@id": "https://liftmyboxes.com/#home-moving",
+     "@type": "Thing",
+     "additionalType": "https://www.wikidata.org/wiki/Q2918584",
+     "alternateName": [
+      "Home move",
+      "Household move"
+     ],
+     "description": "Moving the contents of a house or apartment to a new home.",
+     "name": "Home moving",
+     "url": "https://liftmyboxes.com/home-moving-cost/"
+    },
+    {
+     "@id": "https://liftmyboxes.com/#office-moving",
+     "@type": "Thing",
+     "additionalType": "https://www.wikidata.org/wiki/Q2918584",
+     "description": "Relocating a business office, its furniture and equipment.",
+     "name": "Office moving",
+     "url": "https://liftmyboxes.com/office-moving-cost/"
+    },
+    {
+     "@id": "https://liftmyboxes.com/#piano-moving",
+     "@type": "Thing",
+     "additionalType": "https://www.wikidata.org/wiki/Q2918584",
+     "description": "Moving an upright or grand piano, which needs a specialist crew and equipment.",
+     "name": "Piano moving",
+     "url": "https://liftmyboxes.com/cost-to-move-a-piano/"
+    },
+    {
+     "@id": "https://liftmyboxes.com/#pool-table-moving",
+     "@type": "Thing",
+     "additionalType": "https://www.wikidata.org/wiki/Q2918584",
+     "description": "Taking down, moving and reassembling a slate or wood pool table.",
+     "name": "Pool table moving",
+     "url": "https://liftmyboxes.com/cost-to-move-a-pool-table/"
+    },
+    {
+     "@id": "https://liftmyboxes.com/#hot-tub-moving",
+     "@type": "Thing",
+     "additionalType": "https://www.wikidata.org/wiki/Q2918584",
+     "description": "Moving a hot tub or spa, usually with a dolly, a lift or a crane.",
+     "name": "Hot tub moving",
+     "url": "https://liftmyboxes.com/cost-to-move-a-hot-tub/"
+    },
+    {
+     "@id": "https://liftmyboxes.com/#furniture-moving",
+     "@type": "Thing",
+     "additionalType": "https://www.wikidata.org/wiki/Q2918584",
+     "description": "Moving a few pieces of furniture or other items rather than a whole home.",
+     "name": "Furniture moving",
+     "url": "https://liftmyboxes.com/how-much-does-it-cost-to-move-furniture/"
+    },
+    {
+     "@id": "https://liftmyboxes.com/#mobile-home-moving",
+     "@type": "Thing",
+     "additionalType": "https://www.wikidata.org/wiki/Q2918584",
+     "description": "Transporting a single, double or triple wide mobile or manufactured home.",
+     "name": "Mobile home moving",
+     "url": "https://liftmyboxes.com/mobile-homes-moving-cost/"
+    },
+    {
+     "@id": "https://liftmyboxes.com/#moving-labor",
+     "@type": "Thing",
+     "additionalType": "https://www.wikidata.org/wiki/Q2918584",
+     "alternateName": [
+      "Labor-only help",
+      "Labor-only movers",
+      "Labor-only"
+     ],
+     "description": "Hired help to load or unload a truck the customer provides.",
+     "name": "Moving labor",
+     "url": "https://liftmyboxes.com/moving-labor-cost/"
+    },
+    {
+     "@id": "https://liftmyboxes.com/#local-moving",
+     "@type": "Thing",
+     "additionalType": "https://www.wikidata.org/wiki/Q2918584",
+     "alternateName": [
+      "Local move",
+      "Local movers",
+      "Local moves"
+     ],
+     "description": "Moving within the same city or metro area, which movers usually price by the hour for a crew and truck.",
+     "name": "Local moving",
+     "url": "https://liftmyboxes.com/local-moving-cost/"
+    },
+    {
+     "@id": "https://liftmyboxes.com/#long-distance-moving",
+     "@type": "Thing",
+     "additionalType": "https://www.wikidata.org/wiki/Q2918584",
+     "alternateName": [
+      "Long-distance move",
+      "Long distance moving",
+      "Long distance move",
+      "Cross-country move",
+      "Cross country move",
+      "Interstate move"
+     ],
+     "description": "Moving to another city or state, which movers price by the size of the shipment and the distance.",
+     "name": "Long-distance moving",
+     "url": "https://liftmyboxes.com/long-distance-moving-cost/"
+    },
+    {
+     "@id": "https://liftmyboxes.com/#packing-service",
+     "@type": "Thing",
+     "additionalType": "https://www.wikidata.org/wiki/Q2918584",
+     "alternateName": [
+      "Packing",
+      "Packers",
+      "Packing services"
+     ],
+     "description": "Movers packing a household into boxes before the move, priced by the hour or by the box.",
+     "name": "Packing service",
+     "url": "https://liftmyboxes.com/how-much-do-movers-charge-for-packing/"
+    }
+   ],
+   "logo": "https://liftmyboxes.com/favicon.svg",
+   "name": "Lift My Boxes",
+   "url": "https://liftmyboxes.com/"
+  },
+  {
+   "@id": "https://liftmyboxes.com/#website",
+   "@type": "WebSite",
+   "copyrightHolder": {
+    "@id": "https://liftmyboxes.com/#organization"
+   },
+   "copyrightYear": 2026,
+   "inLanguage": "en-US",
+   "name": "Lift My Boxes",
+   "publisher": {
+    "@id": "https://liftmyboxes.com/#organization"
+   },
+   "url": "https://liftmyboxes.com/"
+  },
+  {
+   "@id": "https://liftmyboxes.com/moving-cost-calculator/#webpage",
+   "@type": "WebPage",
+   "about": [
+    {
+     "@id": "https://liftmyboxes.com/#cost",
+     "@type": "Thing",
+     "additionalType": [
+      "https://www.wikidata.org/wiki/Q151885",
+      "https://www.wikidata.org/wiki/Q29028649"
+     ],
+     "alternateName": [
+      "costs",
+      "expenses",
+      "Costs"
+     ],
+     "identifier": [
+      {
+       "@type": "PropertyValue",
+       "propertyID": "Wikidata",
+       "value": "Q240673"
+      },
+      {
+       "@type": "PropertyValue",
+       "propertyID": "GoogleMachineID",
+       "value": "kg:/m/0168hv"
+      }
+     ],
+     "name": "Cost",
+     "sameAs": [
+      "https://en.wikipedia.org/wiki/Cost",
+      "https://www.wikidata.org/wiki/Q240673",
+      "https://www.google.com/search?kgmid=/m/0168hv",
+      "https://dbpedia.org/resource/Cost"
+     ]
+    },
+    {
+     "@id": "https://liftmyboxes.com/#calculator",
+     "@type": "Thing",
+     "additionalType": [
+      "https://www.wikidata.org/wiki/Q39546",
+      "https://www.wikidata.org/wiki/Q2858615"
+     ],
+     "identifier": [
+      {
+       "@type": "PropertyValue",
+       "propertyID": "Wikidata",
+       "value": "Q31087"
+      },
+      {
+       "@type": "PropertyValue",
+       "propertyID": "GoogleMachineID",
+       "value": "kg:/m/024d2"
+      }
+     ],
+     "name": "Calculator",
+     "sameAs": [
+      "https://en.wikipedia.org/wiki/Calculator",
+      "https://www.wikidata.org/wiki/Q31087",
+      "https://www.google.com/search?kgmid=/m/024d2",
+      "https://dbpedia.org/resource/Calculator"
+     ]
+    },
+    {
+     "@id": "https://liftmyboxes.com/#moving-company",
+     "@type": "Thing",
+     "additionalType": [
+      "https://www.wikidata.org/wiki/Q783794",
+      "https://www.wikidata.org/wiki/Q2169973"
+     ],
+     "alternateName": [
+      "mover",
+      "movers",
+      "Movers",
+      "moving companies",
+      "MOVERS",
+      "Moving companies",
+      "moving vans",
+      "Van Lines",
+      "moving van",
+      "Mover"
+     ],
+     "identifier": [
+      {
+       "@type": "PropertyValue",
+       "propertyID": "Wikidata",
+       "value": "Q1757263"
+      },
+      {
+       "@type": "PropertyValue",
+       "propertyID": "GoogleMachineID",
+       "value": "kg:/m/07ry5s"
+      }
+     ],
+     "name": "Moving company",
+     "sameAs": [
+      "https://en.wikipedia.org/wiki/Moving_company",
+      "https://www.wikidata.org/wiki/Q1757263",
+      "https://www.google.com/search?kgmid=/m/07ry5s",
+      "https://dbpedia.org/resource/Moving_company"
+     ]
+    }
+   ],
+   "abstract": "A 2-bedroom home move of 10 road miles, off peak: $58–$103 with a rental truck before help, $390–$1,380 with a container, and $720–$1,800 with full-service movers. Tip guides suggest $4–$15 per mover per hour: $16–$98 per mover for 4–6.5 hours on site, $48–$294 for 3 movers. Guides put a 2-bedroom home at about 40–90 boxes. A 2-bedroom home move takes up about 640–930 cu ft: the smallest truck that holds the heavy end is 20 ft. With 3 movers, a 2-bedroom home move takes about 4–6.5 hours on site: $720–$1,800 off peak at 10 road miles. The moving checklist has 14 tasks, from 8 weeks before the move to after the move. Each result is a range: the low end fits a light load and easy access, the high end a fuller home or a harder day. Sample figures assume 10 or 1,000 road miles, an off-peak date, no stairs and no extras. Tips, supplies, parking permits and travel sit outside the result, so budget them on top. A written estimate far below the range is a reason to ask questions, not a bargain to grab.",
+   "alternateName": "Moving cost calculator for local and long-distance moves",
+   "breadcrumb": {
+    "@id": "https://liftmyboxes.com/moving-cost-calculator/#breadcrumb",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+     {
+      "@type": "ListItem",
+      "item": "https://liftmyboxes.com/",
+      "name": "Home",
+      "position": 1
+     },
+     {
+      "@type": "ListItem",
+      "item": "https://liftmyboxes.com/moving-cost-calculator/",
+      "name": "Moving cost calculator",
+      "position": 2
+     }
+    ]
+   },
+   "citation": [
+    {
+     "@type": "WebPage",
+     "name": "FMCSA moving guidance",
+     "url": "https://www.fmcsa.dot.gov/protect-your-move"
+    },
+    {
+     "@type": "WebPage",
+     "name": "FMCSA's Protect Your Move pages",
+     "url": "https://www.fmcsa.dot.gov/protect-your-move"
+    },
+    {
+     "@type": "CreativeWork",
+     "name": "HireAHelper"
+    },
+    {
+     "@type": "CreativeWork",
+     "name": "U-Haul"
+    },
+    {
+     "@type": "CreativeWork",
+     "name": "moveBuddha"
+    },
+    {
+     "@type": "CreativeWork",
+     "name": "PODS"
+    },
+    {
+     "@type": "CreativeWork",
+     "name": "FMCSA"
+    },
+    {
+     "@type": "CreativeWork",
+     "name": "This Old House"
+    },
+    {
+     "@type": "CreativeWork",
+     "name": "Move.org"
+    },
+    {
+     "@type": "CreativeWork",
+     "name": "AAA"
+    },
+    {
+     "@type": "CreativeWork",
+     "name": "EIA"
+    },
+    {
+     "@type": "CreativeWork",
+     "name": "Penske"
+    },
+    {
+     "@type": "CreativeWork",
+     "name": "U-Pack"
+    },
+    {
+     "@type": "CreativeWork",
+     "name": "NerdWallet"
+    },
+    {
+     "@type": "CreativeWork",
+     "name": "Forbes Home"
+    },
+    {
+     "@type": "CreativeWork",
+     "name": "MoveAdvisor"
+    },
+    {
+     "@type": "CreativeWork",
+     "name": "Real Simple"
+    },
+    {
+     "@type": "CreativeWork",
+     "name": "American Van Lines"
+    },
+    {
+     "@type": "CreativeWork",
+     "name": "CNET"
+    },
+    {
+     "@type": "CreativeWork",
+     "name": "USmove"
+    },
+    {
+     "@type": "CreativeWork",
+     "name": "Vector Moving and Storage"
+    },
+    {
+     "@type": "CreativeWork",
+     "name": "Uline"
+    },
+    {
+     "@type": "CreativeWork",
+     "name": "Anchor Box"
+    },
+    {
+     "@type": "CreativeWork",
+     "name": "SMKlog"
+    },
+    {
+     "@type": "CreativeWork",
+     "name": "Moving Muscle"
+    },
+    {
+     "@type": "CreativeWork",
+     "name": "Updater"
+    },
+    {
+     "@type": "CreativeWork",
+     "name": "Wirecutter"
+    },
+    {
+     "@type": "CreativeWork",
+     "name": "Moversville"
+    },
+    {
+     "@type": "CreativeWork",
+     "name": "B2 Moving"
+    },
+    {
+     "@type": "CreativeWork",
+     "name": "College Hunks Hauling Junk & Moving"
+    },
+    {
+     "@type": "CreativeWork",
+     "name": "USmove, Vector Moving and Storage, HireAHelper, U-Haul, Uline, Anchor Box, SMKlog, Moving Muscle, Up"
+    },
+    {
+     "@type": "CreativeWork",
+     "name": "Budget Truck Rental"
+    },
+    {
+     "@type": "CreativeWork",
+     "name": "Federal Travel Regulation"
+    },
+    {
+     "@type": "CreativeWork",
+     "name": "Ohio Administrative Code"
+    },
+    {
+     "@type": "CreativeWork",
+     "name": "CubitMove"
+    },
+    {
+     "@type": "CreativeWork",
+     "name": "Move-Price"
+    },
+    {
+     "@type": "CreativeWork",
+     "name": "Aussie Moving"
+    },
+    {
+     "@type": "CreativeWork",
+     "name": "CalState Moving"
+    },
+    {
+     "@type": "CreativeWork",
+     "name": "U-Haul, Penske, Budget Truck Rental, Federal Travel Regulation, Ohio Administrative Code, moveBuddha"
+    },
+    {
+     "@type": "CreativeWork",
+     "name": "Federal Motor Carrier Safety Administration"
+    }
+   ],
+   "dateModified": "2026-11-02T11:45:20Z",
+   "datePublished": "2026-10-31T04:57:50Z",
+   "description": "Use the free moving cost calculator for a price range in about a minute. See what the range assumes, which extras change it, and how to test a quote against it.",
+   "disambiguatingDescription": "Enter your ZIP codes, home size and moving date in the moving cost calculator below for a free price range in about a minute, with no email needed.",
+   "hasPart": [
+    {
+     "@id": "https://liftmyboxes.com/moving-cost-calculator/#header",
+     "@type": "WPHeader",
+     "cssSelector": "body > header"
+    },
+    {
+     "@id": "https://liftmyboxes.com/moving-cost-calculator/#nav-main",
+     "@type": "SiteNavigationElement",
+     "cssSelector": "nav[aria-label=\"Main\"]",
+     "name": "Main menu"
+    },
+    {
+     "@id": "https://liftmyboxes.com/moving-cost-calculator/#footer",
+     "@type": "WPFooter",
+     "cssSelector": "body > footer"
+    },
+    {
+     "@id": "https://liftmyboxes.com/moving-cost-calculator/#nav-costs",
+     "@type": "SiteNavigationElement",
+     "cssSelector": "nav[aria-labelledby=\"footer-costs\"]",
+     "name": "Moving costs"
+    },
+    {
+     "@id": "https://liftmyboxes.com/moving-cost-calculator/#nav-company",
+     "@type": "SiteNavigationElement",
+     "cssSelector": "nav[aria-labelledby=\"footer-company\"]",
+     "name": "Company"
+    },
+    {
+     "@id": "https://liftmyboxes.com/moving-cost-calculator/#nav-legal",
+     "@type": "SiteNavigationElement",
+     "cssSelector": "nav[aria-labelledby=\"footer-legal\"]",
+     "name": "Legal"
+    },
+    {
+     "@id": "https://liftmyboxes.com/moving-cost-calculator/#exact",
+     "@type": "HowTo",
+     "description": "Moving cost calculator: an estimate tells you what to expect. These steps make sure the final bill matches it.",
+     "name": "Five ways to get a quote you can count on",
+     "step": [
+      {
+       "@type": "HowToStep",
+       "name": "List your big items",
+       "position": 1,
+       "text": "Beds, sofas, appliances and anything heavy. They drive weight, crew size and time."
+      },
+      {
+       "@type": "HowToStep",
+       "name": "Ask for a survey",
+       "position": 2,
+       "text": "An in-home or video walk-through gives the mover what they need to firm up the price."
+      },
+      {
+       "@type": "HowToStep",
+       "name": "Get it in writing",
+       "position": 3,
+       "text": "Know whether your estimate is binding or non-binding before you sign anything."
+      },
+      {
+       "@type": "HowToStep",
+       "name": "Check the USDOT number",
+       "position": 4,
+       "text": "For interstate moves, confirm the mover is registered with the FMCSA."
+      },
+      {
+       "@type": "HowToStep",
+       "name": "Choose your coverage",
+       "position": 5,
+       "text": "Decide between basic released value and full value protection before moving day."
+      }
+     ]
+    },
+    {
+     "@id": "https://liftmyboxes.com/moving-cost-calculator/#article",
+     "@type": [
+      "Article",
+      "Guide"
+     ],
+     "about": {
+      "@id": "https://liftmyboxes.com/moving-cost-calculator/#service",
+      "@type": "Service",
+      "additionalType": "https://www.wikidata.org/wiki/Q2918584",
+      "alternateName": "Moving",
+      "areaServed": {
+       "@type": "Country",
+       "name": "United States"
+      },
+      "description": "Use the free moving cost calculator for a price range in about a minute. See what the range assumes, which extras change it, and how to test a quote against it.",
+      "disambiguatingDescription": "Enter your ZIP codes, home size and moving date in the moving cost calculator below for a free price range in about a minute, with no email needed.",
+      "name": "Moving cost calculator",
+      "serviceType": "Moving"
+     },
+     "alternativeHeadline": "Free Moving Cost Calculator, No Email Needed",
+     "articleSection": "Free price range",
+     "author": {
+      "@id": "https://liftmyboxes.com/#organization"
+     },
+     "dateModified": "2026-11-02T11:45:20Z",
+     "datePublished": "2026-10-31T04:57:50Z",
+     "description": "Use the free moving cost calculator for a price range in about a minute. See what the range assumes, which extras change it, and how to test a quote against it.",
+     "headline": "Moving cost calculator for local and long-distance moves",
+     "inLanguage": "en-US",
+     "isPartOf": {
+      "@id": "https://liftmyboxes.com/moving-cost-calculator/#webpage"
+     },
+     "mainEntityOfPage": {
+      "@id": "https://liftmyboxes.com/moving-cost-calculator/#webpage"
+     },
+     "mentions": [
+      {
+       "@type": "MonetaryAmount",
+       "currency": "USD",
+       "description": "Local move: 1-bedroom home, 10 road miles, off peak, no stairs, no extras",
+       "maxValue": 960,
+       "minValue": 380
+      },
+      {
+       "@type": "MonetaryAmount",
+       "currency": "USD",
+       "description": "Long-distance move: 1-bedroom home, 1,000 road miles, off peak, no stairs, no extras",
+       "maxValue": 3300,
+       "minValue": 1400
+      },
+      {
+       "@type": "UnitPriceSpecification",
+       "description": "Hourly rate for the whole crew, local move: 1-bedroom home (2 movers)",
+       "maxPrice": 150,
+       "minPrice": 100,
+       "priceCurrency": "USD",
+       "unitCode": "HUR"
+      },
+      {
+       "@type": "UnitPriceSpecification",
+       "description": "Rate per mile, long-distance move: 1-bedroom home, 1,000 road miles, off peak, no stairs, no extras",
+       "maxPrice": 3.28,
+       "minPrice": 1.45,
+       "priceCurrency": "USD",
+       "unitCode": "SMI"
+      },
+      {
+       "@type": "MonetaryAmount",
+       "currency": "USD",
+       "description": "Local move: 1 to 3 items, 10 road miles, off peak, no stairs, no extras",
+       "maxValue": 590,
+       "minValue": 180
+      },
+      {
+       "@type": "MonetaryAmount",
+       "currency": "USD",
+       "description": "Long-distance move: 1 to 3 items, 1,000 road miles, off peak, no stairs, no extras",
+       "maxValue": 1400,
+       "minValue": 610
+      },
+      {
+       "@type": "MonetaryAmount",
+       "currency": "USD",
+       "description": "Local move: 4 to 10 items, 10 road miles, off peak, no stairs, no extras",
+       "maxValue": 890,
+       "minValue": 330
+      },
+      {
+       "@type": "MonetaryAmount",
+       "currency": "USD",
+       "description": "Long-distance move: 4 to 10 items, 1,000 road miles, off peak, no stairs, no extras",
+       "maxValue": 2450,
+       "minValue": 820
+      },
+      {
+       "@type": "MonetaryAmount",
+       "currency": "USD",
+       "description": "Local move: more than 10 items, 10 road miles, off peak, no stairs, no extras",
+       "maxValue": 1600,
+       "minValue": 570
+      },
+      {
+       "@type": "MonetaryAmount",
+       "currency": "USD",
+       "description": "Long-distance move: more than 10 items, 1,000 road miles, off peak, no stairs, no extras",
+       "maxValue": 4550,
+       "minValue": 1650
+      },
+      {
+       "@type": "MonetaryAmount",
+       "currency": "USD",
+       "description": "Local move: small office, 10 road miles, off peak, no stairs, no extras",
+       "maxValue": 2350,
+       "minValue": 870
+      },
+      {
+       "@type": "MonetaryAmount",
+       "currency": "USD",
+       "description": "Long-distance move: small office, 1,000 road miles, off peak, no stairs, no extras",
+       "maxValue": 6550,
+       "minValue": 2150
+      },
+      {
+       "@type": "MonetaryAmount",
+       "currency": "USD",
+       "description": "Local move: upright piano, 10 road miles, off peak, no stairs, no extras",
+       "maxValue": 490,
+       "minValue": 220
+      },
+      {
+       "@type": "MonetaryAmount",
+       "currency": "USD",
+       "description": "Long-distance move: upright piano, 1,000 road miles, off peak, no stairs, no extras",
+       "maxValue": 2050,
+       "minValue": 1050
+      },
+      {
+       "@type": "MonetaryAmount",
+       "currency": "USD",
+       "description": "Local move: pool table, 10 road miles, off peak, no stairs, no extras",
+       "maxValue": 640,
+       "minValue": 270
+      },
+      {
+       "@type": "MonetaryAmount",
+       "currency": "USD",
+       "description": "Long-distance move: pool table, 1,000 road miles, off peak, no stairs, no extras",
+       "maxValue": 2200,
+       "minValue": 1100
+      },
+      {
+       "@type": "MonetaryAmount",
+       "currency": "USD",
+       "description": "Local move: hot tub, 10 road miles, off peak, no stairs, no extras",
+       "maxValue": 810,
+       "minValue": 270
+      },
+      {
+       "@type": "MonetaryAmount",
+       "currency": "USD",
+       "description": "Long-distance move: hot tub, 1,000 road miles, off peak, no stairs, no extras",
+       "maxValue": 2850,
+       "minValue": 1350
+      },
+      {
+       "@type": "MonetaryAmount",
+       "currency": "USD",
+       "description": "Packing service added to a home move: 1-bedroom home",
+       "maxValue": 650,
+       "minValue": 300
+      },
+      {
+       "@type": "MonetaryAmount",
+       "currency": "USD",
+       "description": "Packing service added to a home move: 3-bedroom home",
+       "maxValue": 1800,
+       "minValue": 800
+      },
+      {
+       "@type": "MonetaryAmount",
+       "currency": "USD",
+       "description": "Local move: studio apartment, 10 road miles, off peak, no stairs, no extras",
+       "maxValue": 740,
+       "minValue": 280
+      },
+      {
+       "@type": "MonetaryAmount",
+       "currency": "USD",
+       "description": "Local move: 3-bedroom home, 10 road miles, off peak, no stairs, no extras",
+       "maxValue": 2850,
+       "minValue": 1150
+      },
+      {
+       "@type": "MonetaryAmount",
+       "currency": "USD",
+       "description": "Long-distance move: 3-bedroom home, 1,000 road miles, off peak, no stairs, no extras",
+       "maxValue": 8550,
+       "minValue": 4000
+      },
+      {
+       "@type": "UnitPriceSpecification",
+       "description": "Hourly rate per mover, local move with a truck (the crew's rate is this times the number of movers)",
+       "maxPrice": 75,
+       "minPrice": 50,
+       "priceCurrency": "USD",
+       "unitCode": "HUR"
+      }
+     ],
+     "name": "Free Moving Cost Calculator, No Email Needed",
+     "publisher": {
+      "@id": "https://liftmyboxes.com/#organization"
+     },
+     "wordCount": 1087
+    },
+    {
+     "@id": "https://liftmyboxes.com/moving-cost-calculator/#body-table",
+     "@type": "Table",
+     "cssSelector": "article.prose table"
+    },
+    {
+     "@id": "https://liftmyboxes.com/moving-cost-calculator/#toc",
+     "@type": "SiteNavigationElement",
+     "cssSelector": "nav[aria-label=\"On this page\"]",
+     "name": "On this page"
+    },
+    {
+     "@id": "https://liftmyboxes.com/moving-cost-calculator/#move-options-section",
+     "@type": "WebPageElement",
+     "about": [
+      {
+       "@type": "ItemList",
+       "itemListElement": [
+        {
+         "@type": "CompoundPriceSpecification",
+         "maxPrice": 103,
+         "minPrice": 58,
+         "name": "Rent a truck",
+         "priceComponent": [
+          {
+           "@type": "UnitPriceSpecification",
+           "maxPrice": 40,
+           "minPrice": 39,
+           "name": "A 20 ft truck, one day in town",
+           "priceCurrency": "USD"
+          },
+          {
+           "@type": "UnitPriceSpecification",
+           "maxPrice": 50,
+           "minPrice": 13,
+           "name": "Mileage, 20 miles round trip",
+           "priceCurrency": "USD"
+          },
+          {
+           "@type": "UnitPriceSpecification",
+           "maxPrice": 13,
+           "minPrice": 6,
+           "name": "Gasoline for 20 miles",
+           "priceCurrency": "USD"
+          }
+         ],
+         "priceCurrency": "USD"
+        },
+        {
+         "@type": "CompoundPriceSpecification",
+         "maxPrice": 1380,
+         "minPrice": 390,
+         "name": "Use a container",
+         "priceComponent": [
+          {
+           "@type": "UnitPriceSpecification",
+           "maxPrice": 900,
+           "minPrice": 220,
+           "name": "Delivery, the move across town and pickup, 1–2 containers at 16 ft rates",
+           "priceCurrency": "USD"
+          },
+          {
+           "@type": "UnitPriceSpecification",
+           "maxPrice": 480,
+           "minPrice": 170,
+           "name": "The first month's rent, 1–2 containers at 16 ft rates",
+           "priceCurrency": "USD"
+          }
+         ],
+         "priceCurrency": "USD"
+        },
+        {
+         "@type": "CompoundPriceSpecification",
+         "maxPrice": 1800,
+         "minPrice": 720,
+         "name": "Hire movers",
+         "priceCurrency": "USD"
+        }
+       ],
+       "name": "A 2-bedroom home move of 10 road miles, three ways",
+       "numberOfItems": 3
+      },
+      {
+       "@type": "PriceSpecification",
+       "description": "Rent a truck: loading and unloading help adds this, by the calculator's labor-only estimate",
+       "maxPrice": 910,
+       "minPrice": 320,
+       "priceCurrency": "USD"
+      },
+      {
+       "@type": "PriceSpecification",
+       "description": "Use a container: loading and unloading help adds this, by the calculator's labor-only estimate",
+       "maxPrice": 910,
+       "minPrice": 320,
+       "priceCurrency": "USD"
+      },
+      {
+       "@type": "UnitPriceSpecification",
+       "description": "Use a container: each extra month adds this",
+       "maxPrice": 480,
+       "minPrice": 170,
+       "priceCurrency": "USD",
+       "unitCode": "MON"
+      }
+     ],
+     "cssSelector": "#move-options",
+     "description": "A section of the Moving cost calculator page: Calculator result against a truck or a container",
+     "name": "Calculator result against a truck or a container"
+    },
+    {
+     "@id": "https://liftmyboxes.com/moving-cost-calculator/#tip-calculator-section",
+     "@type": "WebPageElement",
+     "about": {
+      "@type": "ItemList",
+      "itemListElement": [
+       {
+        "@type": "MonetaryAmount",
+        "currency": "USD",
+        "description": "By the hour: what tipping guides suggest, $4–$15 per mover per hour",
+        "maxValue": 15,
+        "minValue": 4
+       },
+       {
+        "@type": "MonetaryAmount",
+        "currency": "USD",
+        "description": "By the hour: each mover's tip for 3 movers and 4–6.5 hours on site",
+        "maxValue": 98,
+        "minValue": 16
+       },
+       {
+        "@type": "MonetaryAmount",
+        "currency": "USD",
+        "description": "By the hour: the crew's tips for 3 movers and 4–6.5 hours on site",
+        "maxValue": 294,
+        "minValue": 48
+       },
+       {
+        "@type": "MonetaryAmount",
+        "currency": "USD",
+        "description": "Half day: what tipping guides suggest, $10–$20 per mover for a job of up to 4 hours",
+        "maxValue": 20,
+        "minValue": 10
+       },
+       {
+        "@type": "MonetaryAmount",
+        "currency": "USD",
+        "description": "Half day: each mover's tip for 3 movers and 4–6.5 hours on site",
+        "maxValue": 20,
+        "minValue": 10
+       },
+       {
+        "@type": "MonetaryAmount",
+        "currency": "USD",
+        "description": "Half day: the crew's tips for 3 movers and 4–6.5 hours on site",
+        "maxValue": 60,
+        "minValue": 30
+       },
+       {
+        "@type": "MonetaryAmount",
+        "currency": "USD",
+        "description": "Full day: what tipping guides suggest, $20–$65 per mover for each working day",
+        "maxValue": 65,
+        "minValue": 20
+       },
+       {
+        "@type": "MonetaryAmount",
+        "currency": "USD",
+        "description": "Full day: each mover's tip for 3 movers and 4–6.5 hours on site",
+        "maxValue": 65,
+        "minValue": 20
+       },
+       {
+        "@type": "MonetaryAmount",
+        "currency": "USD",
+        "description": "Full day: the crew's tips for 3 movers and 4–6.5 hours on site",
+        "maxValue": 195,
+        "minValue": 60
+       },
+       {
+        "@type": "MonetaryAmount",
+        "currency": "USD",
+        "description": "Long distance: what tipping guides suggest, $40–$100 per mover for each working day, to each crew",
+        "maxValue": 100,
+        "minValue": 40
+       },
+       {
+        "@type": "MonetaryAmount",
+        "currency": "USD",
+        "description": "Long distance: each mover's tip for 3 movers and 4–6.5 hours on site",
+        "maxValue": 100,
+        "minValue": 40
+       },
+       {
+        "@type": "MonetaryAmount",
+        "currency": "USD",
+        "description": "Long distance: the crew's tips for 3 movers and 4–6.5 hours on site",
+        "maxValue": 300,
+        "minValue": 120
+       },
+       {
+        "@type": "MonetaryAmount",
+        "currency": "USD",
+        "description": "Share of the bill: each mover's tip for 3 movers and 4–6.5 hours on site",
+        "maxValue": 120,
+        "minValue": 24
+       },
+       {
+        "@type": "MonetaryAmount",
+        "currency": "USD",
+        "description": "Share of the bill: the crew's tips for 3 movers and 4–6.5 hours on site",
+        "maxValue": 360,
+        "minValue": 72
+       },
+       {
+        "@type": "MonetaryAmount",
+        "currency": "USD",
+        "description": "The bill the share-of-the-bill rules take their share of: the calculator's off-peak estimate for this job at 10 road miles",
+        "maxValue": 1800,
+        "minValue": 720
+       }
+      ],
+      "name": "A 2-bedroom home move: tips for 3 movers and 4–6.5 hours on site",
+      "numberOfItems": 15
+     },
+     "cssSelector": "#tip-calculator",
+     "description": "A section of the Moving cost calculator page: Crew tips to add to your range",
+     "hasPart": [
+      {
+       "@id": "https://liftmyboxes.com/moving-cost-calculator/#tip-calculator-table",
+       "@type": "Table",
+       "cssSelector": "#tip-calculator table",
+       "name": "Crew tips to add to your range"
+      },
+      {
+       "@id": "https://liftmyboxes.com/moving-cost-calculator/#tip-calculator-tool",
+       "@type": "WebApplication",
+       "applicationCategory": "FinanceApplication",
+       "browserRequirements": "Requires JavaScript to update the figures; without it the section shows the page's own example.",
+       "isAccessibleForFree": true,
+       "name": "Crew tips to add to your range",
+       "operatingSystem": "Any",
+       "url": "https://liftmyboxes.com/moving-cost-calculator/#tip-calculator"
+      }
+     ],
+     "name": "Crew tips to add to your range"
+    },
+    {
+     "@id": "https://liftmyboxes.com/moving-cost-calculator/#box-estimator-section",
+     "@type": "WebPageElement",
+     "about": [
+      {
+       "@type": "ItemList",
+       "itemListElement": [
+        {
+         "@type": "Product",
+         "name": "Small moving box (about 1.5 cu ft)",
+         "offers": {
+          "@type": "AggregateOffer",
+          "description": "Retail prices stores and cost guides publish, each, read on 27 October 2026",
+          "highPrice": 2.08,
+          "lowPrice": 1.12,
+          "priceCurrency": "USD"
+         }
+        },
+        {
+         "@type": "Product",
+         "name": "Medium moving box (about 3 cu ft)",
+         "offers": {
+          "@type": "AggregateOffer",
+          "description": "Retail prices stores and cost guides publish, each, read on 27 October 2026",
+          "highPrice": 2.69,
+          "lowPrice": 1.82,
+          "priceCurrency": "USD"
+         }
+        },
+        {
+         "@type": "Product",
+         "name": "Large moving box (about 4.5 cu ft)",
+         "offers": {
+          "@type": "AggregateOffer",
+          "description": "Retail prices stores and cost guides publish, each, read on 27 October 2026",
+          "highPrice": 3.42,
+          "lowPrice": 2.26,
+          "priceCurrency": "USD"
+         }
+        },
+        {
+         "@type": "Product",
+         "name": "Wardrobe box with a hanging bar",
+         "offers": {
+          "@type": "AggregateOffer",
+          "description": "Retail prices stores and cost guides publish, each, read on 27 October 2026",
+          "highPrice": 25.98,
+          "lowPrice": 13.88,
+          "priceCurrency": "USD"
+         }
+        },
+        {
+         "@type": "Product",
+         "name": "Dish pack box (18 × 18 × 28 in, dividers not included)",
+         "offers": {
+          "@type": "AggregateOffer",
+          "description": "Retail prices stores and cost guides publish, each, read on 27 October 2026",
+          "highPrice": 11.41,
+          "lowPrice": 7.95,
+          "priceCurrency": "USD"
+         }
+        },
+        {
+         "@type": "Product",
+         "name": "Packing tape (plastic)",
+         "offers": {
+          "@type": "AggregateOffer",
+          "description": "Retail prices stores and cost guides publish, a roll, read on 27 October 2026",
+          "highPrice": 4.67,
+          "lowPrice": 1.66,
+          "priceCurrency": "USD"
+         }
+        },
+        {
+         "@type": "Product",
+         "name": "Packing paper, 10 lb pack (about 200 sheets)",
+         "offers": {
+          "@type": "AggregateOffer",
+          "description": "Retail prices stores and cost guides publish, a pack, read on 27 October 2026",
+          "highPrice": 40,
+          "lowPrice": 19.99,
+          "priceCurrency": "USD"
+         }
+        }
+       ],
+       "name": "What each one costs",
+       "numberOfItems": 7
+      },
+      {
+       "@type": "MonetaryAmount",
+       "currency": "USD",
+       "description": "Boxes, tape and paper for the rooms listed",
+       "maxValue": 700,
+       "minValue": 120
+      },
+      {
+       "@type": "MonetaryAmount",
+       "currency": "USD",
+       "description": "A packing crew for this home",
+       "maxValue": 1200,
+       "minValue": 500
+      }
+     ],
+     "cssSelector": "#box-estimator",
+     "description": "A section of the Moving cost calculator page: Supplies when you skip the packing extra",
+     "hasPart": [
+      {
+       "@id": "https://liftmyboxes.com/moving-cost-calculator/#box-estimator-table",
+       "@type": "Table",
+       "cssSelector": "#box-estimator table",
+       "name": "Supplies when you skip the packing extra"
+      },
+      {
+       "@id": "https://liftmyboxes.com/moving-cost-calculator/#box-estimator-tool",
+       "@type": "WebApplication",
+       "applicationCategory": "UtilitiesApplication",
+       "browserRequirements": "Requires JavaScript to update the figures; without it the section shows the page's own example.",
+       "isAccessibleForFree": true,
+       "name": "Supplies when you skip the packing extra",
+       "operatingSystem": "Any",
+       "potentialAction": {
+        "@type": "QuoteAction",
+        "name": "Supplies when you skip the packing extra",
+        "target": {
+         "@type": "EntryPoint",
+         "actionPlatform": [
+          "https://schema.org/DesktopWebPlatform",
+          "https://schema.org/MobileWebPlatform"
+         ],
+         "urlTemplate": "https://liftmyboxes.com/moving-cost-calculator/#box-estimator"
+        }
+       },
+       "url": "https://liftmyboxes.com/moving-cost-calculator/#box-estimator"
+      }
+     ],
+     "name": "Supplies when you skip the packing extra"
+    },
+    {
+     "@id": "https://liftmyboxes.com/moving-cost-calculator/#truck-picker-section",
+     "@type": "WebPageElement",
+     "about": [
+      {
+       "@type": "ItemList",
+       "itemListElement": [
+        {
+         "@type": "Vehicle",
+         "cargoVolume": {
+          "@type": "QuantitativeValue",
+          "maxValue": 404,
+          "minValue": 246,
+          "unitCode": "FTQ"
+         },
+         "description": "U-Haul cargo van: 246 cu ft, 4,030 lb · Penske cargo van: 404 cu ft, 3,500 lb · Budget cargo van: up to 3,400 lb",
+         "name": "Cargo van",
+         "payload": {
+          "@type": "QuantitativeValue",
+          "maxValue": 4030,
+          "minValue": 3400,
+          "unitCode": "LBR"
+         }
+        },
+        {
+         "@type": "Vehicle",
+         "cargoVolume": {
+          "@type": "QuantitativeValue",
+          "maxValue": 450,
+          "minValue": 402,
+          "unitCode": "FTQ"
+         },
+         "description": "U-Haul 10 ft: 402 cu ft, 2,850 lb · Penske 12 ft: 450 cu ft, 3,100 lb · Budget 12 ft: up to 3,610 lb",
+         "name": "10 ft",
+         "payload": {
+          "@type": "QuantitativeValue",
+          "maxValue": 3610,
+          "minValue": 2850,
+          "unitCode": "LBR"
+         }
+        },
+        {
+         "@type": "Vehicle",
+         "cargoVolume": {
+          "@type": "QuantitativeValue",
+          "maxValue": 800,
+          "minValue": 764,
+          "unitCode": "FTQ"
+         },
+         "description": "15 ft typical: the truck size the calculator allows for this move. U-Haul 15 ft: 764 cu ft, 6,385 lb · Penske 16 ft: 800 cu ft, 4,300 lb · Budget 16 ft: up to 4,460 lb",
+         "name": "15 ft",
+         "payload": {
+          "@type": "QuantitativeValue",
+          "maxValue": 6385,
+          "minValue": 4300,
+          "unitCode": "LBR"
+         }
+        },
+        {
+         "@type": "Vehicle",
+         "cargoVolume": {
+          "@type": "QuantitativeValue",
+          "maxValue": 1200,
+          "minValue": 1016,
+          "unitCode": "FTQ"
+         },
+         "description": "20 ft typical: the truck size the calculator allows for this move. U-Haul 20 ft: 1,016 cu ft, 5,700 lb · Penske 22 ft: 1,200 cu ft, 10,000 lb",
+         "name": "20 ft",
+         "payload": {
+          "@type": "QuantitativeValue",
+          "maxValue": 10000,
+          "minValue": 5700,
+          "unitCode": "LBR"
+         }
+        },
+        {
+         "@type": "Vehicle",
+         "cargoVolume": {
+          "@type": "QuantitativeValue",
+          "maxValue": 1700,
+          "minValue": 1682,
+          "unitCode": "FTQ"
+         },
+         "description": "U-Haul 26 ft: 1,682 cu ft, 12,859 lb · Penske 26 ft: 1,700 cu ft, 10,000 lb · Budget 26 ft: up to 10,000 lb",
+         "name": "26 ft",
+         "payload": {
+          "@type": "QuantitativeValue",
+          "maxValue": 12859,
+          "minValue": 10000,
+          "unitCode": "LBR"
+         }
+        }
+       ],
+       "name": "Truck sizes for a 2-bedroom home move",
+       "numberOfItems": 5
+      },
+      {
+       "@type": "QuantitativeValue",
+       "description": "The load's weight by the calculator's estimate",
+       "maxValue": 6500,
+       "minValue": 4500,
+       "unitCode": "LBR"
+      },
+      {
+       "@type": "QuantitativeValue",
+       "description": "The space the load takes",
+       "maxValue": 930,
+       "minValue": 640,
+       "unitCode": "FTQ"
+      },
+      {
+       "@type": "QuantitativeValue",
+       "description": "Your rooms and items: the space they take",
+       "maxValue": 370,
+       "minValue": 140,
+       "unitCode": "FTQ"
+      }
+     ],
+     "cssSelector": "#truck-picker",
+     "description": "A section of the Moving cost calculator page: If the range is too high, size a truck",
+     "hasPart": [
+      {
+       "@id": "https://liftmyboxes.com/moving-cost-calculator/#truck-picker-table",
+       "@type": "Table",
+       "cssSelector": "#truck-picker table",
+       "name": "If the range is too high, size a truck"
+      },
+      {
+       "@id": "https://liftmyboxes.com/moving-cost-calculator/#truck-picker-tool",
+       "@type": "WebApplication",
+       "applicationCategory": "UtilitiesApplication",
+       "browserRequirements": "Requires JavaScript to update the figures; without it the section shows the page's own example.",
+       "isAccessibleForFree": true,
+       "name": "If the range is too high, size a truck",
+       "operatingSystem": "Any",
+       "url": "https://liftmyboxes.com/moving-cost-calculator/#truck-picker"
+      },
+      {
+       "@id": "https://liftmyboxes.com/moving-cost-calculator/#truck-picker-fit",
+       "@type": "ImageObject",
+       "caption": "Smallest truck: 20 ft, 92% full",
+       "encodingFormat": "image/svg+xml",
+       "name": "If the range is too high, size a truck",
+       "url": "https://liftmyboxes.com/moving-cost-calculator/#truck-picker"
+      }
+     ],
+     "name": "If the range is too high, size a truck"
+    },
+    {
+     "@id": "https://liftmyboxes.com/moving-cost-calculator/#crew-math-section",
+     "@type": "WebPageElement",
+     "about": {
+      "@type": "ItemList",
+      "itemListElement": [
+       {
+        "@type": "UnitPriceSpecification",
+        "description": "2 movers: the whole crew's hourly rate",
+        "maxPrice": 150,
+        "minPrice": 100,
+        "priceCurrency": "USD",
+        "unitCode": "HUR"
+       },
+       {
+        "@type": "MonetaryAmount",
+        "currency": "USD",
+        "description": "2 movers: labor and travel",
+        "maxValue": 1700,
+        "minValue": 680
+       },
+       {
+        "@type": "QuantitativeValue",
+        "description": "2 movers: hours on site",
+        "maxValue": 10,
+        "minValue": 6,
+        "unitCode": "HUR"
+       },
+       {
+        "@type": "UnitPriceSpecification",
+        "description": "3 movers: the whole crew's hourly rate",
+        "maxPrice": 225,
+        "minPrice": 150,
+        "priceCurrency": "USD",
+        "unitCode": "HUR"
+       },
+       {
+        "@type": "MonetaryAmount",
+        "currency": "USD",
+        "description": "3 movers: labor and travel",
+        "maxValue": 1800,
+        "minValue": 720
+       },
+       {
+        "@type": "QuantitativeValue",
+        "description": "3 movers: hours on site",
+        "maxValue": 6.5,
+        "minValue": 4,
+        "unitCode": "HUR"
+       },
+       {
+        "@type": "UnitPriceSpecification",
+        "description": "4 movers: the whole crew's hourly rate",
+        "maxPrice": 300,
+        "minPrice": 200,
+        "priceCurrency": "USD",
+        "unitCode": "HUR"
+       },
+       {
+        "@type": "MonetaryAmount",
+        "currency": "USD",
+        "description": "4 movers: labor and travel",
+        "maxValue": 1900,
+        "minValue": 760
+       },
+       {
+        "@type": "QuantitativeValue",
+        "description": "4 movers: hours on site",
+        "maxValue": 5,
+        "minValue": 3,
+        "unitCode": "HUR"
+       },
+       {
+        "@type": "UnitPriceSpecification",
+        "description": "5 movers: the whole crew's hourly rate",
+        "maxPrice": 375,
+        "minPrice": 250,
+        "priceCurrency": "USD",
+        "unitCode": "HUR"
+       },
+       {
+        "@type": "MonetaryAmount",
+        "currency": "USD",
+        "description": "5 movers: labor and travel",
+        "maxValue": 2000,
+        "minValue": 800
+       },
+       {
+        "@type": "QuantitativeValue",
+        "description": "5 movers: hours on site",
+        "maxValue": 4,
+        "minValue": 2,
+        "unitCode": "HUR"
+       },
+       {
+        "@type": "UnitPriceSpecification",
+        "description": "6 movers: the whole crew's hourly rate",
+        "maxPrice": 450,
+        "minPrice": 300,
+        "priceCurrency": "USD",
+        "unitCode": "HUR"
+       },
+       {
+        "@type": "MonetaryAmount",
+        "currency": "USD",
+        "description": "6 movers: labor and travel",
+        "maxValue": 2100,
+        "minValue": 850
+       },
+       {
+        "@type": "QuantitativeValue",
+        "description": "6 movers: hours on site",
+        "maxValue": 3.5,
+        "minValue": 2,
+        "unitCode": "HUR"
+       }
+      ],
+      "name": "2-bedroom home at 10 road miles, no stairs",
+      "numberOfItems": 15
+     },
+     "cssSelector": "#crew-math",
+     "description": "A section of the Moving cost calculator page: How crew size shifts a local result",
+     "hasPart": [
+      {
+       "@id": "https://liftmyboxes.com/moving-cost-calculator/#crew-math-table",
+       "@type": "Table",
+       "cssSelector": "#crew-math table",
+       "name": "How crew size shifts a local result"
+      },
+      {
+       "@id": "https://liftmyboxes.com/moving-cost-calculator/#crew-math-tool",
+       "@type": "WebApplication",
+       "applicationCategory": "FinanceApplication",
+       "browserRequirements": "Requires JavaScript to update the figures; without it the section shows the page's own example.",
+       "isAccessibleForFree": true,
+       "name": "How crew size shifts a local result",
+       "operatingSystem": "Any",
+       "url": "https://liftmyboxes.com/moving-cost-calculator/#crew-math"
+      }
+     ],
+     "name": "How crew size shifts a local result"
+    },
+    {
+     "@id": "https://liftmyboxes.com/moving-cost-calculator/#countdown-checklist-section",
+     "@type": "WebPageElement",
+     "cssSelector": "#countdown-checklist",
+     "description": "A section of the Moving cost calculator page: Keeping the final bill close to the estimate",
+     "hasPart": {
+      "@id": "https://liftmyboxes.com/moving-cost-calculator/#countdown-checklist-howto",
+      "@type": "HowTo",
+      "name": "Keeping the final bill close to the estimate",
+      "step": [
+       {
+        "@type": "HowToSection",
+        "itemListElement": {
+         "@type": "HowToStep",
+         "name": "List everything that's moving, largest pieces first",
+         "position": 1,
+         "text": "Give every company the same list, so their estimates price the same job."
+        },
+        "name": "8 weeks before"
+       },
+       {
+        "@type": "HowToSection",
+        "itemListElement": {
+         "@type": "HowToStep",
+         "name": "Ask each building, park or association about its moving rules",
+         "position": 1,
+         "text": "Moving hours, elevators, loading docks and gates. If one wants the company's certificate of insurance, ask the company to send it ahead."
+        },
+        "name": "6 weeks before"
+       },
+       {
+        "@type": "HowToSection",
+        "itemListElement": {
+         "@type": "HowToStep",
+         "name": "Ask how and when the company wants to be paid",
+         "position": 1,
+         "text": "Whether it takes a deposit, when the rest is due, and which payment methods it accepts."
+        },
+        "name": "4 weeks before"
+       },
+       {
+        "@type": "HowToSection",
+        "itemListElement": {
+         "@type": "HowToStep",
+         "name": "Ask who to call if something goes wrong on the day",
+         "position": 1,
+         "text": "Get a name and a direct number, not only the main office line."
+        },
+        "name": "2 weeks before"
+       },
+       {
+        "@type": "HowToSection",
+        "itemListElement": [
+         {
+          "@type": "HowToStep",
+          "name": "Confirm the date, arrival window and addresses with the company",
+          "position": 1,
+          "text": "Ask for a phone number that will be answered on moving day."
+         },
+         {
+          "@type": "HowToStep",
+          "name": "Save parking for the truck at both ends",
+          "position": 2,
+          "text": "Ask the building or the city whether you need a permit or cones."
+         }
+        ],
+        "name": "1 week before"
+       },
+       {
+        "@type": "HowToSection",
+        "itemListElement": [
+         {
+          "@type": "HowToStep",
+          "name": "Empty, defrost and dry the fridge and freezer",
+          "position": 1,
+          "text": "Eat down the frozen food in the weeks before, so little is left to throw away."
+         },
+         {
+          "@type": "HowToStep",
+          "name": "Charge your phone and keep the paperwork with you",
+          "position": 2,
+          "text": "Have the estimate and the company's number where you can reach them."
+         }
+        ],
+        "name": "The day before"
+       },
+       {
+        "@type": "HowToSection",
+        "itemListElement": [
+         {
+          "@type": "HowToStep",
+          "name": "Check each piece as it comes off the truck",
+          "position": 1,
+          "text": "Note any damage on the paperwork before you sign for delivery."
+         },
+         {
+          "@type": "HowToStep",
+          "name": "Check every room, closet and cabinet before the truck leaves",
+          "position": 2,
+          "text": "Look high and low: top shelves, under sinks, the attic and the garage."
+         },
+         {
+          "@type": "HowToStep",
+          "name": "Walk the crew lead through what goes and what stays",
+          "position": 3,
+          "text": "Point out anything fragile, very heavy or going to a particular room."
+         },
+         {
+          "@type": "HowToStep",
+          "name": "Watch the loading and unloading",
+          "position": 4,
+          "text": "FMCSA's advice: if you can't be there, ask someone you know to act for you."
+         }
+        ],
+        "name": "Moving day"
+       },
+       {
+        "@type": "HowToSection",
+        "itemListElement": [
+         {
+          "@type": "HowToStep",
+          "name": "Set up the beds first",
+          "position": 1,
+          "text": "Then the kitchen basics; the rest can wait a day."
+         },
+         {
+          "@type": "HowToStep",
+          "name": "Report any damage to the company in writing",
+          "position": 2,
+          "text": "Send photos and a list of what's damaged or missing as soon as you find it."
+         }
+        ],
+        "name": "After the move"
+       }
+      ]
+     },
+     "name": "Keeping the final bill close to the estimate"
+    },
+    {
+     "@id": "https://liftmyboxes.com/moving-cost-calculator/#faq",
+     "@type": "FAQPage",
+     "isPartOf": {
+      "@id": "https://liftmyboxes.com/moving-cost-calculator/#webpage"
+     },
+     "mainEntity": [
+      {
+       "@type": "Question",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Start with a moving cost calculator: enter both ZIP codes, your home size, the date and any extras to get a range. A studio apartment moved 10 road miles, off peak with no stairs or extras, comes to $280–$740. Then add the costs movers don't charge for, such as tips, supplies and travel, and ask movers for written estimates to firm it up."
+       },
+       "name": "How do you estimate the cost of a move?"
+      },
+      {
+       "@type": "Question",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It's free, and the range appears on the page without an email or a sign-up. The moving cost calculator takes about a minute: you enter ZIP codes, home size, date and extras, and the price range shows straight away."
+       },
+       "name": "Is the moving cost calculator free, and does it need an email?"
+      },
+      {
+       "@type": "Question",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "With movers, a 3-bedroom home moved 10 road miles costs $1,150–$2,850, and moved 1,000 road miles it costs $4,000–$8,550, both off peak with no stairs or extras. Smaller homes cost less and bigger ones more. Run the moving cost calculator with your own ZIP codes and date for a range that fits your move."
+       },
+       "name": "How much should I expect to pay to move?"
+      },
+      {
+       "@type": "Question",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "For a local move, multiply the crew size by the hourly rate and the hours: one mover typically costs $50–$75 an hour, truck included, so a 3-mover crew costs three times that. For a long move, the sum uses the weight of the shipment and the miles instead. A moving cost calculator does both sums from your inputs, and gives a range rather than one average figure."
+       },
+       "name": "How is an average moving cost calculated?"
+      },
+      {
+       "@type": "Question",
+       "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Not directly. The moving cost calculator asks for your home size and uses that as a stand-in for weight. Movers weigh a long-distance shipment, or estimate it after a survey, so their figure can differ if your rooms are fuller or emptier than most. Tell each mover about heavy pieces, such as a gun safe or a piano, at the survey."
+       },
+       "name": "Can a moving cost calculator price a move by weight?"
+      }
+     ],
+     "name": "Moving cost calculator FAQ",
+     "url": "https://liftmyboxes.com/moving-cost-calculator/"
+    }
+   ],
+   "headline": "Moving cost calculator for local and long-distance moves",
+   "inLanguage": "en-US",
+   "isPartOf": {
+    "@id": "https://liftmyboxes.com/#website"
+   },
+   "keywords": "moving cost calculator",
+   "mainEntity": {
+    "@id": "https://liftmyboxes.com/#moving-cost-calculator",
+    "@type": "WebApplication",
+    "applicationCategory": "UtilitiesApplication",
+    "description": "Free online calculator that estimates the cost of a local or long-distance move.",
+    "isAccessibleForFree": true,
+    "name": "Lift My Boxes Moving Cost Calculator",
+    "offers": {
+     "@type": "Offer",
+     "availability": "https://schema.org/OnlineOnly",
+     "price": "0",
+     "priceCurrency": "USD",
+     "seller": {
+      "@id": "https://liftmyboxes.com/#organization"
+     },
+     "url": "https://liftmyboxes.com/moving-cost-calculator/"
+    },
+    "operatingSystem": "Any",
+    "publisher": [
+     {
+      "@id": "https://liftmyboxes.com/#organization"
+     }
+    ],
+    "url": "https://liftmyboxes.com/moving-cost-calculator/"
+   },
+   "mentions": [
+    {
+     "@id": "https://liftmyboxes.com/#moving-cost-calculator"
+    },
+    {
+     "@id": "https://liftmyboxes.com/#price",
+     "@type": "Thing",
+     "additionalType": [
+      "https://www.wikidata.org/wiki/Q29028649",
+      "https://www.wikidata.org/wiki/Q1499548"
+     ],
+     "alternateName": [
+      "prices",
+      "Prices"
+     ],
+     "identifier": [
+      {
+       "@type": "PropertyValue",
+       "propertyID": "Wikidata",
+       "value": "Q160151"
+      },
+      {
+       "@type": "PropertyValue",
+       "propertyID": "GoogleMachineID",
+       "value": "kg:/m/01d_1l"
+      }
+     ],
+     "name": "Price",
+     "sameAs": [
+      "https://en.wikipedia.org/wiki/Price",
+      "https://www.wikidata.org/wiki/Q160151",
+      "https://www.google.com/search?kgmid=/m/01d_1l",
+      "https://dbpedia.org/resource/Price"
+     ]
+    },
+    {
+     "@id": "https://liftmyboxes.com/#truck",
+     "@type": "Thing",
+     "additionalType": [
+      "https://www.wikidata.org/wiki/Q140424465",
+      "https://www.wikidata.org/wiki/Q1515493"
+     ],
+     "alternateName": [
+      "Trucks",
+      "trucks"
+     ],
+     "identifier": [
+      {
+       "@type": "PropertyValue",
+       "propertyID": "Wikidata",
+       "value": "Q43193"
+      },
+      {
+       "@type": "PropertyValue",
+       "propertyID": "GoogleMachineID",
+       "value": "kg:/m/07r04"
+      }
+     ],
+     "name": "Truck",
+     "sameAs": [
+      "https://en.wikipedia.org/wiki/Truck",
+      "https://www.wikidata.org/wiki/Q43193",
+      "https://www.google.com/search?kgmid=/m/07r04",
+      "https://dbpedia.org/resource/Truck"
+     ]
+    },
+    {
+     "@id": "https://liftmyboxes.com/#zip-code",
+     "@type": "Thing",
+     "additionalType": [
+      "https://www.wikidata.org/wiki/Q6545185",
+      "https://www.wikidata.org/wiki/Q126286955"
+     ],
+     "alternateName": [
+      "ZIP codes",
+      "ZIP"
+     ],
+     "identifier": [
+      {
+       "@type": "PropertyValue",
+       "propertyID": "Wikidata",
+       "value": "Q136208"
+      },
+      {
+       "@type": "PropertyValue",
+       "propertyID": "GoogleMachineID",
+       "value": "kg:/m/0dllr"
+      }
+     ],
+     "name": "ZIP Code",
+     "sameAs": [
+      "https://en.wikipedia.org/wiki/ZIP_Code",
+      "https://www.wikidata.org/wiki/Q136208",
+      "https://www.google.com/search?kgmid=/m/0dllr",
+      "https://dbpedia.org/resource/ZIP_Code"
+     ]
+    },
+    {
+     "@id": "https://liftmyboxes.com/#fee",
+     "@type": "Thing",
+     "additionalType": [
+      "https://www.wikidata.org/wiki/Q30242023",
+      "https://www.wikidata.org/wiki/Q1344851"
+     ],
+     "alternateName": [
+      "Fees",
+      "Fuel surcharge",
+      "fees",
+      "fuel surcharge",
+      "service charge",
+      "surcharge"
+     ],
+     "identifier": [
+      {
+       "@type": "PropertyValue",
+       "propertyID": "Wikidata",
+       "value": "Q11765"
+      },
+      {
+       "@type": "PropertyValue",
+       "propertyID": "GoogleMachineID",
+       "value": "kg:/m/03fk6m"
+      },
+      {
+       "@type": "PropertyValue",
+       "propertyID": "GoogleMachineID",
+       "value": "kg:/g/1215c8gf"
+      }
+     ],
+     "name": "Fee",
+     "sameAs": [
+      "https://en.wikipedia.org/wiki/Fee",
+      "https://www.wikidata.org/wiki/Q11765",
+      "https://www.google.com/search?kgmid=/m/03fk6m",
+      "https://www.google.com/search?kgmid=/g/1215c8gf",
+      "https://dbpedia.org/resource/Fee"
+     ]
+    },
+    {
+     "@id": "https://liftmyboxes.com/#road",
+     "@type": "Thing",
+     "additionalType": [
+      "https://www.wikidata.org/wiki/Q123035442",
+      "https://www.wikidata.org/wiki/Q113519195"
+     ],
+     "alternateName": [
+      "roads"
+     ],
+     "identifier": [
+      {
+       "@type": "PropertyValue",
+       "propertyID": "Wikidata",
+       "value": "Q34442"
+      },
+      {
+       "@type": "PropertyValue",
+       "propertyID": "GoogleMachineID",
+       "value": "kg:/m/06gfj"
+      }
+     ],
+     "name": "Road",
+     "sameAs": [
+      "https://en.wikipedia.org/wiki/Road",
+      "https://www.wikidata.org/wiki/Q34442",
+      "https://www.google.com/search?kgmid=/m/06gfj",
+      "https://dbpedia.org/resource/Road"
+     ]
+    },
+    {
+     "@id": "https://liftmyboxes.com/#fuel-economy-in-automobiles",
+     "@type": "Thing",
+     "additionalType": "https://www.wikidata.org/wiki/Q106998002",
+     "alternateName": [
+      "mileage",
+      "miles per gallon",
+      "Mileage"
+     ],
+     "identifier": [
+      {
+       "@type": "PropertyValue",
+       "propertyID": "Wikidata",
+       "value": "Q931507"
+      },
+      {
+       "@type": "PropertyValue",
+       "propertyID": "GoogleMachineID",
+       "value": "kg:/m/0410vz6"
+      }
+     ],
+     "name": "Fuel economy in automobiles",
+     "sameAs": [
+      "https://en.wikipedia.org/wiki/Fuel_economy_in_automobiles",
+      "https://www.wikidata.org/wiki/Q931507",
+      "https://www.google.com/search?kgmid=/m/0410vz6",
+      "https://dbpedia.org/resource/Fuel_economy_in_automobiles"
+     ]
+    },
+    {
+     "@id": "https://liftmyboxes.com/#room",
+     "@type": "Thing",
+     "additionalType": [
+      "https://www.wikidata.org/wiki/Q1299240",
+      "https://www.wikidata.org/wiki/Q13226383"
+     ],
+     "alternateName": [
+      "rooms",
+      "Rooms"
+     ],
+     "identifier": [
+      {
+       "@type": "PropertyValue",
+       "propertyID": "Wikidata",
+       "value": "Q180516"
+      },
+      {
+       "@type": "PropertyValue",
+       "propertyID": "GoogleMachineID",
+       "value": "kg:/m/06ht1"
+      }
+     ],
+     "name": "Room",
+     "sameAs": [
+      "https://en.wikipedia.org/wiki/Room",
+      "https://www.wikidata.org/wiki/Q180516",
+      "https://www.google.com/search?kgmid=/m/06ht1",
+      "https://dbpedia.org/resource/Room"
+     ]
+    },
+    {
+     "@id": "https://liftmyboxes.com/#mile",
+     "@type": "Thing",
+     "additionalType": [
+      "https://www.wikidata.org/wiki/Q1978718",
+      "https://www.wikidata.org/wiki/Q16782623"
+     ],
+     "alternateName": [
+      "miles"
+     ],
+     "identifier": [
+      {
+       "@type": "PropertyValue",
+       "propertyID": "Wikidata",
+       "value": "Q253276"
+      },
+      {
+       "@type": "PropertyValue",
+       "propertyID": "GoogleMachineID",
+       "value": "kg:/m/04vb3"
+      }
+     ],
+     "name": "Mile",
+     "sameAs": [
+      "https://en.wikipedia.org/wiki/Mile",
+      "https://www.wikidata.org/wiki/Q253276",
+      "https://www.google.com/search?kgmid=/m/04vb3",
+      "https://dbpedia.org/resource/Mile"
+     ]
+    },
+    {
+     "@id": "https://liftmyboxes.com/#billiard-table",
+     "@type": "Thing",
+     "additionalType": [
+      "https://www.wikidata.org/wiki/Q768186",
+      "https://www.wikidata.org/wiki/Q14748"
+     ],
+     "alternateName": [
+      "pool tables",
+      "Pool table",
+      "Pool Table",
+      "pockets",
+      "Billiard",
+      "POOL TABLE"
+     ],
+     "identifier": [
+      {
+       "@type": "PropertyValue",
+       "propertyID": "Wikidata",
+       "value": "Q3500725"
+      },
+      {
+       "@type": "PropertyValue",
+       "propertyID": "GoogleMachineID",
+       "value": "kg:/m/04p0qw"
+      }
+     ],
+     "name": "Billiard table",
+     "sameAs": [
+      "https://en.wikipedia.org/wiki/Billiard_table",
+      "https://www.wikidata.org/wiki/Q3500725",
+      "https://www.google.com/search?kgmid=/m/04p0qw",
+      "https://dbpedia.org/resource/Billiard_table"
+     ]
+    },
+    {
+     "@id": "https://liftmyboxes.com/#piano",
+     "@type": "Thing",
+     "additionalType": [
+      "https://www.wikidata.org/wiki/Q110295396",
+      "https://www.wikidata.org/wiki/Q52954"
+     ],
+     "alternateName": [
+      "baby grand",
+      "Pianos",
+      "upright piano",
+      "upright",
+      "acoustic pianos",
+      "uprights",
+      "concert grand",
+      "grand piano",
+      "GRAND PIANOS",
+      "pianos",
+      "UPRIGHT PIANOS",
+      "vertical piano",
+      "Upright piano",
+      "Grand piano"
+     ],
+     "identifier": [
+      {
+       "@type": "PropertyValue",
+       "propertyID": "Wikidata",
+       "value": "Q5994"
+      },
+      {
+       "@type": "PropertyValue",
+       "propertyID": "GoogleMachineID",
+       "value": "kg:/m/05r5c"
+      }
+     ],
+     "name": "Piano",
+     "sameAs": [
+      "https://en.wikipedia.org/wiki/Piano",
+      "https://www.wikidata.org/wiki/Q5994",
+      "https://www.google.com/search?kgmid=/m/05r5c",
+      "https://dbpedia.org/resource/Piano"
+     ]
+    },
+    {
+     "@id": "https://liftmyboxes.com/#hot-tub",
+     "@type": "Thing",
+     "additionalType": "https://www.wikidata.org/wiki/Q152095",
+     "alternateName": [
+      "Hot tubs",
+      "hot tubs"
+     ],
+     "identifier": [
+      {
+       "@type": "PropertyValue",
+       "propertyID": "Wikidata",
+       "value": "Q1936429"
+      },
+      {
+       "@type": "PropertyValue",
+       "propertyID": "GoogleMachineID",
+       "value": "kg:/m/065h6l"
+      }
+     ],
+     "name": "Hot tub",
+     "sameAs": [
+      "https://en.wikipedia.org/wiki/Hot_tub",
+      "https://www.wikidata.org/wiki/Q1936429",
+      "https://www.google.com/search?kgmid=/m/065h6l",
+      "https://dbpedia.org/resource/Hot_tub"
+     ]
+    },
+    {
+     "@id": "https://liftmyboxes.com/#freight-transport",
+     "@type": "Thing",
+     "additionalType": [
+      "https://www.wikidata.org/wiki/Q627436",
+      "https://www.wikidata.org/wiki/Q1724915"
+     ],
+     "alternateName": [
+      "Shipping",
+      "shipment"
+     ],
+     "identifier": [
+      {
+       "@type": "PropertyValue",
+       "propertyID": "Wikidata",
+       "value": "Q651658"
+      },
+      {
+       "@type": "PropertyValue",
+       "propertyID": "GoogleMachineID",
+       "value": "kg:/m/070qm"
+      },
+      {
+       "@type": "PropertyValue",
+       "propertyID": "GoogleMachineID",
+       "value": "kg:/g/120_g24_"
+      }
+     ],
+     "name": "Freight transport",
+     "sameAs": [
+      "https://en.wikipedia.org/wiki/Freight_transport",
+      "https://www.wikidata.org/wiki/Q651658",
+      "https://www.google.com/search?kgmid=/m/070qm",
+      "https://www.google.com/search?kgmid=/g/120_g24_",
+      "https://dbpedia.org/resource/Freight_transport"
+     ]
+    }
+   ],
+   "name": "Free Moving Cost Calculator, No Email Needed | Lift My Boxes",
+   "potentialAction": [
+    {
+     "@type": "ReadAction",
+     "target": "https://liftmyboxes.com/moving-cost-calculator/"
+    },
+    {
+     "@type": "QuoteAction",
+     "name": "Get a free moving cost estimate",
+     "target": {
+      "@type": "EntryPoint",
+      "actionPlatform": [
+       "https://schema.org/DesktopWebPlatform",
+       "https://schema.org/MobileWebPlatform"
+      ],
+      "urlTemplate": "https://liftmyboxes.com/moving-cost-calculator/#calculator"
+     }
+    }
+   ],
+   "url": "https://liftmyboxes.com/moving-cost-calculator/"
+  }
+ ]
+}

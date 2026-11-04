@@ -118,7 +118,7 @@ func (c *checker) vehicles(p *pageFacts, d *draftIndex) {
 		if b := idBox(tbl); b != nil && b.DataAtom != 0 && slices.Contains([]string{"section", "article", "div", "figure"}, b.Data) {
 			at = b
 		}
-		c.add("html:"+selectorFor(p.doc, at), Warning, "the page's table %q lists vehicles (%s) with their capacity: add a Vehicle for each (name, cargoVolume, payload, vehicleConfiguration), in an ItemList or as the items of the Offer or Service they are for", name, examples(names))
+		c.add("html:"+selectorFor(p.doc, at), Warning, "the page's table %q lists vehicles (%s) with their capacity: add a Vehicle for each (name, cargoVolume, payload, vehicleConfiguration), in an ItemList or as the items of the Offer or Service they are for. A Vehicle is a kind of Product, and Search Console's Product snippets report marks one without offers, review or aggregateRating invalid: give each offers with the rental or sale price the page shows for it (an AggregateOffer for a range: lowPrice, highPrice, priceCurrency, offerCount)", name, examples(names))
 		return
 	}
 }

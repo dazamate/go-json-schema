@@ -206,7 +206,7 @@ func (c *checker) goods(p *pageFacts, fresh func(string) bool) {
 		list = append(list, p.main[m[2]:m[3]]+" "+span)
 	}
 	if len(list) > 0 {
-		c.add(pagePath, Warning, "the page prices goods (%s): add a Product for each with an AggregateOffer (lowPrice, highPrice, priceCurrency)", examples(list))
+		c.add(pagePath, Warning, "the page prices goods (%s): add a Product for each with an AggregateOffer (lowPrice, highPrice, priceCurrency, and offerCount: how many sellers or sources the range spans)", examples(list))
 	}
 }
 

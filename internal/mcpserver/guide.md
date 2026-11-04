@@ -131,6 +131,16 @@ them (the site origin plus #name), and every later use of it is a
   their kin. A general idea (a wedding, tea, a bride) stays a Thing: do not
   retype it. An Event is one dated happening at one place, and a Product is
   something offered for sale.
+- **Product snippets:** Search Console's Product snippets report reads every
+  Product, and every subtype of it (a Vehicle, a ProductModel), as a Product
+  wherever it sits in the graph. One with no offers, review or
+  aggregateRating is an invalid item. Give each the price the page shows:
+  an Offer (price, priceCurrency, availability), or for a range an
+  AggregateOffer (lowPrice, highPrice, priceCurrency, offerCount). A
+  UnitPriceSpecification under offers needs a price; minPrice and maxPrice do
+  not stand in for it. Add review and aggregateRating only from real reviews
+  and ratings the page shows, never invented ones. build_jsonld quotes the
+  report's wording: a critical issue is a warning, a non-critical one info.
 - **Specific types:** give every node the most specific type that is true
   of it, not a parent type a subtype refines: a page at /about/ or /contact/
   is an AboutPage or ContactPage, a gallery page an ImageGallery, a bakery a
