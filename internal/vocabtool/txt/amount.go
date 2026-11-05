@@ -52,3 +52,6 @@ func DigitsOf(price string) string {
 	}
 	return strings.ReplaceAll(m[1], ",", "") + map[bool]string{true: "." + m[2], false: ""}[m[2] != ""]
 }
+
+// NumberIn matches each plain number in a text: 12, 6.5.
+var NumberIn = regexp.MustCompile(`\d+(?:\.\d+)?`)

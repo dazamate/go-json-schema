@@ -341,7 +341,6 @@ var (
 		{regexp.MustCompile(`(?i)\b(pattern|print)\b`), "pattern"},
 	}
 	detailLine = regexp.MustCompile(`(?i)^((?:chain |pendant |stone |band )?(?:material|metal|stone|colou?r|size|length|weight|width|height|depth|dimensions?|sku|gtin|ean|upc|barcode|mpn|model|brand|made in|origin)[^:]{0,20}):\s*(.{1,80})$`)
-	numberIn   = regexp.MustCompile(`\d+(?:\.\d+)?`)
 )
 
 // detailProp is the Product property a detail's label names, or
@@ -432,7 +431,7 @@ func (c *checker) details(all []jsonld.Node, p *webpage.Facts) {
 // label.
 func (c *checker) carriesDetail(all, prods []jsonld.Node, prop string, d webpage.Detail) bool {
 	want := txt.NormWords(d.Value)
-	nums := numberIn.FindAllString(d.Value, -1)
+	nums := txt.NumberIn.FindAllString(d.Value, -1)
 	// a value holding the page's whole value matches; a shorter one matches
 	// only when it keeps the page's numbers (2.5 x 2.5 cm for 2.5cm x 2.5cm,
 	// not Silver for 925 Sterling Silver), which may sit in a longer value or
@@ -444,7 +443,7 @@ func (c *checker) carriesDetail(all, prods []jsonld.Node, prop string, d webpage
 		if len(nums) > 0 {
 			var held []string
 			for _, s := range vals {
-				held = append(held, numberIn.FindAllString(s, -1)...)
+				held = append(held, txt.NumberIn.FindAllString(s, -1)...)
 			}
 			return !slices.ContainsFunc(nums, func(n string) bool { f, _ := txt.Amount(n); return !txt.HoldsNumber(held, f) })
 		}

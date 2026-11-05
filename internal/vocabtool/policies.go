@@ -309,7 +309,7 @@ func questions(p *webpage.Facts) []question {
 				add(&out, webpage.HTMLText(n), section, n)
 			}
 		case atom.H2, atom.H3, atom.H4, atom.H5, atom.Dt:
-			if next := nextElement(n); section != "" && next != nil && len(strings.Fields(webpage.HTMLText(next))) >= 3 {
+			if next := webpage.NextElement(n); section != "" && next != nil && len(strings.Fields(webpage.HTMLText(next))) >= 3 {
 				add(&out, webpage.HTMLText(n), section, n)
 			}
 		case atom.Button:
@@ -324,15 +324,6 @@ func questions(p *webpage.Facts) []question {
 		}
 	}
 	return out
-}
-
-func nextElement(n *xhtml.Node) *xhtml.Node {
-	for s := n.NextSibling; s != nil; s = s.NextSibling {
-		if s.Type == xhtml.ElementNode {
-			return s
-		}
-	}
-	return nil
 }
 
 // faq warns on questions the page answers that no Question carries.

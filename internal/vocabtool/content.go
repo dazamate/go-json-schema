@@ -78,7 +78,7 @@ func (c *checker) content(all []jsonld.Node, p *webpage.Facts) {
 		return
 	}
 	c.shop(all, p, d)
-	c.site(all, p, d)
+	c.figures(all, p, d)
 	c.sources(all, p, d)
 	c.copyright(all, p)
 	c.readTime(all, p)
@@ -754,7 +754,7 @@ func (c *checker) counts(all []jsonld.Node, p *webpage.Facts) {
 // rows before them. A heading whose number the section does not hold counts
 // something else: "2 movers", "two bedrooms", "10 business days".
 func sectionCounts(h *xhtml.Node) []int {
-	level := headingLevel(h)
+	level := webpage.HeadingLevel(h)
 	var subs, details, rows, items int
 	listDone, before, started := false, true, false
 	stop := false
@@ -769,7 +769,7 @@ func sectionCounts(h *xhtml.Node) []int {
 				continue
 			}
 			if started {
-				if l := headingLevel(c); l > 0 {
+				if l := webpage.HeadingLevel(c); l > 0 {
 					if l <= level {
 						stop = true
 						return
@@ -806,25 +806,6 @@ func sectionCounts(h *xhtml.Node) []int {
 	return []int{subs, details, rows, items}
 }
 
-// headingLevel is an h1 to h6's level, or 0.
-func headingLevel(n *xhtml.Node) int {
-	switch n.DataAtom {
-	case atom.H1, atom.H2, atom.H3, atom.H4, atom.H5, atom.H6:
-		return int(n.Data[1] - '0')
-	}
-	return 0
-}
-
-// idBox is the nearest ancestor with an id, or the body.
-func idBox(n *xhtml.Node) *xhtml.Node {
-	for e := n.Parent; e != nil; e = e.Parent {
-		if id, ok := webpage.Attr(e, "id"); (ok && webpage.CSSIdent.MatchString(id)) || e.DataAtom == atom.Body {
-			return e
-		}
-	}
-	return n.Parent
-}
-
 // outsideLinks warns on a group of three or more links to other sites, under
 // one ancestor with an id, whose URLs no node in the draft names: partners,
 // vendors or sources the page features.
@@ -852,7 +833,7 @@ func (c *checker) outsideLinks(p *webpage.Facts, d *jsonld.Index) {
 		if d.URLs[key] {
 			return
 		}
-		box := idBox(n)
+		box := webpage.IDBox(n)
 		g := groups[box]
 		if g == nil {
 			g = &group{}

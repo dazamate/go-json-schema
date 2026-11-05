@@ -242,7 +242,7 @@ func labelledSources(doc *xhtml.Node) []string {
 				walk(ch)
 				continue
 			}
-			switch next := nextElement(ch); {
+			switch next := webpage.NextElement(ch); {
 			case next == nil:
 			case next.DataAtom == atom.Ul || next.DataAtom == atom.Ol:
 				for li := next.FirstChild; li != nil; li = li.NextSibling {

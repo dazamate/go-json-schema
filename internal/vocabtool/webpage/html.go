@@ -249,3 +249,32 @@ func siteChromeAround(n *html.Node) bool {
 	}
 	return false
 }
+
+// HeadingLevel is an h1 to h6's level, or 0.
+func HeadingLevel(n *html.Node) int {
+	switch n.DataAtom {
+	case atom.H1, atom.H2, atom.H3, atom.H4, atom.H5, atom.H6:
+		return int(n.Data[1] - '0')
+	}
+	return 0
+}
+
+// IDBox is the nearest ancestor with an id, or the body.
+func IDBox(n *html.Node) *html.Node {
+	for e := n.Parent; e != nil; e = e.Parent {
+		if id, ok := Attr(e, "id"); (ok && CSSIdent.MatchString(id)) || e.DataAtom == atom.Body {
+			return e
+		}
+	}
+	return n.Parent
+}
+
+// NextElement is the element after n among its siblings, or nil.
+func NextElement(n *html.Node) *html.Node {
+	for s := n.NextSibling; s != nil; s = s.NextSibling {
+		if s.Type == html.ElementNode {
+			return s
+		}
+	}
+	return nil
+}

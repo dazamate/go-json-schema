@@ -118,7 +118,7 @@ func (c *checker) vehicles(p *webpage.Facts, d *jsonld.Index) {
 			name = webpage.HTMLText(cs[0])
 		}
 		at := tbl
-		if b := idBox(tbl); b != nil && b.DataAtom != 0 && slices.Contains([]string{"section", "article", "div", "figure"}, b.Data) {
+		if b := webpage.IDBox(tbl); b != nil && b.DataAtom != 0 && slices.Contains([]string{"section", "article", "div", "figure"}, b.Data) {
 			at = b
 		}
 		c.add("html:"+webpage.SelectorFor(p.Doc, at), Warning, "the page's table %q lists vehicles (%s) with their capacity: add a Vehicle for each (name, cargoVolume, payload, vehicleConfiguration), in an ItemList or as the items of the Offer or Service they are for. A Vehicle is a kind of Product, and Search Console's Product snippets report marks one without offers, review or aggregateRating invalid: give each offers with the rental or sale price the page shows for it (an AggregateOffer for a range: lowPrice, highPrice, priceCurrency, offerCount)", name, txt.Examples(names))
@@ -177,7 +177,7 @@ func (c *checker) quantities(all []jsonld.Node, p *webpage.Facts) {
 	for _, l := range all {
 		for _, k := range l.N.Keys {
 			for _, s := range jsonld.Scalars(l.N, k) {
-				for _, n := range numberIn.FindAllString(strings.ReplaceAll(s, ",", ""), -1) {
+				for _, n := range txt.NumberIn.FindAllString(strings.ReplaceAll(s, ",", ""), -1) {
 					if f, ok := txt.Amount(n); ok {
 						held[f] = true
 					}
@@ -193,7 +193,7 @@ func (c *checker) quantities(all []jsonld.Node, p *webpage.Facts) {
 		for _, m := range quantity.FindAllStringSubmatch(webpage.HTMLText(n), -1) {
 			q := strings.TrimSpace(m[1] + " " + m[2])
 			all := true
-			for _, s := range numberIn.FindAllString(strings.ReplaceAll(m[1], ",", ""), -1) {
+			for _, s := range txt.NumberIn.FindAllString(strings.ReplaceAll(m[1], ",", ""), -1) {
 				if f, _ := txt.Amount(s); !held[f] {
 					all = false
 				}
