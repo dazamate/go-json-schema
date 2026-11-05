@@ -3,6 +3,7 @@ package product
 import (
 	"regexp"
 	"slices"
+	"strings"
 
 	"github.com/dazamate/go-json-schema/internal/vocabtool/audit"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
@@ -53,6 +54,27 @@ func headOf(c *audit.Context) string {
 	return audit.Memo(c, headKey{}, func() string {
 		return c.Page.H1() + " · " + titleOf(c.Page)
 	})
+}
+
+// titleSep is where a page title's site name starts: "Silver Ring | Harbour
+// Jewellers", "Silver Ring – Harbour".
+var titleSep = regexp.MustCompile(`\s+(?:[|–—·•-]|::)\s+`)
+
+// nameOf is what the product page names its product: its h1, else its
+// og:title or title before the site's name (a dealer's page whose h1 is
+// empty).
+func nameOf(p *webpage.Facts) string {
+	if h := strings.TrimSpace(p.H1()); h != "" {
+		return h
+	}
+	t := ""
+	if p.Doc != nil {
+		t = webpage.MetaContent(p.Doc, "property", "og:title")
+	}
+	if t == "" {
+		t = titleOf(p)
+	}
+	return strings.TrimSpace(titleSep.Split(t, 2)[0])
 }
 
 // titleOf is the page's title element.
