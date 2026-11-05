@@ -1,6 +1,7 @@
 package sources_test
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/dazamate/go-json-schema/internal/vocabtool/audit"
@@ -34,6 +35,7 @@ func TestObservation(t *testing.T) {
 		{"a ratio no Observation names", audittest.Input{Draft: `{"@context":"https://schema.org","@type":"Observation","value":17,"unitCode":"P1"}`, PageHTML: tulsa, PageURL: "https://movers.test/tulsa/"}, []audit.Issue{
 			{Path: "html:#place-moves", Severity: audit.Warning, Message: `the page states "1 in 6 people in Tulsa moved in the last year" from U.S. Census Bureau, American Community Survey, 2020-2024: ` + ask},
 		}},
+		{"a year is no lead figure", audittest.Input{Draft: `{"@context":"https://schema.org","@type":"Observation","value":4.2,"unitCode":"MIL"}`, PageHTML: strings.Replace(tulsa, "1 in 6 people in Tulsa moved in the last year", "In 2023, 4.2 million households moved.", 1), PageURL: "https://movers.test/tulsa/"}, nil},
 		{"Observations carry the figures", audittest.Input{Draft: observed, PageHTML: dataPage, PageURL: dataURL}, nil},
 		{"an Observation named by the sentence", audittest.Input{Draft: named, PageHTML: tulsa, PageURL: "https://movers.test/tulsa/"}, nil},
 		{"a noindex page", audittest.Input{Draft: barePage, PageHTML: audittest.Noindex(dataPage), PageURL: dataURL}, nil},
