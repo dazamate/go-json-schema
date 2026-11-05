@@ -2,10 +2,12 @@ package graph
 
 import (
 	"regexp"
+	"slices"
 	"strings"
 
 	"github.com/dazamate/go-json-schema/internal/vocabtool/audit"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
+	"github.com/dazamate/go-json-schema/internal/vocabtool/txt"
 )
 
 func init() { audit.Register(PersonName{}) }
@@ -41,18 +43,35 @@ func bareName(s string) string {
 }
 
 // Run reports each Person whose name splits in two and who has neither part.
+// A Person that is also an Organization, or is named for an organization,
+// website or brand of the graph ("Love It Landscaping", "Allrecipes Test
+// Kitchen"), is the business, not a person with a given name.
 func (PersonName) Run(c *audit.Context) []audit.Issue {
 	if c.Page == nil {
 		return nil
 	}
+	var orgs []string
+	for _, l := range c.Nodes {
+		if !c.Is(l.N, "Person") && (c.Is(l.N, "Organization") || c.Is(l.N, "WebSite") || c.Is(l.N, "Brand")) {
+			for _, s := range jsonld.Strs(l.N, "name") {
+				if w := txt.NormWords(s); w != "" {
+					orgs = append(orgs, " "+w+" ")
+				}
+			}
+		}
+	}
 	var out []audit.Issue
 	for _, l := range c.Nodes {
-		if !c.Is(l.N, "Person") {
+		if !c.Is(l.N, "Person") || c.Is(l.N, "Organization") {
 			continue
 		}
 		_, g := l.N.Get("givenName")
 		_, f := l.N.Get("familyName")
 		for _, s := range jsonld.Strs(l.N, "name") {
+			name := " " + txt.NormWords(s) + " "
+			if slices.ContainsFunc(orgs, func(o string) bool { return strings.Contains(name, o) }) {
+				break
+			}
 			if m := personName.FindStringSubmatch(bareName(s)); m != nil && !g && !f {
 				out = append(out, audit.Issuef(l.Path, audit.Warning, "this Person is named %q: set givenName %s and familyName %s", s, m[1], m[2]))
 			}
