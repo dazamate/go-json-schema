@@ -32,8 +32,6 @@ func (legacyAll) Run(ctx *audit.Context) []audit.Issue {
 	}
 	c := newChecker(ctx.Vocab)
 	all := ctx.Nodes
-	c.repeats(doc)
-	c.webPageElements(all)
 	if ctx.HTML != nil {
 		// a page search engines skip still lists its sections, unasked
 		elements := c.pageElements(all, ctx.HTML, ctx.Page == nil || ctx.Page.Private == "")
@@ -44,9 +42,6 @@ func (legacyAll) Run(ctx *audit.Context) []audit.Issue {
 		text = ctx.Page.Text
 	}
 	c.pageEntities(all, text)
-	c.bare(all)
-	c.ownReviews(all)
-	c.reviews(all)
 	if ctx.Page != nil {
 		c.content(all, ctx.Page)
 	}
