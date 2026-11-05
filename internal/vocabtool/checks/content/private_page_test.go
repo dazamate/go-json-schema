@@ -9,7 +9,7 @@ import (
 )
 
 func TestPrivatePage(t *testing.T) {
-	const note = ": search engines leave its structured data out, so the shop checks skip it"
+	const note = ": search engines leave its structured data out, so the page checks skip it"
 	info := func(msg string) []audit.Issue {
 		return []audit.Issue{{Path: "html:body", Severity: audit.Info, Message: msg}}
 	}
