@@ -149,9 +149,25 @@ func (p *Facts) Address() string {
 // StreetAddress finds a street address in text: a number and a street name.
 var StreetAddress = regexp.MustCompile(`\b\d{1,5}[A-Za-z]?\s+(?:[A-Z][a-z]+\s){1,3}(?:Street|St|Road|Rd|Avenue|Ave|Lane|Ln|Drive|Dr|Boulevard|Blvd|Highway|Hwy|Parade|Pde|Place|Pl|Terrace|Tce|Way|Court|Ct|Crescent|Cres)\b\.?[^.\n]{0,60}`)
 
+// The parts of OpeningTime. A day is a full name, "weekdays" or "open today"
+// in any case; an abbreviation needs its capital, so the verb "sat" and the
+// star "sun" are no day. A time looks like hours: it has am, pm, a.m. or
+// p.m., or a colon (9:00), or both ends are four digits on the 24 hour clock
+// (0900-1700). A bare "2-3" or "10-20%" is no time.
+const (
+	dayWord    = `(?:(?i:monday|tuesday|wednesday|thursday|friday|saturday|sunday|weekdays|open today)|(?:Mon|Tue|Tues|Wed|Thu|Thur|Thurs|Fri|Sat|Sun|MON|TUE|TUES|WED|THU|THUR|THURS|FRI|SAT|SUN))`
+	hourAmPm   = `\d{1,2}(?:[:.]\d{2})?\s*(?:(?i:am|pm)\b|(?i:a\.m\.|p\.m\.))`
+	hourClock  = `\d{1,2}:\d{2}`
+	hour24     = `(?:[01]\d|2[0-3])[0-5]\d`
+	hourSpan   = `\s*(?:[-–—]|\bto\b|\buntil\b|\btill\b)\s*`
+	hourStrong = `(?:` + hourAmPm + `|` + hourClock + `)`
+	hourRange  = `\b(?:` + hourStrong + hourSpan + hourStrong + `|\d{1,2}` + hourSpan + hourStrong + `|` + hour24 + hourSpan + hour24 + `)`
+)
+
 // OpeningTime finds opening hours in text: a day, or "weekdays" or "open
-// today", then a run of hours such as "Mon–Fri 8am–5pm".
-var OpeningTime = regexp.MustCompile(`(?i)\b(?:mon(?:day)?|tue(?:s(?:day)?)?|wed(?:nesday)?|thu(?:rs(?:day)?)?|fri(?:day)?|sat(?:urday)?|sun(?:day)?|weekdays|open today)\b[^.\n]{0,40}?\b\d{1,2}(?:[:.]\d{2})?\s*(?:am|pm)?\s*(?:-|–|to)\s*\d{1,2}(?:[:.]\d{2})?\s*(?:am|pm)?`)
+// today", then a run of hours such as "Mon–Fri 8am–5pm", or the words
+// "closed" or "24 hours" after the day.
+var OpeningTime = regexp.MustCompile(`\b` + dayWord + `\b[^.\n]{0,40}?(?:` + hourRange + `|\b(?i:closed|opens?|24\s*hours)\b)`)
 
 // H1 is the text of the page's first visible h1.
 func (p *Facts) H1() string {
