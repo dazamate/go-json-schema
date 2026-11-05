@@ -133,18 +133,23 @@ func (p *Facts) Abs(ref string) string {
 	return txt.NormURL(u)
 }
 
-// Address is a street address the page shows: an address element, or a
-// number and street name.
+// Address is a street address the page shows: an address element that holds
+// a street address (an author's byline in an address element holds a name or
+// an email), or a number and street name.
 func (p *Facts) Address() string {
 	if p.Doc != nil {
 		for _, n := range QueryAll(p.Doc, "address") {
-			if t := HTMLText(n); t != "" && Shown(n) {
+			if t := HTMLText(n); t != "" && Shown(n) && addressShape.MatchString(t) {
 				return t
 			}
 		}
 	}
 	return strings.TrimSpace(StreetAddress.FindString(p.Main))
 }
+
+// addressShape is what an address element must hold: a number and a street
+// word, or a postcode.
+var addressShape = regexp.MustCompile(`(?i)\b\d{1,5}[a-z]?\s+(?:[\w'.-]+\s+){0,3}?(?:street|st|road|rd|avenue|ave|lane|ln|drive|dr|boulevard|blvd|highway|hwy|parade|pde|place|pl|terrace|tce|way|court|ct|crescent|cres|square|sq|close|row|walk|mews)\b|\b(?:NSW|VIC|QLD|WA|SA|TAS|ACT|NT)\s+\d{4}\b|\b\d{5}(?:-\d{4})?\b|\b[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}\b|\b[A-Z]\d[A-Z]\s*\d[A-Z]\d\b`)
 
 // StreetAddress finds a street address in text: a number and a street name.
 var StreetAddress = regexp.MustCompile(`\b\d{1,5}[A-Za-z]?\s+(?:[A-Z][a-z]+\s){1,3}(?:Street|St|Road|Rd|Avenue|Ave|Lane|Ln|Drive|Dr|Boulevard|Blvd|Highway|Hwy|Parade|Pde|Place|Pl|Terrace|Tce|Way|Court|Ct|Crescent|Cres)\b\.?[^.\n]{0,60}`)
