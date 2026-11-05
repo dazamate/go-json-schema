@@ -1,6 +1,7 @@
 package content
 
 import (
+	"regexp"
 	"slices"
 	"strings"
 
@@ -79,6 +80,10 @@ func attribution(n *xhtml.Node) string {
 // quoteMarks pairs each opening quotation mark with its closing one.
 var quoteMarks = map[string]string{"“": "”", `"`: `"`, "«": "»", "「": "」"}
 
+// saidBy is the words after a closing quotation mark that name the speaker:
+// "says culinary producer Nicole McLaughlin", "according to the mayor".
+var saidBy = regexp.MustCompile(`(?i)^[,.]?\s*(?:says|said|writes|wrote|explains|explained|notes|adds|according to|told \w+)\s+(.{3,100})`)
+
 // pullQuote is a paragraph, outside a blockquote, that quotes someone: its
 // text opens with a quotation mark, and a <cite> in it or beside it, or the
 // text after the closing mark when it starts with @ or a dash, says who. It
@@ -111,6 +116,16 @@ func pullQuote(n *xhtml.Node) (quote, who string, ok bool) {
 		switch {
 		case len(cites) > 0:
 			who = strings.TrimSpace(webpage.HTMLText(cites[0]))
+		case saidBy.MatchString(rest):
+			who = saidBy.FindStringSubmatch(rest)[1]
+			// the speaker is named up to the end of the sentence
+			if i := strings.Index(who, ". "); i > 0 {
+				who = who[:i]
+			}
+			if i := strings.Index(who, "("); i > 0 && !strings.Contains(who[i:], ")") {
+				who = who[:i]
+			}
+			who = strings.TrimSpace(who)
 		case strings.HasPrefix(rest, "@") || strings.HasPrefix(rest, "—") || strings.HasPrefix(rest, "–") || strings.HasPrefix(rest, "-"):
 			who = strings.TrimSpace(strings.TrimLeft(rest, "—–- "))
 		}
