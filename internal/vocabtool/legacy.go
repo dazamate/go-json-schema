@@ -1,8 +1,6 @@
 package vocabtool
 
 import (
-	"strings"
-
 	"github.com/dazamate/go-json-schema/internal/vocabtool/audit"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
 )
@@ -21,7 +19,7 @@ func (legacyAll) ID() string { return "legacy/all" }
 
 // Run runs the old checker's checks over the draft.
 func (legacyAll) Run(ctx *audit.Context) []audit.Issue {
-	doc, ok := ctx.Root.(*jsonld.Object)
+	_, ok := ctx.Root.(*jsonld.Object)
 	if !ok {
 		return nil
 	}
@@ -29,11 +27,6 @@ func (legacyAll) Run(ctx *audit.Context) []audit.Issue {
 	all := ctx.Nodes
 	if ctx.Page != nil {
 		c.content(all, ctx.Page)
-	}
-	c.organizations(all, ctx.In.Keyword)
-	c.looseNodes(all, ctx.Known)
-	if strings.TrimSpace(ctx.In.Keyword) != "" {
-		c.keyword(all, doc, ctx.In.Keyword, ctx.In.KeywordDensity, ctx.Known)
 	}
 	return c.issues
 }

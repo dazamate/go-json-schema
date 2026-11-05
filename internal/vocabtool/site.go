@@ -2,7 +2,6 @@ package vocabtool
 
 import (
 	"fmt"
-	"net/url"
 	"regexp"
 	"slices"
 	"strings"
@@ -187,40 +186,6 @@ func (c *checker) article(all []jsonld.Node, p *webpage.Facts) {
 		return
 	}
 	c.add("html:"+webpage.SelectorFor(p.Doc, best), Warning, "the page's main copy is an article (%d words, %d sections) but no node is an Article: add one (headline from the h1, articleSection, wordCount, author, datePublished, dateModified, publisher, isPartOf and mainEntityOfPage the WebPage), and give the WebPage a potentialAction ReadAction targeting its URL", words, sections)
-}
-
-var topPath = regexp.MustCompile(`^\$(?:\.@graph)?(?:\[\d+\])?$`)
-
-// mainWebPage is the draft's WebPage for the page: a node of the graph's top
-// level before one nested in another (a catalog's link to the same page),
-// the one whose url is the page's before the first that is not an FAQPage
-// part.
-func (c *checker) mainWebPage(all []jsonld.Node, p *webpage.Facts) (jsonld.Node, bool) {
-	var best jsonld.Node
-	rank := 0
-	for _, l := range all {
-		if !c.is(l.N, "WebPage") || len(l.N.Keys) < 2 {
-			continue
-		}
-		r := 0
-		if !c.is(l.N, "FAQPage") {
-			r = 1
-		}
-		if p.URL != nil {
-			for _, s := range append(jsonld.Strs(l.N, "url"), jsonld.Strs(l.N, "@id")...) {
-				if u, err := url.Parse(s); err == nil && u.Fragment == "" && txt.NormURL(u) == txt.NormURL(p.URL) {
-					r = 2
-				}
-			}
-		}
-		if r > 0 && topPath.MatchString(l.Path) {
-			r += 2
-		}
-		if r > rank {
-			best, rank = l, r
-		}
-	}
-	return best, rank > 0
 }
 
 var (

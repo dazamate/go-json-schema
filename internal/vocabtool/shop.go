@@ -6,6 +6,7 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/dazamate/go-json-schema/internal/vocabtool/audit"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/txt"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/webpage"
@@ -40,7 +41,7 @@ func (c *checker) website(all []jsonld.Node, p *webpage.Facts) {
 	if _, ok := all[i].N.Get("inLanguage"); !ok && lang != "" {
 		c.add(all[i].Path, Warning, "this WebSite has no inLanguage: set it %s, the page's language", lang)
 	}
-	wp, ok := c.mainWebPage(all, p)
+	wp, ok := audit.MainWebPage(c.v, all, p)
 	if !ok {
 		return
 	}

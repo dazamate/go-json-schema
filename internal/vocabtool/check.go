@@ -6,6 +6,7 @@ import (
 
 	"github.com/dazamate/go-json-schema/internal/vocabtool/audit"
 	_ "github.com/dazamate/go-json-schema/internal/vocabtool/checks/all" // register every check
+	"github.com/dazamate/go-json-schema/internal/vocabtool/checks/keyword"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/checks/onpage"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/vocab"
@@ -35,6 +36,10 @@ type Report struct {
 // describes: a WebPageElement subtype, or a BreadcrumbList for a breadcrumb
 // nav. MarkedBy is the path of the draft node that marks it up, "" for none.
 type PageElement = onpage.PageElement
+
+// DefaultKeywordDensity is the share of the markup's words, in percent, that
+// the target keyword should fill when the caller gives no target.
+const DefaultKeywordDensity = keyword.DefaultKeywordDensity
 
 // CheckOptions controls the published form and the page checks.
 type CheckOptions struct {

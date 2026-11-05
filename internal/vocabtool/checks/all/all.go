@@ -6,6 +6,7 @@ package all
 import (
 	_ "github.com/dazamate/go-json-schema/internal/vocabtool/checks/costs"
 	_ "github.com/dazamate/go-json-schema/internal/vocabtool/checks/graph"
+	_ "github.com/dazamate/go-json-schema/internal/vocabtool/checks/keyword"
 	_ "github.com/dazamate/go-json-schema/internal/vocabtool/checks/onpage"
 	_ "github.com/dazamate/go-json-schema/internal/vocabtool/checks/policies"
 	_ "github.com/dazamate/go-json-schema/internal/vocabtool/checks/product"
