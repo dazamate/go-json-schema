@@ -219,21 +219,93 @@ func (p *Facts) RelatedBoxes() []RelatedBox {
 	return out
 }
 
-// Sells reports a page of a shop: a link to its cart, an add-to-cart form or
-// product cards.
+// Sells reports a page of a shop: an add-to-cart form, a link to its cart or
+// checkout, a cart button, a shop platform's page, or product cards that
+// lead to product pages. Cards alone are no shop: a SaaS plan, a service or
+// a home for sale has a price and a link too.
 func (p *Facts) Sells() bool {
 	if p.Doc == nil {
 		return false
 	}
-	if p.BuyForm() != nil || len(p.ProductCards()) > 0 {
+	if p.BuyForm() != nil || shopPlatform(p.Doc) {
 		return true
 	}
+	for _, c := range p.ProductCards() {
+		if ProductPath(MustParse(c.URL)) {
+			return true
+		}
+	}
 	for _, a := range QueryAll(p.Doc, "a[href]") {
-		if u, ok := p.SiteLink(a); ok && CartPath.MatchString(u) {
+		if u, ok := p.SiteLink(a); ok && (CartPath.MatchString(u) || checkoutPath.MatchString(u)) {
+			return true
+		}
+	}
+	for _, b := range QueryAll(p.Doc, "a, button") {
+		if CartControl(b) {
 			return true
 		}
 	}
 	return false
+}
+
+var (
+	checkoutPath = regexp.MustCompile(`/checkouts?$`)
+	// cartWord is a word that names the cart; controlFiller the words a cart
+	// button's name wraps it in ("Open cart", "Basket quantity 0", "Shopping
+	// Cart Menu 0 items in the cart").
+	cartWord      = regexp.MustCompile(`^(?:cart|basket|bag|trolley|minicart|minibasket|minibag)$`)
+	controlFiller = regexp.MustCompile(`^(?:\d+|open|view|show|go|goto|to|your|my|the|shopping|mini|menu|icon|link|quantity|click|items?|with|in|drawer|button|and|of|total)$`)
+)
+
+// CartControl reports a link or button for the cart: its name (aria-label,
+// else its text, else its title) is the cart's, in a cart button's words. A
+// link named "Bag Straps" sells bags; one named "Bag" opens the cart.
+func CartControl(n *html.Node) bool {
+	name, _ := Attr(n, "aria-label")
+	if strings.TrimSpace(name) == "" {
+		name = HTMLText(n)
+	}
+	if strings.TrimSpace(name) == "" {
+		name, _ = Attr(n, "title")
+	}
+	words := strings.Fields(txt.NormWords(name))
+	cart := false
+	for _, w := range words {
+		switch {
+		case cartWord.MatchString(w):
+			cart = true
+		case !controlFiller.MatchString(w):
+			return false
+		}
+	}
+	return cart
+}
+
+// shopPlatform reports a page of a shop platform's store: Shopify's digital
+// wallet meta or its Shopify.shop script, or WooCommerce's body class.
+func shopPlatform(doc *html.Node) bool {
+	found := false
+	var walk func(*html.Node)
+	walk = func(n *html.Node) {
+		for c := n.FirstChild; c != nil && !found; c = c.NextSibling {
+			if c.Type != html.ElementNode {
+				continue
+			}
+			switch c.DataAtom {
+			case atom.Meta:
+				name, _ := Attr(c, "name")
+				found = name == "shopify-digital-wallet" || name == "shopify-checkout-api-token"
+			case atom.Script:
+				found = c.FirstChild != nil && strings.Contains(c.FirstChild.Data, "Shopify.shop")
+			case atom.Body:
+				class, _ := Attr(c, "class")
+				found = slices.ContainsFunc(strings.Fields(class), func(s string) bool { return strings.HasPrefix(s, "woocommerce") })
+			}
+			walk(c)
+		}
+	}
+	walk(doc)
+	return found
 }
 
 // Promo reports a shop's dl that sells rather than defines: one whose block
