@@ -12,7 +12,7 @@ func init() { audit.Register(ResponseTime{}) }
 
 // responseTime is a promise of a reply time as a page gives it: "we reply
 // within 1 business day".
-var responseTime = regexp.MustCompile(`(?i)\b(?:repl(?:y|ies)|responds?|responses?|get back to you|hear back)\b[^.!?]{0,40}?\bwithin\s+(?:(?:\d+|one|two|three)\s+)?(?:business days?|working days?|days?|hours?|minutes?)`)
+var responseTime = regexp.MustCompile(`(?i)\b(?:repl(?:y|ies)|responds?|responses?|get back to you|hear back|contact you|call you(?: back)?|email you|be in touch|get in touch|answers?)\b[^.!?]{0,40}?\b(?:within|inside|in)\s+(?:(?:(?:the|our)\s+(?:next|first)\s+|about\s+|around\s+|approximately\s+|up to\s+|a maximum of\s+|at most\s+)*(?:(?:\d+(?:\s*(?:-|–|to)\s*\d+)?|an?|one|two|three|four|five|six|seven|eight|nine|ten|twelve|twenty[- ]four|forty[- ]eight)[\s-]+)(?:business days?|working days?|weekdays?|days?|hours?|hrs?|minutes?|mins?)|the (?:same|next) (?:business |working )?day)\b`)
 
 // ResponseTime warns when the page promises a reply time and no node has it
 // as a processingTime. The ServiceChannel the promise is for carries it as a

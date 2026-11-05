@@ -2,6 +2,7 @@ package content
 
 import (
 	"net/url"
+	"regexp"
 	"slices"
 	"strings"
 
@@ -13,6 +14,54 @@ import (
 )
 
 func init() { audit.Register(OutsideLinks{}) }
+
+// furniture is the id or class of a part of the site around its content: the
+// footer, header or menu, a cookie banner, a breadcrumb.
+var furniture = regexp.MustCompile(`(?i)(^|[\s_-])(footer|site-footer|header|navbar|nav|menu|cookies?|cookiebot|consent|cmp|onetrust|cybot\w*|gdpr|breadcrumbs?|skip-links?)($|[\s_-])|cookiebot|onetrust|cybot`)
+
+// chores is the label of a link the site gives every visitor: account, jobs,
+// help, rules, a download.
+var chores = regexp.MustCompile(`(?i)^(log ?in|log ?out|sign ?in|sign ?up|sign ?in here|sign up here|register|my account|account( overview)?|careers?|jobs|privacy( policy| notice)?|terms( (of|and|&) (service|use|conditions))?|terms & conditions|cookies?( policy| settings)?|help( centre| center)?|support|faqs?|contact( us)?|status|platform status|changelog|subscribe|download|accessibility( help)?|sitemap|advertise with us|about( us)?|get started|learn more|visit our \w+ page\.?|pay bill|make one-time payment)$`)
+
+// appStore is a host that sells apps: a link to an app is the business's own.
+var appStore = regexp.MustCompile(`(?i)^(apps|itunes)\.apple\.com$|^play\.google\.com$|^apps\.microsoft\.com$|^appgallery\.huawei\.com$`)
+
+// brandLabel is the name in a host: "bbc" for www.bbc.co.uk and shop.bbc.com.
+func brandLabel(host string) string {
+	labels := strings.Split(strings.ToLower(strings.TrimPrefix(host, "www.")), ".")
+	if len(labels) < 2 {
+		return host
+	}
+	labels = labels[:len(labels)-1] // the top-level domain
+	if n := len(labels); n > 1 && slices.Contains([]string{"co", "com", "org", "net", "gov", "edu", "ac", "or", "ne", "go"}, labels[n-1]) {
+		labels = labels[:n-1]
+	}
+	return labels[len(labels)-1]
+}
+
+// furnished reports a link in the site's own furniture: its chrome, a cookie
+// banner or a dialog.
+func furnished(n *xhtml.Node) bool {
+	if webpage.Chrome(n) {
+		return true
+	}
+	for e := n.Parent; e != nil; e = e.Parent {
+		// the body's classes describe the template, not a part of the page
+		if e.Type != xhtml.ElementNode || e.DataAtom == atom.Body || e.DataAtom == atom.Html {
+			continue
+		}
+		role, _ := webpage.Attr(e, "role")
+		if role == "dialog" || role == "alertdialog" || role == "navigation" || role == "contentinfo" || role == "banner" {
+			return true
+		}
+		for _, k := range []string{"id", "class"} {
+			if v, _ := webpage.Attr(e, k); v != "" && furniture.MatchString(v) {
+				return true
+			}
+		}
+	}
+	return false
+}
 
 // OutsideLinks warns on a group of three or more links to other sites, under
 // one ancestor with an id, whose URLs no node in the draft names: partners,
@@ -45,6 +94,11 @@ func (OutsideLinks) Run(c *audit.Context) []audit.Issue {
 		// the business's profiles and share buttons have checks of their own,
 		// and a feed of its posts features no outside business
 		if webpage.SocialLink(h) || webpage.ShareLink.MatchString(h) {
+			return
+		}
+		// the business's other sites, the site's own furniture, and the links
+		// every site gives its visitors are not businesses the page features
+		if appStore.MatchString(u.Hostname()) || brandLabel(u.Hostname()) == brandLabel(p.Base.Hostname()) || furnished(n) || chores.MatchString(strings.TrimSpace(webpage.HTMLText(n))) {
 			return
 		}
 		key := txt.NormURL(u)

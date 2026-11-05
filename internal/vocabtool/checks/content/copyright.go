@@ -1,12 +1,11 @@
 package content
 
 import (
-	"slices"
+	"regexp"
 	"strings"
 
 	"github.com/dazamate/go-json-schema/internal/vocabtool/audit"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
-	"github.com/dazamate/go-json-schema/internal/vocabtool/webpage"
 )
 
 func init() { audit.Register(Copyright{}) }
@@ -16,6 +15,14 @@ func init() { audit.Register(Copyright{}) }
 // page's content from them. It runs on a page search engines index.
 type Copyright struct{}
 
+// copyrightLine is a copyright line: the mark, the holder's name when it
+// comes first, and the year or the range of years. It captures the range's
+// first year (if any) and the last.
+var copyrightLine = regexp.MustCompile(`(?i)(?:©|\(c\)|copyright)[\s@:©.]*(?:[\p{L}&'’.,/ -]{0,50}?\s)?(?:((?:19|20)\d{2})\s*[-–—]\s*)?((?:19|20)\d{2})\b`)
+
+// copyrightYearFirst is a copyright line with the year before the mark.
+var copyrightYearFirst = regexp.MustCompile(`(?i)\b((?:19|20)\d{2})\s*(?:©|\(c\))`)
+
 // ID is the check's ID.
 func (Copyright) ID() string { return "content/copyright" }
 
@@ -24,13 +31,25 @@ func (Copyright) Run(c *audit.Context) []audit.Issue {
 	if !c.Indexed() {
 		return nil
 	}
-	m := webpage.CopyrightLine.FindStringSubmatch(c.Page.Text)
-	if m == nil {
-		return nil
+	m := copyrightLine.FindStringSubmatch(c.Page.Text)
+	first, year, shown := "", "", ""
+	switch {
+	case m != nil:
+		first, year, shown = m[1], m[2], m[0]
+	default:
+		// the year before the mark
+		if m = copyrightYearFirst.FindStringSubmatch(c.Page.Text); m == nil {
+			return nil
+		}
+		year, shown = m[1], m[0]
 	}
 	hasYear, hasHolder := false, false
 	for _, l := range c.Nodes {
-		hasYear = hasYear || slices.Contains(jsonld.Scalars(l.N, "copyrightYear"), m[1])
+		// a range shows the year the page began and the year it is now: the
+		// markup names either
+		for _, y := range jsonld.Scalars(l.N, "copyrightYear") {
+			hasYear = hasYear || y == year || (first != "" && y == first)
+		}
 		if _, ok := l.N.Get("copyrightHolder"); ok {
 			hasHolder = true
 		}
@@ -38,5 +57,5 @@ func (Copyright) Run(c *audit.Context) []audit.Issue {
 	if hasYear && hasHolder {
 		return nil
 	}
-	return []audit.Issue{audit.Issuef(pageNode(c), audit.Warning, "the page shows %q but the markup has no copyrightYear %s and copyrightHolder: set both on the WebPage or the WebSite", strings.TrimSpace(m[0]), m[1])}
+	return []audit.Issue{audit.Issuef(pageNode(c), audit.Warning, "the page shows %q but the markup has no copyrightYear %s and copyrightHolder: set both on the WebPage or the WebSite", strings.TrimSpace(shown), year)}
 }
