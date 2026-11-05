@@ -18,7 +18,7 @@ type Facts struct {
 	Doc     *html.Node // nil when only the page's text is known
 	Text    string     // the visible text, whitespace collapsed
 	Norm    string     // txt.NormWords(Text), padded with spaces
-	Main    string     // the visible text outside the site's header, footer and navs
+	Main    string     // the visible text outside the site's header, footer, navs and overlays
 	Base    *url.URL   // the page's canonical URL, else its address, or nil
 	URL     *url.URL   // the page's address, else its canonical URL, or nil
 	Kind    Kind
@@ -56,7 +56,8 @@ func New(doc *html.Node, text, address string) *Facts {
 	return p
 }
 
-// mainText is the visible text outside the site's header, footer and navs.
+// mainText is the visible text outside the site's header, footer, navs and
+// overlays.
 func mainText(doc *html.Node) string { return strings.Join(MainLines(doc), " ") }
 
 // LineBreaks are the elements that start and end a line of text.
@@ -70,7 +71,10 @@ var LineBreaks = map[atom.Atom]bool{
 }
 
 // MainLines is mainText a line at a time: a block element starts and ends a
-// line, so a line never runs into the next block's words.
+// line, so a line never runs into the next block's words. It leaves out the
+// drawers, modals and dialogs the page opens over itself (OverlayBox): a
+// cart drawer's picks or a help modal's terms are no copy of the page,
+// while an FAQ's closed details, a tab panel or a collapsed block are.
 func MainLines(doc *html.Node) []string {
 	var lines []string
 	var b strings.Builder
@@ -83,7 +87,7 @@ func MainLines(doc *html.Node) []string {
 	var walk func(*html.Node)
 	walk = func(n *html.Node) {
 		for ch := n.FirstChild; ch != nil; ch = ch.NextSibling {
-			if l := landmark(ch); Skipped(ch) || l == atom.Nav || ((l == atom.Header || l == atom.Footer) && !scoped(ch)) {
+			if l := landmark(ch); Skipped(ch) || l == atom.Nav || ((l == atom.Header || l == atom.Footer) && !scoped(ch)) || OverlayBox(ch) {
 				continue
 			}
 			if ch.Type == html.TextNode {

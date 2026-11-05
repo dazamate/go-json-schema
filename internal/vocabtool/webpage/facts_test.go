@@ -132,3 +132,39 @@ func TestMainSkipsChrome(t *testing.T) {
 		t.Errorf("Main = %q, Text = %q", p.Main, p.Text)
 	}
 }
+
+// TestMainSkipsOverlays checks that a drawer, modal or dialog the page opens
+// over itself is no main copy (royalcanadiancollective.com's closed cart
+// drawer with its picks' prices, officeworks.com.au's help modal "Earn 1
+// point for every $1 spent", a mobile menu), while an FAQ's closed details,
+// a tab panel, a collapse block, a link that opens a modal
+// (taylorstitch.com's "751 reviews") and a dialog's trigger
+// (allrecipes.com's photo count) are.
+func TestMainSkipsOverlays(t *testing.T) {
+	doc := parse(t, `<html><body>
+		<div id="shopify-section-sections--28184335614195__oddit_cart_drawer" class="shopify-section shopify-section-group-header-group oddit-section-active"> <div id="sections--28184335614195__oddit_cart_drawer" class="oddit-cart-drawer" style="display: none" data-cart-drawer="" aria-label="Shopping cart drawer"><p>Your cart is empty</p><a href="/products/cambridge-sunset-wheat">CAMBRIDGE Sunset Wheat</a> <span>$299.00</span></div></div>
+		<div class="modal ow-modal fade" id="modal-quick-help-9" tabindex="-1" role="dialog"> <div class="modal-dialog" role="document"> <button type="button" class="close" data-dismiss="modal" aria-label="Close">x</button> <div class="modal-content"> <div class="modal-body text-left"> <h1 class="text-center">Flybuys</h1><p>Earn 1 point for every $1 spent</p></div></div></div></div>
+		<div class="ow-mobile-menu"><ul><li><a href="/shop/officeworks/c/gifting">Gifts $10 and Under</a></li></ul></div>
+		<dialog id="size-guide-dialog" class="dialog dialog--size-guide"><p>Size Guide 36 – XS</p></dialog>
+		<main>
+		<h1><span class="title">The Jack</span> <span class="subtitle">in Blue Everyday Oxford</span></h1><a class="icon-reviews review-modal-trigger" data-iframe="/products/jack-in-blue-everyday-oxford-2304?view=product-reviews" href="#"><span class="stamped-product-reviews-badge">751 reviews</span></a>
+		<a id="gallery-photo_1-0" class="gallery-photo dialog-link mntl-text-link" role="button" href="#">4,926 Photos</a>
+		<section class="oddit-info-page__group" id="faq-shipping-amp-delivery"> <h2 class="oddit-info-page__h2">Shipping &amp; Delivery</h2><div class="oddit-info-page__accordions"><details class="oddit-info-page__accordion"> <summary>Is shipping free?</summary> <div class="oddit-info-page__accordion-body oddit-info-page__rich"> <p>Shipping is free on orders $34.99 and up; orders under $34.99 ship for $9.</p> </div> </details></div></section>
+		<div role="tabpanel" id="tab-details" hidden-until-found=""><p>100% cotton oxford cloth</p></div>
+		<div class="collapse" id="faq-2"><p>Returns are accepted within 30 days.</p></div>
+		</main></body></html>`)
+	p := New(doc, HTMLText(doc), "https://royalcanadiancollective.com/pages/faq")
+	for _, s := range []string{"$299.00", "Earn 1 point", "Gifts $10", "Size Guide"} {
+		if strings.Contains(p.Main, s) {
+			t.Errorf("Main holds the overlay's %q: %q", s, p.Main)
+		}
+	}
+	for _, s := range []string{"751 reviews", "4,926 Photos", "orders under $34.99 ship for $9", "100% cotton", "within 30 days"} {
+		if !strings.Contains(p.Main, s) {
+			t.Errorf("Main lost the copy %q: %q", s, p.Main)
+		}
+	}
+	if !strings.Contains(p.Text, "Earn 1 point") {
+		t.Errorf("Text lost the overlay: %q", p.Text)
+	}
+}

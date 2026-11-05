@@ -190,39 +190,71 @@ func siteChrome(n *html.Node) bool {
 	return false
 }
 
-// overlayWord is a word of a tag, class or id that names an overlay the page
-// opens over itself: a drawer, modal, dialog or popup.
-var overlayWord = regexp.MustCompile(`^(?:drawers?|modal|dialog|popup|popover|lightbox|flyout)$`)
+var (
+	// overlayWord is a word of a tag, class or id that names an overlay the
+	// page opens over itself: a drawer, modal, dialog or popup.
+	overlayWord = regexp.MustCompile(`^(?:drawers?|modal|dialog|popup|popover|lightbox|flyout)$`)
+	// controlWord is a word of a class or id that names what opens or closes
+	// an overlay, not the overlay ("review-modal-trigger", "dialog-link").
+	controlWord = regexp.MustCompile(`^(?:trigger|toggle|toggler|link|btn|button|open|opener)$`)
+)
 
 // Overlay reports an element in a drawer, modal or dialog the page opens over
-// itself (a cart drawer, a help modal): a dialog element or role, an
-// aria-modal, or a tag, class or id that names one. An element that holds
-// the page's main is the page, whatever its class says.
+// itself (a cart drawer, a help modal, an off-canvas mobile menu): an
+// OverlayBox or an element inside one.
 func Overlay(n *html.Node) bool {
 	for e := n; e != nil && e.Type == html.ElementNode; e = e.Parent {
 		switch e.DataAtom {
 		case atom.Body, atom.Html, atom.Main:
 			return false
-		case atom.Dialog:
-			return true
 		}
-		role, _ := Attr(e, "role")
-		modal, _ := Attr(e, "aria-modal")
-		if role == "dialog" || role == "alertdialog" || modal == "true" || (namesOverlay(e) && !holds(e, atom.Main)) {
+		if OverlayBox(e) {
 			return true
 		}
 	}
 	return false
 }
 
+// OverlayBox reports a drawer, modal or dialog the page opens over itself: a
+// dialog element or role, an aria-modal, or a tag, class or id that names
+// one. A link or button that opens one is a control on the page, and an
+// element that holds the page's main is the page, whatever their classes
+// say.
+func OverlayBox(e *html.Node) bool {
+	if e.Type != html.ElementNode {
+		return false
+	}
+	switch e.DataAtom {
+	case atom.Body, atom.Html, atom.Main, atom.A, atom.Button:
+		return false
+	case atom.Dialog:
+		return true
+	}
+	role, _ := Attr(e, "role")
+	modal, _ := Attr(e, "aria-modal")
+	switch {
+	case role == "button" || role == "link":
+		return false
+	case role == "dialog" || role == "alertdialog" || modal == "true":
+		return true
+	}
+	return namesOverlay(e) && !holds(e, atom.Main)
+}
+
 // namesOverlay reports an element whose tag, class or id names an overlay
-// (site-drawer, "drw-Drawer", "modal fade", "oddit-cart-drawer").
+// (site-drawer, "drw-Drawer", "modal fade", "oddit-cart-drawer") or an
+// off-canvas mobile menu ("ow-mobile-menu", "mobile-nav"), not a control
+// for one.
 func namesOverlay(e *html.Node) bool {
 	id, _ := Attr(e, "id")
 	class, _ := Attr(e, "class")
 	for _, s := range append(strings.Fields(class), e.Data, id) {
-		for _, w := range strings.FieldsFunc(strings.ToLower(s), func(r rune) bool { return r == '-' || r == '_' }) {
-			if overlayWord.MatchString(w) {
+		words := strings.FieldsFunc(strings.ToLower(s), func(r rune) bool { return r == '-' || r == '_' })
+		if slices.ContainsFunc(words, controlWord.MatchString) {
+			continue
+		}
+		for i, w := range words {
+			if overlayWord.MatchString(w) || (w == "mobile" && i+1 < len(words) && (words[i+1] == "menu" || words[i+1] == "nav")) {
 				return true
 			}
 		}
