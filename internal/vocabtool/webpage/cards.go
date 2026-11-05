@@ -272,7 +272,13 @@ func (p *Facts) RelatedBoxes() []RelatedBox {
 		return nil
 	}
 	var out []RelatedBox
-	var named []*html.Node // the boxes their aria-label names
+	var named []*html.Node  // the boxes their aria-label names
+	var titled []*html.Node // the blocks around the page's h1
+	Visit(p.Doc, func(n *html.Node) {
+		if titled == nil && n.DataAtom == atom.H1 {
+			titled = Ancestors(n)
+		}
+	})
 	Visit(p.Doc, func(n *html.Node) {
 		switch n.DataAtom {
 		case atom.H2, atom.H3, atom.H4, atom.H5, atom.H6, atom.P, atom.Span:
@@ -295,13 +301,27 @@ func (p *Facts) RelatedBoxes() []RelatedBox {
 		if len(strings.Fields(t)) > 6 || !relatedLabel.MatchString(t) || (Chrome(n) && !(GuideLabel.MatchString(t) && !siteChromeAround(n))) || inControl(n) || rowKey(n) {
 			return
 		}
+		// the nearest block with a link of the site's is the box when the
+		// climb reaches the page's own copy
+		var first *html.Node
 		for e := n.Parent; e != nil && e.DataAtom != atom.Body && e.DataAtom != atom.Main; e = e.Parent {
-			switch e.DataAtom {
-			case atom.Section, atom.Aside, atom.Nav, atom.Article:
-			default:
-				// a box of links, not a header row with its one "View all"
-				if len(p.SiteLinks(e)) < 2 {
-					continue
+			// a related box never holds the page's own title
+			if slices.Contains(titled, e) {
+				if e = first; e == nil {
+					return
+				}
+			} else {
+				switch e.DataAtom {
+				case atom.Section, atom.Aside, atom.Nav, atom.Article:
+				default:
+					k := len(p.SiteLinks(e))
+					if k > 0 && first == nil {
+						first = e
+					}
+					// a box of links, not a header row with its one "View all"
+					if k < 2 {
+						continue
+					}
 				}
 			}
 			if !slices.ContainsFunc(out, func(b RelatedBox) bool { return b.N == e }) {

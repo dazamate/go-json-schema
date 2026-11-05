@@ -62,6 +62,20 @@ func TestRelatedBoxesReachTheLinks(t *testing.T) {
 	}
 }
 
+// TestRelatedBoxesStopAtThePage checks that a related box never holds the
+// page's own h1: rentrant.nz's "Keep reading" sits in the article's card
+// with one link, and the card holds the post's title, its "7 min read" and
+// its tag links.
+func TestRelatedBoxesStopAtThePage(t *testing.T) {
+	doc := parse(t, `<html><body><main><article><div class="card-body"><header class="post-header"><h1>Renting with pets in NZ</h1><span class="reading-time">7 min read</span></header>
+		<p>Landlords can now say yes to pets.</p><div class="keep-reading"><h3>Keep reading</h3><a href="/blog/posts/renting-a-granny-flat-nz/">Renting a granny flat</a></div>
+		<div class="tags"><a href="/blog/tags/tenant-rights/">Tenant rights</a><a href="/blog/tags/pets/">Pets</a></div></div></article></main></body></html>`)
+	boxes := New(doc, HTMLText(doc), "https://rentrant.nz/blog/posts/renting-with-pets-nz/").RelatedBoxes()
+	if len(boxes) != 1 || !strings.Contains(HTMLText(boxes[0].N), "granny flat") || strings.Contains(HTMLText(boxes[0].N), "7 min read") {
+		t.Errorf("RelatedBoxes() = %v, want the keep-reading block only", boxes)
+	}
+}
+
 func TestRelatedLabel(t *testing.T) {
 	for label, want := range map[string]bool{
 		"Recommendations For You": true,  // taylorstitch.com
