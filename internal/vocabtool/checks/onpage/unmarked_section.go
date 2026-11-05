@@ -14,4 +14,10 @@ type UnmarkedSection struct{}
 func (UnmarkedSection) ID() string { return "onpage/unmarked-section" }
 
 // Run reports each section no element node marks up.
-func (UnmarkedSection) Run(c *audit.Context) []audit.Issue { return analyse(c).unmarked }
+func (UnmarkedSection) Run(c *audit.Context) []audit.Issue {
+	var out []audit.Issue
+	for _, f := range analyse(c).unmarked {
+		out = append(out, audit.Issuef("html:"+f.selector, audit.Warning, `the page's <%s> has no %s: add {"@type": %q, "cssSelector": %q} to the WebPage's hasPart`, f.tag, f.ty, f.ty, f.selector))
+	}
+	return out
+}

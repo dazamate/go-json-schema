@@ -15,5 +15,9 @@ func (OrganizationInAbout) ID() string { return "keyword/organization-in-about" 
 
 // Run reports each organization in about that is no business.
 func (OrganizationInAbout) Run(c *audit.Context) []audit.Issue {
-	return organizationsOf(c).organizationAbout
+	var out []audit.Issue
+	for _, f := range organizationsOf(c).organizationAbout {
+		out = append(out, audit.Issuef(f.path, audit.Warning, "%s is an organization in about: a page is about its topic, not an agency or source it names; move it to mentions", f.name))
+	}
+	return out
 }

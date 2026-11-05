@@ -15,5 +15,9 @@ func (BusinessInMentions) ID() string { return "keyword/business-in-mentions" }
 
 // Run reports each other business in mentions.
 func (BusinessInMentions) Run(c *audit.Context) []audit.Issue {
-	return organizationsOf(c).businessInMentions
+	var out []audit.Issue
+	for _, f := range organizationsOf(c).businessInMentions {
+		out = append(out, audit.Issuef(f.path, audit.Warning, "%s is another business in mentions: its node ties the page to that business. Keep it only if it is a partner or the page's subject, never a competitor", f.name))
+	}
+	return out
 }

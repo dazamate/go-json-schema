@@ -14,4 +14,10 @@ type SelectorWrongType struct{}
 func (SelectorWrongType) ID() string { return "onpage/selector-wrong-type" }
 
 // Run reports each cssSelector that selects only sections of another type.
-func (SelectorWrongType) Run(c *audit.Context) []audit.Issue { return analyse(c).wrongType }
+func (SelectorWrongType) Run(c *audit.Context) []audit.Issue {
+	var out []audit.Issue
+	for _, f := range analyse(c).wrongType {
+		out = append(out, audit.Issuef(f.path, audit.Warning, "cssSelector %q selects a %s, not a %s", f.selector, f.selected, f.want))
+	}
+	return out
+}

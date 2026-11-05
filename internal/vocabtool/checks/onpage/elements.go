@@ -45,12 +45,35 @@ func sections(doc *html.Node) []*section {
 type analysis struct {
 	elements []PageElement
 
-	invalid    []audit.Issue // a cssSelector that is not valid CSS
-	wrongType  []audit.Issue // a cssSelector that selects only sections of another type
-	nothing    []audit.Issue // a cssSelector that selects nothing
-	bare       []audit.Issue // an element node without a cssSelector, where it marks no one section
-	breadcrumb []audit.Issue // a breadcrumb nav no BreadcrumbList marks
-	unmarked   []audit.Issue // any other section no element node marks
+	invalid    []selectorFinding // a cssSelector that is not valid CSS
+	wrongType  []selectorFinding // a cssSelector that selects only sections of another type
+	nothing    []selectorFinding // a cssSelector that selects nothing
+	bare       []bareFinding     // an element node without a cssSelector, where it marks no one section
+	breadcrumb []sectionFinding  // a breadcrumb nav no BreadcrumbList marks
+	unmarked   []sectionFinding  // any other section no element node marks
+}
+
+// The findings are raw: each check words its own message from them.
+
+// selectorFinding is an element node's cssSelector that went wrong: the
+// node's path, the selector, the type of section it selects (other than the
+// node's) and the type the node is.
+type selectorFinding struct {
+	path, selector, selected, want string
+}
+
+// bareFinding is an element node without a cssSelector that marks no one
+// section: the node's path, its type and how many sections of that type the
+// page has.
+type bareFinding struct {
+	path, ty string
+	sections int
+}
+
+// sectionFinding is a page section no node marks up: its selector, its tag
+// and its type.
+type sectionFinding struct {
+	selector, tag, ty string
 }
 
 // analysisKey is the memo key of the analysis.
@@ -65,8 +88,8 @@ type analysisKey struct{}
 func Elements(c *audit.Context) []PageElement { return analyse(c).elements }
 
 // analyse reads the page's sections against the draft, once. It finds the
-// section checks' issues on the way, because the nodes that mark the sections
-// are the ones those issues are about.
+// section checks' findings on the way, because the nodes that mark the sections
+// are the ones those findings are about.
 func analyse(c *audit.Context) *analysis {
 	return audit.Memo(c, analysisKey{}, func() *analysis {
 		a := &analysis{}
@@ -121,7 +144,7 @@ func (a *analysis) mark(c *audit.Context, secs []*section) {
 		for _, sel := range sels {
 			g, err := cascadia.ParseGroup(sel)
 			if err != nil {
-				a.invalid = append(a.invalid, audit.Issuef(l.Path, audit.Warning, "cssSelector %q is not a valid CSS selector", sel))
+				a.invalid = append(a.invalid, selectorFinding{path: l.Path, selector: sel})
 				continue
 			}
 			var other []string
@@ -139,9 +162,9 @@ func (a *analysis) mark(c *audit.Context, secs []*section) {
 			switch {
 			case hit:
 			case len(other) > 0:
-				a.wrongType = append(a.wrongType, audit.Issuef(l.Path, audit.Warning, "cssSelector %q selects a %s, not a %s", sel, other[0], t))
+				a.wrongType = append(a.wrongType, selectorFinding{path: l.Path, selector: sel, selected: other[0], want: t})
 			case len(cascadia.QueryAll(c.HTML, g)) == 0:
-				a.nothing = append(a.nothing, audit.Issuef(l.Path, audit.Warning, "cssSelector %q matches nothing on the page", sel))
+				a.nothing = append(a.nothing, selectorFinding{path: l.Path, selector: sel})
 			}
 		}
 	}
@@ -152,7 +175,7 @@ func (a *analysis) mark(c *audit.Context, secs []*section) {
 			continue
 		}
 		for _, l := range nodes {
-			a.bare = append(a.bare, audit.Issuef(l.Path, audit.Warning, "%s has no cssSelector and the page has %d of its sections: give it the cssSelector of the one it marks up", t, len(byType[t])))
+			a.bare = append(a.bare, bareFinding{path: l.Path, ty: t, sections: len(byType[t])})
 		}
 	}
 	a.elements = make([]PageElement, len(secs))
@@ -161,9 +184,9 @@ func (a *analysis) mark(c *audit.Context, secs []*section) {
 		switch {
 		case s.MarkedBy != "":
 		case s.Type == "BreadcrumbList":
-			a.breadcrumb = append(a.breadcrumb, audit.Issuef("html:"+s.Selector, audit.Warning, "the page's breadcrumb <%s> has no BreadcrumbList: add one listing its links", s.n.Data))
+			a.breadcrumb = append(a.breadcrumb, sectionFinding{selector: s.Selector, tag: s.n.Data, ty: s.Type})
 		default:
-			a.unmarked = append(a.unmarked, audit.Issuef("html:"+s.Selector, audit.Warning, `the page's <%s> has no %s: add {"@type": %q, "cssSelector": %q} to the WebPage's hasPart`, s.n.Data, s.Type, s.Type, s.Selector))
+			a.unmarked = append(a.unmarked, sectionFinding{selector: s.Selector, tag: s.n.Data, ty: s.Type})
 		}
 	}
 }

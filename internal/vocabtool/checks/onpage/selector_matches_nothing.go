@@ -13,4 +13,10 @@ type SelectorMatchesNothing struct{}
 func (SelectorMatchesNothing) ID() string { return "onpage/selector-matches-nothing" }
 
 // Run reports each cssSelector that matches nothing.
-func (SelectorMatchesNothing) Run(c *audit.Context) []audit.Issue { return analyse(c).nothing }
+func (SelectorMatchesNothing) Run(c *audit.Context) []audit.Issue {
+	var out []audit.Issue
+	for _, f := range analyse(c).nothing {
+		out = append(out, audit.Issuef(f.path, audit.Warning, "cssSelector %q matches nothing on the page", f.selector))
+	}
+	return out
+}

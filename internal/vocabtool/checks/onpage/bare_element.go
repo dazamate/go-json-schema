@@ -14,4 +14,10 @@ type BareElement struct{}
 func (BareElement) ID() string { return "onpage/bare-element" }
 
 // Run reports each element node that marks up no one section for want of a cssSelector.
-func (BareElement) Run(c *audit.Context) []audit.Issue { return analyse(c).bare }
+func (BareElement) Run(c *audit.Context) []audit.Issue {
+	var out []audit.Issue
+	for _, f := range analyse(c).bare {
+		out = append(out, audit.Issuef(f.path, audit.Warning, "%s has no cssSelector and the page has %d of its sections: give it the cssSelector of the one it marks up", f.ty, f.sections))
+	}
+	return out
+}

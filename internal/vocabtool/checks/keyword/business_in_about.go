@@ -15,4 +15,10 @@ type BusinessInAbout struct{}
 func (BusinessInAbout) ID() string { return "keyword/business-in-about" }
 
 // Run reports each other business in about.
-func (BusinessInAbout) Run(c *audit.Context) []audit.Issue { return organizationsOf(c).businessAbout }
+func (BusinessInAbout) Run(c *audit.Context) []audit.Issue {
+	var out []audit.Issue
+	for _, f := range organizationsOf(c).businessAbout {
+		out = append(out, audit.Issuef(f.path, audit.Warning, "%s is another business in about: the page is not about it, and its node (sameAs, Knowledge Graph ID) ties the page to that business. Drop it if it competes with the site; otherwise move it to mentions", f.name))
+	}
+	return out
+}

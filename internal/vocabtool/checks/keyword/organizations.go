@@ -72,12 +72,16 @@ func entityRefs(all []jsonld.Node, l jsonld.Node) []entityRef {
 	return out
 }
 
+// organizationFinding is an organization a node's about or mentions points
+// to: the path of the value and the organization's name.
+type organizationFinding struct{ path, name string }
+
 // organizationFindings are the organizations in the page's about and
 // mentions that it should not be about, by the check that reports them.
 type organizationFindings struct {
-	businessAbout      []audit.Issue
-	organizationAbout  []audit.Issue
-	businessInMentions []audit.Issue
+	businessAbout      []organizationFinding
+	organizationAbout  []organizationFinding
+	businessInMentions []organizationFinding
 }
 
 // organizationsKey is the memo key of the organization findings.
@@ -116,11 +120,11 @@ func organizationsOf(c *audit.Context) *organizationFindings {
 				company := isCompany(c, r.n)
 				switch {
 				case r.prop == "about" && company:
-					f.businessAbout = append(f.businessAbout, audit.Issuef(r.path, audit.Warning, "%s is another business in about: the page is not about it, and its node (sameAs, Knowledge Graph ID) ties the page to that business. Drop it if it competes with the site; otherwise move it to mentions", name))
+					f.businessAbout = append(f.businessAbout, organizationFinding{r.path, name})
 				case r.prop == "about":
-					f.organizationAbout = append(f.organizationAbout, audit.Issuef(r.path, audit.Warning, "%s is an organization in about: a page is about its topic, not an agency or source it names; move it to mentions", name))
+					f.organizationAbout = append(f.organizationAbout, organizationFinding{r.path, name})
 				case company:
-					f.businessInMentions = append(f.businessInMentions, audit.Issuef(r.path, audit.Warning, "%s is another business in mentions: its node ties the page to that business. Keep it only if it is a partner or the page's subject, never a competitor", name))
+					f.businessInMentions = append(f.businessInMentions, organizationFinding{r.path, name})
 				}
 			}
 		}

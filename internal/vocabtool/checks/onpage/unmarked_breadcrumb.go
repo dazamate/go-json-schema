@@ -12,4 +12,10 @@ type UnmarkedBreadcrumb struct{}
 func (UnmarkedBreadcrumb) ID() string { return "onpage/unmarked-breadcrumb" }
 
 // Run reports each breadcrumb nav without a BreadcrumbList.
-func (UnmarkedBreadcrumb) Run(c *audit.Context) []audit.Issue { return analyse(c).breadcrumb }
+func (UnmarkedBreadcrumb) Run(c *audit.Context) []audit.Issue {
+	var out []audit.Issue
+	for _, f := range analyse(c).breadcrumb {
+		out = append(out, audit.Issuef("html:"+f.selector, audit.Warning, "the page's breadcrumb <%s> has no BreadcrumbList: add one listing its links", f.tag))
+	}
+	return out
+}
