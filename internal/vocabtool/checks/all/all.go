@@ -10,6 +10,7 @@ import (
 	_ "github.com/dazamate/go-json-schema/internal/vocabtool/checks/product"
 	_ "github.com/dazamate/go-json-schema/internal/vocabtool/checks/shop"
 	_ "github.com/dazamate/go-json-schema/internal/vocabtool/checks/site"
+	_ "github.com/dazamate/go-json-schema/internal/vocabtool/checks/snippets"
 	_ "github.com/dazamate/go-json-schema/internal/vocabtool/checks/sources"
 	_ "github.com/dazamate/go-json-schema/internal/vocabtool/checks/terms"
 )

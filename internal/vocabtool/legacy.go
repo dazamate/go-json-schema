@@ -47,7 +47,6 @@ func (legacyAll) Run(ctx *audit.Context) []audit.Issue {
 	c.bare(all)
 	c.ownReviews(all)
 	c.reviews(all)
-	c.productSnippets(all)
 	if ctx.Page != nil {
 		c.content(all, ctx.Page)
 	}
