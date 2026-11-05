@@ -22,25 +22,33 @@ var pricePage = regexp.MustCompile(`(?i)^(?:(?:plans?|pricing|prices?|rates?|fee
 // pageExt is a page address's file extension.
 var pageExt = regexp.MustCompile(`(?i)\.(?:html?|php|aspx?|jsp|cfm)$`)
 
-// pricedBesides reports a page whose offers, two priced plan cards outside the
-// article, are its copy: the article is an FAQ or notes under them. A guide's
-// price tables are no offers, so tables do not count.
+// pricedBesides reports a page whose plans, two plan prices outside the
+// article and the site's chrome ("$10 per seat / month"), are its copy: the
+// article is an FAQ or notes under them. A guide's prices are no plan's rate.
 func pricedBesides(p *webpage.Facts, article *xhtml.Node) bool {
-	outside := func(n *xhtml.Node) bool {
-		for e := n; e != nil; e = e.Parent {
-			if e == article {
-				return false
+	holds := func(n *xhtml.Node) bool {
+		for e := article; e != nil; e = e.Parent {
+			if e == n {
+				return true
 			}
 		}
-		return true
+		return false
 	}
-	cards := 0
-	for _, cd := range p.ProductCards() {
-		if !cd.Related && outside(cd.N) {
-			cards++
+	plans := 0
+	var walk func(*xhtml.Node)
+	walk = func(n *xhtml.Node) {
+		for c := n.FirstChild; c != nil; c = c.NextSibling {
+			switch {
+			case c == article || c.Type != xhtml.ElementNode || webpage.Chrome(c):
+			case holds(c):
+				walk(c)
+			default:
+				plans += webpage.PlanPrices(webpage.HTMLText(c))
+			}
 		}
 	}
-	return cards >= 2
+	walk(p.Doc)
+	return plans >= 2
 }
 
 // Article warns on a content page whose main copy is an article, 300 words

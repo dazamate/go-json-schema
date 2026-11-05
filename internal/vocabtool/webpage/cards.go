@@ -162,6 +162,18 @@ func productPrice(t string) bool {
 	return false
 }
 
+// PlanPrices counts the plan prices in t: prices a plan's rate follows ("$10
+// per seat / month", "$8/mo", "$96 a year").
+func PlanPrices(t string) int {
+	n := 0
+	for _, loc := range txt.PriceAmount.FindAllStringIndex(t, -1) {
+		if planRate.MatchString(t[loc[1]:]) {
+			n++
+		}
+	}
+	return n
+}
+
 // mediaFile is the address of a photo, video or document, not a page: a
 // gallery's link to a vehicle's photo is no product.
 var mediaFile = regexp.MustCompile(`(?i)\.(?:jpe?g|png|gif|webp|avif|svg|pdf|mp4|webm)$`)

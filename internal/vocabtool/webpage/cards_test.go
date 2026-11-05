@@ -17,6 +17,23 @@ func cardsOf(t *testing.T, src, url string) string {
 	return strings.Join(out, "; ")
 }
 
+func TestPlanPrices(t *testing.T) {
+	for _, tc := range []struct {
+		in   string
+		want int
+	}{
+		{"Free $0 per seat / month Plus* $10 per seat / month", 2},
+		{"$8/mo billed annually, or $96 a year", 2},
+		{"£12 per month", 1},
+		{"Movers charge $120 per hour; a piano costs $300", 0},
+		{"Gifts under $50", 0},
+	} {
+		if got := PlanPrices(tc.in); got != tc.want {
+			t.Errorf("PlanPrices(%q) = %d, want %d", tc.in, got, tc.want)
+		}
+	}
+}
+
 func TestRelatedLabel(t *testing.T) {
 	for label, want := range map[string]bool{
 		"Recommendations For You": true,  // taylorstitch.com
