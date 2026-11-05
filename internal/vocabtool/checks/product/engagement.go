@@ -44,15 +44,16 @@ func engagementOf(c *audit.Context) *engagement {
 		actions := [4]string{"ReviewAction", "ShareAction", "WantAction", "TrackAction"}
 		var e engagement
 		webpage.Visit(c.Page.Doc, func(n *xhtml.Node) {
-			if n.DataAtom != atom.A && n.DataAtom != atom.Button {
+			role, _ := webpage.Attr(n, "role")
+			if n.DataAtom != atom.A && n.DataAtom != atom.Button && !strings.EqualFold(role, "button") {
 				return
 			}
 			t := strings.TrimSpace(webpage.HTMLText(n))
 			lbl, _ := webpage.Attr(n, "aria-label")
 			href, _ := webpage.Attr(n, "href")
 			matches := [4]bool{
-				writeReview.MatchString(t),
-				webpage.ShareLink.MatchString(href),
+				writeReview.MatchString(t) || writeReview.MatchString(lbl),
+				webpage.ShareLink.MatchString(href) || shareButton.MatchString(t) || shareButton.MatchString(lbl),
 				(wishWords.MatchString(t) || wishWords.MatchString(lbl)) && !webpage.Chrome(n),
 				trackOrder.MatchString(t),
 			}
