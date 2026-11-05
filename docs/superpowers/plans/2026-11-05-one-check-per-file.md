@@ -293,7 +293,7 @@ Tasks 5 to 18 each move a set of legacy `checker` methods to an area package. Th
   - Both are registered in `internal/vocabtool/legacy.go`.
   - Both build a `checker` from the context and return its issues.
   - `legacyAll` stores the page elements with `Memo` under an exported key. `Check` copies them into `Report.PageElements`.
-- **`audittest`** loads the vocabulary once (`sync.Once`). It blank-imports `checks/all`, a package that blank-imports every area. `checks/all` is created here, with no imports yet; each area task adds its line.
+- **`checks/all`** is a package that blank-imports every area. `vocabtool` and `audittest` both blank-import it, so production and tests register the same checks. It is created here with no imports yet; each area task adds its line. `audittest` loads the vocabulary once (`sync.Once`).
 
 - [ ] **Step 1: Write the audit tests.**
   - `TestRunSortsBySeverity`: two fake checks, registered A then B, emit `[info, error]` and `[warning, error]`. `Run` returns A's error, B's error, B's warning, A's info.
