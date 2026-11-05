@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/dazamate/go-json-schema/internal/vocabtool/audit"
+	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/txt"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/webpage"
 )
@@ -29,8 +30,8 @@ func (Rules) Run(c *audit.Context) []audit.Issue {
 	}
 	p, d := c.Page, c.Index()
 	var list []string
-	for _, m := range ruleCite.FindAllString(p.Main, -1) {
-		if !slices.Contains(list, m) && !d.HoldsText(m) {
+	for _, m := range ruleCites(p.Main) {
+		if !slices.Contains(list, m) && !d.HoldsText(m) && !heldSuffix(d, m) {
 			list = append(list, m)
 		}
 	}
@@ -54,4 +55,17 @@ func (Rules) Run(c *audit.Context) []audit.Issue {
 		quoted[i] = fmt.Sprintf("%q", s)
 	}
 	return []audit.Issue{audit.Issuef(audit.PagePath, audit.Warning, "the page cites the rules %s: add a Legislation for each (name, legislationIdentifier, legislationJurisdiction, legislationType, url, legislationLegalForce https://schema.org/InForce, legislationLegalValue https://schema.org/UnofficialLegalValue for an unofficial rendering such as eCFR; a LegislationObject for a rule's own text) and list it as the WebPage's citation, or its about when a section is about it", txt.Examples(quoted))}
+}
+
+// heldSuffix reports a rule the draft names without the heading words that
+// ran into it: "Related Guides Renters Rights Act 2025" for "Renters Rights
+// Act 2025".
+func heldSuffix(d *jsonld.Index, m string) bool {
+	w := strings.Fields(m)
+	for i := 1; len(w)-i >= 3; i++ {
+		if d.HoldsText(strings.Join(w[i:], " ")) {
+			return true
+		}
+	}
+	return false
 }
