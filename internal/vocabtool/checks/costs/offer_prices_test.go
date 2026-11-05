@@ -6,6 +6,8 @@ import (
 	"github.com/dazamate/go-json-schema/internal/vocabtool/audit"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/audit/audittest"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/checks/costs"
+	"github.com/dazamate/go-json-schema/internal/vocabtool/checks/policies"
+	"github.com/dazamate/go-json-schema/internal/vocabtool/checks/product"
 )
 
 // productPage is a shop's ring set on sale, with a paid add-on and a unit
@@ -54,4 +56,38 @@ func TestOfferPrices(t *testing.T) {
 	} {
 		t.Run(tc.name, func(t *testing.T) { audittest.Expect(t, costs.OfferPrices{}, tc.in, tc.want) })
 	}
+}
+
+// offerPricesMsg is the offer-prices issue for the amounts it lists.
+func offerPricesMsg(amounts string) audit.Issue {
+	return audit.Issue{Path: "html:body", Severity: audit.Warning, Message: "the page shows prices (" + amounts + ") that no price property carries: mark each up on the item it is the price of, as an Offer's price or, for a range, an AggregateOffer's lowPrice and highPrice, with priceCurrency and offerCount"}
+}
+
+// TestOfferPricesLedger pins the takes that report nothing: a taker takes
+// its amounts whether or not it reports them, so the prices checks stay quiet
+// on them; one that does not take an amount leaves it to offer-prices.
+func TestOfferPricesLedger(t *testing.T) {
+	const freeOver = `<!doctype html><html><head><link rel="canonical" href="https://harbour.test/products/art-deco-ring-set"></head><body>
+<header><a href="/">Harbour Jewellers</a><nav><a href="/cart">Cart</a></nav></header>
+<main><h1>Art Deco ring set</h1>
+<p><ins>$320.00</ins> GST included</p>
+<p>Free shipping on orders over $60.</p></main></body></html>`
+	t.Run("a threshold the draft holds bare is still taken", func(t *testing.T) {
+		// the draft's orderValue 60 is the threshold, so shipping-rate says nothing
+		// of it, yet it still takes the amount
+		in := audittest.Input{Draft: `{"@context":"https://schema.org","@type":"ShippingConditions","orderValue":60}`, PageHTML: freeOver, PageURL: productURL}
+		audittest.Expect(t, policies.ShippingRate{}, in, nil)
+		audittest.Expect(t, costs.OfferPrices{}, in, []audit.Issue{offerPricesMsg("$320.00")})
+	})
+	t.Run("a threshold nothing carries is taken by shipping-rate", func(t *testing.T) {
+		in := audittest.Input{Draft: noDraft, PageHTML: freeOver, PageURL: productURL}
+		audittest.Expect(t, costs.OfferPrices{}, in, []audit.Issue{offerPricesMsg("$320.00")})
+	})
+	t.Run("a unit price the draft gives a referenceQuantity is not taken", func(t *testing.T) {
+		// unit-price leaves the price to the draft that has its referenceQuantity,
+		// and that draft carries no price, so offer-prices reports it
+		in := audittest.Input{Draft: `{"@context":"https://schema.org","@type":"UnitPriceSpecification","referenceQuantity":{"@type":"QuantitativeValue","value":100,"unitCode":"GRM"}}`, PageHTML: productPage, PageURL: productURL}
+		audittest.Expect(t, product.UnitPrice{}, in, nil)
+		audittest.Expect(t, costs.OfferPrices{}, in, []audit.Issue{offerPricesMsg("$320.00, $4.50")})
+	})
 }

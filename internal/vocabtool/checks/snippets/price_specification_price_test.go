@@ -23,6 +23,10 @@ func TestPriceSpecificationPrice(t *testing.T) {
 		{"a list of specifications", `{"@type":"Product","name":"Box","offers":{"@type":"Offer","price":1,"priceSpecification":[{"@type":"PriceSpecification","price":1},{"@type":"PriceSpecification"}]}}`, []audit.Issue{
 			warn("$.offers.priceSpecification[1]", msg("PriceSpecification")),
 		}},
+		// the path counts the raw list, a non-node entry included
+		{"a list with a non-node first", `{"@type":"Product","name":"Box","offers":{"@type":"Offer","price":1,"priceSpecification":["x",{"@type":"PriceSpecification"}]}}`, []audit.Issue{
+			warn("$.offers.priceSpecification[1]", msg("PriceSpecification")),
+		}},
 		{"a specification given by reference", `[{"@type":"Product","name":"Box","offers":{"@type":"AggregateOffer","priceSpecification":{"@id":"#s"}}},{"@type":"UnitPriceSpecification","@id":"#s","minPrice":1}]`, []audit.Issue{
 			warn("$.@graph[0].offers.priceSpecification", msg("UnitPriceSpecification")),
 		}},

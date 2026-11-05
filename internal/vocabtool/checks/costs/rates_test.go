@@ -6,6 +6,7 @@ import (
 	"github.com/dazamate/go-json-schema/internal/vocabtool/audit"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/audit/audittest"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/checks/costs"
+	"github.com/dazamate/go-json-schema/internal/vocabtool/checks/sources"
 )
 
 // payTable is a guide's table of what movers earn. A pay table's amounts
@@ -38,4 +39,14 @@ func TestRates(t *testing.T) {
 	} {
 		t.Run(tc.name, func(t *testing.T) { audittest.Expect(t, costs.Rates{}, tc.in, tc.want) })
 	}
+}
+
+// A pay table's wages are taken whether or not the draft carries them: with
+// an estimatedSalary in the draft the pay check says nothing, yet the rates
+// and prices checks still leave the table's amounts alone.
+func TestPayTableTakenWhenCarried(t *testing.T) {
+	in := audittest.Input{Draft: `{"@context":"https://schema.org","@type":"Occupation","name":"Mover","estimatedSalary":{"@type":"MonetaryAmountDistribution","name":"base","currency":"USD","duration":"P1H","median":20.83}}`, PageHTML: payTable, PageURL: costGuideURL}
+	audittest.Expect(t, sources.PayPercentiles{}, in, nil)
+	audittest.Expect(t, costs.Rates{}, in, nil)
+	audittest.Expect(t, costs.Prices{}, in, nil)
 }
