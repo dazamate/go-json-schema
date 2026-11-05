@@ -4,8 +4,6 @@ import (
 	"regexp"
 
 	"github.com/dazamate/go-json-schema/internal/vocabtool/audit"
-	"github.com/dazamate/go-json-schema/internal/vocabtool/txt"
-	"github.com/dazamate/go-json-schema/internal/vocabtool/webpage"
 )
 
 func init() { audit.Register(WantAction{}) }
@@ -23,12 +21,9 @@ func (WantAction) ID() string { return "product/want-action" }
 // Run reports the first wishlist link or button outside the site's chrome, at
 // its element.
 func (WantAction) Run(c *audit.Context) []audit.Issue {
-	if c.Has("WantAction") {
-		return nil
-	}
-	l := firstLink(c, func(l link) bool { return wishWords.MatchString(l.text+" "+l.label) && !webpage.Chrome(l.n) })
+	l := engagementLink(c, kindWant)
 	if l == nil {
 		return nil
 	}
-	return []audit.Issue{audit.Issuef(l.path, audit.Warning, "the page lets a visitor save products to a wishlist (%q): add a WantAction (target the wishlist page) to each Product's potentialAction", txt.Clip(txt.OrDefault(l.label, l.text), 60))}
+	return []audit.Issue{audit.Issuef(l.path, audit.Warning, "the page lets a visitor save products to a wishlist (%q): add a WantAction (target the wishlist page) to each Product's potentialAction", l.text)}
 }

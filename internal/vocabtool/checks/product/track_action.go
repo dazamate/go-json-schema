@@ -19,10 +19,7 @@ func (TrackAction) ID() string { return "product/track-action" }
 
 // Run reports the first track-your-order link or button, at its element.
 func (TrackAction) Run(c *audit.Context) []audit.Issue {
-	if c.Has("TrackAction") {
-		return nil
-	}
-	l := firstLink(c, func(l link) bool { return trackOrder.MatchString(l.text) })
+	l := engagementLink(c, kindTrack)
 	if l == nil {
 		return nil
 	}

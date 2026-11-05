@@ -19,10 +19,7 @@ func (ReviewAction) ID() string { return "product/review-action" }
 
 // Run reports the first write-a-review link or button, at its element.
 func (ReviewAction) Run(c *audit.Context) []audit.Issue {
-	if c.Has("ReviewAction") {
-		return nil
-	}
-	l := firstLink(c, func(l link) bool { return writeReview.MatchString(l.text) })
+	l := engagementLink(c, kindReview)
 	if l == nil {
 		return nil
 	}

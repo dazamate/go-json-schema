@@ -28,3 +28,21 @@ func TestShareAction(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) { audittest.Expect(t, product.ShareAction{}, tc.in, tc.want) })
 	}
 }
+
+// A twitter "favorite" link matches both the share pattern and the wishlist
+// words; it is a share button only, as the one switch over a link decided.
+func TestEngagementClassifiesALinkOnce(t *testing.T) {
+	page := plainPageWith(`<p><a href="https://twitter.com/intent/favorite?tweet_id=1">Favorite</a></p>`)
+	in := audittest.Input{Draft: noDraft, PageHTML: page, PageURL: notesURL}
+	audittest.Expect(t, product.ShareAction{}, in, []audit.Issue{
+		{Path: "html:body > main > p > a", Severity: audit.Warning, Message: "the page has share buttons: add a ShareAction to the page's (or the Product's) potentialAction"},
+	})
+	audittest.Expect(t, product.WantAction{}, in, nil)
+
+	// with a ShareAction in the draft the link is free for the next kind
+	shared := `{"@context":"https://schema.org","@type":"ShareAction"}`
+	in.Draft = shared
+	audittest.Expect(t, product.WantAction{}, in, []audit.Issue{
+		{Path: "html:body > main > p > a", Severity: audit.Warning, Message: `the page lets a visitor save products to a wishlist ("Favorite"): add a WantAction (target the wishlist page) to each Product's potentialAction`},
+	})
+}
