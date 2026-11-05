@@ -168,3 +168,22 @@ func TestMainSkipsOverlays(t *testing.T) {
 		t.Errorf("Text lost the overlay: %q", p.Text)
 	}
 }
+
+// TestMainSkipsNamedChrome checks that Main leaves out what Chrome names by
+// class or id: officeworks.com.au's div#header promo "Unlock a $20 OnePass
+// reward*" and a OneTrust consent block, while a restaurant's div.menu in
+// its main copy stays.
+func TestMainSkipsNamedChrome(t *testing.T) {
+	doc := parse(t, `<html><body><div id="header"><div id="ow-header"><div id="benefits-bar" class="BenefitsBarstyle__BenefitsBarMain-sc-1u86yt"><p>Unlock a $20 OnePass reward*</p></div></div></div>
+		<div id="onetrust-consent-sdk"><p>We use cookies and similar technologies to collect information from your device.</p></div>
+		<main><h1>Menu</h1><div class="menu"><h2>Breakfast</h2><p>Eggs on toast $18</p></div></main></body></html>`)
+	p := New(doc, HTMLText(doc), "https://www.officeworks.com.au/contact-us")
+	for _, s := range []string{"$20 OnePass", "We use cookies"} {
+		if strings.Contains(p.Main, s) {
+			t.Errorf("Main holds the chrome %q: %q", s, p.Main)
+		}
+	}
+	if !strings.Contains(p.Main, "Eggs on toast $18") {
+		t.Errorf("Main lost the menu: %q", p.Main)
+	}
+}

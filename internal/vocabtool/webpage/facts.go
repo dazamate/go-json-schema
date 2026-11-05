@@ -56,6 +56,18 @@ func New(doc *html.Node, text, address string) *Facts {
 	return p
 }
 
+// namedChrome reports a block the site names its header, footer or menu by
+// its class or id, outside the page's copy, or a cookie consent block.
+func namedChrome(e *html.Node) bool {
+	switch chromeName(e) {
+	case chromeNamed:
+		return !scoped(e)
+	case consentNamed:
+		return true
+	}
+	return false
+}
+
 // mainText is the visible text outside the site's header, footer, navs and
 // overlays.
 func mainText(doc *html.Node) string { return strings.Join(MainLines(doc), " ") }
@@ -87,7 +99,7 @@ func MainLines(doc *html.Node) []string {
 	var walk func(*html.Node)
 	walk = func(n *html.Node) {
 		for ch := n.FirstChild; ch != nil; ch = ch.NextSibling {
-			if l := landmark(ch); Skipped(ch) || l == atom.Nav || ((l == atom.Header || l == atom.Footer) && !scoped(ch)) || OverlayBox(ch) {
+			if l := landmark(ch); Skipped(ch) || l == atom.Nav || ((l == atom.Header || l == atom.Footer) && !scoped(ch)) || OverlayBox(ch) || namedChrome(ch) {
 				continue
 			}
 			if ch.Type == html.TextNode {
