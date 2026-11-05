@@ -61,6 +61,21 @@ func TestPersonName(t *testing.T) {
 			audittest.Input{PageText: "Easy chicken curry.", PageURL: "https://www.jamieoliver.com/recipes/chicken/easy-chicken-curry/"}, []audit.Issue{
 				{Path: "$.author", Severity: audit.Warning, Message: `this Person is named "Jamie Oliver": set givenName Jamie and familyName Oliver`},
 			}},
+		// a personal site: the WebSite is named after the person who runs it
+		{"a WebSite named after its person", `{"@context":"https://schema.org","@graph":[
+			{"@type":"WebSite","@id":"https://janesmith.test/#website","name":"Jane Smith","publisher":{"@id":"https://janesmith.test/#person"}},
+			{"@type":"Person","@id":"https://janesmith.test/#person","name":"Jane Smith"}]}`,
+			audittest.Input{PageText: "Jane Smith, illustrator."}, []audit.Issue{
+				{Path: "$.@graph[1]", Severity: audit.Warning, Message: `this Person is named "Jane Smith": set givenName Jane and familyName Smith`},
+			}},
+		// Yoast and Rank Math type the site's person Person and Organization
+		{"a person typed Organization too", `{"@context":"https://schema.org","@graph":[
+			{"@type":["Person","Organization"],"@id":"https://janesmith.test/#person","name":"Jane Smith"}]}`,
+			audittest.Input{PageText: "Jane Smith, illustrator."}, []audit.Issue{
+				{Path: "$.@graph[0]", Severity: audit.Warning, Message: `this Person is named "Jane Smith": set givenName Jane and familyName Smith`},
+			}},
+		// a business's name holds words no person's name does
+		{"a business name typed Person", `{"@type":"Person","name":"The Bread Kitchen"}`, audittest.Input{PageText: "Sourdough."}, nil},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			tc.in.Draft = tc.draft
