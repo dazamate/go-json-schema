@@ -1,6 +1,7 @@
 package content
 
 import (
+	"net/url"
 	"regexp"
 	"slices"
 	"strings"
@@ -14,7 +15,26 @@ import (
 )
 
 // phoneNumber is a telephone number as the page's text shows it.
-var phoneNumber = regexp.MustCompile(`\+?\d[\d ()-]{6,}\d`)
+var phoneNumber = regexp.MustCompile(`\+?\d[\d ().-]{6,}\d`)
+
+// vanityNumber is a number the page spells with letters: 1-833-VERIZON.
+var vanityNumber = regexp.MustCompile(`\+?\d[\d ().-]{2,}[A-Za-z]{3,10}\b`)
+
+// keypad is the digit each letter stands for on a telephone.
+var keypad = strings.NewReplacer("A", "2", "B", "2", "C", "2", "D", "3", "E", "3", "F", "3", "G", "4", "H", "4", "I", "4", "J", "5", "K", "5", "L", "5", "M", "6", "N", "6", "O", "6", "P", "7", "Q", "7", "R", "7", "S", "7", "T", "8", "U", "8", "V", "8", "W", "9", "X", "9", "Y", "9", "Z", "9")
+
+// telHref is the number a tel: link holds: percent-decoded, without the
+// extension, pause or fragment after it.
+func telHref(h string) string {
+	h = strings.TrimSpace(h)
+	if u, err := url.PathUnescape(h); err == nil {
+		h = u
+	}
+	if i := strings.IndexAny(h, ";,#?"); i >= 0 {
+		h = h[:i]
+	}
+	return h
+}
 
 // telKey compares phone numbers by their last eight digits, so +61 4 and
 // 04 forms of one number match.
@@ -64,6 +84,9 @@ func contactsOf(c *audit.Context) contacts {
 		for _, m := range phoneNumber.FindAllString(p.Text, -1) {
 			shownTel[telKey(m)] = true
 		}
+		for _, m := range vanityNumber.FindAllString(p.Text, -1) {
+			shownTel[telKey(keypad.Replace(strings.ToUpper(m)))] = true
+		}
 		if p.Doc != nil {
 			webpage.Visit(p.Doc, func(n *xhtml.Node) {
 				if n.DataAtom != atom.A {
@@ -73,13 +96,21 @@ func contactsOf(c *audit.Context) contacts {
 				low := strings.ToLower(h)
 				switch {
 				case strings.HasPrefix(low, "tel:"):
-					k := telKey(h)
+					k := telKey(telHref(h))
 					shownTel[k] = true
 					if !slices.ContainsFunc(tels, func(v val) bool { return v.key == k }) {
 						out.telLinks = append(out.telLinks, contactFind{"html:" + webpage.SelectorFor(p.Doc, n), h})
 					}
 				case strings.HasPrefix(low, "mailto:"):
 					a, _, _ := strings.Cut(strings.TrimPrefix(low, "mailto:"), "?")
+					if u, err := url.PathUnescape(a); err == nil {
+						a = u
+					}
+					a = strings.TrimSpace(a)
+					// "mailto:www.site.com" is a web address in the wrong place
+					if !strings.Contains(a, "@") {
+						return
+					}
 					shownMail[a] = true
 					if !slices.ContainsFunc(mails, func(v val) bool { return v.key == a }) {
 						out.mailLinks = append(out.mailLinks, contactFind{"html:" + webpage.SelectorFor(p.Doc, n), h})
