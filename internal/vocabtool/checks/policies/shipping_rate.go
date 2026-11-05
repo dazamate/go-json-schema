@@ -35,7 +35,7 @@ func (ShippingRate) Run(c *audit.Context) []audit.Issue {
 	}
 	country := "its country"
 	if m := shipCountry.FindStringSubmatch(c.Page.Text); m != nil {
-		country = txt.CountryCode(txt.FirstNonEmpty(m[1:]...))
+		country = countryCode(txt.FirstNonEmpty(m[1:]...))
 	}
 	return []audit.Issue{audit.Issuef(audit.PagePath, audit.Warning, "the page gives a shipping rate of $%s that no node carries: add a ShippingService to the business's hasShippingService (fulfillmentType https://schema.org/FulfillmentTypeDelivery) with shippingConditions, a ShippingConditions with shippingDestination (a DefinedRegion with addressCountry %s) and shippingRate (a MonetaryAmount of %s); on a product page give its Offer the same as shippingDetails, an OfferShippingDetails", v, country, v)}
 }

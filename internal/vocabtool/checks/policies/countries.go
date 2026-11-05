@@ -1,4 +1,4 @@
-package txt
+package policies
 
 import "strings"
 
@@ -7,6 +7,6 @@ import "strings"
 var countryCodes = map[string]string{"australia": "AU", "australian": "AU", "au": "AU", "new zealand": "NZ", "nz": "NZ", "united states": "US", "usa": "US", "us": "US",
 	"united kingdom": "GB", "uk": "GB", "canada": "CA", "canadian": "CA"}
 
-// CountryCode is the two-letter code of the country a page names
+// countryCode is the two-letter code of the country a page names
 // ("Australia", "UK", "Canadian"), or "" for one it does not know.
-func CountryCode(name string) string { return countryCodes[strings.ToLower(name)] }
+func countryCode(name string) string { return countryCodes[strings.ToLower(name)] }

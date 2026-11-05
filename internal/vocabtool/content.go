@@ -113,12 +113,8 @@ func (c *checker) shop(all []jsonld.Node, p *webpage.Facts, d *jsonld.Index) {
 	if p.Sells() {
 		c.stock(all, p)
 		c.members(all, p)
-		c.returns(all, p)
-		c.payments(all, p)
 	}
 	c.engagement(all, p)
-	c.whereAndWhen(all, p)
-	c.faq(all, p)
 	c.founding(all, p)
 }
 

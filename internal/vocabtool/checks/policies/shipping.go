@@ -1,6 +1,10 @@
 // Package policies holds the policy checks: they hold a shop's markup to the
-// terms its pages state, such as its shipping rates, free-shipping threshold
-// and times.
+// terms its pages state. They cover its shipping (rates, free-shipping
+// threshold, handling and transit times), its return policy, how it takes
+// payment, where it is and when it is open, how to contact it, and the
+// questions it answers. A policy's words ("a damaged item", "pay by bank
+// transfer") are about others on a site that sells nothing, so the shipping,
+// return and payment checks run on a shop's pages only.
 package policies
 
 import (
@@ -25,9 +29,29 @@ type shipping struct {
 	ship []string // the scalars under the draft's shipping nodes
 }
 
-// shippingOf is the shipping a page search engines index of a shop states;
-// ok is false on any other page.
+// shippingKey is the memo key of the page's shipping.
+type shippingKey struct{}
+
+// shippingFound is the memoized shippingOf: the shipping, and whether the
+// page states any.
+type shippingFound struct {
+	s  shipping
+	ok bool
+}
+
+// shippingOf is the shipping a page search engines index of a shop states,
+// worked out once for the checks that share it; ok is false on any other
+// page.
 func shippingOf(c *audit.Context) (s shipping, ok bool) {
+	f := audit.Memo(c, shippingKey{}, func() shippingFound {
+		s, ok := findShipping(c)
+		return shippingFound{s, ok}
+	})
+	return f.s, f.ok
+}
+
+// findShipping reads the shipping off the page and the draft.
+func findShipping(c *audit.Context) (s shipping, ok bool) {
 	if !c.Indexed() || !c.Page.Sells() {
 		return shipping{}, false
 	}
