@@ -25,3 +25,13 @@ func TestDefinitions(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) { audittest.Expect(t, figures.Definitions{}, tc.in, tc.want) })
 	}
 }
+
+// A cookie notice's "Rejecting these cookies means we won't know ..." is a
+// consequence, not a term's definition (oliverbonas.com).
+func TestDefinitionsSkipConsequences(t *testing.T) {
+	page := `<!doctype html><html><body><main><h1>Returns</h1>
+<p>Performance cookies. Rejecting these cookies means we won’t know that you have visited us before.</p>
+<p>Social cookies. Rejecting these cookies means that you might not be able to use or see these sharing tools.</p>
+<p>Targeting cookies. Rejecting these cookies means you may see less relevant adverts.</p></main></body></html>`
+	audittest.Expect(t, figures.Definitions{}, audittest.Input{Draft: figuresBare, PageHTML: page, PageURL: figuresURL}, nil)
+}

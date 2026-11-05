@@ -15,7 +15,10 @@ func init() { audit.Register(Definitions{}) }
 
 var (
 	appositive = regexp.MustCompile(`(?:^|[.!?]\s+)([A-Z][a-z]+(?:[ -][a-z]+){1,3}), (?:the|a|an) [^,.]{8,90}, (?:is|means|pays|covers|gives|lets|protects)\b`)
-	meansDef   = regexp.MustCompile(`(?:^|[.!?]\s+)(?:An? |The )?([A-Z][a-z]+(?:[ -][a-z]+){1,3}) (?:means|refers to|is defined as|is the term for)\b`)
+	// notTerm is a phrase naming no term: it points at something ("these
+	// cookies", "your order") or is someone's.
+	notTerm  = regexp.MustCompile(`(?i)\b(?:these|this|those|that|your|our|my|their|its|his|her|you|we|it|they)\b`)
+	meansDef = regexp.MustCompile(`(?:^|[.!?]\s+)(?:An? |The )?([A-Z][a-z]+(?:[ -][a-z]+){1,3}) (?:means|refers to|is defined as|is the term for)\b`)
 )
 
 // Definitions warns on terms the copy defines ("Released value, the basic
@@ -46,7 +49,7 @@ func (Definitions) Run(c *audit.Context) []audit.Issue {
 	for _, re := range []*regexp.Regexp{appositive, meansDef} {
 		for _, m := range re.FindAllStringSubmatch(p.Main, -1) {
 			t := m[1]
-			if strings.Count(lower, strings.ToLower(t)) < 3 || slices.Contains(named, txt.NormWords(t)) || slices.Contains(terms, t) {
+			if notTerm.MatchString(t) || strings.Count(lower, strings.ToLower(t)) < 3 || slices.Contains(named, txt.NormWords(t)) || slices.Contains(terms, t) {
 				continue
 			}
 			terms = append(terms, t)
