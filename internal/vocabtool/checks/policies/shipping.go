@@ -9,19 +9,53 @@ package policies
 
 import (
 	"regexp"
+	"strings"
 
 	"github.com/dazamate/go-json-schema/internal/vocabtool/audit"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/txt"
 )
 
-const money = `(?:A\$|AU\$|NZ\$|US\$|\$|£|€)\s?(\d+(?:\.\d{1,2})?)`
+// currency is a currency symbol or code a price can start with.
+const currency = `(?:A\$|AU\$|NZ\$|US\$|C\$|CA\$|AUD|NZD|USD|CAD|GBP|EUR|\$|£|€)`
+
+// money is a price in a currency, as a group 1 amount. It starts with the
+// currency (a trailing "50 EUR" is not read).
+const money = currency + `\s?(\d+(?:,\d{3})*(?:\.\d{1,2})?)`
+
+// The place free shipping is offered, and the orders it needs: "free
+// shipping to Ireland on orders over", "free delivery over", "free shipping
+// when you spend".
+const (
+	freeKind  = `(?:shipping|delivery|postage)`
+	freePlace = `(?:\s+(?:to|within|in)\s+[A-Za-z][A-Za-z &.'-]{1,40}?)?`
+	freeOrder = `(?:\s+(?:on|for)\s+(?:all\s+|any\s+|your\s+)?(?:orders?|purchases?)(?:\s+(?:over|above|of|from|totall?ing|worth|exceeding|more than))?|\s+(?:over|above|of|from|when you spend(?:\s+(?:over|more than))?))\s*`
+)
 
 var (
-	freeShipping  = regexp.MustCompile(`(?i)\bfree (?:\w+ ){0,2}(?:shipping|delivery|postage)(?: (?:on|for) (?:all )?orders)?(?: (?:over|above|of|from)| when you spend)\s*` + money)
-	shippingRate  = regexp.MustCompile(`(?i)\b(?:shipping|delivery|postage)(?: rate| cost| fee)?(?: within \w+)?(?: is)?(?: a)?(?: flat(?: rate)?(?: of)?)?\s*:?\s*` + money + `|` + money + ` flat[- ]rate (?:shipping|delivery|postage)`)
+	freeShipping = regexp.MustCompile(`(?i)\bfree (?:[\w.]+ ){0,2}` + freeKind + freePlace + freeOrder + money + `|\b` + freeKind + ` (?:is )?free(?: to [A-Za-z][A-Za-z &.'-]{1,40}?)? (?:on|for|with) (?:all )?(?:orders?|purchases?)(?: (?:over|above|of|from))?\s*` + money)
+	// a rate is the price after "shipping", "delivery charge", "shipping &
+	// handling", "shipping from", or "ship"
+	shippingRate  = regexp.MustCompile(`(?i)\b(?:shipping|delivery|postage)(?: (?:rates?|costs?|fees?|charges?))?(?: (?:&|and) handling)?(?: within \w+)?(?: (?:is|are))?(?: a)?(?: flat(?: rate)?(?: of)?)?(?: (?:from|starts? at|starting at))?\s*:?\s*` + money + `|` + money + ` flat[- ]rate (?:shipping|delivery|postage)|\bships? (?:for |at )?` + money)
 	freeOtherwise = regexp.MustCompile(`(?i)\bfree (?:\w+ ){0,2}(?:over|above|from)\s*` + money + `,?\s*otherwise\s*` + money)
+	// symbol is the currency a matched price is in
+	symbol = regexp.MustCompile(currency)
 )
+
+// symbolOf is how the matched text writes its currency: "$" for any dollar,
+// "£", "€", or the code followed by a space ("CAD ").
+func symbolOf(match string) string {
+	switch m := strings.ToUpper(symbol.FindString(match)); m {
+	case "", "A$", "AU$", "NZ$", "US$", "C$", "CA$", "$":
+		return "$"
+	case "GBP", "£":
+		return "£"
+	case "EUR", "€":
+		return "€"
+	default:
+		return m + " "
+	}
+}
 
 // shipping is what a shop's page states about its shipping.
 type shipping struct {
@@ -57,7 +91,7 @@ func findShipping(c *audit.Context) (s shipping, ok bool) {
 	}
 	s.text = c.Page.Text
 	if m := freeOtherwise.FindStringSubmatch(s.text); m != nil {
-		s.text = s.text + " Shipping rate $" + m[2] + ". Free shipping over $" + m[1] + "."
+		s.text = s.text + " Shipping rate " + symbolOf(m[0]) + m[2] + ". Free shipping over " + symbolOf(m[0]) + m[1] + "."
 	}
 	for _, l := range c.Nodes {
 		for _, ty := range []string{"ShippingConditions", "OfferShippingDetails", "ShippingRateSettings", "ShippingService", "DeliveryChargeSpecification"} {
@@ -70,25 +104,27 @@ func findShipping(c *audit.Context) (s shipping, ok bool) {
 	return s, true
 }
 
-// rate is the shipping rate the page gives, as written and as an amount (0
-// when it does not read as one).
-func (s shipping) rate() (string, float64, bool) {
+// rate is the shipping rate the page gives, as written, its currency's symbol and
+// as an amount (0 when it does not read as one).
+func (s shipping) rate() (v, sym string, f float64, ok bool) {
 	m := shippingRate.FindStringSubmatch(s.text)
 	if m == nil {
-		return "", 0, false
+		return "", "", 0, false
 	}
-	v := txt.FirstNonEmpty(m[1:]...)
-	f, _ := txt.Amount(v)
-	return v, f, true
+	v = txt.FirstNonEmpty(m[1:]...)
+	f, _ = txt.Amount(v)
+	return v, symbolOf(m[0]), f, true
 }
 
 // freeOver is the order value over which the page says shipping is free, as
-// written and as an amount (0 when it does not read as one).
-func (s shipping) freeOver() (string, float64, bool) {
+// written with its currency and as an amount (0 when it does not read as
+// one).
+func (s shipping) freeOver() (v, sym string, f float64, ok bool) {
 	m := freeShipping.FindStringSubmatch(s.text)
 	if m == nil {
-		return "", 0, false
+		return "", "", 0, false
 	}
-	f, _ := txt.Amount(m[1])
-	return m[1], f, true
+	v = txt.FirstNonEmpty(m[1:]...)
+	f, _ = txt.Amount(v)
+	return v, symbolOf(m[0]), f, true
 }

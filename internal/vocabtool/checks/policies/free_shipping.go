@@ -20,9 +20,9 @@ func (FreeShipping) Run(c *audit.Context) []audit.Issue {
 	if !ok {
 		return nil
 	}
-	v, f, ok := s.freeOver()
+	v, sym, f, ok := s.freeOver()
 	if !ok || txt.HoldsNumber(s.ship, f) {
 		return nil
 	}
-	return []audit.Issue{audit.Issuef(audit.PagePath, audit.Warning, "the page offers free shipping over $%s but no ShippingConditions has an orderValue of %s: add a ShippingConditions with orderValue (a MonetaryAmount with minValue %s) and shippingRate 0 to the business's ShippingService, or a ShippingRateSettings whose freeShippingThreshold is a DeliveryChargeSpecification of %s", v, v, v, v)}
+	return []audit.Issue{audit.Issuef(audit.PagePath, audit.Warning, "the page offers free shipping over %s%s but no ShippingConditions has an orderValue of %s: add a ShippingConditions with orderValue (a MonetaryAmount with minValue %s) and shippingRate 0 to the business's ShippingService, or a ShippingRateSettings whose freeShippingThreshold is a DeliveryChargeSpecification of %s", sym, v, v, v, v)}
 }
