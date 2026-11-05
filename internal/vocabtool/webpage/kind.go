@@ -38,16 +38,17 @@ var kindSegments = []struct {
 	{KindCheckout, regexp.MustCompile(`^checkouts?$`)},
 	{KindAccount, regexp.MustCompile(`^(account|my-account|login|signin|sign-in|register|signup|sign-up|wishlist|wish-list|favourites|favorites)$`)},
 	{KindSearch, regexp.MustCompile(`^search$`)},
-	{KindContact, regexp.MustCompile(`^contact(-us)?$`)},
+	{KindContact, regexp.MustCompile(`^contact(-?us)?$`)},
 	{KindAbout, regexp.MustCompile(`^(about|about-us|our-story)$`)},
-	{KindShipping, regexp.MustCompile(`^(shipping|delivery|postage)(-(policy|information|info))?$`)},
-	{KindReturns, regexp.MustCompile(`^(returns?|refunds?|exchanges?)(-(policy|information|info))?$|^(return|refund)-policy$`)},
+	{KindShipping, regexp.MustCompile(`^(shipping|delivery|postage)(-(and|&)-(returns?|refunds?))?(-(policy|information|info))?$`)},
+	{KindReturns, regexp.MustCompile(`^(returns?|refunds?|exchanges?)(-(and|&)-(returns?|refunds?|exchanges?))?(-(policy|information|info))?$`)},
 	{KindFAQ, regexp.MustCompile(`^(faqs?|frequently-asked-questions)$`)},
 }
 
 var (
 	productSegment = regexp.MustCompile(`^(products?|p|item|items)$`)
 	ogProduct      = regexp.MustCompile(`(?i)^\s*product(?:\.item)?\s*$`)
+	fileExt        = regexp.MustCompile(`\.(?:html?|php\d?|aspx?|jsp|cfm)$`)
 	listingSegment = regexp.MustCompile(`^(categor(y|ies)|collections?|c|shop|store|catalog(ue)?|departments?)$`)
 	LocaleSegment  = regexp.MustCompile(`^[a-z]{2}(-[a-z]{2})?$`)
 	kindHeadings   = []struct {
@@ -123,8 +124,13 @@ func (p *Facts) BuyForm() *html.Node {
 // og:type, add-to-cart form and product cards, then its h1.
 func (p *Facts) classify() Kind {
 	segs := Segments(p.URL)
+	// a slug as older sites write it: contact_us.php, refund_policy.html
+	slugs := make([]string, len(segs))
+	for i, s := range segs {
+		slugs[i] = strings.ReplaceAll(fileExt.ReplaceAllString(s, ""), "_", "-")
+	}
 	for _, ks := range kindSegments {
-		if slices.ContainsFunc(segs, ks.re.MatchString) {
+		if slices.ContainsFunc(slugs, ks.re.MatchString) {
 			return ks.kind
 		}
 	}

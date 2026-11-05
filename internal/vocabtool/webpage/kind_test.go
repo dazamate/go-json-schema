@@ -44,6 +44,29 @@ var kindRows = []struct {
 	},
 }
 
+// TestClassifyAddress checks the kinds a page's address gives, with no
+// heading to go by: verizon.com's contactus, oliverbonas.com's
+// returns-and-refunds, and the underscore and file-name slugs older sites
+// use.
+func TestClassifyAddress(t *testing.T) {
+	for u, want := range map[string]Kind{
+		"https://www.verizon.com/digital/nsa/nos/ui/ngd/contactus":            KindContact,
+		"https://www.oliverbonas.com/returns-and-refunds":                     KindReturns,
+		"https://www.taylorstitch.com/policies/shipping-policy":               KindShipping,
+		"https://royalcanadiancollective.com/pages/faq":                       KindFAQ,
+		"https://shop.test/pages/shipping-and-returns":                        KindShipping,
+		"https://shop.test/contact_us.php":                                    KindContact,
+		"https://shop.test/refund_policy.html":                                KindReturns,
+		"https://www.tutorfinder.com.au/help/tutor_rates.php":                 KindOther,
+		"https://business.gov.au/Registrations/Register-licences-and-permits": KindOther,
+	} {
+		doc := parse(t, `<html><body><main><p>Text.</p></main></body></html>`)
+		if got := New(doc, HTMLText(doc), u).Kind; got != want {
+			t.Errorf("%s: Kind = %q, want %q", u, got, want)
+		}
+	}
+}
+
 // TestClassifyCards checks that priced cards make a listing only on a site
 // that sells: a SaaS's plans, a pest controller's services and the homes in a
 // real estate blog post are no shop's listing.
