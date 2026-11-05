@@ -12,10 +12,21 @@ import (
 
 func init() { audit.Register(Payments{}) }
 
+// paymentAlt is the payment names a page can use.
+const paymentAlt = `Visa|Mastercard|MasterCard|American Express|Amex|Diners Club|Discover|JCB|UnionPay|PayPal|Afterpay|Zip Pay|Klarna|Apple Pay|Google Pay|Shop Pay|Laybuy|Humm`
+
 var (
-	paymentNames = regexp.MustCompile(`\b(Visa|Mastercard|MasterCard|American Express|Amex|Diners Club|Discover|JCB|UnionPay|PayPal|Afterpay|Zip Pay|Klarna|Apple Pay|Google Pay|Shop Pay|Laybuy|Humm)\b`)
-	cardNames    = regexp.MustCompile(`(?i)^(visa|mastercard|american express|amex|diners club|discover|jcb|unionpay)$`)
-	payTypes     = []struct {
+	paymentNames = regexp.MustCompile(`\b(` + paymentAlt + `)\b`)
+	// everyday words that are also a card's name: they count as a card with the
+	// word "card" after them, in a list of payment names, or alone in the alt
+	// or title of an icon
+	wordNames  = regexp.MustCompile(`^(?:Visa|Discover)$`)
+	cardAfter  = regexp.MustCompile(`^\s+(?:credit |debit )?cards?\b`)
+	listAfter  = regexp.MustCompile(`^\s*(?:[,/|&•]|\band\b|\bor\b)\s*(?:(?:and|or)\s+)?` + `\b(?:` + paymentAlt + `)\b`)
+	listBefore = regexp.MustCompile(`\b(?:` + paymentAlt + `)\s*(?:[,/|&•]|\band\b|\bor\b)\s*(?:(?:and|or)\s+)?$`)
+	iconWord   = regexp.MustCompile(`(?i)^(?:visa|discover)(?: (?:card|logo|icon))?$`)
+	cardNames  = regexp.MustCompile(`(?i)^(visa|mastercard|american express|amex|diners club|discover|jcb|unionpay)$`)
+	payTypes   = []struct {
 		re     *regexp.Regexp
 		member string
 	}{
@@ -46,14 +57,18 @@ func (Payments) Run(c *audit.Context) []audit.Issue {
 			names = append(names, s)
 		}
 	}
-	for _, m := range paymentNames.FindAllString(p.Text, -1) {
-		add(m)
+	for _, loc := range paymentNames.FindAllStringIndex(p.Text, -1) {
+		if m := p.Text[loc[0]:loc[1]]; !wordNames.MatchString(m) || cardNamed(p.Text, loc) {
+			add(m)
+		}
 	}
 	if p.Doc != nil {
 		for _, n := range webpage.QueryAll(p.Doc, "img[alt], [aria-label], [title]") {
 			for _, k := range []string{"alt", "aria-label", "title"} {
 				if v, _ := webpage.Attr(n, k); paymentNames.MatchString(v) && len(strings.Fields(v)) <= 3 {
-					add(paymentNames.FindString(v))
+					if m := paymentNames.FindString(v); !wordNames.MatchString(m) || iconWord.MatchString(strings.TrimSpace(v)) {
+						add(m)
+					}
 				}
 			}
 		}
@@ -86,4 +101,10 @@ func (Payments) Run(c *audit.Context) []audit.Issue {
 		set = append(set, "a PaymentMethod with paymentMethodType "+strings.Join(types, " and ")+" (a PaymentMethodType)")
 	}
 	return []audit.Issue{audit.Issuef(audit.PagePath, audit.Warning, "the page shows how to pay (%s): set acceptedPaymentMethod on the business: %s", strings.Join(append(slices.Clone(names), types...), ", "), strings.Join(set, "; "))}
+}
+
+// cardNamed reports a name that is an everyday word (Discover, Visa) used as
+// a card's name: "Discover card", or listed with another way to pay.
+func cardNamed(text string, loc []int) bool {
+	return cardAfter.MatchString(text[loc[1]:]) || listAfter.MatchString(text[loc[1]:]) || listBefore.MatchString(text[:loc[0]])
 }
