@@ -28,7 +28,7 @@ func (PriceCurrency) Run(c *audit.Context) []audit.Issue {
 			return slices.ContainsFunc(jsonld.Scalars(l.N, k), func(s string) bool { _, ok := txt.Amount(s); return ok })
 		})
 		if priced && len(jsonld.Strs(l.N, "priceCurrency"))+len(jsonld.Strs(l.N, "currency")) == 0 {
-			out = append(out, audit.Issuef(l.Path, audit.Warning, "this %s has a price but no priceCurrency: set it (AUD, USD, EUR)", nodeNoun(l.N)))
+			out = append(out, audit.Issuef(l.Path, audit.Warning, "this %s has a price but no priceCurrency: set it (the ISO 4217 code of the currency the page shows: USD, EUR, GBP, AUD…)", nodeNoun(l.N)))
 		}
 	}
 	return out
