@@ -32,12 +32,14 @@ func TestPriceOf(t *testing.T) {
 		{"50 €", 50},
 		{"₹1,00,000", 100000},
 		{"Rs. 1,299", 1299},
-		{"£ 50", 50},
+		{"£\u00a050", 50},
 		{"CHF 120", 120},
 		{"120 kr per hour", 120},
 		{"USD 50", 50},
 		{"50 USD", 50},
 		{"R$ 99,90", 99.9},
+		{"Qty 1 €80.00", 80},
+		{"2 £15 each", 15},
 	} {
 		m := PriceAmount.FindStringSubmatch(c.text)
 		if m == nil {
@@ -80,7 +82,7 @@ func TestDigitsOf(t *testing.T) {
 // are built from, takes in each form of price whole.
 func TestPriceTextMatchesWholePrice(t *testing.T) {
 	re := regexp.MustCompile(PriceText)
-	for _, s := range []string{"$1,150", "A$12.95", "€1.234,56", "1,23 €", "₹1,00,000", "£ 50", "CHF 120", "Rs. 1,299"} {
+	for _, s := range []string{"$1,150", "A$12.95", "€1.234,56", "1,23 €", "₹1,00,000", "£\u00a050", "CHF 120", "Rs. 1,299"} {
 		if got := re.FindString(s); got != s {
 			t.Errorf("PriceText on %q matched %q", s, got)
 		}

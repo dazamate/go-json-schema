@@ -9,11 +9,12 @@ import (
 
 // The parts of a shown price: a currency written before the amount ("$",
 // "A$", "€", "£", "₹", "Rs.", "CHF", "AUD"), one written after it ("50 €",
-// "120 kr", "50 USD"), the amount with whatever grouping and decimal mark
-// its country uses, and the space between them, a no-break space included.
+// "120 kr", "50 USD"; not a symbol that leads the next amount, as in "Qty 1
+// €80"), the amount with whatever grouping and decimal mark its country
+// uses, and the space between them, a no-break space included.
 const (
 	leadCurrency  = `(?:(?:A|AU|US|NZ|C|CA|S|HK|R|MX)?\$|€|£|¥|₹|₱|₩|₦|₪|₺|₽|\bRs\.?|\b(?:AUD|USD|NZD|CAD|GBP|EUR|CHF|INR|SGD|HKD|ZAR|JPY|SEK|NOK|DKK|PLN))`
-	trailCurrency = `(?:€|£|zł|(?:kr|AUD|USD|NZD|CAD|GBP|EUR|CHF|INR|SGD|HKD|ZAR|JPY|SEK|NOK|DKK|PLN)\b)`
+	trailCurrency = `(?:(?:€|£|zł)\B|(?:kr|AUD|USD|NZD|CAD|GBP|EUR|CHF|INR|SGD|HKD|ZAR|JPY|SEK|NOK|DKK|PLN)\b)`
 	shownNumber   = `\d(?:[\d.,]*\d)?`
 	currencySpace = `[\s\x{00a0}\x{202f}]?`
 )
