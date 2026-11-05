@@ -10,6 +10,7 @@
 package product
 
 import (
+	"net/url"
 	"regexp"
 	"slices"
 	"strings"
@@ -24,7 +25,7 @@ import (
 )
 
 var (
-	wasText = regexp.MustCompile(`(?i)\b(?:was|rrp|originally|regular price|compare at)\s*:?\s*((?:A\$|AU\$|\$|£|€)\s?\d[\d,]*(?:\.\d{1,2})?)`)
+	wasText = regexp.MustCompile(`(?i)\b(?:was|rrp|m\.?r\.?p|msrp|originally|regular price|list price|usual price|compare at)\s*:?\s*(` + txt.PriceText + `)`)
 )
 
 // wasWords are the class words that mark an old price, and wasCompounds the
@@ -47,12 +48,17 @@ func wasClass(v string) bool {
 	words := strings.FieldsFunc(camelSplit.ReplaceAllString(v, "$1 $2"), func(r rune) bool {
 		return r == '-' || r == '_' || unicode.IsSpace(r)
 	})
+	was := false
 	for _, w := range words {
-		if slices.Contains(wasWords, strings.ToLower(w)) {
-			return true
+		switch strings.ToLower(w) {
+		case "sale", "now", "current", "special", "offer", "new":
+			// "price--regular price--sale" is the sale price on a theme
+			// that calls every price "regular"
+			return false
 		}
+		was = was || slices.Contains(wasWords, strings.ToLower(w))
 	}
-	return false
+	return was
 }
 
 var camelSplit = regexp.MustCompile(`([a-z])([A-Z])`)
@@ -118,7 +124,8 @@ func wasPrices(p *webpage.Facts) []string {
 	}
 	if p.Doc != nil {
 		webpage.Visit(p.Doc, func(n *html.Node) {
-			if webpage.Chrome(n) {
+			// on a product page, the prices in cards are other products'
+			if webpage.Chrome(n) || (p.Kind == webpage.KindProduct && (p.InCard(n) || inOtherProduct(p, n))) {
 				return
 			}
 			t := webpage.HTMLText(n)
@@ -143,4 +150,24 @@ func wasPrices(p *webpage.Facts) []string {
 		add(m[1])
 	}
 	return out
+}
+
+// inOtherProduct reports an element inside a link to another product of the
+// shop: a "similar products" tile on a product page.
+func inOtherProduct(p *webpage.Facts, n *html.Node) bool {
+	for e := n; e != nil; e = e.Parent {
+		if e.DataAtom != atom.A {
+			continue
+		}
+		href, _ := webpage.Attr(e, "href")
+		u, err := url.Parse(href)
+		if err != nil || (p.URL != nil && u.Path == p.URL.Path) {
+			continue
+		}
+		segs := webpage.Segments(u)
+		if i := slices.IndexFunc(segs, func(s string) bool { return s == "product" || s == "products" }); i >= 0 && i < len(segs)-1 {
+			return true
+		}
+	}
+	return false
 }
