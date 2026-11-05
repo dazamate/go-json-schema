@@ -77,10 +77,13 @@ func (Observation) Run(c *audit.Context) []audit.Issue {
 func leadFigure(t string) string {
 	for _, loc := range firstCount.FindAllStringIndex(t, -1) {
 		// the number's pattern takes a comma after it: "2023,"
+		if rangeEnd.MatchString(t[:loc[0]]) {
+			continue // the 35 of "2025–35"
+		}
 		n := strings.TrimRight(t[loc[0]:loc[1]], ",")
 		loc[1] = loc[0] + len(n)
 		if y, err := strconv.Atoi(n); err == nil && len(n) == 4 && y >= 1900 && y <= 2100 &&
-			(yearLead.MatchString(t[:loc[0]]) || (sentenceStart.MatchString(t[:loc[0]]) && strings.HasPrefix(t[loc[1]:], ","))) {
+			(yearLead.MatchString(t[:loc[0]]) || yearRange.MatchString(t[loc[1]:]) || (sentenceStart.MatchString(t[:loc[0]]) && strings.HasPrefix(t[loc[1]:], ","))) {
 			continue
 		}
 		return t[loc[0]:loc[1]]
@@ -89,7 +92,11 @@ func leadFigure(t string) string {
 }
 
 var (
-	yearLead      = regexp.MustCompile(`(?i)\b(?:in|since|by)\s+$`)
+	yearLead = regexp.MustCompile(`(?i)\b(?:in|since|by|from|until|through|between|and|or|to)\s+$`)
+	// yearRange follows the first year of a range: "2025–35", "2020-2024".
+	yearRange = regexp.MustCompile(`^\s*[–—-]\s*(?:19|20)?\d\d\b`)
+	// rangeEnd ends the text before the last year of a range.
+	rangeEnd      = regexp.MustCompile(`(?:19|20)\d\d\s*[–—-]\s*$`)
 	sentenceStart = regexp.MustCompile(`(?:^|[.!?]\s+)$`)
 )
 

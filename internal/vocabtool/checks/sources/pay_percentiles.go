@@ -30,10 +30,7 @@ func (PayPercentiles) Run(c *audit.Context) []audit.Issue {
 		return nil
 	}
 	var out []audit.Issue
-	for _, b := range dataBlocks(c) {
-		if !b.pay() {
-			continue
-		}
+	for _, b := range payTables(c) {
 		job := "the occupation"
 		if m := payFor.FindStringSubmatch(b.caption); m != nil {
 			job = strings.TrimSpace(m[1])
@@ -45,6 +42,16 @@ func (PayPercentiles) Run(c *audit.Context) []audit.Issue {
 				break
 			}
 		}
+		if b.byHead {
+			// the first row of data names its area in a cell
+			area = "the area"
+			for _, tr := range webpage.QueryAll(b.n, "tr") {
+				if tds := webpage.QueryAll(tr, "td"); len(tds) > 1 && len(webpage.QueryAll(tr, "th")) == 0 {
+					area = webpage.HTMLText(tds[0])
+					break
+				}
+			}
+		}
 		out = append(out, audit.Issuef("html:"+webpage.SelectorFor(c.Page.Doc, b.n), audit.Warning, "the page shows pay percentiles for %q in %s: add an Occupation (name, occupationLocation) with estimatedSalary as a MonetaryAmountDistribution (percentile10, percentile25, median, percentile75, percentile90, currency, unitText HOUR or YEAR)", job, area))
 	}
 	return out
@@ -53,10 +60,8 @@ func (PayPercentiles) Run(c *audit.Context) []audit.Issue {
 // TakesPrices takes every amount in each pay table's block, carried or not.
 func (PayPercentiles) TakesPrices(c *audit.Context, _ audit.Taken) audit.Taken {
 	t := audit.Taken{}
-	for _, b := range dataBlocks(c) {
-		if b.pay() {
-			t.Take(webpage.HTMLText(b.n))
-		}
+	for _, b := range payTables(c) {
+		t.Take(webpage.HTMLText(b.n))
 	}
 	return t
 }
