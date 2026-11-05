@@ -16,6 +16,7 @@ func TestCounts(t *testing.T) {
 		{"a heading that counts minutes", at(webPage, `<h2>Plan 30 minutes</h2><ul><li>One</li><li>Two</li></ul>`), nil},
 		{"a section that holds another count", at(webPage, `<h2>Four ways to say thanks</h2><p>Just say it.</p>`), nil},
 		{"a heading that is a link", at(webPage, `<h2><a href="/ideas/">16 ideas</a></h2>`), nil},
+		{"a product card's heading", contactPage(at(webPage, `<h2>You may also like</h2><div class="card"><a href="/p/gold/">Gold</a><h3>Three tiny rings</h3><ul><li>a</li><li>b</li><li>c</li></ul><span>$120.00</span></div><div class="card"><a href="/p/silver/">Silver</a><span>$90.00</span></div>`)), nil},
 		textOnly(webPage, "Four ways to say thanks"),
 	}, hidden(webPage, body)...))
 }

@@ -85,7 +85,7 @@ func (p *Facts) BuyForm() *html.Node {
 	}
 	var form *html.Node
 	Visit(p.Doc, func(n *html.Node) {
-		if form != nil || n.DataAtom != atom.Form || p.InCard(n) {
+		if form != nil || n.DataAtom != atom.Form || p.inFoundCard(n) {
 			return
 		}
 		action, _ := Attr(n, "action")

@@ -71,3 +71,11 @@ func run(t *testing.T, c audit.Check, cases []tc) {
 		t.Run(k.name, func(t *testing.T) { audittest.Expect(t, c, k.in, k.want) })
 	}
 }
+
+// contactPage is the input at a contact page's address. Its kind comes from
+// the address, so the page never looks for its product cards to tell what it
+// is; a check that asks about cards must find them itself.
+func contactPage(in audittest.Input) audittest.Input {
+	in.PageURL = "https://x.test/contact/"
+	return in
+}

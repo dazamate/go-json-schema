@@ -153,8 +153,16 @@ func cardName(c, a *html.Node) string {
 	return strings.Join(strings.Fields(txt.PriceAmount.ReplaceAllString(name, "")), " ")
 }
 
-// InCard reports whether n sits in a product card.
+// InCard reports whether n sits in a product card. It finds the page's
+// cards first, so the answer never depends on what ran before it.
 func (p *Facts) InCard(n *html.Node) bool {
+	p.ProductCards()
+	return p.inFoundCard(n)
+}
+
+// inFoundCard reports whether n sits in a product card already found. It
+// finds none itself: classify runs it before the cards can be known.
+func (p *Facts) inFoundCard(n *html.Node) bool {
 	if !p.cardsDone {
 		return false
 	}

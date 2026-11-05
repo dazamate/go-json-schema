@@ -18,6 +18,7 @@ func TestImageObject(t *testing.T) {
 		{"an image with no alt text", at(webPage, `<img src="/img/tea-640.webp" alt="">`), nil},
 		{"a tracking pixel", at(webPage, `<img src="/pixel.gif" alt="Pixel" width="1" height="1">`), nil},
 		{"the page header's logo", at(webPage, logo), nil},
+		{"a product card's image", contactPage(at(webPage, `<h2>You may also like</h2><div class="card"><a href="/p/gold/"><img src="/gold.webp" alt="Gold ring"></a><span>$120.00</span></div><div class="card"><a href="/p/silver/"><img src="/silver.webp" alt="Silver ring"></a><span>$90.00</span></div>`)), nil},
 		textOnly(webPage, "A couple serving tea to elders"),
 	}, hidden(webPage, body)...))
 }

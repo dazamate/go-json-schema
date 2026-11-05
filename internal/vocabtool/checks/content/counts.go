@@ -125,8 +125,6 @@ func (Counts) Run(c *audit.Context) []audit.Issue {
 			}
 		}
 	}
-	// the page knows its product cards only once it has looked for them
-	p.ProductCards()
 	var out []audit.Issue
 	webpage.Visit(p.Doc, func(n *xhtml.Node) {
 		switch n.DataAtom {

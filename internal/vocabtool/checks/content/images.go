@@ -78,8 +78,6 @@ func imagesOf(c *audit.Context) imaged {
 				}
 			}
 		}
-		// the page knows its product cards only once it has looked for them
-		p.ProductCards()
 		var out imaged
 		reported := map[string]bool{}
 		webpage.Visit(p.Doc, func(n *xhtml.Node) {
