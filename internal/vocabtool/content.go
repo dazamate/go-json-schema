@@ -79,7 +79,6 @@ func (c *checker) content(all []jsonld.Node, p *webpage.Facts) {
 	}
 	c.shop(all, p, d)
 	c.figures(all, p, d)
-	c.sources(all, p, d)
 	c.copyright(all, p)
 	c.readTime(all, p)
 	c.sectionLabel(all, p)

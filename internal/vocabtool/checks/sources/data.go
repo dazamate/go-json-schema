@@ -1,6 +1,8 @@
-// Package sources holds the data checks: a block of statistics with its
-// source is a Dataset, its lead figure an Observation, and a table of pay by
-// percentile an Occupation's estimatedSalary.
+// Package sources holds the checks of what a page shows from outside itself:
+// a block of statistics with its source is a Dataset, its lead figure an
+// Observation, and a table of pay by percentile an Occupation's
+// estimatedSalary; the rules, permits and agencies the page cites, the
+// documents it links and the sources it credits are each marked up too.
 package sources
 
 import (
