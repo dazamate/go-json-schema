@@ -20,6 +20,11 @@ type question struct {
 	n          *xhtml.Node
 }
 
+// inviteHeading is a heading that invites a visitor to ask ("Still have
+// questions?", "Need more help?"): it ends in a question mark but asks
+// nothing the page answers.
+var inviteHeading = regexp.MustCompile(`(?i)^(?:still |do you )?(?:have|got|need)\b[^?]{0,20}\b(?:questions?|help|answers?|support)\?$|^(?:any |more )?(?:other )?questions\?$|^(?:still )?(?:looking|searching) for (?:something|answers?|help)[^?]{0,20}\?$|^need (?:to know|assistance|more info\w*)\?$`)
+
 var faqHeading = regexp.MustCompile(`(?i)\bfaqs?\b|frequently asked|\bquestions\b|\bq\s?&\s?a\b`)
 
 // questions are the questions the page answers outside its header, footer
@@ -37,7 +42,9 @@ func questions(p *webpage.Facts) []question {
 	clean := func(q string) string {
 		return strings.TrimSpace(strings.TrimRight(strings.TrimSpace(q), "+−-–▾▸›>"))
 	}
-	asks := func(q string) bool { return strings.HasSuffix(q, "?") && len(strings.Fields(q)) >= 3 }
+	asks := func(q string) bool {
+		return strings.HasSuffix(q, "?") && len(strings.Fields(q)) >= 3 && !inviteHeading.MatchString(q)
+	}
 	var out, summaries []question
 	add := func(list *[]question, q, section string, n *xhtml.Node) {
 		if q = clean(q); asks(q) && !slices.ContainsFunc(*list, func(o question) bool { return o.q == q }) {
