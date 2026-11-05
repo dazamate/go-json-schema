@@ -17,7 +17,7 @@ var (
 	// lawHost matches the host of a site that publishes laws.
 	lawHost = regexp.MustCompile(`(?i)(?:^|\.)(?:ecfr\.gov|govinfo\.gov|law\.cornell\.edu|legislation\.gov\.uk|legislation\.gov\.au)$|^(?:www\.)?leg\.state\.[a-z]{2}\.us$|(?:^|\.)legislature\.`)
 	// govHost matches the host of a government site.
-	govHost = regexp.MustCompile(`(?i)\.(?:gov|mil)$|\.gov\.[a-z]{2}$|(?:^|\.)state\.[a-z]{2}\.us$|\.gc\.ca$|\.govt\.nz$`)
+	govHost = regexp.MustCompile(`(?i)\.(?:gov|mil)$|\.gov\.[a-z]{2}$|(?:^|\.)state\.[a-z]{2}\.us$|\.gc\.ca$|\.govt\.nz$|(?:^|\.)gov\.[a-z]{2}$|(?:^|\.)gov\.[a-z]{2}\.[a-z]{2}$|(?:^|\.)(?:nhs|police|parliament)\.uk$|(?:^|\.)(?:canada|ontario)\.ca$|(?:^|\.)europa\.eu$`)
 	// agencyName matches the words of a government body's name.
 	agencyName = regexp.MustCompile(`\b(?:Department|Dept\.?|Bureau|Administration|Commission|Agency|Office|Board|Authority|Service|Survey|Institute|Council|Ministry|Court|Congress|Senate|Army|Navy|Air Force|Marine Corps|Coast Guard|City of|County of|State of)\b|^[A-Z]{2,6}$`)
 )
