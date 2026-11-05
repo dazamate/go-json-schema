@@ -72,10 +72,37 @@ func TestAddressInFooter(t *testing.T) {
 		`<html><body><main><h1>Landscaping costs in Melbourne</h1></main><footer><div class="col-contact contact-footer"><h2 class="contact-title contact-top">Melbourne, Australia</h2> <p class="contact-address text-muted"><strong>11 Frederick St, Sunbury, VIC 3429</strong></p></div><ul><li><a href="/">Home</a></li></ul></footer></body></html>`: "11 Frederick St, Sunbury, VIC 3429",
 		`<html><body><main><h1>Menu</h1></main><footer><div class="elementor-widget-container"> <p>174 Grey St, South Brisbane 4101</p> </div><p>Trading Open 7 Days</p></footer></body></html>`:                                                                                                                                                           "174 Grey St, South Brisbane 4101",
 		`<html><body><main><h1>Property lawyers</h1></main><div id="flex-footer" role="contentinfo"><p>Lincoln Manor</p><p>293 Lincoln Road, Henderson, Auckland 0610</p></div></body></html>`:                                                                                                                                                             "293 Lincoln Road, Henderson, Auckland 0610",
+		// jamesplumbingheating.com: the address runs across the footer's lines
+		`<html><body><main><h1>Pricing</h1></main><footer><div itemprop="address" itemscope="" itemtype="https://schema.org/PostalAddress"><p><span itemprop="streetAddress">15, Coniston Road</span><br><span itemprop="addressLocality">Twickenham</span> <span itemprop="postalCode">TW2 7HH</span></p></div><p><a href="tel:02080508928">0208 050 8928</a></p></footer></body></html>`: "15, Coniston Road Twickenham TW2 7HH",
 	} {
 		doc := parse(t, src)
 		if got := New(doc, HTMLText(doc), "https://site.test/page").Address(); got != want {
 			t.Errorf("Address() = %q, want %q", got, want)
+		}
+	}
+}
+
+// TestAddressEnds checks that a street address stops where the address
+// does: at its postcode or ZIP and the country after it, else before the
+// words that start new copy, on pages from NZ, AU, the UK and the US; that a
+// home for sale in an article and a returns depot are no business's
+// address; and that a house number may take a comma ("15, Coniston Road").
+func TestAddressEnds(t *testing.T) {
+	for _, r := range []struct{ name, src, want string }{
+		{"autodiscount.co.nz, no postcode", `<div class="vehicle-description">nal servicing for $300<br><br>Auto Discount<br>10 Doncaster Street, Mngere, Auckland<br>PH0NE O9 39O O3O3<br> </div> <div class="small-12 columns feature-wrap hide-for-medium-only"> <h4>Feature Highlights</h4>`, "10 Doncaster Street, Mngere, Auckland"},
+		{"officeworks.com.au, AU postcode", `<p><a href="/shop/officeworks/storelocator">Or find your local Officeworks store</a></p> <div class="ow-contact-info__address"> <p>Officeworks Support Centre:</p> Chadstone Place, 1341 Dandenong Rd, Chadstone VIC 3148</div> <form><label>What are you contacting us about?</label></form>`, "1341 Dandenong Rd, Chadstone VIC 3148"},
+		{"dentistryforyou.co.uk, UK postcode", `<p>Harunani and Co Group of Dental Surgeries t/a Dentistry for you has its address at 45 Southend Road, Hockley, United Kingdom, SS5 4PZ and is authorised and regulated by the Financial Conduct Authority.</p>`, "45 Southend Road, Hockley, United Kingdom, SS5 4PZ"},
+		{"mooreheaddentistry.com, US ZIP", `<div class="column wysiwyg"> <h3>Blue Ash Dentistry</h3> <p> 10427 Kenwood Road<br> Cincinnati, OH 45242 <br><a style="text-decoration: underline;" href="https://goo.gl/maps/7pFmrok3avE2cSCS7" target="_blank">View Map</a> </p> <h4>Hours</h4> <p>Mon: 8AM - 4PM</p></div>`, "10427 Kenwood Road Cincinnati, OH 45242"},
+		{"a unit number", `<p>1521 Walmart Drive #301<br> Lebanon, OH 45036 <br><a href="https://goo.gl/maps/x">View Map</a></p>`, "1521 Walmart Drive #301 Lebanon, OH 45036"},
+		{"opushotel.com, CA postal code and country", `<p>322 Davie St<br>Vancouver, BC V6B 5Z6 Canada</p><p>Phone +1 866-642-6787</p>`, "322 Davie St Vancouver, BC V6B 5Z6 Canada"},
+		{"jamesplumbingheating.com, a comma after the number", `<div itemprop="address" itemscope="" itemtype="https://schema.org/PostalAddress"><p><span itemprop="streetAddress">15, Coniston Road</span><br><span itemprop="addressLocality">Twickenham</span> <span itemprop="postalCode">TW2 7HH</span></p></div><p><a href="tel:02080508928">0208 050 8928</a></p>`, "15, Coniston Road Twickenham TW2 7HH"},
+		{"redfin.com, homes for sale in a blog post", `<h2>Checklist for buying a house</h2><div class="house-listing"><div class="price"><strong>$1,850,000</strong></div><div class="details">5 beds, 3.5 baths, 4228 sq ft</div><div class="address"><a href="https://www.redfin.com/IL/Chicago/4130-N-Kenneth-Ave-60641/home/22650100" target="_blank">4130 N Kenneth Ave, Chicago, IL</a></div></div><div class="house-listing"><div class="price"><strong>$579,900</strong></div><div class="details">3 beds, 2.5 baths, 1692 sq ft</div><div class="address"><a href="https://www.redfin.com/IL/Schaumburg/1425-Concord-Ln-60193/home/13716465" target="_blank">1425 Concord Ln, Schaumburg, IL</a></div></div><div class="house-listing"><div class="price"><strong>$1,799,000</strong></div><div class="details">4 beds, 3 baths, 1936 sq ft</div></div>`, ""},
+		{"oliverbonas.com, a returns depot", `<p>Customers in the rest of the world are responsible for any local postage costs associated with returns and orders should be sent back to – Oliver Bonas Returns, Unit 1, Lions Park Avenue, Chessington, KT9 1ST, United Kingdom. Please include a completed returns form.</p>`, ""},
+		{"a year is no house number", `<p>In 2026, Ocean Drive Road works closed the bridge.</p>`, ""},
+	} {
+		doc := parse(t, "<html><body><main>"+r.src+"</main></body></html>")
+		if got := New(doc, HTMLText(doc), "https://site.test/page").Address(); got != r.want {
+			t.Errorf("%s: Address() = %q, want %q", r.name, got, r.want)
 		}
 	}
 }
