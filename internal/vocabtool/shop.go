@@ -5,21 +5,19 @@ import (
 	"net/url"
 	"regexp"
 	"slices"
-	"strconv"
 	"strings"
 
 	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/txt"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/webpage"
-	xhtml "golang.org/x/net/html"
 )
 
 // The shop checks read an online shop's page for what its structured data
 // should hold. They work out what kind of page it is (a product, a listing, a
 // policy, a contact page), then name the nodes it calls for: the sitewide
-// WebSite and business, the page's own WebPage type, and what a product page,
-// a listing and the shop's policies show. Each message names the schema.org
-// types to use, so a draft with nothing in it gets the whole list.
+// WebSite and business, the page's own WebPage type, and what a product page
+// and the shop's policies show. Each message names the schema.org types to
+// use, so a draft with nothing in it gets the whole list.
 
 // kindPageType is the WebPage type each kind of page takes.
 var kindPageType = map[webpage.Kind]string{
@@ -75,7 +73,7 @@ func (c *checker) website(all []jsonld.Node, p *webpage.Facts) {
 			home = p.URL.Scheme + "://" + p.URL.Host + "/"
 			id = home + "#website"
 		}
-		c.add(pagePath, Warning, "the draft has no WebSite: add the site's WebSite to every page (@id %s, url %s, name, inLanguage %s, publisher the business) and set the WebPage's isPartOf to it", id, home, orDefault(lang, "the page's language"))
+		c.add(pagePath, Warning, "the draft has no WebSite: add the site's WebSite to every page (@id %s, url %s, name, inLanguage %s, publisher the business) and set the WebPage's isPartOf to it", id, home, txt.OrDefault(lang, "the page's language"))
 		return
 	}
 	if _, ok := all[i].N.Get("inLanguage"); !ok && lang != "" {
@@ -87,20 +85,13 @@ func (c *checker) website(all []jsonld.Node, p *webpage.Facts) {
 	}
 	if _, ok := wp.N.Get("isPartOf"); !ok {
 		ref := strings.Join(append(jsonld.Strs(all[i].N, "@id"), jsonld.Strs(all[i].N, "url")...), ", ")
-		c.add(wp.Path, Warning, "the WebPage has no isPartOf: set it to the WebSite ({\"@id\": %q})", orDefault(strings.SplitN(ref, ", ", 2)[0], "the WebSite's @id"))
+		c.add(wp.Path, Warning, "the WebPage has no isPartOf: set it to the WebSite ({\"@id\": %q})", txt.OrDefault(strings.SplitN(ref, ", ", 2)[0], "the WebSite's @id"))
 	}
 	// the breadcrumb nav's BreadcrumbList belongs to the page
 	crumbs := p.Doc != nil && slices.ContainsFunc(webpage.PageSections(p.Doc), func(s *webpage.Section) bool { return s.Type == "BreadcrumbList" })
 	if _, ok := wp.N.Get("breadcrumb"); !ok && crumbs && c.has(all, "BreadcrumbList") {
 		c.add(wp.Path, Warning, "the WebPage has no breadcrumb: set it to the BreadcrumbList of the page's breadcrumb nav")
 	}
-}
-
-func orDefault(s, def string) string {
-	if strings.TrimSpace(s) == "" {
-		return def
-	}
-	return s
 }
 
 // storeKinds name the Store subtype a shopfront business takes from the words
@@ -292,123 +283,5 @@ func (c *checker) catalog(all []jsonld.Node, p *webpage.Facts) {
 			list = append(list[:6:6], "…")
 		}
 		c.add(pagePath, Warning, "the site's menu lists %d categories (%s): set the business's hasOfferCatalog, an OfferCatalog with a ListItem for each category naming its CollectionPage", len(seen), strings.Join(list, ", "))
-	}
-}
-
-// listing warns on the product cards a page shows that no ItemList carries,
-// on a product count no ItemList has as numberOfItems, and on a sort order
-// no ItemList has as itemListOrder.
-func (c *checker) listing(all []jsonld.Node, p *webpage.Facts, d *jsonld.Index) {
-	// a filter link (Under $10, $20 and over) names no item's price: its
-	// address holds a query, and its text is little besides the price
-	if p.Doc != nil {
-		for _, a := range webpage.QueryAll(p.Doc, "a[href]") {
-			if u, ok := p.SiteLink(a); ok && webpage.MustParse(u).RawQuery != "" {
-				if t := webpage.HTMLText(a); len(strings.Fields(txt.PriceAmount.ReplaceAllString(t, ""))) <= 3 {
-					c.claim(t)
-				}
-			}
-		}
-	}
-	var listed []*webpage.Card
-	for _, cd := range p.ProductCards() {
-		if !cd.Related {
-			listed = append(listed, cd)
-		}
-		c.claim(webpage.HTMLText(cd.N))
-	}
-	if len(listed) < 2 {
-		return
-	}
-	var missing []string
-	for _, cd := range listed {
-		if !d.URLs[cd.URL] && !slices.Contains(missing, cd.Name) {
-			missing = append(missing, cd.Name)
-		}
-	}
-	// a listing's products are its subject; a row of them elsewhere (the
-	// home page's best sellers) is a part of the page
-	where := "the WebPage's hasPart (name its heading)"
-	if p.Kind == webpage.KindListing {
-		where = "the CollectionPage's mainEntity (numberOfItems, itemListOrder)"
-	}
-	if len(missing) > 0 {
-		names := missing
-		if len(names) > 5 {
-			names = append(names[:5:5], "…")
-		}
-		c.add("html:"+webpage.SelectorFor(p.Doc, commonParent(listed)), Warning, "the page lists %d products (%s) that no ItemList carries: add an ItemList as %s, with a ListItem for each product (position, url) holding its Product (name, url, image, offers an Offer with price and priceCurrency)", len(missing), strings.Join(names, ", "), where)
-	}
-	if m := fromPrice.FindStringSubmatch(p.Main); m != nil && p.Kind == webpage.KindListing {
-		c.claim(m[0])
-		if !c.has(all, "AggregateOffer") {
-			c.add(pagePath, Warning, "the page says %q: give the CollectionPage offers, an AggregateOffer (lowPrice %s, highPrice, priceCurrency, offerCount)", m[0], txt.DigitsOf(m[1]))
-		}
-	}
-	if m := productCount.FindStringSubmatch(p.Main); m != nil && p.Kind == webpage.KindListing {
-		n, _ := strconv.Atoi(strings.ReplaceAll(m[1], ",", ""))
-		if n >= len(listed) && !slices.ContainsFunc(all, func(l jsonld.Node) bool {
-			return slices.Contains(jsonld.Scalars(l.N, "numberOfItems"), strconv.Itoa(n))
-		}) {
-			c.add(pagePath, Warning, "the page says %q: set numberOfItems %d on the ItemList of its products", m[0], n)
-		}
-	}
-	c.sortOrder(all, p)
-}
-
-var fromPrice = regexp.MustCompile(`(?i)\b(?:prices? (?:start|starting) (?:at|from)|starting (?:at|from)|from only)\s+((?:A\$|AU\$|\$|£|€)\s?\d+(?:\.\d{1,2})?)`)
-
-var productCount = regexp.MustCompile(`(?i)\b(\d{1,3}(?:,\d{3})*|\d+)\s+(?:products|items|pieces|results|styles|designs)\b`)
-
-// commonParent is the nearest element around every card.
-func commonParent(cards []*webpage.Card) *xhtml.Node {
-	n := cards[0].N
-	for n != nil {
-		if !slices.ContainsFunc(cards, func(cd *webpage.Card) bool {
-			for e := cd.N; e != nil; e = e.Parent {
-				if e == n {
-					return false
-				}
-			}
-			return true
-		}) {
-			return n
-		}
-		n = n.Parent
-	}
-	return cards[0].N
-}
-
-var (
-	sortAsc  = regexp.MustCompile(`(?i)low to high|ascending|a\s*-\s*z|oldest`)
-	sortDesc = regexp.MustCompile(`(?i)high to low|descending|z\s*-\s*a|newest`)
-)
-
-// sortOrder warns when a sort control shows an ascending or descending order
-// and no ItemList has an itemListOrder.
-func (c *checker) sortOrder(all []jsonld.Node, p *webpage.Facts) {
-	if p.Doc == nil || slices.ContainsFunc(all, func(l jsonld.Node) bool { _, ok := l.N.Get("itemListOrder"); return ok }) {
-		return
-	}
-	for _, sel := range webpage.QueryAll(p.Doc, "select") {
-		name, _ := webpage.Attr(sel, "name")
-		id, _ := webpage.Attr(sel, "id")
-		if !strings.Contains(strings.ToLower(name+" "+id), "sort") {
-			continue
-		}
-		for _, o := range webpage.QueryAll(sel, "option[selected]") {
-			t := webpage.HTMLText(o)
-			member := ""
-			switch {
-			case sortAsc.MatchString(t):
-				member = "ItemListOrderAscending"
-			case sortDesc.MatchString(t):
-				member = "ItemListOrderDescending"
-			}
-			if member != "" {
-				c.add("html:"+webpage.SelectorFor(p.Doc, sel), Warning, "the page sorts its products %q: set the ItemList's itemListOrder https://schema.org/%s (an ItemListOrderType)", t, member)
-				return
-			}
-		}
 	}
 }

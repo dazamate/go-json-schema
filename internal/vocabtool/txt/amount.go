@@ -2,6 +2,7 @@ package txt
 
 import (
 	"regexp"
+	"slices"
 	"strconv"
 	"strings"
 )
@@ -10,10 +11,19 @@ import (
 // the whole part and the cents.
 var PriceAmount = regexp.MustCompile(`(?:A\$|AU\$|AUD ?|US\$|USD ?|NZ\$|NZD ?|C\$|CA\$|S\$|HK\$|€|£|¥|₹|\$)\s?(\d{1,3}(?:,\d{3})+|\d+)(?:\.(\d{1,2}))?`)
 
+// PriceText is the pattern of a price written with its currency's symbol,
+// for building other patterns: "$1,150", "A$12.95", "€40".
+const PriceText = `(?:A\$|AU\$|US\$|NZ\$|C\$|CA\$|€|£|\$)\s?\d(?:[\d,]*\d)?(?:\.\d{1,2})?`
+
 // Amount reads a price's number.
 func Amount(s string) (float64, bool) {
 	f, err := strconv.ParseFloat(strings.ReplaceAll(strings.TrimSpace(s), ",", ""), 64)
 	return f, err == nil
+}
+
+// HoldsNumber reports a number among the scalars.
+func HoldsNumber(vals []string, f float64) bool {
+	return slices.ContainsFunc(vals, func(s string) bool { g, ok := Amount(s); return ok && g == f })
 }
 
 // PriceOf is the amount a PriceAmount match gives.

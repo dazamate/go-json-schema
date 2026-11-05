@@ -115,6 +115,12 @@ func NewIndex(all []Node) *Index {
 	return d
 }
 
+// HoldsText reports a draft string that holds s, words compared.
+func (d *Index) HoldsText(s string) bool {
+	w := txt.NormWords(s)
+	return w != "" && slices.ContainsFunc(d.Strs, func(v string) bool { return strings.Contains(" "+txt.NormWords(v)+" ", " "+w+" ") })
+}
+
 // HasKey reports a node with the property in the draft.
 func HasKey(all []Node, key string) bool {
 	return slices.ContainsFunc(all, func(l Node) bool { _, ok := l.N.Get(key); return ok })

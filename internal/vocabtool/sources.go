@@ -22,7 +22,7 @@ var (
 	govHost      = regexp.MustCompile(`(?i)\.(?:gov|mil)$|\.gov\.[a-z]{2}$|(?:^|\.)state\.[a-z]{2}\.us$|\.gc\.ca$|\.govt\.nz$`)
 	permitName   = regexp.MustCompile(`\b((?:[A-Z][\w'-]*\s+){1,4}(?:Permit|License|Licence))\b`)
 	permitWord   = regexp.MustCompile(`(?i)\b(?:permits?|licen[cs]es?|licensing)\b`)
-	permitTerms  = regexp.MustCompile(`(?i)` + priceText + `|\b\d+\s+(?:business |working )?days?\b|\bfees?\b|\bapply\b`)
+	permitTerms  = regexp.MustCompile(`(?i)` + txt.PriceText + `|\b\d+\s+(?:business |working )?days?\b|\bfees?\b|\bapply\b`)
 	agencyName   = regexp.MustCompile(`\b(?:Department|Dept\.?|Bureau|Administration|Commission|Agency|Office|Board|Authority|Service|Survey|Institute|Council|Ministry|Court|Congress|Senate|Army|Navy|Air Force|Marine Corps|Coast Guard|City of|County of|State of)\b|^[A-Z]{2,6}$`)
 	rentalSource = regexp.MustCompile(`(?i)\bu-haul\b|\bpenske\b|\bbudget truck\b|\benterprise truck\b|\bhertz\b|\bavis\b|\bryder\b|\btruck rental\b`)
 	quoted       = regexp.MustCompile(`“[^”]{3,}”|"[^"]{3,}"`)
@@ -38,18 +38,12 @@ func (c *checker) sources(all []jsonld.Node, p *webpage.Facts, d *jsonld.Index) 
 	c.citations(p, d)
 }
 
-// heldText reports a draft string that holds s, words compared.
-func heldText(d *jsonld.Index, s string) bool {
-	w := txt.NormWords(s)
-	return w != "" && slices.ContainsFunc(d.Strs, func(v string) bool { return strings.Contains(" "+txt.NormWords(v)+" ", " "+w+" ") })
-}
-
 // rules warn on the laws and regulations the page cites ("49 CFR 375.401")
 // that no value in the draft names.
 func (c *checker) rules(p *webpage.Facts, d *jsonld.Index) {
 	var list []string
 	for _, m := range ruleCite.FindAllString(p.Main, -1) {
-		if !slices.Contains(list, m) && !heldText(d, m) {
+		if !slices.Contains(list, m) && !d.HoldsText(m) {
 			list = append(list, m)
 		}
 	}
@@ -60,7 +54,7 @@ func (c *checker) rules(p *webpage.Facts, d *jsonld.Index) {
 			if err != nil || !lawHost.MatchString(u.Hostname()) || webpage.Chrome(a) {
 				continue
 			}
-			if t := webpage.HTMLText(a); t != "" && !slices.Contains(list, t) && !heldText(d, t) && !d.URLs[txt.NormURL(u)] {
+			if t := webpage.HTMLText(a); t != "" && !slices.Contains(list, t) && !d.HoldsText(t) && !d.URLs[txt.NormURL(u)] {
 				list = append(list, t)
 			}
 		}
@@ -93,7 +87,7 @@ func (c *checker) permits(all []jsonld.Node, p *webpage.Facts) {
 	}
 	var done []*xhtml.Node
 	for _, s := range webpage.QueryAll(p.Doc, "section, article") {
-		if webpage.Chrome(s) || !webpage.Shown(s) || slices.ContainsFunc(done, func(o *xhtml.Node) bool { return slices.Contains(ancestors(s), o) }) {
+		if webpage.Chrome(s) || !webpage.Shown(s) || slices.ContainsFunc(done, func(o *xhtml.Node) bool { return slices.Contains(webpage.Ancestors(s), o) }) {
 			continue
 		}
 		// the permit is the section's topic: its heading says so, or a part
@@ -153,7 +147,7 @@ func (c *checker) agencies(p *webpage.Facts, d *jsonld.Index) {
 		seen[host] = true
 		// a link names the agency, or else the page it links to
 		name := webpage.HTMLText(a)
-		if heldText(d, name) {
+		if d.HoldsText(name) {
 			continue
 		}
 		if n := len(strings.Fields(name)); n == 0 || n > 8 || !agencyName.MatchString(name) {
@@ -175,7 +169,7 @@ func (c *checker) documents(p *webpage.Facts, d *jsonld.Index) {
 		if err != nil || webpage.Chrome(a) || !strings.HasSuffix(strings.ToLower(u.Path), ".pdf") || d.URLs[p.Abs(h)] {
 			continue
 		}
-		if t := webpage.HTMLText(a); t != "" && !heldText(d, t) {
+		if t := webpage.HTMLText(a); t != "" && !d.HoldsText(t) {
 			list = append(list, fmt.Sprintf("%q", t))
 		}
 	}
@@ -194,7 +188,7 @@ func (c *checker) citations(p *webpage.Facts, d *jsonld.Index) {
 	var list []string
 	add := func(s string) {
 		s = strings.TrimSpace(s)
-		if s == "" || ruleCite.MatchString(s) || heldText(d, s) || slices.ContainsFunc(list, func(o string) bool {
+		if s == "" || ruleCite.MatchString(s) || d.HoldsText(s) || slices.ContainsFunc(list, func(o string) bool {
 			return strings.HasPrefix(txt.NormWords(o), txt.NormWords(s)) || strings.HasPrefix(txt.NormWords(s), txt.NormWords(o))
 		}) {
 			return
@@ -202,7 +196,7 @@ func (c *checker) citations(p *webpage.Facts, d *jsonld.Index) {
 		list = append(list, txt.Clip(s, 60))
 	}
 	for _, n := range webpage.QueryAll(p.Doc, "cite") {
-		if webpage.Chrome(n) || !webpage.Shown(n) || slices.ContainsFunc(ancestors(n), func(e *xhtml.Node) bool {
+		if webpage.Chrome(n) || !webpage.Shown(n) || slices.ContainsFunc(webpage.Ancestors(n), func(e *xhtml.Node) bool {
 			return e.DataAtom == atom.Blockquote || e.DataAtom == atom.Figure && len(webpage.QueryAll(e, "blockquote")) > 0
 		}) {
 			continue

@@ -27,6 +27,9 @@ type Issue struct {
 	Message  string `json:"message"`
 }
 
+// PagePath is the path of an issue about the page as a whole.
+const PagePath = "html:body"
+
 // Issuef is an issue whose message is the format filled in with args.
 func Issuef(path, severity, format string, args ...any) Issue {
 	return Issue{Path: path, Severity: severity, Message: fmt.Sprintf(format, args...)}

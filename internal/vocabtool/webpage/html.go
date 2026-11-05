@@ -184,6 +184,38 @@ func Shown(n *html.Node) bool {
 	return true
 }
 
+// Ancestors are n and the elements around it.
+func Ancestors(n *html.Node) []*html.Node {
+	var out []*html.Node
+	for e := n; e != nil; e = e.Parent {
+		out = append(out, e)
+	}
+	return out
+}
+
+// Detail is a labelled value the page lists: a key/value list's term and
+// description, a two-column table's row, a "Material: silver" line.
+type Detail struct{ Label, Value string }
+
+// Pairs are a key/value list's labels and values, in order. A dt may sit in
+// a div of the dl.
+func Pairs(dl *html.Node) []Detail {
+	var out []Detail
+	var label string
+	Visit(dl, func(n *html.Node) {
+		switch n.DataAtom {
+		case atom.Dt:
+			label = HTMLText(n)
+		case atom.Dd:
+			if label != "" {
+				out = append(out, Detail{Label: label, Value: HTMLText(n)})
+				label = ""
+			}
+		}
+	})
+	return out
+}
+
 // MustParse parses a URL this package normalized.
 func MustParse(s string) *url.URL {
 	u, _ := url.Parse(s)

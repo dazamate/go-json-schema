@@ -46,7 +46,7 @@ func (c *checker) publisher(all []jsonld.Node, p *webpage.Facts) {
 		return
 	}
 	if i := slices.IndexFunc(all, func(l jsonld.Node) bool { return c.is(l.N, "Organization") && len(l.N.Keys) > 1 }); i >= 0 {
-		org := orDefault(strings.Join(jsonld.Strs(all[i].N, "name"), " "), "the business")
+		org := txt.OrDefault(strings.Join(jsonld.Strs(all[i].N, "name"), " "), "the business")
 		c.add(pagePath, Warning, "no node publishes the page: set the Organization %q as the WebSite's publisher (and the copyrightHolder), by its @id", org)
 		return
 	}
@@ -73,7 +73,7 @@ func (c *checker) onlineBusiness(all []jsonld.Node, p *webpage.Facts) {
 		if slices.ContainsFunc([]string{"address", "location", "geo", "openingHours", "openingHoursSpecification", "hasMap"}, func(k string) bool { _, ok := l.N.Get(k); return ok }) {
 			continue
 		}
-		name := orDefault(strings.Join(jsonld.Strs(l.N, "name"), " "), "the business")
+		name := txt.OrDefault(strings.Join(jsonld.Strs(l.N, "name"), " "), "the business")
 		c.add(l.Path, Warning, "Organization %q shows no premises and works through its website: type it OnlineBusiness", name)
 		c.suggested[l.N] = true
 	}
@@ -410,7 +410,7 @@ func tools(p *webpage.Facts) []tool {
 	var out []tool
 	for _, n := range found {
 		// the innermost block that is a tool
-		if slices.ContainsFunc(found, func(o *xhtml.Node) bool { return o != n && slices.Contains(ancestors(o)[1:], n) }) {
+		if slices.ContainsFunc(found, func(o *xhtml.Node) bool { return o != n && slices.Contains(webpage.Ancestors(o)[1:], n) }) {
 			continue
 		}
 		id, _ := webpage.Attr(n, "id")

@@ -9,6 +9,7 @@ import (
 	"strings"
 	"unicode/utf8"
 
+	"github.com/dazamate/go-json-schema/internal/vocabtool/audit"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/txt"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/webpage"
@@ -20,10 +21,10 @@ import (
 // directions. Text the markup repeats must be on the page (a HowToStep, a
 // Question, an Answer, a Review), and what the page shows that a type or a
 // property describes must be in the markup (a copyright line, a reading time,
-// images, a video, prices, ratings, quotations, terms, counted lists, links,
-// a search box, a form, a phone number, a registration number).
+// images, a video, ratings, quotations, terms, counted lists, links, a
+// search box, a form, a phone number, a registration number).
 
-const pagePath = "html:body" // an issue about the page as a whole
+const pagePath = audit.PagePath // an issue about the page as a whole
 
 // is reports whether the node has the type or a subtype of it.
 func (c *checker) is(n *jsonld.Object, ty string) bool {
@@ -84,7 +85,6 @@ func (c *checker) content(all []jsonld.Node, p *webpage.Facts) {
 	c.shop(all, p, d)
 	c.site(all, p, d)
 	c.sources(all, p, d)
-	c.data(all, p, d)
 	c.copyright(all, p)
 	c.readTime(all, p)
 	c.sectionLabel(all, p)
@@ -99,15 +99,12 @@ func (c *checker) content(all []jsonld.Node, p *webpage.Facts) {
 	c.outsideLinks(p, d)
 	c.related(all, p, d)
 	c.responseTime(all, p)
-	c.costs(all, p)
-	c.prices(all, p)
 	c.quotes(p, d)
 	c.ratings(all, p)
 }
 
 // shop runs the shop checks: the sitewide nodes, the page's type, and what a
-// product page, a listing and the shop's policies show. They run before
-// prices, which leaves out the prices they report.
+// product page and the shop's policies show.
 func (c *checker) shop(all []jsonld.Node, p *webpage.Facts, d *jsonld.Index) {
 	if p.Doc != nil {
 		c.pageType(all, p)
@@ -122,15 +119,11 @@ func (c *checker) shop(all []jsonld.Node, p *webpage.Facts, d *jsonld.Index) {
 	if p.Kind == webpage.KindProduct {
 		c.product(all, p, d)
 	}
-	c.listing(all, p, d)
 	// what a shop's pages state about its own sales; on another site the
 	// same words ("a damaged item", "pay by bank transfer") are about others
 	if p.Sells() {
-		c.sale(all, p)
 		c.stock(all, p)
 		c.members(all, p)
-		c.extras(all, p)
-		c.shipping(all, p)
 		c.returns(all, p)
 		c.payments(all, p)
 	}
@@ -616,15 +609,15 @@ func (c *checker) terms(all []jsonld.Node, p *webpage.Facts) {
 		lists := map[string]int{}
 		for _, dl := range webpage.QueryAll(p.Doc, "dl") {
 			seen := map[string]bool{}
-			for _, d := range pairs(dl) {
-				if k := txt.NormWords(d.label); !seen[k] {
+			for _, d := range webpage.Pairs(dl) {
+				if k := txt.NormWords(d.Label); !seen[k] {
 					seen[k] = true
 					lists[k]++
 				}
 			}
 		}
 		repeats := func(dl *xhtml.Node) bool {
-			return slices.ContainsFunc(pairs(dl), func(d detail) bool { return lists[txt.NormWords(d.label)] > 1 })
+			return slices.ContainsFunc(webpage.Pairs(dl), func(d webpage.Detail) bool { return lists[txt.NormWords(d.Label)] > 1 })
 		}
 		webpage.Visit(p.Doc, func(n *xhtml.Node) {
 			switch n.DataAtom {
@@ -636,8 +629,8 @@ func (c *checker) terms(all []jsonld.Node, p *webpage.Facts) {
 				// shop's dl beside a "Shop lockets" link sells: neither is a
 				// glossary
 				if !keyValueList(n) && p.Kind != webpage.KindProduct && !p.Promo(n) && !repeats(n) {
-					for _, d := range pairs(n) {
-						add(d.label)
+					for _, d := range webpage.Pairs(n) {
+						add(d.Label)
 					}
 				}
 			}
@@ -979,7 +972,7 @@ func (c *checker) related(all []jsonld.Node, p *webpage.Facts, d *jsonld.Index) 
 		t, box := b.Label, b.N
 		var cards []*webpage.Card
 		for _, cd := range p.ProductCards() {
-			if cd.Related && slices.Contains(ancestors(cd.N), box) {
+			if cd.Related && slices.Contains(webpage.Ancestors(cd.N), box) {
 				cards = append(cards, cd)
 			}
 		}
@@ -1034,15 +1027,6 @@ func (c *checker) related(all []jsonld.Node, p *webpage.Facts, d *jsonld.Index) 
 	}
 }
 
-// ancestors are n and the elements around it.
-func ancestors(n *xhtml.Node) []*xhtml.Node {
-	var out []*xhtml.Node
-	for e := n; e != nil; e = e.Parent {
-		out = append(out, e)
-	}
-	return out
-}
-
 var responseTime = regexp.MustCompile(`(?i)\b(?:repl(?:y|ies)|responds?|responses?|get back to you|hear back)\b[^.!?]{0,40}?\bwithin\s+(?:(?:\d+|one|two|three)\s+)?(?:business days?|working days?|days?|hours?|minutes?)`)
 
 // responseTime warns when the page promises a reply time and no
@@ -1057,86 +1041,6 @@ func (c *checker) responseTime(all []jsonld.Node, p *webpage.Facts) {
 		path = all[i].Path
 	}
 	c.add(path, Warning, "the page promises %q but no ServiceChannel has processingTime: set it as a Duration (P1D for a day) on the channel the promise is for", m)
-}
-
-var (
-	taxWords  = regexp.MustCompile(`(?i)\b(plus|excl(?:uding|\.)?|ex|exclusive of|incl(?:uding|\.)?|inc\.?|inclusive of)\s+(GST|VAT|tax(?:es)?|sales tax)\b|\b(GST|VAT|tax(?:es)?)\s+(included|inclusive|incl\.?|excluded|exclusive|excl\.?|extra)\b`)
-	taxOut    = regexp.MustCompile(`(?i)^(?:plus|ex|excl|exclusive|excluded|extra)`)
-	notPrices = regexp.MustCompile(`(?i)\b(?:save|payments? of|under|below|less than)\s+(?:A\$|AU\$|\$|£|€)\s?\d[\d,]*(?:\.\d{1,2})?`)
-)
-
-// prices warns on prices the page shows that no price property carries, on
-// a price without its currency, and on tax wording the PriceSpecification
-// does not match.
-func (c *checker) prices(all []jsonld.Node, p *webpage.Facts) {
-	// marked holds every amount the draft carries; sold, only the prices of
-	// things for sale, which tax wording is about (a shipping rate's
-	// MonetaryAmount is not one)
-	marked, sold := map[float64]bool{}, map[float64]bool{}
-	for _, l := range all {
-		keys := []string{"price", "lowPrice", "highPrice", "minPrice", "maxPrice"}
-		if c.is(l.N, "MonetaryAmount") || c.is(l.N, "PriceSpecification") {
-			keys = append(keys, "value", "minValue", "maxValue")
-		}
-		priced := false
-		for i, k := range keys {
-			for _, s := range jsonld.Scalars(l.N, k) {
-				if f, ok := txt.Amount(s); ok {
-					marked[f], priced = true, true
-					sold[f] = sold[f] || i < 5
-				}
-			}
-		}
-		if priced && len(jsonld.Strs(l.N, "priceCurrency"))+len(jsonld.Strs(l.N, "currency")) == 0 {
-			c.add(l.Path, Warning, "this %s has a price but no priceCurrency: set it (AUD, USD, EUR)", jsonld.TypeNames(l.N)[0])
-		}
-	}
-	// prices in the site's header, footer and menus, a saving ("save $50")
-	// and an instalment are no item's price; the shop checks report the
-	// prices they own (was prices, shipping rates, product cards)
-	ms := txt.PriceAmount.FindAllStringSubmatch(notPrices.ReplaceAllString(p.Main, " "), -1)
-	if len(ms) == 0 {
-		return
-	}
-	var missing []string
-	seen := map[float64]bool{}
-	anySold := false
-	for _, m := range ms {
-		f, ok := txt.PriceOf(m)
-		if !ok || seen[f] {
-			continue
-		}
-		seen[f] = true
-		anySold = anySold || sold[f]
-		if !marked[f] && !c.claimed[f] {
-			missing = append(missing, strings.TrimSpace(m[0]))
-		}
-	}
-	switch {
-	case len(missing) == 0:
-	case p.Sells():
-		c.add(pagePath, Warning, "the page shows prices (%s) that no price property carries: mark each up on the item it is the price of, as an Offer's price or, for a range, an AggregateOffer's lowPrice and highPrice, with priceCurrency and offerCount", strings.Join(missing, ", "))
-	default:
-		// a site that sells nothing shows what others charge
-		c.add(pagePath, Warning, "the page shows prices (%s) that no price property carries: mark each up on the thing it is the price of, as a MonetaryAmount (value, or minValue and maxValue, currency) for a cost or estimate of what others charge, or an Offer's price only for what the business itself sells", strings.Join(missing, ", "))
-	}
-	t := taxWords.FindStringSubmatch(p.Text)
-	if t == nil || !anySold {
-		return
-	}
-	incl := !taxOut.MatchString(firstNonEmpty(t[1], t[4]))
-	found := false
-	for _, l := range all {
-		for _, v := range jsonld.Scalars(l.N, "valueAddedTaxIncluded") {
-			found = true
-			if (v == "true") != incl {
-				c.add(l.Path+".valueAddedTaxIncluded", Warning, "valueAddedTaxIncluded is %s but the page says %q", v, t[0])
-			}
-		}
-	}
-	if !found {
-		c.add(pagePath, Warning, "the page's prices are %q but no PriceSpecification sets valueAddedTaxIncluded: set it %t", t[0], incl)
-	}
 }
 
 // attribution is who a blockquote is from: a cite inside it, or after it in

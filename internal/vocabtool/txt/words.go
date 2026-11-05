@@ -1,5 +1,6 @@
 // Package txt holds the text helpers the audit checks share: whole-word
-// matching, clipping, tag stripping, URL normalization and price reading.
+// matching, clipping, tag stripping, URL normalization, price reading and
+// country codes.
 package txt
 
 import (
@@ -7,6 +8,7 @@ import (
 	"html"
 	"net/url"
 	"regexp"
+	"strconv"
 	"strings"
 	"unicode"
 	"unicode/utf8"
@@ -52,6 +54,33 @@ func Clip(s string, n int) string {
 		return s
 	}
 	return string([]rune(s)[:n]) + "…"
+}
+
+// FirstNonEmpty is the first of the strings that is not empty, else "".
+func FirstNonEmpty(ss ...string) string {
+	for _, s := range ss {
+		if s != "" {
+			return s
+		}
+	}
+	return ""
+}
+
+// OrDefault is s, or def when s is blank.
+func OrDefault(s, def string) string {
+	if strings.TrimSpace(s) == "" {
+		return def
+	}
+	return s
+}
+
+// QuoteAll is each string quoted, joined with commas.
+func QuoteAll(ss []string) string {
+	q := make([]string, len(ss))
+	for i, s := range ss {
+		q[i] = strconv.Quote(s)
+	}
+	return strings.Join(q, ", ")
 }
 
 // Examples joins up to four examples, and says how many more there are.

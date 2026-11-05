@@ -40,7 +40,7 @@ func (c *checker) charts(all []jsonld.Node, p *webpage.Facts, d *jsonld.Index) {
 			continue
 		}
 		cp := webpage.HTMLText(fc[0])
-		if cp == "" || heldText(d, cp) {
+		if cp == "" || d.HoldsText(cp) {
 			continue
 		}
 		if first == nil {
@@ -106,7 +106,7 @@ func (c *checker) vehicles(p *webpage.Facts, d *jsonld.Index) {
 			if len(cells) < 2 || len(webpage.QueryAll(tr, "td")) == 0 {
 				continue
 			}
-			if n := webpage.HTMLText(cells[0]); (every || vehicleName.MatchString(n)) && len(strings.Fields(n)) <= 5 && !heldText(d, n) {
+			if n := webpage.HTMLText(cells[0]); (every || vehicleName.MatchString(n)) && len(strings.Fields(n)) <= 5 && !d.HoldsText(n) {
 				names = append(names, n)
 			}
 		}

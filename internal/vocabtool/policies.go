@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"regexp"
 	"slices"
-	"strconv"
 	"strings"
 
 	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
@@ -14,94 +13,9 @@ import (
 	"golang.org/x/net/html/atom"
 )
 
-// The policy checks hold a shop's markup to the terms its pages state:
-// shipping rates, free-shipping thresholds and times, its return policy, how
-// to contact it, where it is, when it is open, how to pay, and the questions
-// it answers.
-
-const money = `(?:A\$|AU\$|NZ\$|US\$|\$|£|€)\s?(\d+(?:\.\d{1,2})?)`
-
-var (
-	freeShipping  = regexp.MustCompile(`(?i)\bfree (?:\w+ ){0,2}(?:shipping|delivery|postage)(?: (?:on|for) (?:all )?orders)?(?: (?:over|above|of|from)| when you spend)\s*` + money)
-	shippingRate  = regexp.MustCompile(`(?i)\b(?:shipping|delivery|postage)(?: rate| cost| fee)?(?: within \w+)?(?: is)?(?: a)?(?: flat(?: rate)?(?: of)?)?\s*:?\s*` + money + `|` + money + ` flat[- ]rate (?:shipping|delivery|postage)`)
-	handling      = regexp.MustCompile(`(?i)\b(?:posted|dispatched|shipped|ships|sent|processed)(?: out)? within (\d+)(?:\s*(?:-|–|to)\s*(\d+))? (hours?|business days?|working days?|days?)\b|\bprocessing time:?\s*(\d+)\s*(?:-|–|to)\s*(\d+) (business days?|working days?|days?)\b`)
-	freeOtherwise = regexp.MustCompile(`(?i)\bfree (?:\w+ ){0,2}(?:over|above|from)\s*` + money + `,?\s*otherwise\s*` + money)
-	transit       = regexp.MustCompile(`(?i)\b(?:delivery|transit|arrives?|arrival)(?: time)?(?: in| within)?:?\s*(\d+)\s*(?:-|–|to)\s*(\d+) (business days?|working days?|days?)\b`)
-	shipCountry   = regexp.MustCompile(`(?i)\b(?:shipping|delivery|postage|ship|orders?)\s+(?:within|to|across|in)\s+(?:the )?(Australia|AU|New Zealand|NZ|United States|USA|US|United Kingdom|UK|Canada)\b|\bfree (Australian|NZ|US|UK|Canadian) (?:shipping|delivery|postage)\b`)
-	countryCodes  = map[string]string{"australia": "AU", "australian": "AU", "au": "AU", "new zealand": "NZ", "nz": "NZ", "united states": "US", "usa": "US", "us": "US",
-		"united kingdom": "GB", "uk": "GB", "canada": "CA", "canadian": "CA"}
-)
-
-// shippingNodes are the scalars under the draft's shipping nodes.
-func (c *checker) shippingScalars(all []jsonld.Node) []string {
-	var out []string
-	for _, l := range all {
-		for _, ty := range []string{"ShippingConditions", "OfferShippingDetails", "ShippingRateSettings", "ShippingService", "DeliveryChargeSpecification"} {
-			if c.is(l.N, ty) {
-				out = append(out, jsonld.DeepScalars(l.N)...)
-				break
-			}
-		}
-	}
-	return out
-}
-
-// shipping warns on a shipping rate, free-shipping threshold, handling time
-// or transit time the page states that no shipping node carries.
-func (c *checker) shipping(all []jsonld.Node, p *webpage.Facts) {
-	text := p.Text
-	ship := c.shippingScalars(all)
-	country := "its country"
-	if m := shipCountry.FindStringSubmatch(text); m != nil {
-		country = countryCodes[strings.ToLower(firstNonEmpty(m[1:]...))]
-	}
-	if m := freeOtherwise.FindStringSubmatch(text); m != nil {
-		text = text + " Shipping rate $" + m[2] + ". Free shipping over $" + m[1] + "."
-	}
-	if m := shippingRate.FindStringSubmatch(text); m != nil {
-		v := firstNonEmpty(m[1:]...)
-		f, _ := txt.Amount(v)
-		c.claimed[f] = true
-		if !holdsNumber(ship, f) {
-			c.add(pagePath, Warning, "the page gives a shipping rate of $%s that no node carries: add a ShippingService to the business's hasShippingService (fulfillmentType https://schema.org/FulfillmentTypeDelivery) with shippingConditions, a ShippingConditions with shippingDestination (a DefinedRegion with addressCountry %s) and shippingRate (a MonetaryAmount of %s); on a product page give its Offer the same as shippingDetails, an OfferShippingDetails", v, country, v)
-		}
-	}
-	if m := freeShipping.FindStringSubmatch(text); m != nil {
-		f, _ := txt.Amount(m[1])
-		c.claimed[f] = true
-		if !holdsNumber(ship, f) {
-			c.add(pagePath, Warning, "the page offers free shipping over $%s but no ShippingConditions has an orderValue of %s: add a ShippingConditions with orderValue (a MonetaryAmount with minValue %s) and shippingRate 0 to the business's ShippingService, or a ShippingRateSettings whose freeShippingThreshold is a DeliveryChargeSpecification of %s", m[1], m[1], m[1], m[1])
-		}
-	}
-	handlingVals := jsonld.Under(all, "handlingTime")
-	var said []string
-	days := 0
-	for _, m := range handling.FindAllStringSubmatch(text, -1) {
-		lo, hi, unit := m[1], m[2], m[3]
-		if m[4] != "" {
-			lo, hi, unit = m[4], m[5], m[6]
-		}
-		maxV, _ := strconv.Atoi(orDefault(hi, lo))
-		d := maxV
-		if strings.HasPrefix(strings.ToLower(unit), "hour") {
-			d = (maxV + 23) / 24
-		}
-		if !holdsNumber(handlingVals, float64(maxV)) && !holdsNumber(handlingVals, float64(d)) && !slices.Contains(said, m[0]) {
-			said, days = append(said, m[0]), max(days, d)
-		}
-	}
-	if len(said) > 0 {
-		c.add(pagePath, Warning, "the page says %s but no handlingTime carries it: set handlingTime on the ShippingService (a ServicePeriod, or a QuantitativeValue with maxValue %d and unitCode DAY) or, on a product page, in its OfferShippingDetails's deliveryTime (a ShippingDeliveryTime with handlingTime a QuantitativeValue)", quoteAll(said), days)
-	}
-	transitVals := jsonld.Under(all, "transitTime")
-	if m := transit.FindStringSubmatch(text); m != nil {
-		lo, _ := txt.Amount(m[1])
-		hi, _ := txt.Amount(m[2])
-		if !holdsNumber(transitVals, lo) || !holdsNumber(transitVals, hi) {
-			c.add(pagePath, Warning, "the page says %q but no transitTime carries it: set transitTime on the ShippingConditions (a ServicePeriod with businessDays and a duration of %s to %s days) or in the Offer's ShippingDeliveryTime (a QuantitativeValue with minValue %s, maxValue %s and unitCode DAY)", m[0], m[1], m[2], m[1], m[2])
-		}
-	}
-}
+// The policy checks hold a shop's markup to the terms its pages state: its
+// return policy, how to contact it, where it is, when it is open, how to
+// pay, and the questions it answers.
 
 // returnFact is a term of the return policy the page states and the
 // property and member that carry it.
@@ -138,7 +52,7 @@ var (
 func (c *checker) returns(all []jsonld.Node, p *webpage.Facts) {
 	var facts []returnFact
 	if m := returnWindow.FindStringSubmatch(p.Text); m != nil {
-		days := firstNonEmpty(m[1:]...)
+		days := txt.FirstNonEmpty(m[1:]...)
 		facts = append(facts, returnFact{m[0], "merchantReturnDays", days}, returnFact{m[0], "returnPolicyCategory", "MerchantReturnFiniteReturnWindow"})
 	}
 	if m := returnNone.FindString(p.Text); m != "" {
@@ -187,7 +101,7 @@ func (c *checker) returns(all []jsonld.Node, p *webpage.Facts) {
 		}
 		what := "links its return policy"
 		if len(said) > 0 {
-			what = fmt.Sprintf("states a return policy (%s)", quoteAll(said))
+			what = fmt.Sprintf("states a return policy (%s)", txt.QuoteAll(said))
 		}
 		c.add(pagePath, Warning, "the page %s that no MerchantReturnPolicy carries: give the business (and each Offer) hasMerchantReturnPolicy, a MerchantReturnPolicy with applicableCountry, %s", what, strings.Join(set, ", "))
 		return
@@ -212,15 +126,6 @@ func (c *checker) returns(all []jsonld.Node, p *webpage.Facts) {
 	}) {
 		c.add(policies[0].Path, Warning, "the page links the return policy (%s): set merchantReturnLink %s on the MerchantReturnPolicy", link, link)
 	}
-}
-
-// quoteAll is each string quoted, joined with commas.
-func quoteAll(ss []string) string {
-	q := make([]string, len(ss))
-	for i, s := range ss {
-		q[i] = strconv.Quote(s)
-	}
-	return strings.Join(q, ", ")
 }
 
 func describeReturnFact(f returnFact) string {
@@ -248,7 +153,7 @@ func (c *checker) whereAndWhen(all []jsonld.Node, p *webpage.Facts) {
 		c.add(pagePath, Warning, "the page shows the address %q: set the business's address, a PostalAddress (streetAddress, addressLocality, addressRegion, postalCode, addressCountry)", txt.Clip(addr, 80))
 	} else if m := basedIn.FindStringSubmatch(p.Main); m != nil && !hasAddress && (p.Kind == webpage.KindContact || p.Kind == webpage.KindAbout) {
 		// elsewhere "based in" is about someone else: movers based in Queens
-		code := orDefault(countryCodes[strings.ToLower(m[1])], "its two-letter code")
+		code := txt.OrDefault(txt.CountryCode(m[1]), "its two-letter code")
 		c.add(pagePath, Warning, "the page says the business is based in %s: set its address, a PostalAddress with addressCountry %s", m[1], code)
 	}
 	if m := openingTime.FindString(p.Main); m != "" && !jsonld.HasKey(all, "openingHoursSpecification") && !jsonld.HasKey(all, "openingHours") && !jsonld.HasKey(all, "hoursAvailable") {
@@ -370,7 +275,7 @@ func questions(p *webpage.Facts) []question {
 	var heads [7]string
 	faq := func(above int) string {
 		if p.Kind == webpage.KindFAQ {
-			return orDefault(p.H1(), "FAQ")
+			return txt.OrDefault(p.H1(), "FAQ")
 		}
 		for i := above - 1; i >= 1; i-- {
 			if faqHeading.MatchString(heads[i]) {
@@ -416,7 +321,7 @@ func questions(p *webpage.Facts) []question {
 	})
 	if len(summaries) >= 2 {
 		for _, s := range summaries {
-			add(&out, s.q, orDefault(s.section, "questions"), s.n)
+			add(&out, s.q, txt.OrDefault(s.section, "questions"), s.n)
 		}
 	}
 	return out

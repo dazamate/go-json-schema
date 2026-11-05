@@ -10,7 +10,6 @@ import (
 	"github.com/dazamate/go-json-schema/internal/vocabtool/audit"
 	_ "github.com/dazamate/go-json-schema/internal/vocabtool/checks/all" // register every check
 	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
-	"github.com/dazamate/go-json-schema/internal/vocabtool/txt"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/vocab"
 )
 
@@ -128,22 +127,11 @@ type checker struct {
 	v         *vocab.Vocab
 	issues    []Issue
 	suggested map[*jsonld.Object]bool // nodes already told to take a more specific type
-	claimed   map[float64]bool        // prices a check other than prices reports
 }
 
 // newChecker is a checker with nothing found yet.
 func newChecker(v *vocab.Vocab) *checker {
-	return &checker{v: v, suggested: map[*jsonld.Object]bool{}, claimed: map[float64]bool{}}
-}
-
-// claim notes prices another check reports, so prices does not report them
-// again.
-func (c *checker) claim(text string) {
-	for _, m := range txt.PriceAmount.FindAllStringSubmatch(text, -1) {
-		if f, ok := txt.PriceOf(m); ok {
-			c.claimed[f] = true
-		}
-	}
+	return &checker{v: v, suggested: map[*jsonld.Object]bool{}}
 }
 
 // add notes an issue.

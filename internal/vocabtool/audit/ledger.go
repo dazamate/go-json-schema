@@ -6,6 +6,7 @@ import (
 	"slices"
 
 	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
+	"github.com/dazamate/go-json-schema/internal/vocabtool/txt"
 )
 
 // The ledgers settle which check reports a fact that several could. Each one
@@ -16,6 +17,15 @@ import (
 // Taken is a set of price amounts.
 type Taken map[float64]bool
 
+// Take adds the amount of every price the text shows.
+func (t Taken) Take(text string) {
+	for _, m := range txt.PriceAmount.FindAllStringSubmatch(text, -1) {
+		if f, ok := txt.PriceOf(m); ok {
+			t[f] = true
+		}
+	}
+}
+
 // PriceTaker is a check that reports prices shown on the page. Given the
 // amounts the takers before it took, TakesPrices returns the amounts it
 // takes: every amount it would claim, whether or not it reports one. It must
@@ -25,8 +35,22 @@ type PriceTaker interface {
 	TakesPrices(c *Context, before Taken) Taken
 }
 
-// priceOrder lists the price takers by ID, in the order they take prices.
-var priceOrder []string
+// priceOrder lists the price takers by ID, in the order they take prices: a
+// listing's cards, then what a shop's pages state about its own sales, then
+// a pay table's wages, then on a site that sells nothing the prices of what
+// others charge. The prices checks come after every one; they report what is
+// left.
+var priceOrder = []string{
+	"shop/listing",
+	"product/was-price",
+	"product/unit-price",
+	"policies/shipping-rate",
+	"sources/pay-percentiles",
+	"costs/breakdowns",
+	"costs/rates",
+	"costs/goods",
+	"costs/estimates",
+}
 
 // priceLedgerKey is the memo key of the price ledger.
 type priceLedgerKey struct{}
