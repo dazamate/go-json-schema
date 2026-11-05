@@ -16,7 +16,7 @@ func TestOpeningHours(t *testing.T) {
 		want []audit.Issue
 	}{
 		{"hours on the page", audittest.Input{Draft: noDraft, PageHTML: contactPage, PageURL: contactURL}, []audit.Issue{
-			{Path: "html:body", Severity: audit.Warning, Message: `the page gives opening hours ("Monday to Friday 9am to 5pm"): set the store's openingHoursSpecification, an OpeningHoursSpecification for each run of days (dayOfWeek, DayOfWeek members such as https://schema.org/Monday, opens, closes); an online shop's hours go on its ContactPoint as hoursAvailable`},
+			{Path: "html:body", Severity: audit.Warning, Message: `the page gives opening hours ("Monday to Friday 9am to 5pm"): set the business's openingHoursSpecification, an OpeningHoursSpecification for each run of days (dayOfWeek, DayOfWeek members such as https://schema.org/Monday, opens, closes); a business with no premises gives its hours on its ContactPoint as hoursAvailable`},
 		}},
 		{"a shipping time is no hours", audittest.Input{Draft: noDraft, PageHTML: hoursPage("Monday to Friday, orders ship in 2-3 days. Sale Monday 10-20% off. Buyers sat 5-6 to a table."), PageURL: contactURL}, nil},
 		{"hours on a 24 hour clock", audittest.Input{Draft: noDraft, PageHTML: hoursPage("Mon-Fri 0900-1700"), PageURL: contactURL}, []audit.Issue{
@@ -44,7 +44,7 @@ func TestOpeningHours(t *testing.T) {
 }
 
 // hoursAdvice is the end of the message every opening hours issue shares.
-const hoursAdvice = `set the store's openingHoursSpecification, an OpeningHoursSpecification for each run of days (dayOfWeek, DayOfWeek members such as https://schema.org/Monday, opens, closes); an online shop's hours go on its ContactPoint as hoursAvailable`
+const hoursAdvice = `set the business's openingHoursSpecification, an OpeningHoursSpecification for each run of days (dayOfWeek, DayOfWeek members such as https://schema.org/Monday, opens, closes); a business with no premises gives its hours on its ContactPoint as hoursAvailable`
 
 // hoursPage is a contact page with the line in its main element.
 func hoursPage(line string) string {

@@ -32,5 +32,5 @@ func (OpeningHours) Run(c *audit.Context) []audit.Issue {
 	if m == "" || jsonld.HasKey(c.Nodes, "openingHoursSpecification") || jsonld.HasKey(c.Nodes, "openingHours") || jsonld.HasKey(c.Nodes, "hoursAvailable") {
 		return nil
 	}
-	return []audit.Issue{audit.Issuef(audit.PagePath, audit.Warning, "the page gives opening hours (%q): set the store's openingHoursSpecification, an OpeningHoursSpecification for each run of days (dayOfWeek, DayOfWeek members such as https://schema.org/Monday, opens, closes); an online shop's hours go on its ContactPoint as hoursAvailable", m)}
+	return []audit.Issue{audit.Issuef(audit.PagePath, audit.Warning, "the page gives opening hours (%q): set the business's openingHoursSpecification, an OpeningHoursSpecification for each run of days (dayOfWeek, DayOfWeek members such as https://schema.org/Monday, opens, closes); a business with no premises gives its hours on its ContactPoint as hoursAvailable", m)}
 }
