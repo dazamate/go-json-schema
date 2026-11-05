@@ -32,6 +32,10 @@ func TestGoods(t *testing.T) {
 		{"service prices are not goods", audittest.Input{Draft: bareDraft, PageURL: "https://dental.test/fees/", PageHTML: `<!doctype html><html lang="en-GB"><body><main><h1>Fees</h1><article>
 <p>Teeth whitening – top up £60 each. A standard check-up retails at £45 per visit. Installation of a new tap sells for £80 including call-out.</p>
 <p>Pest control: $350 for each additional room, and the treatment is $120 a session.</p></article></main></body></html>`}, nil},
+		{"a service's approximate price", audittest.Input{Draft: bareDraft, PageURL: "https://movers.test/guide/", PageHTML: `<!doctype html><html lang="en-US"><body><main><h1>Moving guide</h1><article>
+<p>A local two-bedroom move: approximate price $1,200. End of lease cleaning: approximate price $350. Kitchen renovation approximate price $25,000.</p></article></main></body></html>`}, nil},
+		{"a past sale", audittest.Input{Draft: bareDraft, PageURL: "https://homes.test/blog/market/", PageHTML: `<!doctype html><html lang="en-US"><body><main><h1>Market update</h1><article>
+<p>The house next door sold for $850,000 in March.</p></article></main></body></html>`}, nil},
 		{"goods priced with no sign of sellers", audittest.Input{Draft: bareDraft, PageText: "Our boxes cost $3.", PageURL: costGuideURL}, nil},
 		{"the markup carries them", audittest.Input{Draft: markedDraft, PageHTML: costGuide, PageURL: costGuideURL}, nil},
 		{"a shop's page", audittest.Input{Draft: bareDraft, PageHTML: audittest.Selling(costGuide), PageURL: costGuideURL}, nil},

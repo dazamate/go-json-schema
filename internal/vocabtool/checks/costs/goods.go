@@ -17,10 +17,12 @@ var (
 	goodsRe = regexp.MustCompile(`(?i)\b(boxes|box|tape|packing paper|paper|bubble wrap|mattress bags?|moving blankets?|furniture pads?|dollies|dolly|stretch wrap|packing peanuts)\b[^$.]{0,45}?` + priceSpan + `([^.$]{0,25})`)
 	// retailRe reads a retail price cue and the price after it, whatever
 	// the goods: "RRP of £89 to £109", "Approximate Price: $75", "retail
-	// matt emulsion costs £18–£26".
-	retailRe = regexp.MustCompile(`(?i)\b(?:retail(?:s|ed|ing)?(?:\s+prices?)?|rrp|msrp|list price|street price|approximate price|sells? for|sold for)\b((?:[^.]|\.\d){0,45}?)` + priceSpan)
-	// labourRe marks a price for work or a visit, never goods.
-	labourRe  = regexp.MustCompile(`(?i)\b(?:per|an?|each)\s+(?:hour|hr|visit|session|lesson|class|treatment|appointment|night|day|week|month)\b|\b(?:installation|install(?:ed|ing)?|call-?outs?|labou?r|treatments?|consultations?|sessions?|lessons?|visits?|appointments?|repairs?|servicing|fitting)\b`)
+	// matt emulsion costs £18–£26". What a thing once sold for is no price
+	// it sells at.
+	retailRe = regexp.MustCompile(`(?i)\b(?:retail(?:s|ed|ing)?(?:\s+prices?)?|rrp|msrp|list price|street price|approximate price|sells? for)\b((?:[^.]|\.\d){0,45}?)` + priceSpan)
+	// labourRe marks a price for work, a visit or a service, never goods:
+	// "a two-bedroom move: approximate price $1,200".
+	labourRe  = regexp.MustCompile(`(?i)\b(?:per|an?|each)\s+(?:hour|hr|visit|session|lesson|class|treatment|appointment|night|day|week|month)\b|\b(?:installation|install(?:ed|ing)?|call-?outs?|labou?r|treatments?|consultations?|sessions?|lessons?|visits?|appointments?|repairs?|servicing|fitting|services?|moves?|moving|removals?|cleaning|renovations?|hire|rentals?)\b`)
 	nameStop  = map[string]bool{"the": true, "a": true, "an": true, "and": true, "of": true, "for": true, "at": true, "is": true, "are": true, "has": true, "have": true, "with": true, "on": true, "in": true, "to": true, "costs": true, "cost": true, "was": true, "from": true, "about": true, "around": true}
 	goodsSign = regexp.MustCompile(`(?i)\b(?:each|apiece|a pack|per pack|a roll|per roll|published prices|retail prices|typical (?:store|retail) prices)\b`)
 )
@@ -91,8 +93,17 @@ func goodsName(before, between string) string {
 		for len(words) > 0 && nameStop[strings.ToLower(words[0])] {
 			words = words[1:]
 		}
-		if len(words) > 0 {
-			return strings.Join(words, " ")
+		name := strings.Join(words, " ")
+		// a bracket the clip opened and never closed, or closed and never
+		// opened: "Standard (Dulux/Crown", "Scrubbable) Litres Dulux"
+		if k := strings.LastIndex(name, "("); k > 0 && !strings.Contains(name[k:], ")") {
+			name = strings.TrimSpace(name[:k])
+		}
+		if k := strings.Index(name, ")"); k >= 0 && !strings.Contains(name[:k], "(") {
+			name = strings.TrimSpace(name[k+1:])
+		}
+		if name != "" {
+			return name
 		}
 	}
 	return "goods"
