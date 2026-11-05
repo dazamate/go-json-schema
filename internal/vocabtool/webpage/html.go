@@ -380,7 +380,8 @@ func landmark(n *html.Node) atom.Atom {
 }
 
 // Chrome reports an element in the page's own header, footer or a nav, by
-// their tags or their landmark roles.
+// their tags, their landmark roles or the class or id the site names them
+// by, or in a cookie consent block.
 func Chrome(n *html.Node) bool {
 	for e := n.Parent; e != nil; e = e.Parent {
 		switch landmark(e) {
@@ -391,6 +392,14 @@ func Chrome(n *html.Node) bool {
 				return true
 			}
 		}
+		switch chromeName(e) {
+		case chromeNamed:
+			if !scoped(e) {
+				return true
+			}
+		case consentNamed:
+			return true
+		}
 	}
 	return false
 }
@@ -398,11 +407,55 @@ func Chrome(n *html.Node) bool {
 // siteChromeAround reports an element in the site's own header or footer.
 func siteChromeAround(n *html.Node) bool {
 	for e := n.Parent; e != nil; e = e.Parent {
-		if l := landmark(e); (l == atom.Header || l == atom.Footer) && !scoped(e) {
+		if l := landmark(e); (l == atom.Header || l == atom.Footer || chromeName(e) == chromeNamed) && !scoped(e) {
 			return true
 		}
 	}
 	return false
+}
+
+var (
+	// chromeToken is a whole class or id token a site names its header,
+	// footer or menu by ("footer", "site-header", "navbar"), or the section
+	// group a Shopify theme puts its header or footer in. A token that only
+	// holds the word names a part of the copy: a price list's header, a
+	// product description's header, a menu item.
+	chromeToken = regexp.MustCompile(`(?i)^(?:footer|site-footer|page-footer|header|site-header|navbar|nav|menu|shopify-section-group-(?:[a-z0-9]+-)*(?:header|footer)(?:-[a-z0-9]+)*)$`)
+	// consentToken is in the class or id of a cookie consent block:
+	// Cookiebot's CybotCookiebotDialog, OneTrust's onetrust-banner-sdk, a
+	// cookie-banner, cookie-consent, cookie-notice, cookie-bar or cookie-law
+	// block, CookieYes's cky-consent.
+	consentToken = regexp.MustCompile(`(?i)cookiebot|onetrust|cookie-?(?:banner|consent|notice|bar|law)|cky-consent`)
+)
+
+// The ways chromeName finds an element named as chrome.
+const (
+	chromeNamed  = 1 // the site's header, footer or menu
+	consentNamed = 2 // a cookie consent block
+)
+
+// chromeName is how an element's class or id names it chrome: chromeNamed,
+// consentNamed, or 0. The body and an element that holds the page's main
+// are the page, whatever their classes say ("gdpr-infobar-visible").
+func chromeName(e *html.Node) int {
+	if e.Type != html.ElementNode || e.DataAtom == atom.Body || e.DataAtom == atom.Html {
+		return 0
+	}
+	id, _ := Attr(e, "id")
+	class, _ := Attr(e, "class")
+	found := 0
+	for _, s := range append(strings.Fields(class), id) {
+		switch t := strings.ReplaceAll(s, "_", "-"); {
+		case consentToken.MatchString(t):
+			found = consentNamed
+		case found == 0 && chromeToken.MatchString(t):
+			found = chromeNamed
+		}
+	}
+	if found != 0 && holds(e, atom.Main) {
+		return 0
+	}
+	return found
 }
 
 // HeadingLevel is an h1 to h6's level, or 0.

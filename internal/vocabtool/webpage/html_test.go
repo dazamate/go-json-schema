@@ -82,3 +82,41 @@ func TestMainSkipsSiteFooterHolderFirst(t *testing.T) {
 		t.Errorf("Main = %q", p.Main)
 	}
 }
+
+// TestChromeByClass checks that a div the site names its header, footer or
+// menu by a whole class or id token, or a cookie consent block, is chrome
+// like the elements: officeworks.com.au's div#footer, jamieoliver.com's
+// div.header, loveitlandscaping.com.au's div.menu, orbitmedia.com's
+// Cookiebot dialog, a Shopify theme's footer group. A token that only holds
+// the word (vicisouthbank.com.au's price list headers, reliancedigital.in's
+// product description header, tutorfinder.com.au's rates card header), a
+// page header, and a menu inside the main copy (a restaurant's) are no
+// chrome.
+func TestChromeByClass(t *testing.T) {
+	doc := parse(t, `<html><body>
+		<div class="header astro-hhcwb6lh"><div class="header__bar-auth--content"><a id="c1" href="/login">Sign In or Register</a></div></div>
+		<div class="menu"><span class="close-menu icon-cross2 right-boxed"></span><div class="menu-lang right-boxed lang_sw"><p><a id="c2" title="English" href="#">Eng</a></p></div></div>
+		<div id="CybotCookiebotDialog" name="CybotCookiebotDialog" role="region" class="CybotEdge CybotMultilevel"><a id="c3" href="https://www.cookiebot.com">Cookiebot</a></div>
+		<div id="shopify-section-sections--19701750038726__footer" class="shopify-section shopify-section-group-group-footer"><a id="c4" href="/pages/contact">Contact us</a></div>
+		<div id="shopify-section-sections--2__footer" class="shopify-section shopify-section-group-footer-group"><a id="c5" href="/pages/contact">Contact us</a></div>
+		<main>
+		<div class="opus-page"><div class="page-header-wrapper"><div class="page-header outside text-center"><h1 id="k1">Opus Vancouver Boutique Hotel in Yaletown</h1></div></div></div>
+		<div class="elementor-price-list-header"><span id="k2" class="elementor-price-list-title">Acai Activate</span><span class="elementor-price-list-price">11</span></div>
+		<div class="product-description-header"><a id="k3" href="#info">Product Info</a></div>
+		<div class="tf-card-header"><h2 id="k4">Average Hourly Rate Charged by Tutors</h2></div>
+		<div class="menu"><h2 id="k5">Breakfast</h2><p>Eggs on toast $18</p></div>
+		<p class="comment-form-cookies-consent"><label id="k6">Save my name, email, and website in this browser for the next time I comment.</label></p>
+		</main>
+		<div id="footer"><!-- BEGIN Footer.jsp --><a id="c6" href="/shop/officeworks/newsletter">Want to keep in touch?</a></div>
+		</body></html>`)
+	for _, id := range []string{"c1", "c2", "c3", "c4", "c5", "c6"} {
+		if n := QueryAll(doc, "#"+id); !Chrome(n[0]) {
+			t.Errorf("#%s is no chrome", id)
+		}
+	}
+	for _, id := range []string{"k1", "k2", "k3", "k4", "k5", "k6"} {
+		if n := QueryAll(doc, "#"+id); Chrome(n[0]) {
+			t.Errorf("#%s is chrome", id)
+		}
+	}
+}
