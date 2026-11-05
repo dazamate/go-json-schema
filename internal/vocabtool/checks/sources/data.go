@@ -21,6 +21,9 @@ var (
 	payWords   = regexp.MustCompile(`(?i)\b(?:pay|paid|wages?|earn(?:s|ings)?|salar(?:y|ies))\b`)
 	percentile = regexp.MustCompile(`(?i)\b(?:tenth|middle half|median|typical|\d{2}th percentile|quartile)\b`)
 	sourceText = regexp.MustCompile(`\bSources?:\s+(.{3,120})`)
+	// sourceStart is a source note: an element's text starts with "Source:".
+	sourceStart = regexp.MustCompile(`^\s*Sources?:\s+(.{3,120})`)
+	sentenceEnd = regexp.MustCompile(`[a-z0-9)]\.\s+[A-Z]`)
 )
 
 // dataBlock is a block of data the page shows: its section, caption and
@@ -65,11 +68,34 @@ func dataBlocks(c *audit.Context) []dataBlock {
 		source := ""
 		if cs := webpage.QueryAll(box, "cite"); len(cs) > 0 {
 			source = webpage.HTMLText(cs[0])
+		} else if line := sourceNote(box); line != "" {
+			source = line
 		} else if m := sourceText.FindStringSubmatch(webpage.HTMLText(box)); m != nil {
-			source = m[1]
+			source = endSentence(m[1])
 		}
 		source, _, _ = strings.Cut(source, ":")
-		out = append(out, dataBlock{box, webpage.HTMLText(cap), strings.TrimSpace(source)})
+		out = append(out, dataBlock{box, webpage.HTMLText(cap), strings.TrimRight(strings.TrimSpace(source), ".")})
 	}
 	return out
+}
+
+// sourceNote is the text after "Source:" in the first element of the block
+// that starts with it: a source note of its own, not the sentences around it.
+func sourceNote(box *html.Node) string {
+	for _, e := range webpage.QueryAll(box, "p, small, li, span, div, td") {
+		if m := sourceStart.FindStringSubmatch(webpage.HTMLText(e)); m != nil {
+			return endSentence(m[1])
+		}
+	}
+	return ""
+}
+
+// endSentence is the text up to the end of its first sentence: a full stop
+// after a word or figure, then a capital ("Statistics. Employment"). The dots of
+// "U.S." do not end it.
+func endSentence(s string) string {
+	if loc := sentenceEnd.FindStringIndex(s); loc != nil {
+		return s[:loc[0]+2]
+	}
+	return s
 }

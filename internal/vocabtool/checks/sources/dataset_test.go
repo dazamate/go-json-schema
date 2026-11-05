@@ -8,6 +8,14 @@ import (
 	"github.com/dazamate/go-json-schema/internal/vocabtool/checks/sources"
 )
 
+// outlookPage is the BLS Occupational Outlook Handbook's job outlook (trimmed): the
+// chart's label leads with a year range, and its Source line ends a sentence
+// with the lead text of the next paragraph after it.
+const outlookPage = `<!doctype html><html><body><main><h1>Electricians</h1><article aria-labelledby="job-outlook"><h2 id="job-outlook"><span> Job Outlook</span></h2>
+<div class="ooh-chart"><h3> Electricians</h3><p> Percent change in employment, projected 2025–35</p><dl><dt><span> Electricians </span></dt><dd>11%</dd></dl><p class="footer"> Note: <br>Data are from the Occupational Employment and Wage Statistics program.<br> All Occupations includes all occupations in the U.S. Economy.<br>Source: U.S. Bureau of Labor Statistics.</p></div>
+<p> Employment of electricians is projected to grow 9 percent from 2025 to 2035, much faster than the average for all occupations.</p>
+<table class="regular" id="outlook-table"><caption><span class="tableTitle"> Employment projections data for electricians, 2025–35</span></caption><thead><tr><th>Occupational Title</th><th>Employment, 2025</th></tr></thead><tbody><tr><td>Electricians</td><td>757,200</td></tr></tbody></table></article></main></body></html>`
+
 func TestDataset(t *testing.T) {
 	described := `{"@context":"https://schema.org","@graph":[
 		{"@type":"Dataset","name":"Moving companies per 100,000 residents, 2023"},
@@ -25,6 +33,9 @@ func TestDataset(t *testing.T) {
 			{Path: "html:#mover-pay", Severity: audit.Warning, Message: `the page shows data from U.S. Bureau of Labor Statistics, Occupational Employment and Wage Statistics, May 2025 ("Hourly pay for hand laborers and material movers, May 2025") ` + ask},
 			{Path: "html:#distance", Severity: audit.Warning, Message: `the page shows data from U.S. Census Bureau, Gazetteer files, 2024 ("Road miles to ten cities") ` + ask},
 			{Path: "html:#typical-home", Severity: audit.Warning, Message: `the page shows data from U.S. Census Bureau, American Community Survey, 2020-2024 ("Homes by bedrooms, 2020-2024") ` + ask},
+		}},
+		{"a source line that ends its sentence", audittest.Input{Draft: barePage, PageHTML: outlookPage, PageURL: "https://jobs.test/electricians/"}, []audit.Issue{
+			{Path: "html:body > main > article", Severity: audit.Warning, Message: `the page shows data from U.S. Bureau of Labor Statistics ("Employment projections data for electricians, 2025–35") ` + ask},
 		}},
 		{"a Dataset names each", audittest.Input{Draft: described, PageHTML: dataPage, PageURL: dataURL}, nil},
 		{"a noindex page", audittest.Input{Draft: barePage, PageHTML: audittest.Noindex(dataPage), PageURL: dataURL}, nil},
