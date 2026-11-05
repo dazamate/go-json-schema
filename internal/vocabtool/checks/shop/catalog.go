@@ -17,7 +17,8 @@ var categorySegment = regexp.MustCompile(`^(categor(y|ies)|collections?|c|depart
 
 // Catalog warns when the site's menus list its categories and no node has an
 // OfferCatalog of them: the business's hasOfferCatalog names the categories
-// it sells in. It needs the page's document and at least three categories.
+// it sells in. It needs the page's document, a shop's page and at least three
+// categories.
 type Catalog struct{}
 
 // ID is the check's ID.
@@ -25,7 +26,7 @@ func (Catalog) ID() string { return "shop/catalog" }
 
 // Run reports the categories the menus link, once, up to six.
 func (Catalog) Run(c *audit.Context) []audit.Issue {
-	if !c.Indexed() || c.Page.Doc == nil || jsonld.HasKey(c.Nodes, "hasOfferCatalog") {
+	if !c.Indexed() || c.Page.Doc == nil || !c.Page.Sells() || jsonld.HasKey(c.Nodes, "hasOfferCatalog") {
 		return nil
 	}
 	p := c.Page
