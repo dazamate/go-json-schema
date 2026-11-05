@@ -186,11 +186,36 @@ func TestCheckWarnsOnUntypedNodeWithProperties(t *testing.T) {
 	}
 }
 
+// A draft string that holds a closing script tag must not end the script tag
+// early: the body escapes < and > as JSON does, and still parses back to the
+// string.
 func TestCheckKeepsKeyOrderAndEscapesScript(t *testing.T) {
-	r := check(t, `{"@type":"Recipe","name":"</script><b>","description":"d","about":[]}`)
-	want := `<script type="application/ld+json">{"@context":"https://schema.org","@type":"Recipe","name":"</script><b>","description":"d","about":[]}</script>`
-	if r.ScriptTag != want {
-		t.Fatalf("got  %s\nwant %s", r.ScriptTag, want)
+	const name = `</script><script>alert(1)</script>`
+	draft, err := json.Marshal(name)
+	if err != nil {
+		t.Fatal(err)
+	}
+	r := check(t, `{"@type":"Recipe","name":`+string(draft)+`,"description":"d","about":[]}`)
+	const open, shut = `<script type="application/ld+json">`, `</script>`
+	if !strings.HasPrefix(r.ScriptTag, open) || !strings.HasSuffix(r.ScriptTag, shut) {
+		t.Fatalf("not a script tag: %s", r.ScriptTag)
+	}
+	body := strings.TrimSuffix(strings.TrimPrefix(r.ScriptTag, open), shut)
+	if strings.Contains(strings.ToLower(body), "</script") || strings.ContainsAny(body, "<>") {
+		t.Fatalf("raw angle bracket in the body: %s", body)
+	}
+	want := `{"@context":"https://schema.org","@type":"Recipe","name":"\u003c/script\u003e\u003cscript\u003ealert(1)\u003c/script\u003e","description":"d","about":[]}`
+	if body != want {
+		t.Fatalf("got  %s\nwant %s", body, want)
+	}
+	var got struct {
+		Name string `json:"name"`
+	}
+	if err := json.Unmarshal([]byte(body), &got); err != nil {
+		t.Fatalf("body is not JSON: %v", err)
+	}
+	if got.Name != name {
+		t.Errorf("name = %q, want %q", got.Name, name)
 	}
 }
 

@@ -95,13 +95,15 @@ func input(opts CheckOptions) audit.Input {
 	}
 }
 
-// scriptTag is the draft as Check publishes it: a JSON-LD script tag.
+// scriptTag is the draft as Check publishes it: a JSON-LD script tag. The
+// body escapes < and > the way JSON does, so a string holding </script> cannot
+// end the tag early and the body still parses to the same value.
 func scriptTag(root any, pretty bool) (string, error) {
 	body, err := jsonld.Encode(root, pretty)
 	if err != nil {
 		return "", err
 	}
-	safe := strings.NewReplacer("<", `<`, ">", `>`).Replace(string(body))
+	safe := strings.NewReplacer("<", `\u003c`, ">", `\u003e`).Replace(string(body))
 	return `<script type="application/ld+json">` + safe + `</script>`, nil
 }
 
