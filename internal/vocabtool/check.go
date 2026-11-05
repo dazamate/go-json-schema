@@ -11,6 +11,8 @@ import (
 	"strings"
 
 	"golang.org/x/net/html"
+
+	"github.com/dazamate/go-json-schema/internal/vocabtool/vocab"
 )
 
 // Issue severities. Only errors stop a draft being valid schema.org.
@@ -86,7 +88,7 @@ func (t *Tool) Check(draft json.RawMessage, opts CheckOptions) (Report, error) {
 	default:
 		return Report{}, fmt.Errorf("draft must be a JSON object or array")
 	}
-	c := checker{t: t, suggested: map[*object]bool{}}
+	c := checker{v: t.Vocab, suggested: map[*object]bool{}}
 	c.walk("$", doc)
 	c.repeats(doc)
 	all := nodes("$", doc)
@@ -168,13 +170,13 @@ func (t *Tool) Vocabulary(draft json.RawMessage) ([]Issue, error) {
 	default:
 		return nil, fmt.Errorf("draft must be a JSON object or array")
 	}
-	c := checker{t: t, suggested: map[*object]bool{}}
+	c := checker{v: t.Vocab, suggested: map[*object]bool{}}
 	c.walk("$", root)
 	return c.issues, nil
 }
 
 type checker struct {
-	t         *Tool
+	v         *vocab.Vocab
 	issues    []Issue
 	suggested map[*object]bool // nodes already told to take a more specific type
 }
@@ -314,9 +316,9 @@ func (c *checker) types(path string, n *object) []string {
 	var known []string
 	for _, name := range names {
 		term := stripPrefix(name)
-		cl, ok := c.t.v.Classes[term]
+		cl, ok := c.v.V.Classes[term]
 		if !ok {
-			c.unknown(path, kindType, name)
+			c.unknown(path, vocab.KindType, name)
 			continue
 		}
 		if len(cl.SupersededBy) > 0 {
@@ -328,7 +330,7 @@ func (c *checker) types(path string, n *object) []string {
 }
 
 func (c *checker) unknown(path, kind, name string) {
-	if s := c.t.suggest(kind, stripPrefix(name)); s != "" {
+	if s := c.v.Suggest(kind, stripPrefix(name)); s != "" {
 		c.add(path, Error, "unknown %s %q; did you mean %s?", kind, name, s)
 		return
 	}
@@ -345,9 +347,9 @@ func (c *checker) property(path, key string, types []string, n *object) {
 		c.add(path, Warning, "%q is not a schema.org term; left as is", key)
 		return
 	}
-	p, ok := c.t.v.Props[term]
+	p, ok := c.v.V.Props[term]
 	if !ok {
-		c.unknown(path, kindProperty, key)
+		c.unknown(path, vocab.KindProperty, key)
 		return
 	}
 	if len(p.SupersededBy) > 0 {
@@ -362,9 +364,9 @@ func (c *checker) property(path, key string, types []string, n *object) {
 			}
 		}
 	}
-	if len(types) > 0 && !slices.ContainsFunc(types, func(ty string) bool { return c.t.applicable[ty][term] }) {
+	if len(types) > 0 && !slices.ContainsFunc(types, func(ty string) bool { return c.v.Applicable(ty, term) }) {
 		// a subtype that takes the property is the type the node means
-		if subs := c.t.subtypesTaking(types, term); len(subs) > 0 {
+		if subs := c.v.SubtypesTaking(types, term); len(subs) > 0 {
 			noun := "subtype"
 			if len(subs) > 1 {
 				noun = "subtypes"
@@ -394,12 +396,12 @@ func (c *checker) value(path, prop string, v any) any {
 		c.walk(path, v)
 		return v
 	}
-	if enum, only := c.t.enumOnly[prop]; only {
+	if enum, only := c.v.EnumOnly(prop); only {
 		name := stripPrefix(s)
-		if slices.Contains(c.t.members(enum), name) {
+		if slices.Contains(c.v.Members(enum), name) {
 			return baseURL + name
 		}
-		allowed := c.t.members(enum)
+		allowed := c.v.Members(enum)
 		if len(allowed) > 15 {
 			allowed = append(allowed[:15:15], "...")
 		}
@@ -409,20 +411,11 @@ func (c *checker) value(path, prop string, v any) any {
 	// Mixed ranges such as Text|ItemListOrderType: only a schema.org URL
 	// claims to be a member, so only that is checked.
 	if name, isURL := cutSchemaURL(s); isURL {
-		if _, isMember := c.t.v.Members[name]; !isMember && c.rangesEnum(prop) {
+		if _, isMember := c.v.V.Members[name]; !isMember && c.v.RangesEnum(prop) {
 			c.add(path, Warning, "%q names no schema.org enumeration member", s)
 		}
 	}
 	return v
-}
-
-func (c *checker) rangesEnum(prop string) bool {
-	for _, r := range c.t.v.Props[prop].Ranges {
-		if slices.Contains(c.t.v.Ancestors(r), "Enumeration") {
-			return true
-		}
-	}
-	return false
 }
 
 func cutSchemaURL(s string) (string, bool) {

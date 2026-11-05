@@ -3,7 +3,6 @@ package vocabtool
 import (
 	"net/url"
 	"slices"
-	"sort"
 	"strings"
 	"unicode"
 
@@ -23,86 +22,13 @@ import (
 // Only stable types are suggested: not pending, retired, meta, superseded,
 // a data type or an enumeration.
 
-// unstableParts are the schema.org sections whose types are never suggested.
-var unstableParts = map[string]bool{"pending": true, "attic": true, "meta": true}
-
-// suggestable reports whether a type may be suggested as a more specific type.
-func (t *Tool) suggestable(name string) bool {
-	c, ok := t.v.Classes[name]
-	if !ok || c.DataType || len(c.SupersededBy) > 0 || unstableParts[c.Part] {
-		return false
-	}
-	return !slices.Contains(t.v.Ancestors(name), "Enumeration")
-}
-
-// indexSubtypes fills subtypesOf: for every type, its suggestable strict
-// subtypes, in name order. New calls it once, so checks only read the map.
-func (t *Tool) indexSubtypes() {
-	children := map[string][]string{}
-	for name, c := range t.v.Classes {
-		for _, p := range c.Parents {
-			children[p] = append(children[p], name)
-		}
-	}
-	t.subtypesOf = map[string][]string{}
-	for class := range t.v.Classes {
-		seen := map[string]bool{}
-		var out []string
-		var down func(string)
-		down = func(n string) {
-			for _, ch := range children[n] {
-				if seen[ch] {
-					continue
-				}
-				seen[ch] = true
-				if t.suggestable(ch) {
-					out = append(out, ch)
-				}
-				down(ch)
-			}
-		}
-		down(class)
-		sort.Strings(out)
-		t.subtypesOf[class] = out
-	}
-}
-
-// descendants are the suggestable strict subtypes of class, in name order.
-func (t *Tool) descendants(class string) []string { return t.subtypesOf[class] }
-
-// mostGeneral keeps the candidates no other candidate is an ancestor of.
-func (t *Tool) mostGeneral(cands []string) []string {
-	var out []string
-	for _, c := range cands {
-		if !slices.ContainsFunc(cands, func(o string) bool { return o != c && slices.Contains(t.v.Ancestors(c), o) }) {
-			out = append(out, c)
-		}
-	}
-	return out
-}
-
-// subtypesTaking are the most general subtypes of the node's types that take
-// the property, when none of the types does.
-func (t *Tool) subtypesTaking(types []string, prop string) []string {
-	var cands []string
-	for _, ty := range types {
-		for _, d := range t.descendants(ty) {
-			if t.applicable[d][prop] && !slices.Contains(cands, d) {
-				cands = append(cands, d)
-			}
-		}
-	}
-	sort.Strings(cands)
-	return t.mostGeneral(cands)
-}
-
 // single is the node's one known type, or "" when it has none or several.
 func (c *checker) single(n *object) string {
 	types := typeNames(n)
 	if len(types) != 1 {
 		return ""
 	}
-	if _, ok := c.t.v.Classes[types[0]]; !ok {
+	if _, ok := c.v.V.Classes[types[0]]; !ok {
 		return ""
 	}
 	return types[0]
@@ -140,7 +66,7 @@ func (c *checker) classTypes(all []located) {
 			continue
 		}
 		kind := slices.ContainsFunc(ownItems(l.n), func(q string) bool { return classtype.Of([]string{q}, false) != "" })
-		if want := classtype.Of([]string{m[1]}, kind); want != "" && want != ty && slices.Contains(c.t.v.Ancestors(want), ty) {
+		if want := classtype.Of([]string{m[1]}, kind); want != "" && want != ty && slices.Contains(c.v.V.Ancestors(want), ty) {
 			also := ""
 			if want == "LandmarksOrHistoricalBuildings" {
 				also = ", with TouristAttraction too when visitors go to see it"
@@ -191,7 +117,7 @@ func (c *checker) namedTypes(all []located) {
 	}
 	for _, l := range all {
 		ty := c.single(l.n)
-		if ty == "" || ty == "Thing" || c.suggested[l.n] || crumbs[l.n] || len(wikidataItems(l.n)) > 0 || hasWikidataClass(l.n) || slices.Contains(c.t.v.Ancestors(ty), "WebPageElement") {
+		if ty == "" || ty == "Thing" || c.suggested[l.n] || crumbs[l.n] || len(wikidataItems(l.n)) > 0 || hasWikidataClass(l.n) || slices.Contains(c.v.V.Ancestors(ty), "WebPageElement") {
 			continue
 		}
 		label := strings.Join(append(strs(l.n, "name"), strs(l.n, "headline")...), " ")
@@ -212,11 +138,11 @@ func (c *checker) namedTypes(all []located) {
 		}
 		var best []string
 		depth := 0
-		for _, d := range c.t.descendants(ty) {
+		for _, d := range c.v.Descendants(ty) {
 			if unnamedTypes[d] || !namesType(text, typeAlternatives(d, ty)) {
 				continue
 			}
-			switch n := len(c.t.v.Ancestors(d)); {
+			switch n := len(c.v.V.Ancestors(d)); {
 			case n > depth:
 				best, depth = []string{d}, n
 			case n == depth:

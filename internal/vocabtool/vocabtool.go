@@ -9,53 +9,21 @@ import (
 	"strings"
 
 	"github.com/dazamate/go-json-schema/internal/schemagen"
+	"github.com/dazamate/go-json-schema/internal/vocabtool/vocab"
 )
 
 const baseURL = "https://schema.org/"
 
 // Tool looks terms up in the embedded schema.org vocabulary.
-type Tool struct {
-	v          *schemagen.Vocab
-	applicable map[string]map[string]bool
-	enumOnly   map[string]string
-	lower      map[string]map[string]string // kind -> lowercased term -> term, for suggestions
-	subtypesOf map[string][]string          // type -> its suggestable strict subtypes
-}
-
-// Term kinds, for suggestions.
-const (
-	kindType     = "type"
-	kindProperty = "property"
-	kindMember   = "member"
-)
+type Tool struct{ *vocab.Vocab }
 
 // New loads the embedded vocabulary.
 func New() (*Tool, error) {
-	v, err := schemagen.Embedded()
+	v, err := vocab.Load()
 	if err != nil {
 		return nil, err
 	}
-	t := &Tool{v: v, applicable: map[string]map[string]bool{}, enumOnly: v.EnumOnlyProps(), lower: map[string]map[string]string{
-		kindType: {}, kindProperty: {}, kindMember: {},
-	}}
-	for name := range v.Classes {
-		t.lower[kindType][strings.ToLower(name)] = name
-	}
-	for name := range v.Props {
-		t.lower[kindProperty][strings.ToLower(name)] = name
-	}
-	for name := range v.Members {
-		t.lower[kindMember][strings.ToLower(name)] = name
-	}
-	for name := range v.Classes {
-		set := map[string]bool{}
-		for _, p := range v.Applicable(name) {
-			set[p] = true
-		}
-		t.applicable[name] = set
-	}
-	t.indexSubtypes()
-	return t, nil
+	return &Tool{v}, nil
 }
 
 // TypeInfo describes a schema.org type and every property usable on it.
@@ -84,39 +52,45 @@ type PropertyRef struct {
 // TypeProperties returns the type's place in the hierarchy and every
 // property usable on it, inherited ones included.
 func (t *Tool) TypeProperties(name string) (TypeInfo, error) {
-	cl, ok := t.v.Classes[name]
+	cl, ok := t.V.Classes[name]
 	if !ok {
-		return TypeInfo{}, t.unknown(kindType, "type", name)
+		return TypeInfo{}, t.unknown(vocab.KindType, "type", name)
 	}
 	info := TypeInfo{
 		Type:      name,
 		URL:       baseURL + name,
 		Comment:   cl.Comment,
 		Parents:   cl.Parents,
-		Ancestors: t.v.Ancestors(name),
+		Ancestors: t.V.Ancestors(name),
 	}
-	for sub, c := range t.v.Classes {
+	for sub, c := range t.V.Classes {
 		if slices.Contains(c.Parents, name) {
 			info.Subtypes = append(info.Subtypes, sub)
 		}
 	}
 	sort.Strings(info.Subtypes)
-	info.Members = t.members(name)
-	if t.v.IsStruct(name) {
+	info.Members = t.Members(name)
+	if t.V.IsStruct(name) {
 		info.GoType = schemagen.GoType(name)
 	}
-	for _, p := range t.v.Applicable(name) {
-		prop := t.v.Props[p]
+	for _, p := range t.V.Applicable(name) {
+		prop := t.V.Props[p]
 		info.Properties = append(info.Properties, PropertyRef{
 			Name:         p,
 			Expects:      prop.Ranges,
 			From:         t.from(prop, info.Ancestors),
-			Enum:         t.enumOnly[p],
+			Enum:         t.enumOf(p),
 			Part:         prop.Part,
 			SupersededBy: prop.SupersededBy,
 		})
 	}
 	return info, nil
+}
+
+// enumOf is the enumeration a property is limited to, or "" when it is not.
+func (t *Tool) enumOf(prop string) string {
+	enum, _ := t.EnumOnly(prop)
+	return enum
 }
 
 // from picks the most specific of the property's domains that the type
@@ -125,7 +99,7 @@ func (t *Tool) from(p *schemagen.Prop, ancestors []string) string {
 	best, depth := "", -1
 	for _, d := range p.Domains {
 		if slices.Contains(ancestors, d) {
-			if n := len(t.v.Ancestors(d)); n > depth {
+			if n := len(t.V.Ancestors(d)); n > depth {
 				best, depth = d, n
 			}
 		}
@@ -153,42 +127,27 @@ type MemberRef struct {
 // EnumValues returns the members of an enumeration, including members of
 // its sub-enumerations, and the properties that expect it.
 func (t *Tool) EnumValues(name string) (EnumInfo, error) {
-	cl, ok := t.v.Classes[name]
-	if !ok || !slices.Contains(t.v.Ancestors(name), "Enumeration") {
-		return EnumInfo{}, t.unknown(kindType, "enumeration", name)
+	cl, ok := t.V.Classes[name]
+	if !ok || !slices.Contains(t.V.Ancestors(name), "Enumeration") {
+		return EnumInfo{}, t.unknown(vocab.KindType, "enumeration", name)
 	}
 	info := EnumInfo{Enum: name, URL: baseURL + name, Comment: cl.Comment}
-	for sub := range t.v.Classes {
-		if sub != name && slices.Contains(t.v.Ancestors(sub), name) {
+	for sub := range t.V.Classes {
+		if sub != name && slices.Contains(t.V.Ancestors(sub), name) {
 			info.Subenums = append(info.Subenums, sub)
 		}
 	}
 	sort.Strings(info.Subenums)
-	for _, m := range t.members(name) {
-		info.Members = append(info.Members, MemberRef{Name: m, URL: baseURL + m, Comment: firstSentence(t.v.Members[m].Comment)})
+	for _, m := range t.Members(name) {
+		info.Members = append(info.Members, MemberRef{Name: m, URL: baseURL + m, Comment: firstSentence(t.V.Members[m].Comment)})
 	}
-	for p, prop := range t.v.Props {
+	for p, prop := range t.V.Props {
 		if slices.Contains(prop.Ranges, name) {
 			info.Properties = append(info.Properties, p)
 		}
 	}
 	sort.Strings(info.Properties)
 	return info, nil
-}
-
-// members returns the members of enum and of every enumeration under it.
-func (t *Tool) members(enum string) []string {
-	var out []string
-	for name, m := range t.v.Members {
-		for _, e := range m.Enums {
-			if slices.Contains(t.v.Ancestors(e), enum) {
-				out = append(out, name)
-				break
-			}
-		}
-	}
-	sort.Strings(out)
-	return out
 }
 
 // PropInfo describes a property and where it lives in package schema.
@@ -208,9 +167,9 @@ type PropInfo struct {
 
 // PropertyInfo returns a property's domains, expected types and Go field.
 func (t *Tool) PropertyInfo(name string) (PropInfo, error) {
-	p, ok := t.v.Props[name]
+	p, ok := t.V.Props[name]
 	if !ok {
-		return PropInfo{}, t.unknown(kindProperty, "property", name)
+		return PropInfo{}, t.unknown(vocab.KindProperty, "property", name)
 	}
 	info := PropInfo{
 		Property:     name,
@@ -218,13 +177,13 @@ func (t *Tool) PropertyInfo(name string) (PropInfo, error) {
 		Comment:      p.Comment,
 		Domains:      p.Domains,
 		Expects:      p.Ranges,
-		Enum:         t.enumOnly[name],
+		Enum:         t.enumOf(name),
 		Part:         p.Part,
 		SupersededBy: p.SupersededBy,
 		GoField:      schemagen.GoName(name),
 	}
 	if info.Enum != "" {
-		info.Members = t.members(info.Enum)
+		info.Members = t.Members(info.Enum)
 	}
 	if len(p.Domains) == 1 {
 		info.GoBlock = schemagen.GoType(p.Domains[0]) + "Props"
@@ -237,64 +196,10 @@ func (t *Tool) PropertyInfo(name string) (PropInfo, error) {
 // unknown builds a not-found error, suggesting the term the caller most
 // likely meant.
 func (t *Tool) unknown(kind, label, name string) error {
-	if s := t.suggest(kind, name); s != "" {
+	if s := t.Suggest(kind, name); s != "" {
 		return fmt.Errorf("unknown %s %q; did you mean %s?", label, name, s)
 	}
 	return fmt.Errorf("unknown %s %q", label, name)
-}
-
-// suggest returns the term of that kind matching name ignoring case, or
-// the closest one within two edits.
-func (t *Tool) suggest(kind, name string) string {
-	low := strings.ToLower(name)
-	if s, ok := t.lower[kind][low]; ok {
-		return s
-	}
-	best, dist := "", 3 // accept at most two edits
-	for l, s := range t.lower[kind] {
-		// Capping one past dist keeps true ties apart from worse matches.
-		if d := editDistance(low, l, dist+1); d < dist || (d == dist && dist < 3 && s < best) {
-			best, dist = s, d
-		}
-	}
-	return best
-}
-
-// editDistance is the Levenshtein distance between a and b, or max when it
-// is at least max.
-func editDistance(a, b string, max int) int {
-	if abs(len(a)-len(b)) >= max {
-		return max
-	}
-	prev := make([]int, len(b)+1)
-	cur := make([]int, len(b)+1)
-	for j := range prev {
-		prev[j] = j
-	}
-	for i := 1; i <= len(a); i++ {
-		cur[0] = i
-		rowMin := cur[0]
-		for j := 1; j <= len(b); j++ {
-			cost := 1
-			if a[i-1] == b[j-1] {
-				cost = 0
-			}
-			cur[j] = min(prev[j]+1, cur[j-1]+1, prev[j-1]+cost)
-			rowMin = min(rowMin, cur[j])
-		}
-		if rowMin >= max {
-			return max
-		}
-		prev, cur = cur, prev
-	}
-	return min(prev[len(b)], max)
-}
-
-func abs(n int) int {
-	if n < 0 {
-		return -n
-	}
-	return n
 }
 
 func firstSentence(s string) string {

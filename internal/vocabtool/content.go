@@ -209,7 +209,7 @@ func indexDraft(all []located) *draftIndex {
 
 // is reports whether the node has the type or a subtype of it.
 func (c *checker) is(n *object, ty string) bool {
-	return slices.ContainsFunc(typeNames(n), func(t string) bool { return slices.Contains(c.t.v.Ancestors(t), ty) })
+	return c.v.Is(typeNames(n), ty)
 }
 
 // scalars are a property's string, number and boolean values, as text.

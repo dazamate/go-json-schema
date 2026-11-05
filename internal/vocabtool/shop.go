@@ -468,7 +468,7 @@ func (c *checker) pageType(all []located, p *pageFacts) {
 	ty := c.single(l.n)
 	// the name and URL check may already have named the subtype
 	named := slices.ContainsFunc(c.issues, func(i Issue) bool { return i.Path == l.path && strings.Contains(i.Message, "subtype "+want) })
-	if ty != "" && ty != want && slices.Contains(c.t.v.Ancestors(want), ty) && !c.suggested[l.n] && !named {
+	if ty != "" && ty != want && slices.Contains(c.v.V.Ancestors(want), ty) && !c.suggested[l.n] && !named {
 		c.add(l.path, Warning, "this %s is a %s page: type it %s", ty, strings.TrimPrefix(string(p.kind), "kind"), want)
 		c.suggested[l.n] = true
 	}
@@ -627,7 +627,7 @@ func (c *checker) business(all []located, p *pageFacts) {
 	}
 	l := all[i]
 	ty := c.single(l.n)
-	if want != "" && ty != "" && ty != want && slices.Contains(c.t.v.Ancestors(want), ty) && !c.suggested[l.n] {
+	if want != "" && ty != "" && ty != want && slices.Contains(c.v.V.Ancestors(want), ty) && !c.suggested[l.n] {
 		c.add(l.path, Warning, "%s: type this %s %s", why, ty, want)
 		c.suggested[l.n] = true
 	}

@@ -282,11 +282,11 @@ var notForShop = map[string]string{
 // auditReason is why a type no shop page calls for is left out, from the
 // branch it sits in.
 func auditReason(t *Tool, name string) string {
-	c := t.v.Classes[name]
-	anc := t.v.Ancestors(name)
+	c := t.V.Classes[name]
+	anc := t.V.Ancestors(name)
 	under := func(ty string) bool { return slices.Contains(anc, ty) && name != ty }
 	switch {
-	case c.DataType || !t.v.IsStruct(name):
+	case c.DataType || !t.V.IsStruct(name):
 		return "a value written as text, a number or a date, not a node"
 	case len(c.SupersededBy) > 0:
 		return "superseded: the report names its replacement"
@@ -384,8 +384,8 @@ func reportNames(issues []Issue, words string) bool {
 
 func TestEcommerceAudit(t *testing.T) {
 	tool := newTool(t)
-	names := make([]string, 0, len(tool.v.Classes))
-	for name := range tool.v.Classes {
+	names := make([]string, 0, len(tool.V.Classes))
+	for name := range tool.V.Classes {
 		names = append(names, name)
 	}
 	sort.Strings(names)
@@ -418,7 +418,7 @@ func TestEcommerceAudit(t *testing.T) {
 		t.Errorf("%d types have no verdict: %s", len(unjudged), strings.Join(unjudged, ", "))
 	}
 	for name := range shopUses {
-		if _, ok := tool.v.Classes[name]; !ok {
+		if _, ok := tool.V.Classes[name]; !ok {
 			t.Errorf("shopUses names %s, which the vocabulary lacks", name)
 		}
 	}

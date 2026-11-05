@@ -300,7 +300,7 @@ func (c *checker) choices(all []located, p *pageFacts) {
 	varies := strs(pg.n, "variesBy")
 	for _, v := range varies {
 		if name, isURL := cutSchemaURL(v); isURL {
-			if _, ok := c.t.v.Props[name]; ok {
+			if _, ok := c.v.V.Props[name]; ok {
 				continue
 			}
 		}

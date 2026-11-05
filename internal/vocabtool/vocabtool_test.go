@@ -5,6 +5,8 @@ import (
 	"slices"
 	"strings"
 	"testing"
+
+	"github.com/dazamate/go-json-schema/internal/vocabtool/vocab"
 )
 
 func newTool(t *testing.T) *Tool {
@@ -195,11 +197,11 @@ func TestCheckKeepsKeyOrderAndEscapesScript(t *testing.T) {
 func TestSuggestPicksClosestTerm(t *testing.T) {
 	tool := newTool(t)
 	for in, want := range map[string]string{"Persn": "Person", "Recipee": "Recipe", "recipeingredient": "recipeIngredient"} {
-		kind := kindType
+		kind := vocab.KindType
 		if in == "recipeingredient" {
-			kind = kindProperty
+			kind = vocab.KindProperty
 		}
-		if got := tool.suggest(kind, in); got != want {
+		if got := tool.Suggest(kind, in); got != want {
 			t.Errorf("suggest(%q) = %q, want %q", in, got, want)
 		}
 	}
