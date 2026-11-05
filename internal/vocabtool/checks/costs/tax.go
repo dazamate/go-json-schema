@@ -9,8 +9,8 @@ import (
 )
 
 var (
-	taxWords = regexp.MustCompile(`(?i)\b(plus|excl(?:uding|\.)?|ex|exclusive of|incl(?:uding|\.)?|inc\.?|inclusive of)\s+(GST|VAT|tax(?:es)?|sales tax)\b|\b(GST|VAT|tax(?:es)?)\s+(included|inclusive|incl\.?|excluded|exclusive|excl\.?|extra)\b`)
-	taxOut   = regexp.MustCompile(`(?i)^(?:plus|ex|excl|exclusive|excluded|extra)`)
+	taxWords = regexp.MustCompile(`(?i)(?:\b(plus|excl(?:uding|udes?|\.)?|ex\.?|exclusive of|incl(?:uding|udes?|\.)?|inc\.?|inclusive of)\s+|(\+)\s*)(GST|VAT|tax(?:es)?|sales tax)\b|\b(GST|VAT|tax(?:es)?)\s+(included|inclusive|incl\.?|excluded|exclusive|excl\.?|extra)\b`)
+	taxOut   = regexp.MustCompile(`(?i)^(?:\+|plus|ex|excl|exclusive|excluded|extra)`)
 )
 
 // taxSaid is the first thing the page says of tax ("GST included", "plus
@@ -26,5 +26,5 @@ func taxSaid(c *audit.Context) (said string, included bool) {
 	if t == nil {
 		return "", false
 	}
-	return t[0], !taxOut.MatchString(txt.FirstNonEmpty(t[1], t[4]))
+	return t[0], !taxOut.MatchString(txt.FirstNonEmpty(t[1], t[2], t[5]))
 }
