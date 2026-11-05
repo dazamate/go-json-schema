@@ -18,12 +18,13 @@ const paymentAlt = `Visa|Mastercard|MasterCard|American Express|Amex|Diners Club
 var (
 	paymentNames = regexp.MustCompile(`\b(` + paymentAlt + `)\b`)
 	// everyday words that are also a card's name: they count as a card with the
-	// word "card" after them, in a list of payment names, or alone in the alt
+	// word "card" after them, in a list of payment names (a row of icons' names
+	// counts, with no commas between them), or alone in the alt
 	// or title of an icon
 	wordNames  = regexp.MustCompile(`^(?:Visa|Discover)$`)
 	cardAfter  = regexp.MustCompile(`^\s+(?:credit |debit )?cards?\b`)
-	listAfter  = regexp.MustCompile(`^\s*(?:[,/|&•]|\band\b|\bor\b)\s*(?:(?:and|or)\s+)?` + `\b(?:` + paymentAlt + `)\b`)
-	listBefore = regexp.MustCompile(`\b(?:` + paymentAlt + `)\s*(?:[,/|&•]|\band\b|\bor\b)\s*(?:(?:and|or)\s+)?$`)
+	listAfter  = regexp.MustCompile(`^\s*(?:[,/|&•]|\band\b|\bor\b)?\s*(?:(?:and|or)\s+)?` + `\b(?:` + paymentAlt + `)\b`)
+	listBefore = regexp.MustCompile(`\b(?:` + paymentAlt + `)\s*(?:[,/|&•]|\band\b|\bor\b)?\s*(?:(?:and|or)\s+)?$`)
 	payBefore  = regexp.MustCompile(`(?i)\b(?:accepts?|accepted|take|takes|(?:pay|paying|payment)\s+(?:with|by|using|via))\s+(?:all\s+major\s+cards\s+(?:including\s+)?)?$`)
 	iconWord   = regexp.MustCompile(`(?i)^(?:visa|discover)(?: (?:card|logo|icon))?$`)
 	cardNames  = regexp.MustCompile(`(?i)^(visa|mastercard|american express|amex|diners club|discover|jcb|unionpay)$`)
