@@ -229,7 +229,7 @@ func (p *Facts) Sells() bool {
 		return true
 	}
 	for _, a := range QueryAll(p.Doc, "a[href]") {
-		if u, ok := p.SiteLink(a); ok && cartPath.MatchString(u) {
+		if u, ok := p.SiteLink(a); ok && CartPath.MatchString(u) {
 			return true
 		}
 	}

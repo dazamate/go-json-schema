@@ -47,6 +47,7 @@ var kindSegments = []struct {
 
 var (
 	productSegment = regexp.MustCompile(`^(products?|p|item|items)$`)
+	ogProduct      = regexp.MustCompile(`(?i)^\s*product(?:\.item)?\s*$`)
 	listingSegment = regexp.MustCompile(`^(categor(y|ies)|collections?|c|shop|store|catalog(ue)?|departments?)$`)
 	LocaleSegment  = regexp.MustCompile(`^[a-z]{2}(-[a-z]{2})?$`)
 	kindHeadings   = []struct {
@@ -62,8 +63,12 @@ var (
 		{KindReturns, regexp.MustCompile(`(?i)^(returns?|refunds?)\b`)},
 		{KindFAQ, regexp.MustCompile(`(?i)^(faqs?|frequently asked)\b`)},
 	}
-	cartPath  = regexp.MustCompile(`/(cart|basket|bag)$`)
-	CartForm  = regexp.MustCompile(`(?i)(cart|basket|bag)\b`)
+	// CartPath matches the address of the cart page (/cart, /basket, /bag).
+	CartPath = regexp.MustCompile(`/(cart|basket|bag)$`)
+	// CartForm matches the action of a form that adds to the cart
+	// (/cart/add, ?add-to-cart=, addtobasket): a form that only posts to the
+	// cart is the cart's own (its checkout button), not a product's.
+	CartForm  = regexp.MustCompile(`(?i)\b(?:cart|basket|bag)[/_-]?add\b|\badd[/_-]?to[/_-]?(?:cart|basket|bag)\b|\badd(?:to)?(?:cart|basket|bag)\b`)
 	AddToCart = regexp.MustCompile(`(?i)\b(add to (cart|bag|basket)|buy now|pre-?order)\b`)
 
 	// PreOrder finds a shop taking pre-orders ("Pre-order now").
@@ -105,7 +110,9 @@ func (p *Facts) classify() Kind {
 			return ks.kind
 		}
 	}
-	if p.Doc != nil && strings.HasPrefix(strings.ToLower(MetaContent(p.Doc, "property", "og:type")), "product") {
+	// og:type product.group is a group of products: a collection, or a
+	// product's variants, which its add-to-cart form tells apart below
+	if p.Doc != nil && ogProduct.MatchString(MetaContent(p.Doc, "property", "og:type")) {
 		return KindProduct
 	}
 	if i := slices.IndexFunc(segs, productSegment.MatchString); i >= 0 && i < len(segs)-1 {
@@ -132,6 +139,11 @@ func (p *Facts) classify() Kind {
 		}
 	}
 	if (slices.ContainsFunc(segs, listingSegment.MatchString) && listed >= 2) || listed >= 3 {
+		return KindListing
+	}
+	// a shop's category or collection address whose grid the page loads
+	// after it renders
+	if listingLink(p.URL) && p.Sells() {
 		return KindListing
 	}
 	return KindOther
