@@ -1,11 +1,11 @@
 package content
 
 import (
-	"regexp"
 	"strings"
 
 	"github.com/dazamate/go-json-schema/internal/vocabtool/audit"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
+	"github.com/dazamate/go-json-schema/internal/vocabtool/webpage"
 )
 
 func init() { audit.Register(Copyright{}) }
@@ -15,14 +15,6 @@ func init() { audit.Register(Copyright{}) }
 // page's content from them. It runs on a page search engines index.
 type Copyright struct{}
 
-// copyrightLine is a copyright line: the mark, the holder's name when it
-// comes first, and the year or the range of years. It captures the range's
-// first year (if any) and the last.
-var copyrightLine = regexp.MustCompile(`(?i)(?:©|\(c\)|copyright)[\s@:©.]*(?:[\p{L}&'’.,/ -]{0,50}?\s)?(?:((?:19|20)\d{2})\s*[-–—]\s*)?((?:19|20)\d{2})\b`)
-
-// copyrightYearFirst is a copyright line with the year before the mark.
-var copyrightYearFirst = regexp.MustCompile(`(?i)\b((?:19|20)\d{2})\s*(?:©|\(c\))`)
-
 // ID is the check's ID.
 func (Copyright) ID() string { return "content/copyright" }
 
@@ -31,14 +23,14 @@ func (Copyright) Run(c *audit.Context) []audit.Issue {
 	if !c.Indexed() {
 		return nil
 	}
-	m := copyrightLine.FindStringSubmatch(c.Page.Text)
+	m := webpage.CopyrightLine.FindStringSubmatch(c.Page.Text)
 	first, year, shown := "", "", ""
 	switch {
 	case m != nil:
 		first, year, shown = m[1], m[2], m[0]
 	default:
 		// the year before the mark
-		if m = copyrightYearFirst.FindStringSubmatch(c.Page.Text); m == nil {
+		if m = webpage.CopyrightYearFirst.FindStringSubmatch(c.Page.Text); m == nil {
 			return nil
 		}
 		year, shown = m[1], m[0]

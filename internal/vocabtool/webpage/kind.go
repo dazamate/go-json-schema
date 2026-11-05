@@ -34,7 +34,7 @@ var kindSegments = []struct {
 	kind Kind
 	re   *regexp.Regexp
 }{
-	{KindCart, regexp.MustCompile(`^(cart|basket|bag|shopping-bag|shopping-cart)$`)},
+	{KindCart, regexp.MustCompile(`^(cart|basket|bag|trolley|shopping-bag|shopping-cart|shopping-basket|shopping-trolley)$`)},
 	{KindCheckout, regexp.MustCompile(`^checkouts?$`)},
 	{KindAccount, regexp.MustCompile(`^(account|my-account|login|signin|sign-in|register|signup|sign-up|wishlist|wish-list|favourites|favorites)$`)},
 	{KindSearch, regexp.MustCompile(`^search$`)},
@@ -46,7 +46,11 @@ var kindSegments = []struct {
 }
 
 var (
-	productSegment = regexp.MustCompile(`^(products?|p|item|items)$`)
+	// productSegment is the path segment a product's own page sits under:
+	// /products/ (Shopify), /p/, /dp/ (Amazon), /pd/, /item/, /goods/, and
+	// /vehicle/ on a dealer's site
+	productSegment = regexp.MustCompile(`^(products?|p|pd|dp|items?|goods|vehicles?)$`)
+	vehicleSegment = regexp.MustCompile(`^vehicles?$`)
 	ogProduct      = regexp.MustCompile(`(?i)^\s*product(?:\.item)?\s*$`)
 	fileExt        = regexp.MustCompile(`\.(?:html?|php\d?|aspx?|jsp|cfm)$`)
 	listingSegment = regexp.MustCompile(`^(categor(y|ies)|collections?|c|shop|store|catalog(ue)?|departments?)$`)
@@ -56,7 +60,7 @@ var (
 		re   *regexp.Regexp
 	}{
 		{KindSearch, regexp.MustCompile(`(?i)^search results|^results for`)},
-		{KindCart, regexp.MustCompile(`(?i)^your (bag|cart|basket)\b`)},
+		{KindCart, regexp.MustCompile(`(?i)^your (?:shopping )?(bag|cart|basket|trolley)\b`)},
 		{KindCheckout, regexp.MustCompile(`(?i)^checkout\b`)},
 		{KindContact, regexp.MustCompile(`(?i)^contact\b`)},
 		{KindAbout, regexp.MustCompile(`(?i)^about\b|^our story\b`)},
@@ -64,13 +68,17 @@ var (
 		{KindReturns, regexp.MustCompile(`(?i)^(returns?|refunds?)\b`)},
 		{KindFAQ, regexp.MustCompile(`(?i)^(faqs?|frequently asked)\b`)},
 	}
-	// CartPath matches the address of the cart page (/cart, /basket, /bag).
-	CartPath = regexp.MustCompile(`/(cart|basket|bag)$`)
+	// CartPath matches the address of the cart page (/cart, /basket, /bag,
+	// /trolley).
+	CartPath = regexp.MustCompile(`/(cart|basket|bag|trolley)$`)
 	// CartForm matches the action of a form that adds to the cart
-	// (/cart/add, ?add-to-cart=, addtobasket): a form that only posts to the
-	// cart is the cart's own (its checkout button), not a product's.
-	CartForm  = regexp.MustCompile(`(?i)\b(?:cart|basket|bag)[/_-]?add\b|\badd[/_-]?to[/_-]?(?:cart|basket|bag)\b|\badd(?:to)?(?:cart|basket|bag)\b`)
-	AddToCart = regexp.MustCompile(`(?i)\b(add to (cart|bag|basket)|buy now|pre-?order)\b`)
+	// (/cart/add, ?add-to-cart=, addtobasket, /trolley/add): a form that only
+	// posts to the cart is the cart's own (its checkout button), not a
+	// product's.
+	CartForm = regexp.MustCompile(`(?i)\b(?:cart|basket|bag|trolley)[/_-]?add\b|\badd[/_-]?to[/_-]?(?:cart|basket|bag|trolley)\b|\badd(?:to)?(?:cart|basket|bag|trolley)\b`)
+	// AddToCart matches a buy button's words: "Add to cart", "Add to my
+	// bag", "Add to trolley", "Buy now", "Pre-order".
+	AddToCart = regexp.MustCompile(`(?i)\b(add (?:it )?to (?:my |your )?(cart|bag|basket|trolley)|buy now|pre-?order)\b`)
 
 	// PreOrder finds a shop taking pre-orders ("Pre-order now").
 	PreOrder = regexp.MustCompile(`(?i)\bpre-?order(?: now)?\b`)
@@ -85,11 +93,16 @@ func Segments(u *url.URL) []string {
 }
 
 // ProductPath reports the address of a product page: a product segment with
-// the product's own after it (/products/gold-locket, /p/12345).
+// the product's own after it (/products/gold-locket, /p/12345). A vehicle's
+// page names it by its year or stock number (/vehicle/2015-Toyota-Aqua/12434);
+// /vehicles/registration is a topic, not a vehicle.
 func ProductPath(u *url.URL) bool {
 	segs := Segments(u)
 	i := slices.IndexFunc(segs, productSegment.MatchString)
-	return i >= 0 && i < len(segs)-1
+	if i < 0 || i == len(segs)-1 {
+		return false
+	}
+	return !vehicleSegment.MatchString(segs[i]) || strings.ContainsAny(strings.Join(segs[i+1:], "/"), "0123456789")
 }
 
 // categorySegment names a category or collection in an address.

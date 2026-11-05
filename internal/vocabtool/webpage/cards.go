@@ -73,10 +73,15 @@ func holds(n *html.Node, a atom.Atom) bool {
 }
 
 // ProductCards finds the page's product cards once: for each link to
-// another page of the site, outside its header, footer and navs, the nearest
-// element around it that shows a price and links to no other page. An
-// element holding an h1 or a form is the page's own product, not a card. A
-// single priced link is no listing, so it takes two.
+// another page of the site (not a photo or a document), outside its header,
+// footer and navs, the nearest element around it that shows a price and
+// links to no other page (a link with another query is the same page: a
+// recommender's tracking). An element
+// that is or holds a form or holds an h1 is the page's own product, not a
+// card. A card shows a product's price: a sentence or table cell with a
+// price and a link is copy, and a price bracket ("Gifts $20 and Under") or a
+// plan's rate ("$10 per seat / month") is no product's price. A single
+// priced link is no listing, so it takes two.
 func (p *Facts) ProductCards() []*Card {
 	if p.cardsDone {
 		return p.cards
@@ -92,17 +97,20 @@ func (p *Facts) ProductCards() []*Card {
 			return
 		}
 		u, ok := p.SiteLink(a)
-		if !ok || categoryLink(MustParse(u)) || slices.ContainsFunc(out, func(c *Card) bool { return c.URL == u }) {
+		if !ok || categoryLink(MustParse(u)) || mediaFile.MatchString(pageOf(u)) || slices.ContainsFunc(out, func(c *Card) bool { return pageOf(c.URL) == pageOf(u) }) {
 			return
 		}
 		for e, depth := a.Parent, 0; e != nil && depth < 8; e, depth = e.Parent, depth+1 {
-			if e.DataAtom == atom.Body || e.DataAtom == atom.Main || holds(e, atom.H1) || holds(e, atom.Form) {
+			if e.DataAtom == atom.Body || e.DataAtom == atom.Main || e.DataAtom == atom.Form || holds(e, atom.H1) || holds(e, atom.Form) {
 				return
 			}
-			if len(p.SiteLinks(e)) > 1 {
+			if p.pagesUnder(e) > 1 {
 				return
 			}
-			if txt.PriceAmount.MatchString(HTMLText(e)) {
+			if t := HTMLText(e); txt.PriceAmount.MatchString(t) {
+				if copyBlock[e.DataAtom] || !productPrice(t) {
+					return
+				}
 				if !seen[e] {
 					seen[e] = true
 					out = append(out, &Card{N: e, URL: u, Name: p.cardName(e, a, u)})
@@ -127,9 +135,65 @@ func (p *Facts) ProductCards() []*Card {
 	return out
 }
 
+// copyBlock are the elements of copy, not cards: a paragraph, a table cell
+// or a definition that gives a price beside a link ("Free Shipping over $150
+// spend. View more details HERE").
+var copyBlock = map[atom.Atom]bool{atom.P: true, atom.Td: true, atom.Th: true, atom.Dd: true, atom.Label: true, atom.Blockquote: true, atom.Figcaption: true}
+
+var (
+	// bracketBefore and bracketAfter are the words that make a price a
+	// bracket of prices: "GIFTS UNDER $50", "Gifts $20 and Under".
+	bracketBefore = regexp.MustCompile(`(?i)\b(?:under|below|less than|up to)\s*$`)
+	bracketAfter  = regexp.MustCompile(`(?i)^\s*(?:and|or|&)\s+(?:under|below|less)\b`)
+	// planRate is a plan's period after its price: "$10 per seat / month",
+	// "$8/mo", "$96 a year", "billed annually".
+	planRate = regexp.MustCompile(`(?i)^\s*(?:(?:/|per|a|an)\s*(?:(?:seat|user|member|person|licen[cs]e)\s*(?:/|per|a)?\s*)?(?:mo|mth|month|yr|year|annum|wk|week)\b|(?:monthly|annually|yearly|billed)\b)`)
+)
+
+// productPrice reports a price in t that is a product's: not a bracket of
+// prices and not a plan's rate.
+func productPrice(t string) bool {
+	for _, loc := range txt.PriceAmount.FindAllStringIndex(t, -1) {
+		before, after := t[:loc[0]], t[loc[1]:]
+		if !bracketBefore.MatchString(before) && !bracketAfter.MatchString(after) && !planRate.MatchString(after) {
+			return true
+		}
+	}
+	return false
+}
+
+// mediaFile is the address of a photo, video or document, not a page: a
+// gallery's link to a vehicle's photo is no product.
+var mediaFile = regexp.MustCompile(`(?i)\.(?:jpe?g|png|gif|webp|avif|svg|pdf|mp4|webm)$`)
+
+// pageOf is a site link's page: its address without its query and fragment.
+func pageOf(u string) string {
+	if i := strings.IndexAny(u, "?#"); i >= 0 {
+		return u[:i]
+	}
+	return u
+}
+
+// pagesUnder counts the distinct pages of this site that links under n
+// point at.
+func (p *Facts) pagesUnder(n *html.Node) int {
+	var pages []string
+	for _, s := range p.SiteLinks(n) {
+		if s = pageOf(s); !slices.Contains(pages, s) {
+			pages = append(pages, s)
+		}
+	}
+	return len(pages)
+}
+
+// callToAction is a card link's words that name what it does, not the
+// product: "Quick Buy", "Shop now", "Add to cart".
+var callToAction = regexp.MustCompile(`(?i)^(?:quick (?:buy|view|shop|add)|shop now|buy now|view(?: details| product)?|add to (?:cart|bag|basket|trolley)|select options|choose options|learn more|more info|details|see more)$`)
+
 // cardName is a card's heading, else the text of its links to the product
-// (a card often links its image and its title), else its link's image alt or
-// label.
+// that is no call to action: its title link's before an image link's (a
+// card often links its image, described for a screen reader, and its
+// title), else its link's image alt or label.
 func (p *Facts) cardName(c, a *html.Node, u string) string {
 	name := ""
 	Visit(c, func(n *html.Node) {
@@ -140,12 +204,9 @@ func (p *Facts) cardName(c, a *html.Node, u string) string {
 			}
 		}
 	})
-	if name == "" {
-		name = HTMLText(a)
-	}
-	if name == "" {
+	for _, images := range []bool{false, true} {
 		Visit(c, func(n *html.Node) {
-			if s, ok := p.SiteLink(n); ok && n.DataAtom == atom.A && s == u && name == "" {
+			if s, ok := p.SiteLink(n); ok && name == "" && n.DataAtom == atom.A && pageOf(s) == pageOf(u) && holds(n, atom.Img) == images && !callToAction.MatchString(HTMLText(n)) {
 				name = HTMLText(n)
 			}
 		})
@@ -267,12 +328,13 @@ var (
 )
 
 // CartControl reports a link or button for the cart: its name (aria-label,
-// else its text, else its title) is the cart's, in a cart button's words. A
+// else its text with each icon's name, else its title) is the cart's, in a
+// cart button's words. A
 // link named "Bag Straps" sells bags; one named "Bag" opens the cart.
 func CartControl(n *html.Node) bool {
 	name, _ := Attr(n, "aria-label")
 	if strings.TrimSpace(name) == "" {
-		name = HTMLText(n)
+		name = iconText(n)
 	}
 	if strings.TrimSpace(name) == "" {
 		name, _ = Attr(n, "title")
