@@ -13,6 +13,7 @@ import (
 	"regexp"
 	"slices"
 	"strings"
+	"unicode"
 
 	"github.com/dazamate/go-json-schema/internal/vocabtool/audit"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
@@ -23,9 +24,38 @@ import (
 )
 
 var (
-	wasClass = regexp.MustCompile(`(?i)compare|original|was|old|regular|strike|line-through|rrp|list-price|crossed`)
-	wasText  = regexp.MustCompile(`(?i)\b(?:was|rrp|originally|regular price|compare at)\s*:?\s*((?:A\$|AU\$|\$|£|€)\s?\d[\d,]*(?:\.\d{1,2})?)`)
+	wasText = regexp.MustCompile(`(?i)\b(?:was|rrp|originally|regular price|compare at)\s*:?\s*((?:A\$|AU\$|\$|£|€)\s?\d[\d,]*(?:\.\d{1,2})?)`)
 )
+
+// wasWords are the class words that mark an old price, and wasCompounds the
+// whole class tokens that do so with their hyphen.
+var (
+	wasWords     = []string{"compare", "original", "was", "old", "regular", "strike", "strikethrough", "rrp", "crossed"}
+	wasCompounds = []string{"line-through", "list-price", "compare-at"}
+)
+
+// wasClass reports whether an attribute value (a class list, an id) names an
+// old price: one of its whole class tokens is a was compound, or one of its
+// words, split on hyphens, underscores and camelCase, is a was word. "font-bold"
+// and "holder" hold "old" but no word of it.
+func wasClass(v string) bool {
+	for _, tok := range strings.Fields(strings.ToLower(v)) {
+		if slices.Contains(wasCompounds, tok) {
+			return true
+		}
+	}
+	words := strings.FieldsFunc(camelSplit.ReplaceAllString(v, "$1 $2"), func(r rune) bool {
+		return r == '-' || r == '_' || unicode.IsSpace(r)
+	})
+	for _, w := range words {
+		if slices.Contains(wasWords, strings.ToLower(w)) {
+			return true
+		}
+	}
+	return false
+}
+
+var camelSplit = regexp.MustCompile(`([a-z])([A-Z])`)
 
 // sale is what a shop's page shows of a sale.
 type sale struct {
@@ -102,7 +132,7 @@ func wasPrices(p *webpage.Facts) []string {
 				return
 			}
 			for _, k := range []string{"class", "data-testid", "itemprop", "id"} {
-				if v, _ := webpage.Attr(n, k); v != "" && wasClass.MatchString(v) {
+				if v, _ := webpage.Attr(n, k); v != "" && wasClass(v) {
 					add(ms[0])
 					return
 				}

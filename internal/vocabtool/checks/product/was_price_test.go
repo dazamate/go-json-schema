@@ -50,6 +50,10 @@ func TestWasPrice(t *testing.T) {
 		{"a product page's was price", audittest.Input{Draft: noDraft, PageHTML: productPage, PageURL: productURL}, []audit.Issue{
 			{Path: "html:body", Severity: audit.Warning, Message: "the page shows $389.00 as a was price: add it to the Offer's priceSpecification as a UnitPriceSpecification with priceType https://schema.org/StrikethroughPrice and price 389.00, beside the sale price (Google's sale-price markup)"},
 		}},
+		{"a bold price is no was price", audittest.Input{Draft: noDraft, PageHTML: strings.Replace(strings.Replace(productPage, "<del>$389.00</del> ", "", 1), "<p>Card payments", `<p><span class="price font-bold">$25</span></p><p>Card payments`, 1), PageURL: productURL}, nil},
+		{"a class names the was price", audittest.Input{Draft: struckThrough("389"), PageHTML: strings.Replace(productPage, "<p>Card payments", `<p><span class="price price--compare-at">$450.00</span></p><p>Card payments`, 1), PageURL: productURL}, []audit.Issue{
+			{Path: "html:body", Severity: audit.Warning, Message: "the page shows $450.00 as a was price: add it to the Offer's priceSpecification as a UnitPriceSpecification with priceType https://schema.org/StrikethroughPrice and price 450.00, beside the sale price (Google's sale-price markup)"},
+		}},
 		{"a StrikethroughPrice carries it", audittest.Input{Draft: struckThrough("389"), PageHTML: productPage, PageURL: productURL}, nil},
 		{"two was prices", audittest.Input{Draft: noDraft, PageHTML: twoOnSale, PageURL: productURL}, nil},
 		{"a was price on another page of the shop", audittest.Input{Draft: noDraft, PageHTML: salePage, PageURL: salePageURL}, nil},
