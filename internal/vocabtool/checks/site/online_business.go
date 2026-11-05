@@ -1,6 +1,7 @@
 package site
 
 import (
+	"regexp"
 	"slices"
 	"strings"
 
@@ -25,6 +26,10 @@ type OnlineBusiness struct{}
 // ID is the check's ID.
 func (OnlineBusiness) ID() string { return "site/online-business" }
 
+// publicBody is the host of a government, health service, police, school or
+// university site, which is no business whatever its markup says.
+var publicBody = regexp.MustCompile(`(?i)(?:^|\.)(?:gov|mil|edu)$|(?:^|\.)(?:gov|govt|gc|ac|edu|sch|nhs|police|parliament)\.[a-z]{2}$`)
+
 // premises are the properties that place a business.
 var premises = []string{"address", "location", "geo", "openingHours", "openingHoursSpecification", "hasMap"}
 
@@ -33,6 +38,9 @@ var premises = []string{"address", "location", "geo", "openingHours", "openingHo
 // opening hours, that no source before it told.
 func (OnlineBusiness) find(c *audit.Context, before audit.Retyped) []jsonld.Node {
 	if !c.Indexed() || c.Page.Doc == nil {
+		return nil
+	}
+	if c.Page.Base != nil && publicBody.MatchString(c.Page.Base.Hostname()) {
 		return nil
 	}
 	if c.Page.Sells() || webpage.StreetAddress.MatchString(c.Page.Text) || webpage.OpeningTime.MatchString(c.Page.Text) {
