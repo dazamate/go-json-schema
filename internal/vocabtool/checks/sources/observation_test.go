@@ -39,6 +39,7 @@ func TestObservation(t *testing.T) {
 		{"a year range is no lead figure", audittest.Input{Draft: barePage, PageHTML: outlookPage, PageURL: "https://jobs.test/electricians/"}, []audit.Issue{
 			{Path: "html:body > main > article", Severity: audit.Warning, Message: `the page states "Employment of electricians is projected to grow 9 percent from 2025 to 2035, much faster than the average for all occupations." from U.S. Bureau of Labor Statistics: ` + ask},
 		}},
+		{"years joined by and are no lead figure", audittest.Input{Draft: barePage, PageHTML: strings.Replace(tulsa, "1 in 6 people in Tulsa moved in the last year", "Volatility in 2021 and 2022 reflects house price movements around changes in Stamp Duty Land Tax in 2021.", 1), PageURL: "https://movers.test/tulsa/"}, nil},
 		{"Observations carry the figures", audittest.Input{Draft: observed, PageHTML: dataPage, PageURL: dataURL}, nil},
 		{"an Observation named by the sentence", audittest.Input{Draft: named, PageHTML: tulsa, PageURL: "https://movers.test/tulsa/"}, nil},
 		{"a noindex page", audittest.Input{Draft: barePage, PageHTML: audittest.Noindex(dataPage), PageURL: dataURL}, nil},

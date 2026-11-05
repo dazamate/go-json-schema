@@ -24,9 +24,12 @@ var (
 	// percentile", "Top 10%", "Lower quartile".
 	percentileHead = regexp.MustCompile(`(?i)^(?:p(?:10|20|25|75|80|90)|(?:10|20|25|75|80|90)(?:th|%)(?:\s+percentile)?|percentile\s+(?:10|25|75|90)|(?:top|bottom|lowest|highest)\s+(?:10|25)%|(?:lower|upper)\s+quartile)$`)
 	moneyCell      = regexp.MustCompile(`[$£€₹]\s?\d`)
-	sourceText     = regexp.MustCompile(`\bSources?:\s+(.{3,120})`)
+	// figureTitle is a numbered title over a chart or table: "Figure 1:
+	// Average UK house prices fell".
+	figureTitle = regexp.MustCompile(`^(?:Figure|Chart|Graph|Table|Map)\s+\d+\s*[:.–—-]\s*\S`)
+	sourceText  = regexp.MustCompile(`\bSources?:\s+(.{3,120})`)
 	// sourceStart is a source note: an element's text starts with "Source:".
-	sourceStart = regexp.MustCompile(`^\s*Sources?:\s+(.{3,120})`)
+	sourceStart = regexp.MustCompile(`^\s*Sources?:\s+(.{3,})`)
 	sentenceEnd = regexp.MustCompile(`[a-z0-9)]\.\s+[A-Z]`)
 )
 
@@ -56,12 +59,22 @@ func dataBlocks(c *audit.Context) []dataBlock {
 		return nil
 	}
 	var out []dataBlock
-	for _, cap := range webpage.QueryAll(c.Page.Doc, "figcaption, caption") {
-		if webpage.Chrome(cap) || !webpage.Shown(cap) {
+	for _, cap := range webpage.QueryAll(c.Page.Doc, "figcaption, caption, h2, h3, h4, h5, h6") {
+		heading := cap.DataAtom != atom.Figcaption && cap.DataAtom != atom.Caption
+		if webpage.Chrome(cap) || !webpage.Shown(cap) || (heading && !figureTitle.MatchString(webpage.HTMLText(cap))) {
 			continue
 		}
 		var box *html.Node
 		for e := cap.Parent; e != nil && e.DataAtom != atom.Body && e.DataAtom != atom.Main; e = e.Parent {
+			if heading {
+				// a numbered title ("Figure 1: ...") heads a chart: its block is
+				// the nearest one around it that gives a source and no other chart's
+				if sourceNote(e) != "" && len(slices.DeleteFunc(webpage.QueryAll(e, "h2, h3, h4, h5, h6"), func(h *html.Node) bool { return !figureTitle.MatchString(webpage.HTMLText(h)) })) == 1 {
+					box = e
+					break
+				}
+				continue
+			}
 			if e.DataAtom == atom.Section || e.DataAtom == atom.Article {
 				box = e
 				break
@@ -87,7 +100,7 @@ func dataBlocks(c *audit.Context) []dataBlock {
 // sourceNote is the text after "Source:" in the first element of the block
 // that starts with it: a source note of its own, not the sentences around it.
 func sourceNote(box *html.Node) string {
-	for _, e := range webpage.QueryAll(box, "p, small, li, span, div, td") {
+	for _, e := range webpage.QueryAll(box, "p, small, li, span, div, td, h2, h3, h4, h5, h6") {
 		if m := sourceStart.FindStringSubmatch(webpage.HTMLText(e)); m != nil {
 			return endSentence(m[1])
 		}

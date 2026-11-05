@@ -92,7 +92,7 @@ func leadFigure(t string) string {
 }
 
 var (
-	yearLead = regexp.MustCompile(`(?i)\b(?:in|since|by|from|until|through|between)\s+$`)
+	yearLead = regexp.MustCompile(`(?i)\b(?:in|since|by|from|until|through|between|and|or|to)\s+$`)
 	// yearRange follows the first year of a range: "2025–35", "2020-2024".
 	yearRange = regexp.MustCompile(`^\s*[–—-]\s*(?:19|20)?\d\d\b`)
 	// rangeEnd ends the text before the last year of a range.
