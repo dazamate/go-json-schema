@@ -18,4 +18,3 @@ func TestBackOrderInStock(t *testing.T) {
 		{Path: "html:body", Severity: audit.Warning, Message: `the page says "back order": set the Offer's availability https://schema.org/BackOrder`},
 	})
 }
-
