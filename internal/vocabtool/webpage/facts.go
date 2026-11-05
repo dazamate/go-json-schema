@@ -149,18 +149,33 @@ func (p *Facts) Address() string {
 	if a := strings.TrimSpace(StreetAddress.FindString(p.Main)); a != "" {
 		return a
 	}
-	a := ""
+	return p.inFooter(StreetAddress)
+}
+
+// Hours are the first opening hours the page gives: in its main copy, else
+// in the site's footer, where a restaurant or a dealer gives its own.
+func (p *Facts) Hours() string {
+	if h := OpeningTime.FindString(p.Main); h != "" || p.Doc == nil {
+		return h
+	}
+	return p.inFooter(OpeningTime)
+}
+
+// inFooter is the first match of re on a line of the site's footer, by its
+// element or its contentinfo role.
+func (p *Facts) inFooter(re *regexp.Regexp) string {
+	found := ""
 	Visit(p.Doc, func(n *html.Node) {
-		if a != "" || landmark(n) != atom.Footer || scoped(n) {
+		if found != "" || landmark(n) != atom.Footer || scoped(n) {
 			return
 		}
 		for _, l := range MainLines(n) {
-			if a = strings.TrimSpace(StreetAddress.FindString(l)); a != "" {
+			if found = strings.TrimSpace(re.FindString(l)); found != "" {
 				return
 			}
 		}
 	})
-	return a
+	return found
 }
 
 // addressShape is what an address element must hold: a number and a street

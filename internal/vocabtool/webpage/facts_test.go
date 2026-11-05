@@ -80,6 +80,20 @@ func TestAddressInFooter(t *testing.T) {
 	}
 }
 
+// TestHoursInFooter checks that a business's hours in its site footer are
+// the page's: autodiscount.co.nz gives its yard's only there.
+func TestHoursInFooter(t *testing.T) {
+	doc := parse(t, `<html><body><main><h2>2015 Toyota Aqua</h2><p>$14,450</p></main>
+		<footer><h4>Opening hours</h4><p>Monday 9.30am - 5.30pm</p><p>Sunday Closed</p><p>©2018 - 2026 Auto Discount</p></footer></body></html>`)
+	if got, want := New(doc, HTMLText(doc), "https://www.autodiscount.co.nz/vehicle/2015-Toyota-Aqua/12434").Hours(), "Monday 9.30am - 5.30pm"; got != want {
+		t.Errorf("Hours() = %q, want %q", got, want)
+	}
+	doc = parse(t, `<html><body><main><h1>Fees</h1><p>Mon: 8AM - 4PM</p></main><footer><p>Sunday Closed</p></footer></body></html>`)
+	if got, want := New(doc, HTMLText(doc), "https://www.mooreheaddentistry.com/financial/office-fees/").Hours(), "Mon: 8AM - 4PM"; got != want {
+		t.Errorf("Hours() = %q, want %q", got, want)
+	}
+}
+
 func TestMainSkipsChrome(t *testing.T) {
 	doc := parse(t, `<html><body><header><a href="/">Acme Shop</a></header>
 		<main><h1>Lockets</h1><p>Hand made.</p></main></body></html>`)
