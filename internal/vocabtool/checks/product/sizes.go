@@ -4,6 +4,7 @@ import (
 	"regexp"
 	"slices"
 	"strings"
+	"unicode"
 
 	"github.com/dazamate/go-json-schema/internal/vocabtool/audit"
 )
@@ -24,7 +25,14 @@ func (Sizes) Run(c *audit.Context) []audit.Issue {
 	if !onProductPage(c) {
 		return nil
 	}
-	ms := sizeMeasure.FindAllStringSubmatch(c.Page.Main, -1)
+	var ms [][]string
+	for _, m := range sizeMeasure.FindAllStringSubmatch(c.Page.Main, -1) {
+		// "60-70cm" is a range of centimetres, not size 60 measuring 70cm
+		if strings.ContainsAny(m[1][:1], "0123456789") && !strings.ContainsFunc(m[0], unicode.IsSpace) && strings.ContainsAny(m[0], "-–") {
+			continue
+		}
+		ms = append(ms, m)
+	}
 	if len(ms) < 2 || c.Has("SizeSpecification") {
 		return nil
 	}

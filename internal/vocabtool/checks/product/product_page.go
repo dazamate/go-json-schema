@@ -1,6 +1,9 @@
 package product
 
 import (
+	"regexp"
+	"slices"
+
 	"github.com/dazamate/go-json-schema/internal/vocabtool/audit"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/webpage"
@@ -9,7 +12,19 @@ import (
 // onProductPage reports a product page that search engines index: the page
 // a product's own checks read.
 func onProductPage(c *audit.Context) bool {
-	return c.Indexed() && c.Page.Kind == webpage.KindProduct
+	return c.Indexed() && c.Page.Kind == webpage.KindProduct && !onListing(c.Page)
+}
+
+var listingSegments = regexp.MustCompile(`^(collections?|categor(y|ies))$`)
+
+// onListing reports a page the kind rules took for a product's (a cart
+// drawer's add-to-cart form on /collections/sale) whose address is a shop's
+// collection or category and names no product: /collections/rings/products/opal
+// is a product's.
+func onListing(p *webpage.Facts) bool {
+	segs := webpage.Segments(p.URL)
+	return slices.ContainsFunc(segs, listingSegments.MatchString) &&
+		!slices.ContainsFunc(segs, func(s string) bool { return s == "product" || s == "products" })
 }
 
 // productsKey is the memo key of the draft's Product nodes.

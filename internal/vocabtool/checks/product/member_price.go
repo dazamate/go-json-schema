@@ -2,13 +2,20 @@ package product
 
 import (
 	"regexp"
+	"strings"
 
 	"github.com/dazamate/go-json-schema/internal/vocabtool/audit"
+	"github.com/dazamate/go-json-schema/internal/vocabtool/txt"
 )
 
 func init() { audit.Register(MemberPrice{}) }
 
-var memberPrice = regexp.MustCompile(`(?i)\bmember(?:s|ship)?['’]?\s+price\b|\bmembers?\s+(?:save|pay|get)\b|\b(?:rewards?|loyalty)\s+(?:club|program(?:me)?|members?)\b|\bclub members\b`)
+var (
+	memberPrice = regexp.MustCompile(`(?i)\b(?:member(?:s|ship)?|rewards?|loyalty|club|vip|insider)['’]?\s+(?:only\s+)?pric(?:e|es|ing)\b|\bmembers?\s+(?:save|pay|get)\b[^.]{0,40}`)
+	// memberOffer is what a "members get ..." sentence must hold to be about a
+	// price: a percentage or an amount, no free delivery or early access.
+	memberOffer = regexp.MustCompile(`\d\s*%|` + txt.PriceText)
+)
 
 // MemberPrice warns when a shop's page shows a member price and the draft has
 // no MemberProgram: a price for members is an Offer price tied to the tier
@@ -23,7 +30,18 @@ func (MemberPrice) Run(c *audit.Context) []audit.Issue {
 	if !c.Indexed() || !c.Page.Sells() || c.Has("MemberProgram") {
 		return nil
 	}
-	m := memberPrice.FindString(c.Page.Main)
+	m := ""
+	for _, f := range memberPrice.FindAllString(c.Page.Main, -1) {
+		if strings.Contains(strings.ToLower(f), "pric") {
+			m = f
+			break
+		}
+		if memberOffer.MatchString(f) {
+			m = f[:strings.IndexAny(f, "0123456789$£€₹")]
+			m = strings.TrimSpace(m)
+			break
+		}
+	}
 	if m == "" {
 		return nil
 	}

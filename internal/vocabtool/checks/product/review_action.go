@@ -8,7 +8,7 @@ import (
 
 func init() { audit.Register(ReviewAction{}) }
 
-var writeReview = regexp.MustCompile(`(?i)^(?:write|leave|add) a review$`)
+var writeReview = regexp.MustCompile(`(?i)^(?:be the first to )?(?:write|leave|add|submit) (?:a|your) (?:customer |product )?review$`)
 
 // ReviewAction warns when a page invites reviews ("Write a review") and the
 // draft has no ReviewAction: the invitation is an action on the Product.
