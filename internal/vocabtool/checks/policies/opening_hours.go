@@ -3,7 +3,6 @@ package policies
 import (
 	"github.com/dazamate/go-json-schema/internal/vocabtool/audit"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
-	"github.com/dazamate/go-json-schema/internal/vocabtool/webpage"
 	"regexp"
 )
 
@@ -25,7 +24,7 @@ func (OpeningHours) Run(c *audit.Context) []audit.Issue {
 	if !c.Indexed() {
 		return nil
 	}
-	m := webpage.OpeningTime.FindString(c.Page.Main)
+	m := c.Page.Hours()
 	if m == "" {
 		// a business that never closes says so in its header or footer
 		m = alwaysOpen.FindString(c.Page.Text)
