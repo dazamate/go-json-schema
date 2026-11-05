@@ -13,7 +13,7 @@ import (
 func init() { audit.Register(Registrations{}) }
 
 // registration is a labelled business or licence number as the page shows it.
-var registration = regexp.MustCompile(`(?i)\b(ABN|ACN|ARBN|NZBN|UEN|EIN|GSTIN|VAT(?:\s+(?:no\.?|number|reg(?:istration)?\.?\s+no\.?))?|company\s+(?:no\.?|number|reg(?:istration)?\.?\s+(?:no\.?|number))|licen[cs]e\s+(?:no\.?|number))[\s:#.]*([A-Z]{0,3}\s?\d[\d ]{4,18}\d)\b`)
+var registration = regexp.MustCompile(`(?i)\b(ABN|ACN|ARBN|NZBN|UEN|EIN|GSTIN|NPI|NMLS|DUNS|CRN|FRN|VAT(?:\s+(?:no\.?|number|reg(?:istration)?\.?\s+no\.?))?|company\s+(?:no\.?|number|reg(?:istration)?\.?\s+(?:no\.?|number))|registered\s+in\s+[A-Z][a-z]+(?:\s+(?:and|&)\s+[A-Z][a-z]+)?\s+(?:company\s+)?(?:no\.?|number)|registration\s+(?:no\.?|number)|firm\s+reference\s+number|charity\s+(?:no\.?|number)|(?:SRA|GDC|NMC|GMC)\s+(?:no\.?|number|id)|gas\s+safe(?:\s+register)?\s+(?:no\.?|number|id)|(?:contractor(?:'s)?\s+)?licen[cs]e(?:\s+(?:no\.?|number)|\s*#))[\s:#.]*([A-Z]{0,3}\s?\d[\d ]{4,18}\d)\b`)
 
 // Registrations warns on a labelled business or licence number the page
 // shows that no taxID, vatID or identifier carries. It runs on a page search
