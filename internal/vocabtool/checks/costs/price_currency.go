@@ -28,8 +28,16 @@ func (PriceCurrency) Run(c *audit.Context) []audit.Issue {
 			return slices.ContainsFunc(jsonld.Scalars(l.N, k), func(s string) bool { _, ok := txt.Amount(s); return ok })
 		})
 		if priced && len(jsonld.Strs(l.N, "priceCurrency"))+len(jsonld.Strs(l.N, "currency")) == 0 {
-			out = append(out, audit.Issuef(l.Path, audit.Warning, "this %s has a price but no priceCurrency: set it (AUD, USD, EUR)", jsonld.TypeNames(l.N)[0]))
+			out = append(out, audit.Issuef(l.Path, audit.Warning, "this %s has a price but no priceCurrency: set it (AUD, USD, EUR)", nodeNoun(l.N)))
 		}
 	}
 	return out
+}
+
+// nodeNoun is the node's first type, or "node" for one that has none.
+func nodeNoun(n *jsonld.Object) string {
+	if types := jsonld.TypeNames(n); len(types) > 0 {
+		return types[0]
+	}
+	return "node"
 }
