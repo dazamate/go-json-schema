@@ -66,6 +66,16 @@ func (Goods) find(c *audit.Context, before audit.Taken) (found []string, took au
 	return found, took
 }
 
+// goodsNoun names the moving supplies goods reads by name.
+var goodsNoun = regexp.MustCompile(`(?i)\b(?:boxes|box|tape|packing paper|bubble wrap|mattress bags?|moving blankets?|furniture pads?|dollies|dolly|stretch wrap|packing peanuts)\b`)
+
+// goodsPart reports a priced line that is goods' to read, not a part of a
+// breakdown: moving supplies by name, or any goods at a retail price that is
+// no price for work.
+func goodsPart(t string) bool {
+	return goodsNoun.MatchString(t) || (retailRe.MatchString(t) && !labourRe.MatchString(t))
+}
+
 // tail is the up to n bytes of s after i, as far as the end of its sentence.
 func tail(s string, i, n int) string {
 	t := s[i:min(len(s), i+n)]

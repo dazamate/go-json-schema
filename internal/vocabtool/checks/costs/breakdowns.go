@@ -1,7 +1,6 @@
 package costs
 
 import (
-	"regexp"
 	"slices"
 	"strings"
 
@@ -15,8 +14,6 @@ import (
 func init() { audit.Register(Breakdowns{}) }
 
 var _ audit.PriceTaker = Breakdowns{}
-
-var goodsNoun = regexp.MustCompile(`(?i)\b(?:boxes|box|tape|packing paper|bubble wrap|mattress bags?|moving blankets?|furniture pads?|dollies|dolly|stretch wrap|packing peanuts)\b`)
 
 // Breakdowns warns on a total the page breaks into priced parts: a list,
 // definition list or table of two or more priced lines beside the total (an
@@ -71,7 +68,7 @@ func (Breakdowns) find(c *audit.Context, before audit.Taken) (found []breakdown,
 		// a list of goods' prices is the goods check's
 		goods := 0
 		for _, t := range parts {
-			if goodsNoun.MatchString(t) {
+			if goodsPart(t) {
 				goods++
 			}
 		}
