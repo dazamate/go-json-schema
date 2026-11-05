@@ -12,8 +12,11 @@ import (
 func init() { audit.Register(SortOrder{}) }
 
 var (
-	sortAsc  = regexp.MustCompile(`(?i)low to high|ascending|a\s*-\s*z|oldest`)
-	sortDesc = regexp.MustCompile(`(?i)high to low|descending|z\s*-\s*a|newest`)
+	sortAsc  = regexp.MustCompile(`(?i)low(?:est)?\s*(?:to|-|–)\s*high(?:est)?|(?:lowest|cheapest)(?: price)? first|ascending|a\s*-\s*z|oldest|old to new`)
+	sortDesc = regexp.MustCompile(`(?i)high(?:est)?\s*(?:to|-|–)\s*low(?:est)?|highest(?: price)? first|descending|z\s*-\s*a|newest|new to old`)
+	// sortControl is what names a select that sorts: its name, id, class or
+	// label says sort or order ("sort_by", "SortBy", "orderby"), not "border".
+	sortControl = regexp.MustCompile(`(?i)sort|(?:^|[^a-z])order(?:by|ing)?(?:[^a-z]|$)`)
 )
 
 // SortOrder warns when a page that lists products has a sort control showing
@@ -30,9 +33,12 @@ func (SortOrder) Run(c *audit.Context) []audit.Issue {
 	}
 	doc := c.Page.Doc
 	for _, sel := range webpage.QueryAll(doc, "select") {
-		name, _ := webpage.Attr(sel, "name")
-		id, _ := webpage.Attr(sel, "id")
-		if !strings.Contains(strings.ToLower(name+" "+id), "sort") {
+		var names []string
+		for _, a := range []string{"name", "id", "class", "aria-label"} {
+			v, _ := webpage.Attr(sel, a)
+			names = append(names, v)
+		}
+		if !sortControl.MatchString(strings.Join(names, " ")) {
 			continue
 		}
 		for _, o := range webpage.QueryAll(sel, "option[selected]") {

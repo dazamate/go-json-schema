@@ -8,8 +8,12 @@ import (
 )
 
 var (
-	unitPrice = regexp.MustCompile(`(?i)(?:A\$|\$|£|€)\s?\d+(?:\.\d{1,2})?\s*(?:per|/)\s*(?:\d+\s*)?(?:g|kg|ml|l|litres?|liters?|m|metres?|meters?)\b`)
-	addOn     = regexp.MustCompile(`(?i)\badd (?:gift[- ]?wrap(?:ping)?|engraving|a gift box|gift box|personali[sz]ation)\b[^.$]{0,20}(?:A\$|\$|£|€)\s?\d+(?:\.\d{1,2})?`)
+	// unitPrice is a price per a measure: in the currency's sign or in pence
+	// ("12p per 100g"), per a weight, a volume or a length.
+	unitPrice = regexp.MustCompile(`(?i)(?:(?:A\$|\$|£|€|₹)\s?\d+(?:\.\d{1,2})?|\b\d+(?:\.\d+)?p)\s*(?:per|/)\s*(?:\d+\s*)?(?:mg|g|kg|ml|cl|l|litres?|liters?|fl\.? ?oz|oz|ounces?|lbs?|pounds?|m|metres?|meters?)\b`)
+	// addOn is a paid extra the shopper adds to the order: a gift wrap, an
+	// engraving, a monogram, a gift box or bag, a warranty or protection plan.
+	addOn = regexp.MustCompile(`(?i)\badd (?:an? |your |free )?(?:custom(?:ised|ized)? |personali[sz]ed |monogram(?:med)? )?(?:(?:\d+[- ](?:year|yr|month)s?[- ])?(?:extended |extra )?(?:warranty|protection plan|care plan|insurance)|gift[- ]?wrap(?:ping)?|engraving|gift box|gift bag|monogram(?:ming)?|personali[sz]ation)\b[^.$]{0,20}(?:A\$|\$|£|€)\s?\d+(?:\.\d{1,2})?`)
 )
 
 // extrasKey is the memo key of the page's extras.
