@@ -10,6 +10,7 @@ import (
 	"github.com/dazamate/go-json-schema/internal/vocabtool/txt"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/webpage"
 	xhtml "golang.org/x/net/html"
+	"golang.org/x/net/html/atom"
 )
 
 var (
@@ -53,7 +54,9 @@ func productDetails(p *webpage.Facts) []webpage.Detail {
 		return nil
 	}
 	var out []webpage.Detail
-	keep := func(n *xhtml.Node) bool { return webpage.Shown(n) && !webpage.Chrome(n) && !p.InCard(n) }
+	keep := func(n *xhtml.Node) bool {
+		return webpage.Shown(n) && !webpage.Chrome(n) && !p.InCard(n) && !inConsent(n)
+	}
 	for _, dl := range webpage.QueryAll(p.Doc, "dl") {
 		if keep(dl) && (webpage.KeyValueList(dl) || p.Kind == webpage.KindProduct) {
 			out = append(out, webpage.Pairs(dl)...)
@@ -71,6 +74,15 @@ func productDetails(p *webpage.Facts) []webpage.Detail {
 		}
 		if m := detailLine.FindStringSubmatch(webpage.HTMLText(n)); m != nil {
 			out = append(out, webpage.Detail{Label: m[1], Value: m[2]})
+		}
+		// a row of two spans, label then value, in a specification list
+		if n.DataAtom == atom.Li {
+			if spans := childSpans(n); len(spans) == 2 {
+				d := webpage.Detail{Label: webpage.HTMLText(spans[0]), Value: webpage.HTMLText(spans[1])}
+				if d.Label != "" && d.Value != "" && len(d.Label) <= 40 && detailProp(d.Label) != "additionalProperty" {
+					out = append(out, d)
+				}
+			}
 		}
 	}
 	return out
@@ -112,4 +124,34 @@ func carriesDetail(c *audit.Context, prods []jsonld.Node, prop string, d webpage
 	return slices.ContainsFunc(c.Nodes, func(l jsonld.Node) bool {
 		return c.Is(l.N, "PropertyValue") && slices.ContainsFunc(jsonld.Strs(l.N, "name"), func(s string) bool { return txt.NormWords(s) == txt.NormWords(d.Label) })
 	})
+}
+
+var consentName = regexp.MustCompile(`(?i)cookie|consent|gdpr|onetrust|privacy-?(banner|settings|center)`)
+
+// inConsent reports an element in a cookie or consent banner, whose lists of
+// names, providers and durations describe no product.
+func inConsent(n *xhtml.Node) bool {
+	for e := n; e != nil; e = e.Parent {
+		for _, k := range []string{"id", "class"} {
+			if v, _ := webpage.Attr(e, k); v != "" && consentName.MatchString(v) {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+// childSpans are n's child elements when they are all spans.
+func childSpans(n *xhtml.Node) []*xhtml.Node {
+	var out []*xhtml.Node
+	for ch := n.FirstChild; ch != nil; ch = ch.NextSibling {
+		if ch.Type != xhtml.ElementNode {
+			continue
+		}
+		if ch.DataAtom != atom.Span {
+			return nil
+		}
+		out = append(out, ch)
+	}
+	return out
 }
