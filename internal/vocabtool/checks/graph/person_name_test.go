@@ -24,6 +24,19 @@ func TestPersonName(t *testing.T) {
 		{"a middle name", `{"@type":"Person","name":"Ann Marie Lee"}`, audittest.Input{PageText: "Tea."}, []audit.Issue{
 			{Path: "$", Severity: audit.Warning, Message: `this Person is named "Ann Marie Lee": set givenName Ann and familyName Lee`},
 		}},
+		{"an honorific", `{"@type":"Person","name":"Dr Jane Smith"}`, audittest.Input{PageText: "Tea."}, []audit.Issue{
+			{Path: "$", Severity: audit.Warning, Message: `this Person is named "Dr Jane Smith": set givenName Jane and familyName Smith`},
+		}},
+		{"an honorific with a stop", `{"@type":"Person","name":"Prof. Jane Smith"}`, audittest.Input{PageText: "Tea."}, []audit.Issue{
+			{Path: "$", Severity: audit.Warning, Message: `this Person is named "Prof. Jane Smith": set givenName Jane and familyName Smith`},
+		}},
+		{"a suffix", `{"@type":"Person","name":"John Smith Jr"}`, audittest.Input{PageText: "Tea."}, []audit.Issue{
+			{Path: "$", Severity: audit.Warning, Message: `this Person is named "John Smith Jr": set givenName John and familyName Smith`},
+		}},
+		{"a degree after a comma", `{"@type":"Person","name":"Jane Smith, PhD"}`, audittest.Input{PageText: "Tea."}, []audit.Issue{
+			{Path: "$", Severity: audit.Warning, Message: `this Person is named "Jane Smith, PhD": set givenName Jane and familyName Smith`},
+		}},
+		{"an honorific and a family name", `{"@type":"Person","name":"Dr Smith"}`, audittest.Input{PageText: "Tea."}, nil},
 		{"givenName set", `{"@type":"Person","name":"Ann Lee","givenName":"Ann"}`, audittest.Input{PageText: "Tea."}, nil},
 		{"familyName set", `{"@type":"Person","name":"Ann Lee","familyName":"Lee"}`, audittest.Input{PageText: "Tea."}, nil},
 		{"one word", `{"@type":"Person","name":"Ann"}`, audittest.Input{PageText: "Tea."}, nil},
