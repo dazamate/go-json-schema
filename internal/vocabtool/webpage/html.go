@@ -87,8 +87,11 @@ func HTMLText(doc *html.Node) string {
 // page and holds no h1, or a footer with a copyright line.
 func scoped(n *html.Node) bool {
 	for p := n.Parent; p != nil; p = p.Parent {
+		if landmark(p) != 0 {
+			return true
+		}
 		switch p.DataAtom {
-		case atom.Article, atom.Aside, atom.Nav, atom.Section, atom.Header, atom.Footer:
+		case atom.Article, atom.Aside, atom.Section:
 			return true
 		case atom.Main:
 			return !siteChrome(n)
@@ -99,7 +102,7 @@ func scoped(n *html.Node) bool {
 
 // siteChrome reports a header or footer that is the site's, not its section's.
 func siteChrome(n *html.Node) bool {
-	switch n.DataAtom {
+	switch landmark(n) {
 	case atom.Header:
 		if len(cascadia.QueryAll(n, cascadia.MustCompile("h1"))) > 0 {
 			return false
@@ -281,10 +284,30 @@ func MustParse(s string) *url.URL {
 // CopyrightLine matches a copyright line and captures its last year.
 var CopyrightLine = regexp.MustCompile(`(?i)(?:©|\(c\)|copyright)\s*(?:\d{4}\s*[-–]\s*)?(\d{4})`)
 
-// Chrome reports an element in the page's own header, footer or a nav.
+// landmark is the chrome an element is by its tag or its ARIA landmark role:
+// atom.Nav for a nav or role navigation, atom.Header for a header or role
+// banner, atom.Footer for a footer or role contentinfo, else 0.
+func landmark(n *html.Node) atom.Atom {
+	switch n.DataAtom {
+	case atom.Nav, atom.Header, atom.Footer:
+		return n.DataAtom
+	}
+	switch role, _ := Attr(n, "role"); role {
+	case "navigation":
+		return atom.Nav
+	case "banner":
+		return atom.Header
+	case "contentinfo":
+		return atom.Footer
+	}
+	return 0
+}
+
+// Chrome reports an element in the page's own header, footer or a nav, by
+// their tags or their landmark roles.
 func Chrome(n *html.Node) bool {
 	for e := n.Parent; e != nil; e = e.Parent {
-		switch e.DataAtom {
+		switch landmark(e) {
 		case atom.Nav:
 			return true
 		case atom.Header, atom.Footer:
@@ -299,7 +322,7 @@ func Chrome(n *html.Node) bool {
 // siteChromeAround reports an element in the site's own header or footer.
 func siteChromeAround(n *html.Node) bool {
 	for e := n.Parent; e != nil; e = e.Parent {
-		if (e.DataAtom == atom.Header || e.DataAtom == atom.Footer) && !scoped(e) {
+		if l := landmark(e); (l == atom.Header || l == atom.Footer) && !scoped(e) {
 			return true
 		}
 	}

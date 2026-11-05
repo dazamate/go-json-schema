@@ -83,7 +83,7 @@ func MainLines(doc *html.Node) []string {
 	var walk func(*html.Node)
 	walk = func(n *html.Node) {
 		for ch := n.FirstChild; ch != nil; ch = ch.NextSibling {
-			if Skipped(ch) || ch.DataAtom == atom.Nav || ((ch.DataAtom == atom.Header || ch.DataAtom == atom.Footer) && !scoped(ch)) {
+			if l := landmark(ch); Skipped(ch) || l == atom.Nav || ((l == atom.Header || l == atom.Footer) && !scoped(ch)) {
 				continue
 			}
 			if ch.Type == html.TextNode {
