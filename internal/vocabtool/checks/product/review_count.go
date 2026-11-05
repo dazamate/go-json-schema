@@ -37,5 +37,23 @@ func (ReviewCount) Run(c *audit.Context) []audit.Issue {
 	if n <= 0 || txt.HoldsNumber(counts, float64(n)) {
 		return nil
 	}
-	return []audit.Issue{audit.Issuef(audit.PagePath, audit.Warning, "the page counts %d reviews: set the Product's aggregateRating, an AggregateRating (ratingValue, bestRating, reviewCount %d)", n, n)}
+	return []audit.Issue{audit.Issuef(audit.PagePath, audit.Warning, "the page counts %d reviews: set the %s's aggregateRating, an AggregateRating (ratingValue, bestRating, reviewCount %d)", n, reviewed(c), n)}
+}
+
+// ratedTypes are the types a rating is for, the page's own subject first and
+// the business that publishes it last.
+var ratedTypes = []string{"Recipe", "Product", "Course", "Book", "Movie", "SoftwareApplication", "Event", "Service", "LocalBusiness", "Organization"}
+
+// reviewed is the type of the node the reviews are of: the draft's node of the
+// first rated type, by its own type when it has one; a Product when the draft
+// has none.
+func reviewed(c *audit.Context) string {
+	for _, ty := range ratedTypes {
+		for _, l := range c.Nodes {
+			if c.Is(l.N, ty) {
+				return txt.OrDefault(c.Single(l.N), ty)
+			}
+		}
+	}
+	return "Product"
 }
