@@ -11,6 +11,7 @@ import (
 	"github.com/dazamate/go-json-schema/internal/vocabtool/txt"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/webpage"
 	xhtml "golang.org/x/net/html"
+	"golang.org/x/net/html/atom"
 )
 
 // optionGroup is a choice the page offers a buyer: a size, a colour.
@@ -22,7 +23,10 @@ type optionGroup struct {
 var (
 	optionSkip  = regexp.MustCompile(`(?i)sort|filter|page|qty|quantity|currency|country|locale|lang|search`)
 	optionBlank = regexp.MustCompile(`(?i)^(choose|select|pick)\b|^-+$`)
-	optionProps = []struct {
+	// optionLegend is a legend that names no choice ("Select Your Product
+	// Options"): the radios' own name does.
+	optionLegend = regexp.MustCompile(`(?i)\b(options?|choices?|choose|select|pick|variants?)\b`)
+	optionProps  = []struct {
 		re   *regexp.Regexp
 		prop string
 	}{
@@ -41,6 +45,18 @@ func optionProp(name string) string {
 		}
 	}
 	return ""
+}
+
+// inInputForm reports an element in a form that collects text from a visitor
+// (a review, a contact or sign-up form): its selects are not choices of a
+// product.
+func inInputForm(n *xhtml.Node) bool {
+	for e := n.Parent; e != nil; e = e.Parent {
+		if e.DataAtom == atom.Form {
+			return len(webpage.QueryAll(e, `textarea, input[type="email"], input[type="password"], input[type="tel"]`)) > 0
+		}
+	}
+	return false
 }
 
 // ownText is the text of n's own text nodes, not its children's elements.
@@ -73,7 +89,7 @@ func optionGroups(p *webpage.Facts) []optionGroup {
 	}
 	var out []optionGroup
 	for _, fs := range webpage.QueryAll(p.Doc, "fieldset") {
-		if !webpage.Shown(fs) || webpage.Chrome(fs) || p.InCard(fs) {
+		if !webpage.Shown(fs) || webpage.Chrome(fs) || p.InCard(fs) || inInputForm(fs) {
 			continue
 		}
 		g := optionGroup{}
@@ -86,6 +102,11 @@ func optionGroups(p *webpage.Facts) []optionGroup {
 				g.values = append(g.values, v)
 			}
 		}
+		if optionLegend.MatchString(g.name) {
+			if in := webpage.QueryAll(fs, `input[type="radio"][name]`); len(in) > 0 {
+				g.name, _ = webpage.Attr(in[0], "name")
+			}
+		}
 		if g.name != "" && len(g.values) >= 2 && !optionSkip.MatchString(g.name) {
 			out = append(out, g)
 		}
@@ -93,7 +114,7 @@ func optionGroups(p *webpage.Facts) []optionGroup {
 	for _, sel := range webpage.QueryAll(p.Doc, "select") {
 		name, _ := webpage.Attr(sel, "name")
 		id, _ := webpage.Attr(sel, "id")
-		if !webpage.Shown(sel) || webpage.Chrome(sel) || p.InCard(sel) || optionSkip.MatchString(name+" "+id) {
+		if !webpage.Shown(sel) || webpage.Chrome(sel) || p.InCard(sel) || inInputForm(sel) || strings.EqualFold(name, "id") || optionSkip.MatchString(name+" "+id) {
 			continue
 		}
 		g := optionGroup{name: strings.TrimSpace(label(sel))}
