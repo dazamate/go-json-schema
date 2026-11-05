@@ -12,7 +12,7 @@ import (
 )
 
 var (
-	relatedLabel = regexp.MustCompile(`(?i)^(?:related\b|keep reading|read next|read more|more (?:for|from|on|like this|guides|articles|reading)|you (?:may|might) also like|see also|further reading|in this (?:guide|section|series|hub)\b|guides in\b)`)
+	relatedLabel = regexp.MustCompile(`(?i)^(?:related\b|keep reading|read next|read more|more (?:for|from|on|like this|guides|articles|reading)|you (?:may|might) also like|see also|further reading|in this (?:guide|section|series|hub)\b|guides in\b|recommendations\b|recommended (?:for|products?|items?|reading|articles?|posts?|guides?)\b|recently viewed|(?:this )?goes well with|(?:customers|people) (?:also|who)\b|frequently bought|similar\b|complete the look|shop the look|pairs? (?:well )?with|(?:wear|style) it with)`)
 	GuideLabel   = regexp.MustCompile(`(?i)^(?:in this (?:guide|section|series|hub)\b|guides in\b)`)
 )
 
@@ -88,11 +88,11 @@ func (p *Facts) ProductCards() []*Card {
 	seen := map[*html.Node]bool{}
 	var out []*Card
 	Visit(p.Doc, func(a *html.Node) {
-		if a.DataAtom != atom.A || Chrome(a) {
+		if a.DataAtom != atom.A || Chrome(a) || Overlay(a) || StyleHidden(a) {
 			return
 		}
 		u, ok := p.SiteLink(a)
-		if !ok {
+		if !ok || categoryLink(MustParse(u)) || slices.ContainsFunc(out, func(c *Card) bool { return c.URL == u }) {
 			return
 		}
 		for e, depth := a.Parent, 0; e != nil && depth < 8; e, depth = e.Parent, depth+1 {
@@ -105,7 +105,7 @@ func (p *Facts) ProductCards() []*Card {
 			if txt.PriceAmount.MatchString(HTMLText(e)) {
 				if !seen[e] {
 					seen[e] = true
-					out = append(out, &Card{N: e, URL: u, Name: cardName(e, a)})
+					out = append(out, &Card{N: e, URL: u, Name: p.cardName(e, a, u)})
 				}
 				return
 			}
@@ -127,8 +127,10 @@ func (p *Facts) ProductCards() []*Card {
 	return out
 }
 
-// cardName is a card's heading, else its link's text, image alt or label.
-func cardName(c, a *html.Node) string {
+// cardName is a card's heading, else the text of its links to the product
+// (a card often links its image and its title), else its link's image alt or
+// label.
+func (p *Facts) cardName(c, a *html.Node, u string) string {
 	name := ""
 	Visit(c, func(n *html.Node) {
 		switch n.DataAtom {
@@ -140,6 +142,13 @@ func cardName(c, a *html.Node) string {
 	})
 	if name == "" {
 		name = HTMLText(a)
+	}
+	if name == "" {
+		Visit(c, func(n *html.Node) {
+			if s, ok := p.SiteLink(n); ok && n.DataAtom == atom.A && s == u && name == "" {
+				name = HTMLText(n)
+			}
+		})
 	}
 	if name == "" {
 		for _, img := range QueryAll(a, "img[alt]") {
@@ -192,7 +201,7 @@ func (p *Facts) RelatedBoxes() []RelatedBox {
 	var out []RelatedBox
 	Visit(p.Doc, func(n *html.Node) {
 		switch n.DataAtom {
-		case atom.H2, atom.H3, atom.H4, atom.P, atom.Span:
+		case atom.H2, atom.H3, atom.H4, atom.H5, atom.H6, atom.P, atom.Span:
 		default:
 			return
 		}

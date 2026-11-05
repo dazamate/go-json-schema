@@ -91,6 +91,16 @@ func ProductPath(u *url.URL) bool {
 	return i >= 0 && i < len(segs)-1
 }
 
+// categorySegment names a category or collection in an address.
+var categorySegment = regexp.MustCompile(`^(categor(y|ies)|collections?|c|departments?)$`)
+
+// categoryLink reports the address of a category or collection page
+// (/collections/gifts-under-30, /shop/officeworks/c/gifting), not a product's
+// (/collections/sale/products/stool).
+func categoryLink(u *url.URL) bool {
+	return !ProductPath(u) && slices.ContainsFunc(Segments(u), categorySegment.MatchString)
+}
+
 // BuyForm is the page's add-to-cart form outside product cards, or nil.
 func (p *Facts) BuyForm() *html.Node {
 	if p.Doc == nil {

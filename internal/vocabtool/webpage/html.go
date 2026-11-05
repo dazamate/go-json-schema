@@ -118,6 +118,62 @@ func siteChrome(n *html.Node) bool {
 	return false
 }
 
+// overlayWord is a word of a tag, class or id that names an overlay the page
+// opens over itself: a drawer, modal, dialog or popup.
+var overlayWord = regexp.MustCompile(`^(?:drawers?|modal|dialog|popup|popover|lightbox|flyout)$`)
+
+// Overlay reports an element in a drawer, modal or dialog the page opens over
+// itself (a cart drawer, a help modal): a dialog element or role, an
+// aria-modal, or a tag, class or id that names one. An element that holds
+// the page's main is the page, whatever its class says.
+func Overlay(n *html.Node) bool {
+	for e := n; e != nil && e.Type == html.ElementNode; e = e.Parent {
+		switch e.DataAtom {
+		case atom.Body, atom.Html, atom.Main:
+			return false
+		case atom.Dialog:
+			return true
+		}
+		role, _ := Attr(e, "role")
+		modal, _ := Attr(e, "aria-modal")
+		if role == "dialog" || role == "alertdialog" || modal == "true" || (namesOverlay(e) && !holds(e, atom.Main)) {
+			return true
+		}
+	}
+	return false
+}
+
+// namesOverlay reports an element whose tag, class or id names an overlay
+// (site-drawer, "drw-Drawer", "modal fade", "oddit-cart-drawer").
+func namesOverlay(e *html.Node) bool {
+	id, _ := Attr(e, "id")
+	class, _ := Attr(e, "class")
+	for _, s := range append(strings.Fields(class), e.Data, id) {
+		for _, w := range strings.FieldsFunc(strings.ToLower(s), func(r rune) bool { return r == '-' || r == '_' }) {
+			if overlayWord.MatchString(w) {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+// hiddenStyle matches an inline style that hides its element.
+var hiddenStyle = regexp.MustCompile(`(?i)(?:^|;)\s*(?:display\s*:\s*none|visibility\s*:\s*hidden)\b`)
+
+// StyleHidden reports an element that its own or an ancestor's inline style
+// hides (display: none): a closed drawer, a helper frame. Its text still
+// counts as the page's (a closed accordion's answer), but it is no section
+// of the page.
+func StyleHidden(n *html.Node) bool {
+	for e := n; e != nil; e = e.Parent {
+		if s, _ := Attr(e, "style"); hiddenStyle.MatchString(s) {
+			return true
+		}
+	}
+	return false
+}
+
 // CSSIdent matches a name usable in a CSS selector as an id.
 var CSSIdent = regexp.MustCompile(`^[A-Za-z_][A-Za-z0-9_-]*$`)
 
