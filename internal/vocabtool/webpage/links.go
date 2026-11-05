@@ -94,6 +94,14 @@ func ReviewProfileAddress(href string) string {
 	if err != nil || !u.IsAbs() {
 		return ""
 	}
+	// a place named by its street address is a map of the address (hasMap),
+	// not the business's profile
+	if place, ok := strings.CutPrefix(u.Path, "/maps/place/"); ok && googleHost.MatchString(u.Hostname()) {
+		name, _, _ := strings.Cut(strings.ReplaceAll(place, "+", " "), "/")
+		if loc := StreetAddress.FindStringIndex(name); loc != nil && loc[0] == 0 {
+			return ""
+		}
+	}
 	for _, r := range reviewProfiles {
 		if r.host.MatchString(u.Hostname()) && r.path.MatchString(u.Path) {
 			return href

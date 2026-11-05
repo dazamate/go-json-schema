@@ -1,6 +1,7 @@
 package site_test
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/dazamate/go-json-schema/internal/vocabtool/audit"
@@ -43,9 +44,12 @@ func TestReviewProfile(t *testing.T) {
 		{"an image link in a footer widget", audittest.Input{Draft: bare, PageHTML: pest, PageURL: url}, []audit.Issue{
 			{Path: "html:body", Severity: audit.Warning, Message: `the page links the business's profiles on review sites (nocowboys.co.nz/businesses/Pestproof-Pest-Control) ` + ask},
 		}},
-		{"a Google Maps place in the header", audittest.Input{Draft: bare, PageHTML: maps, PageURL: url}, []audit.Issue{
-			{Path: "html:body", Severity: audit.Warning, Message: `the page links the business's profiles on review sites (google.com/maps/place/10+Doncaster+Street+Mangere+Auckland+nz) ` + ask},
+		{"a Google Maps place in the header", audittest.Input{Draft: bare, PageHTML: strings.Replace(maps, "10+Doncaster+Street+Mangere+Auckland+nz", "Auto+Discount+Mangere/@-36.97,174.77,17z", 1), PageURL: url}, []audit.Issue{
+			{Path: "html:body", Severity: audit.Warning, Message: `the page links the business's profiles on review sites (google.com/maps/place/Auto+Discount+Mangere/@-36.97,174.77,17z) ` + ask},
 		}},
+		// autodiscount.co.nz's header links a map of its street address: its
+		// hasMap, not a profile
+		{"a map of the street address", audittest.Input{Draft: bare, PageHTML: maps, PageURL: url}, nil},
 		{"a link worded as the business's own", audittest.Input{Draft: bare, PageHTML: review, PageURL: url}, []audit.Issue{
 			{Path: "html:body", Severity: audit.Warning, Message: `the page links the business's profiles on review sites (yelp.com/biz/moorehead-family-dentistry-cincinnati) ` + ask},
 		}},

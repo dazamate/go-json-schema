@@ -57,6 +57,8 @@ func TestReviewProfileTakesBusinessPagesOnly(t *testing.T) {
 		"https://www.trustpilot.com/categories/plumber",
 		"https://www.google.com/maps/dir//10+Doncaster+Street,+Mangere/@-36.97,174.77",
 		"https://www.google.com/maps/search/plumbers",
+		// autodiscount.co.nz's footer: a map of its street address, its hasMap
+		"https://www.google.com/maps/place/10+Doncaster+Street+Mangere+Auckland+nz",
 		"https://www.google.com/search?q=acme",
 		"https://www.bbb.org/search?find_text=acme",
 		"https://www.booking.com/index.html",
@@ -78,7 +80,8 @@ func TestReviewProfileTakesBusinessPagesOnly(t *testing.T) {
 		"https://www.checkatrade.com/trades/jamesplumbingandheatinglimited",
 		"https://www.trustpilot.com/review/acme.example",
 		"https://uk.trustpilot.com/review/acme.example",
-		"https://www.google.com/maps/place/10+Doncaster+Street+Mangere+Auckland+nz",
+		"https://www.google.com/maps/place/Auto+Discount+Mangere/@-36.97,174.77,17z",
+		"https://www.google.com/maps/place/7-Eleven/@40.7,-74.0,17z",
 		"https://www.google.co.uk/maps/place/Acme+Plumbing/@51.5,-0.1,17z",
 		"https://www.google.com/maps?cid=11399163827163773228",
 		"https://g.page/moorehead-dentistry-lebanon?share",
