@@ -42,3 +42,43 @@ func TestCartControlReadsSVGName(t *testing.T) {
 		t.Error("a menu button is a cart control")
 	}
 }
+
+// TestCopyrightLine checks copyright lines as sites word them: the holder
+// before the year (loveitlandscaping.com.au, sublimecandles.co.uk,
+// oliverbonas.com), an "@" after the mark (tutorfinder.com.au), a range, and
+// the year before the mark; business.gov.au's menu of IP rights is no copyright
+// line.
+func TestCopyrightLine(t *testing.T) {
+	for text, want := range map[string][2]string{
+		"© Love It Landscaping 2023. All Rights Reseverd":                                  {"", "2023"},
+		"Terms & conditions © Copyright Sublime Candles 2026":                              {"", "2026"},
+		"Read our 566151 reviews © Oliver Bonas 2026 Privacy Policy":                       {"", "2026"},
+		"Copyright @ 2026 TutorFinder.com.au English Tutors":                               {"", "2026"},
+		"©2009–2026 Moorehead Dentistry":                                                   {"2009", "2026"},
+		"Copyright 2026":                                                                   {"", "2026"},
+		"a trade mark Copyright Designs Circuit layouts Plant breeder's rights What to do": {"", ""},
+	} {
+		got := [2]string{}
+		if m := CopyrightLine.FindStringSubmatch(text); m != nil {
+			got = [2]string{m[1], m[2]}
+		}
+		if got != want {
+			t.Errorf("CopyrightLine(%q) = %q, want %q", text, got, want)
+		}
+	}
+	if m := CopyrightYearFirst.FindStringSubmatch("2026 © Acme Pty Ltd"); m == nil || m[1] != "2026" {
+		t.Errorf("CopyrightYearFirst = %q", m)
+	}
+}
+
+// TestMainSkipsSiteFooterHolderFirst checks that a footer inside main whose
+// copyright line names the holder before the year is the site's footer, as
+// one with "© 2026" is.
+func TestMainSkipsSiteFooterHolderFirst(t *testing.T) {
+	doc := parse(t, `<html><body><main><h1>Returns and Refunds</h1><p>You can return most items to us within 30 days.</p>
+		<footer><p>Read our 566151 reviews</p><p>© Oliver Bonas 2026</p><a href="/privacy">Privacy Policy</a></footer></main></body></html>`)
+	p := New(doc, HTMLText(doc), "https://www.oliverbonas.com/returns-and-refunds")
+	if strings.Contains(p.Main, "566151 reviews") || !strings.Contains(p.Main, "within 30 days") {
+		t.Errorf("Main = %q", p.Main)
+	}
+}

@@ -184,7 +184,8 @@ func siteChrome(n *html.Node) bool {
 			}
 		}
 	case atom.Footer:
-		return CopyrightLine.MatchString(HTMLText(n))
+		t := HTMLText(n)
+		return CopyrightLine.MatchString(t) || CopyrightYearFirst.MatchString(t)
 	}
 	return false
 }
@@ -349,8 +350,15 @@ func MustParse(s string) *url.URL {
 	return u
 }
 
-// CopyrightLine matches a copyright line and captures its last year.
-var CopyrightLine = regexp.MustCompile(`(?i)(?:©|\(c\)|copyright)\s*(?:\d{4}\s*[-–]\s*)?(\d{4})`)
+// CopyrightLine matches a copyright line: the mark, the holder's name when
+// it comes before the year ("© Oliver Bonas 2026", "Copyright @ 2026"), and
+// the year or the range of years. It captures the range's first year (if
+// any) and the last.
+var CopyrightLine = regexp.MustCompile(`(?i)(?:©|\(c\)|copyright)[\s@:©.]*(?:[\p{L}&'’.,/ -]{0,50}?\s)?(?:((?:19|20)\d{2})\s*[-–—]\s*)?((?:19|20)\d{2})\b`)
+
+// CopyrightYearFirst matches a copyright line with the year before the mark
+// ("2026 © Acme"), and captures the year.
+var CopyrightYearFirst = regexp.MustCompile(`(?i)\b((?:19|20)\d{2})\s*(?:©|\(c\))`)
 
 // landmark is the chrome an element is by its tag or its ARIA landmark role:
 // atom.Nav for a nav or role navigation, atom.Header for a header or role
