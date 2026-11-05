@@ -19,7 +19,7 @@ var (
 	ratingWord   = regexp.MustCompile(`(?i)\b(rat(?:ed|ing|ings)|scores?|stars?|reviews?)\b`)
 )
 
-var ratingShown = regexp.MustCompile(`(?i)\b(\d(?:\.\d)?)\s*(?:/\s*(?:5|10)\b|out of\s*(?:5|10)\b|stars?\b)`)
+var ratingShown = regexp.MustCompile(`(?i)\b(\d(?:\.\d{1,2})?)\s*(?:/\s*(?:5|10)\b|out of\s*(?:5|10)\b|stars?\b)`)
 
 // Ratings warns on ratings the page shows that no Rating or AggregateRating
 // carries as its ratingValue. It runs on a page search engines index, and
