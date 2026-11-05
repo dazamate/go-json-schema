@@ -47,7 +47,7 @@ Adding a check for something a report such as Search Console flags should mean w
 
 These would make the work a failure even if every test passed:
 
-- A new god package: the old `checker` renamed, or a `Context` that grows a method for every check. Shared code is split by what it is about: the vocabulary, the draft, the page, and the audit framework.
+- A new god package: the old `checker` renamed, or a `Context` that grows a method for every check. Shared code is split by what it is about: the vocabulary, the draft, the page, plain text, and the audit framework.
 - Copying one area's shared traversal into each of its check files. For example, the snippet checks' `@id` resolver and offers walk would be copied into each snippet check. Shared code for an area lives in one helper file of that area.
 - Checks that still depend on run order through mutable state on the context.
 
@@ -70,9 +70,10 @@ These would make the work a failure even if every test passed:
 |---|---|
 | `internal/vocabtool` | `Tool` and its lookups (TypeProperties, EnumValues, PropertyInfo), plus `Check` and `Vocabulary`. These two build the context, run the checks and assemble the `Report`. It imports every area package so their checks register. |
 | `internal/vocabtool/vocab` | The vocabulary index that `Tool` builds today: classes, properties and members, applicable properties, enum-only properties, suggestable subtypes, did-you-mean suggestions. It imports no audit code, so tests can load it without a cycle. |
-| `internal/vocabtool/draft` | The ordered JSON object (`Object`: decode, encode, get, set), the list of nodes with their paths, value helpers (`Values`, `Strs`, `Scalars`, `TypeNames`, …), and `Normalize`. |
-| `internal/vocabtool/page` | Everything read from the rendered page: today's `pageFacts`, page kind, private, cards, sections, questions, tools, data blocks, option groups, details and the like, plus the HTML and text helpers. |
-| `internal/vocabtool/audit` | The framework: the `Check` interface, `Issue` and the severities, `Context`, the registry, `Run`, the shared ledgers (below) and memoized facts. |
+| `internal/vocabtool/jsonld` | The ordered JSON object (`Object`: decode, encode, get, set), the list of nodes with their paths, value helpers (`Values`, `Strs`, `Scalars`, `TypeNames`, …). It knows nothing of the vocabulary. |
+| `internal/vocabtool/webpage` | Everything read from the rendered page: today's `pageFacts`, page kind, private, cards, sections, questions, tools, data blocks, option groups, details and the like, plus the HTML helpers. |
+| `internal/vocabtool/txt` | Plain-string helpers the others share: normalized words, whole-word matching, clipping, URL normalization, money amounts. |
+| `internal/vocabtool/audit` | The framework: `Normalize`, the `Check` interface, `Issue` and the severities, `Context`, the registry, `Run`, the shared ledgers (below) and memoized facts. |
 | `internal/vocabtool/audit/audittest` | The harness that per-check tests use. |
 | `internal/vocabtool/checks/<area>` | The checks, one per file. |
 
@@ -84,7 +85,7 @@ These would make the work a failure even if every test passed:
 - recursing only through property values and `@graph`, including untyped objects;
 - only members of an enum-only range.
 
-Areas, as a starting split. Area names never repeat a core package's name (`terms`, not `vocab`; `onpage`, not `page`), so a check file never imports a package with its own name. The builder may move a check to a better-fitting area:
+Areas, as a starting split. Area names never repeat a core package's name (`terms`, not `vocab`), so a check file never imports a package with its own name. The builder may move a check to a better-fitting area:
 
 | Area | From today |
 |---|---|
@@ -223,7 +224,7 @@ When the split is done, the golden test and its data are deleted in the last com
 The order is strangler-style, sequential, with one commit per step. The golden test stays green at every commit.
 
 1. **Core packages.**
-   - Move the vocabulary index, the draft model and the page facts out to `vocab`, `draft` and `page`.
+   - Move the vocabulary index, the draft model, the text helpers and the page facts out to `vocab`, `jsonld`, `txt` and `webpage`.
    - Add `audit` with the interface, context, registry, run and ledgers.
    - Wrap what is left of the old `checker` as one temporary adapter check, so `Check` already runs through `audit.Run`.
 2. **Areas, one at a time.** Move each area's checks to `checks/<area>`, one per file with tests, and delete them from the old `checker`.
@@ -233,14 +234,14 @@ The order is strangler-style, sequential, with one commit per step. The golden t
 
 ## Left to the builder
 
-- **Names and APIs.** Exact type, method and helper names in `audit`, `draft` and `page`, and the exported API of each.
+- **Names and APIs.** Exact type, method and helper names in `audit`, `jsonld`, `webpage` and `txt`, and the exported API of each.
 - **The bridge.** How the adapter and the ledgers coexist during the migration.
 - **Where checks go.** Which helper goes in which core package, and moving a check to a better area.
 - **Fixtures.** Test-case HTML for page checks.
 
 ## Decisions made by the implementer, not the owner
 
-- **Area names.** `terms` and `onpage` keep area names apart from the core `vocab` and `page` packages.
+- **Package names.** `jsonld`, `webpage` and `txt`, not `draft`, `page` and `text`. The code has dozens of locals named `draft`, `page` and `text`, which would shadow those package names. `terms` keeps the vocabulary walk's area apart from the core `vocab` package.
 - **Base branch.** PR #11 and PR #12 merged together. Both are already on `refactor/audit-checks` (merge commit `0df924d`), so no rebase is needed, so `Vocabulary` (PR #11) and the snippet checks (PR #12) move too. Both PRs merge before this one.
 - **Issue order.** Issues are sorted by severity, then check order. This differs from today's run order, but the issues themselves are the same.
   - Splitting checks makes some change of order unavoidable: issues group by check instead of by node.
