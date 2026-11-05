@@ -78,7 +78,7 @@ func textOutsideChrome(n *xhtml.Node) string {
 	var walk func(*xhtml.Node)
 	walk = func(e *xhtml.Node) {
 		switch e.DataAtom {
-		case atom.Nav, atom.Header, atom.Footer, atom.Script, atom.Style:
+		case atom.Nav, atom.Header, atom.Footer, atom.A, atom.Script, atom.Style:
 			return
 		}
 		if e.Type == xhtml.TextNode {
@@ -91,4 +91,15 @@ func textOutsideChrome(n *xhtml.Node) string {
 	}
 	walk(n)
 	return strings.Join(strings.Fields(b.String()), " ")
+}
+
+// inLink reports an element that is, or is inside, a link: a menu or banner
+// link that names an offer ("Clearance Outlet - 65% off") is no price.
+func inLink(n *xhtml.Node) bool {
+	for e := n; e != nil; e = e.Parent {
+		if e.DataAtom == atom.A {
+			return true
+		}
+	}
+	return false
 }

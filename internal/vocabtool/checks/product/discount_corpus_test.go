@@ -37,3 +37,9 @@ func TestDiscountNavLink(t *testing.T) {
 	page := `<!doctype html><html><head></head><body><header>` + cartLink + `<nav><ul><li><a href="/collections/outlet">Clearance Outlet - 65% off</a></li></ul></nav></header><main><h1>Sale</h1><p>Furniture, lighting and decor.</p></main></body></html>`
 	audittest.Expect(t, product.Discount{}, audittest.Input{Draft: noDraft, PageHTML: page, PageURL: notesURL}, nil)
 }
+
+// cultfurniture.com's mobile drawer repeats the link outside any nav element.
+func TestDiscountDrawerLink(t *testing.T) {
+	page := `<!doctype html><html><head></head><body><header>` + cartLink + `</header><main><h1>Sale</h1><div class="drw-Navigation"><a href="/collections/outlet" class="drw-Navigation_Link">Clearance Outlet - 65% off</a></div></main></body></html>`
+	audittest.Expect(t, product.Discount{}, audittest.Input{Draft: noDraft, PageHTML: page, PageURL: notesURL}, nil)
+}
