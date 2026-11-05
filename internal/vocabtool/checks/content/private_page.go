@@ -36,5 +36,5 @@ func (PrivatePage) Run(c *audit.Context) []audit.Issue {
 	if n := privateNotes[p.Kind]; n != "" {
 		note = "; if you mark it up at all, " + n
 	}
-	return []audit.Issue{audit.Issuef(audit.PagePath, audit.Info, "%s: search engines leave its structured data out, so the shop checks skip it%s", what, note)}
+	return []audit.Issue{audit.Issuef(audit.PagePath, audit.Info, "%s: search engines leave its structured data out, so the checks of what a page shows skip it%s", what, note)}
 }
