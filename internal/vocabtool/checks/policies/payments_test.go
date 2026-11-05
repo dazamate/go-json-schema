@@ -26,6 +26,9 @@ func TestPayments(t *testing.T) {
 		{"a discover card", audittest.Input{Draft: noDraft, PageHTML: payLine("We take Discover card."), PageURL: paymentsURL}, []audit.Issue{
 			{Path: "html:body", Severity: audit.Warning, Message: "the page shows how to pay (Discover): set acceptedPaymentMethod on the business: a PaymentCard for each card (Discover)"},
 		}},
+		{"visa accepted alone", audittest.Input{Draft: noDraft, PageHTML: payLine("We accept Visa. You can also pay with Discover."), PageURL: paymentsURL}, []audit.Issue{
+			{Path: "html:body", Severity: audit.Warning, Message: "the page shows how to pay (Visa, Discover): set acceptedPaymentMethod on the business: a PaymentCard for each card (Visa, Discover)"},
+		}},
 		{"discover in a list", audittest.Input{Draft: noDraft, PageHTML: payLine("We accept Mastercard and Discover."), PageURL: paymentsURL}, []audit.Issue{
 			{Path: "html:body", Severity: audit.Warning, Message: "the page shows how to pay (Mastercard, Discover): set acceptedPaymentMethod on the business: a PaymentCard for each card (Mastercard, Discover)"},
 		}},

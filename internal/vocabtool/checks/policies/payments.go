@@ -24,6 +24,7 @@ var (
 	cardAfter  = regexp.MustCompile(`^\s+(?:credit |debit )?cards?\b`)
 	listAfter  = regexp.MustCompile(`^\s*(?:[,/|&•]|\band\b|\bor\b)\s*(?:(?:and|or)\s+)?` + `\b(?:` + paymentAlt + `)\b`)
 	listBefore = regexp.MustCompile(`\b(?:` + paymentAlt + `)\s*(?:[,/|&•]|\band\b|\bor\b)\s*(?:(?:and|or)\s+)?$`)
+	payBefore  = regexp.MustCompile(`(?i)\b(?:accepts?|accepted|take|takes|(?:pay|paying|payment)\s+(?:with|by|using|via))\s+(?:all\s+major\s+cards\s+(?:including\s+)?)?$`)
 	iconWord   = regexp.MustCompile(`(?i)^(?:visa|discover)(?: (?:card|logo|icon))?$`)
 	cardNames  = regexp.MustCompile(`(?i)^(visa|mastercard|american express|amex|diners club|discover|jcb|unionpay)$`)
 	payTypes   = []struct {
@@ -104,7 +105,8 @@ func (Payments) Run(c *audit.Context) []audit.Issue {
 }
 
 // cardNamed reports a name that is an everyday word (Discover, Visa) used as
-// a card's name: "Discover card", or listed with another way to pay.
+// a card's name: "Discover card", "we accept Visa", "pay with Discover", or
+// listed with another way to pay.
 func cardNamed(text string, loc []int) bool {
-	return cardAfter.MatchString(text[loc[1]:]) || listAfter.MatchString(text[loc[1]:]) || listBefore.MatchString(text[:loc[0]])
+	return cardAfter.MatchString(text[loc[1]:]) || listAfter.MatchString(text[loc[1]:]) || listBefore.MatchString(text[:loc[0]]) || payBefore.MatchString(text[:loc[0]])
 }
