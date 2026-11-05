@@ -53,7 +53,7 @@ func engagementOf(c *audit.Context) *engagement {
 			matches := [4]bool{
 				writeReview.MatchString(t),
 				webpage.ShareLink.MatchString(href),
-				wishWords.MatchString(t+" "+lbl) && !webpage.Chrome(n),
+				(wishWords.MatchString(t) || wishWords.MatchString(lbl)) && !webpage.Chrome(n),
 				trackOrder.MatchString(t),
 			}
 			for k, m := range matches {
