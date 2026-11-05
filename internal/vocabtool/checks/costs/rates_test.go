@@ -50,3 +50,33 @@ func TestPayTableTakenWhenCarried(t *testing.T) {
 	audittest.Expect(t, costs.Rates{}, in, nil)
 	audittest.Expect(t, costs.Prices{}, in, nil)
 }
+
+// TestRatesOtherTrades pins rates worded as other trades word them: the
+// tutor's "$10 per hour" and a dentist's "$125/appt", a pest controller's
+// "$140 per nest", a SaaS plan's "$10 per seat / month", an Indian shop's
+// "(₹53/day)", a landscaper's "$45 per m²" and a gym's "£24.99 a month". Plain
+// copy that only looks like one stays silent.
+func TestRatesOtherTrades(t *testing.T) {
+	msg := func(list, codes string) []audit.Issue {
+		return []audit.Issue{{Path: "html:body", Severity: audit.Warning, Message: "the page prices " + list + ": mark each up as a UnitPriceSpecification (price, or minPrice and maxPrice, priceCurrency, unitCode " + codes + ") on the Service or Offer it is the rate of"}}
+	}
+	for _, tc := range []struct {
+		name, text string
+		want       []audit.Issue
+	}{
+		{"a tutor's hour", "Min Rate $10 per hour $20 per hour", msg("$10 per hour, $20 per hour", "HUR")},
+		{"a dentist's appointment", "Nitrous $125/appt Certain PPO plans may cover up to 100%", msg("$125/appt", "C62 with unitText appt")},
+		{"a unit the list does not know", "Bumblebees nest relocation- $140 per nest. Extraction per tooth £149.00 Per Additional tooth £129.00", nil},
+		{"a gym's month", "Join for £24.99 a month with no contract.", msg("£24.99 a month", "MON")},
+		{"a rate a year", "Members pay $40 a year or $4 per month.", msg("$40 a year, $4 per month", "ANN or MON")},
+		{"an area", "Turf costs $45 per m² laid, or $50/sqm for sloping sites.", msg("$45 per m², $50/sqm", "MTK")},
+		{"a per day price in rupees", "Extended warranty ₹19,249.00 (₹53/day) MRP", msg("₹53/day", "DAY")},
+		{"a SaaS seat", "Plus $10 per seat / month for small teams.", []audit.Issue{{Path: "html:body", Severity: audit.Warning, Message: `the page prices $10 per seat / month: mark each up as a UnitPriceSpecification (price, or minPrice and maxPrice, priceCurrency, unitCode MON, and referenceQuantity for a "per seat" rate) on the Service or Offer it is the rate of`}}},
+		{"a percentage", "The fee is $20 per cent of the bill.", nil},
+		{"a price then a word", "It costs $20 a few times a year, per the contract.", nil},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			audittest.Expect(t, costs.Rates{}, audittest.Input{Draft: bareDraft, PageText: tc.text, PageURL: costGuideURL}, tc.want)
+		})
+	}
+}
