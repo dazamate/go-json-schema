@@ -19,6 +19,16 @@ func TestReviewCount(t *testing.T) {
 		{"a review count", audittest.Input{Draft: noDraft, PageHTML: page, PageURL: notesURL}, []audit.Issue{
 			{Path: "html:body", Severity: audit.Warning, Message: `the page counts 128 reviews: set the Product's aggregateRating, an AggregateRating (ratingValue, bestRating, reviewCount 128)`},
 		}},
+		// the reviewed node is the page's own, not always a Product
+		{"a recipe", audittest.Input{Draft: `{"@context":"https://schema.org","@type":"Recipe","name":"Best Chocolate Chip Cookies"}`, PageHTML: page, PageURL: notesURL}, []audit.Issue{
+			{Path: "html:body", Severity: audit.Warning, Message: `the page counts 128 reviews: set the Recipe's aggregateRating, an AggregateRating (ratingValue, bestRating, reviewCount 128)`},
+		}},
+		{"a dentist", audittest.Input{Draft: `{"@context":"https://schema.org","@graph":[{"@type":"WebPage","url":"https://harbour.test/pages/notes"},{"@type":"Organization","name":"Harbour"},{"@type":"Dentist","name":"Harbour Dental"}]}`, PageHTML: page, PageURL: notesURL}, []audit.Issue{
+			{Path: "html:body", Severity: audit.Warning, Message: `the page counts 128 reviews: set the Dentist's aggregateRating, an AggregateRating (ratingValue, bestRating, reviewCount 128)`},
+		}},
+		{"a product among a recipe's neighbours", audittest.Input{Draft: `{"@context":"https://schema.org","@graph":[{"@type":"Organization","name":"Harbour"},{"@type":"Product","name":"Opal ring"}]}`, PageHTML: page, PageURL: notesURL}, []audit.Issue{
+			{Path: "html:body", Severity: audit.Warning, Message: `the page counts 128 reviews: set the Product's aggregateRating, an AggregateRating (ratingValue, bestRating, reviewCount 128)`},
+		}},
 		{"the reviewCount is there", audittest.Input{Draft: carried, PageHTML: page, PageURL: notesURL}, nil},
 		{"no review count", audittest.Input{Draft: noDraft, PageHTML: plainPageWith("<p>Handmade rings.</p>"), PageURL: notesURL}, nil},
 		{"a page known by its text", audittest.Input{Draft: noDraft, PageText: `Rated by 128 reviews.`, PageURL: notesURL}, []audit.Issue{

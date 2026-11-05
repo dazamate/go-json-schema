@@ -12,11 +12,13 @@ import (
 	"github.com/dazamate/go-json-schema/internal/vocabtool/webpage"
 )
 
-// listed are the product cards a page search engines index lists outside
-// its blocks of related products; nil when it lists fewer than two, which is
-// no listing.
+// listed are the product cards a page of a shop that search engines index
+// lists outside its blocks of related products; nil when it lists fewer than
+// two, which is no listing, or when the page is of another kind than a
+// listing or a home page: a pricing page's plans, a price list's services and
+// an article's example homes are cards, not a shop's products.
 func listed(c *audit.Context) []*webpage.Card {
-	if !c.Indexed() {
+	if !c.Indexed() || !c.Page.Sells() || (c.Page.Kind != webpage.KindListing && c.Page.Kind != webpage.KindHome) {
 		return nil
 	}
 	var out []*webpage.Card

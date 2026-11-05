@@ -31,6 +31,9 @@ func TestOpeningHours(t *testing.T) {
 		{"closed on a day", audittest.Input{Draft: noDraft, PageHTML: hoursPage("Sunday: closed"), PageURL: contactURL}, []audit.Issue{
 			{Path: "html:body", Severity: audit.Warning, Message: `the page gives opening hours ("Sunday: closed"): ` + hoursAdvice},
 		}},
+		{"hours in the site's footer only", audittest.Input{Draft: noDraft, PageHTML: `<!doctype html><html><head></head><body><main><h1>2015 Toyota Aqua</h1><p>Low kilometres, one owner.</p></main><footer><p>Showroom hours</p><p>Mon-Fri 8:30am-5:30pm</p></footer></body></html>`, PageURL: contactURL}, []audit.Issue{
+			{Path: "html:body", Severity: audit.Warning, Message: `the page gives opening hours ("Mon-Fri 8:30am-5:30pm"): ` + hoursAdvice},
+		}},
 		{"openingHours in the draft", audittest.Input{Draft: carried, PageHTML: contactPage, PageURL: contactURL}, nil},
 		{"a page that gives no hours", audittest.Input{Draft: noDraft, PageHTML: aboutPage, PageURL: aboutURL}, nil},
 		{"a noindex page", audittest.Input{Draft: noDraft, PageHTML: audittest.Noindex(contactPage), PageURL: contactURL}, nil},
