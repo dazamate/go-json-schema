@@ -81,14 +81,14 @@ func HTMLText(doc *html.Node) string {
 	return strings.Join(strings.Fields(b.String()), " ")
 }
 
-// scoped reports a header or footer that belongs to a part of the page. One
-// inside main is the site's own when the page wraps everything in main: a
-// header that links to the home page and holds no h1, or a footer with a
-// copyright line.
+// scoped reports a header or footer that belongs to a part of the page, or to
+// the site's header or footer around it. One inside main is the site's own
+// when the page wraps everything in main: a header that links to the home
+// page and holds no h1, or a footer with a copyright line.
 func scoped(n *html.Node) bool {
 	for p := n.Parent; p != nil; p = p.Parent {
 		switch p.DataAtom {
-		case atom.Article, atom.Aside, atom.Nav, atom.Section:
+		case atom.Article, atom.Aside, atom.Nav, atom.Section, atom.Header, atom.Footer:
 			return true
 		case atom.Main:
 			return !siteChrome(n)
