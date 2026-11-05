@@ -15,10 +15,15 @@ import (
 var reactSegment = regexp.MustCompile(`^S:\d+$`)
 
 // Skipped reports whether a visitor never sees the element or its contents:
-// scripts, styles, noscript, template contents and hidden elements.
+// scripts, styles, noscript, template contents, hidden elements, and the
+// title and desc of an icon in a link or button, which name the icon for a
+// screen reader and show as no text (a menu link's "Nav chevron").
 func Skipped(n *html.Node) bool {
 	if n.Type != html.ElementNode {
 		return false
+	}
+	if n.Namespace == "svg" && (n.Data == "title" || n.Data == "desc") && inControl(n) {
+		return true
 	}
 	switch n.DataAtom {
 	case atom.Script, atom.Style, atom.Noscript, atom.Template:
@@ -27,6 +32,24 @@ func Skipped(n *html.Node) bool {
 	_, hidden := Attr(n, "hidden")
 	aria, _ := Attr(n, "aria-hidden")
 	return (hidden && !streamed(n)) || aria == "true"
+}
+
+// inControl reports an element in a link, button, label or summary, or in an
+// element with a link, button, menu item or tab role. A graphic there is the
+// control's icon; a graphic outside one (a card logo in a row of ways to pay,
+// a chart) is the page's own, and its title says what it shows.
+func inControl(n *html.Node) bool {
+	for e := n.Parent; e != nil; e = e.Parent {
+		switch e.DataAtom {
+		case atom.A, atom.Button, atom.Label, atom.Summary:
+			return true
+		}
+		switch role, _ := Attr(e, "role"); role {
+		case "button", "link", "menuitem", "tab":
+			return true
+		}
+	}
+	return false
 }
 
 // streamed reports a hidden div React's streaming server render sends a
@@ -79,6 +102,51 @@ func HTMLText(doc *html.Node) string {
 	}
 	walk(doc)
 	return strings.Join(strings.Fields(b.String()), " ")
+}
+
+// iconText is the text under n with each inline svg read as its name, its
+// aria-label or else its title: what a screen reader calls a control whose
+// only label is its icon (a cart link's "Open Cart Menu").
+func iconText(n *html.Node) string {
+	var b strings.Builder
+	var walk func(*html.Node)
+	walk = func(n *html.Node) {
+		for c := n.FirstChild; c != nil; c = c.NextSibling {
+			switch {
+			case c.Type == html.ElementNode && c.Namespace == "svg" && c.Data == "svg" && !Skipped(c):
+				name, _ := Attr(c, "aria-label")
+				if strings.TrimSpace(name) == "" {
+					for t := c.FirstChild; t != nil; t = t.NextSibling {
+						if t.Type == html.ElementNode && t.Data == "title" {
+							name = textOf(t)
+						}
+					}
+				}
+				b.WriteString(name)
+				b.WriteByte(' ')
+			case Skipped(c):
+			case c.Type == html.TextNode:
+				b.WriteString(c.Data)
+				b.WriteByte(' ')
+			default:
+				walk(c)
+			}
+		}
+	}
+	walk(n)
+	return strings.Join(strings.Fields(b.String()), " ")
+}
+
+// textOf is every text node under n, hidden or not.
+func textOf(n *html.Node) string {
+	var b strings.Builder
+	for c := n.FirstChild; c != nil; c = c.NextSibling {
+		if c.Type == html.TextNode {
+			b.WriteString(c.Data)
+		}
+		b.WriteString(textOf(c))
+	}
+	return b.String()
 }
 
 // scoped reports a header or footer that belongs to a part of the page, or to

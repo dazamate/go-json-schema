@@ -267,12 +267,13 @@ var (
 )
 
 // CartControl reports a link or button for the cart: its name (aria-label,
-// else its text, else its title) is the cart's, in a cart button's words. A
+// else its text with each icon's name, else its title) is the cart's, in a
+// cart button's words. A
 // link named "Bag Straps" sells bags; one named "Bag" opens the cart.
 func CartControl(n *html.Node) bool {
 	name, _ := Attr(n, "aria-label")
 	if strings.TrimSpace(name) == "" {
-		name = HTMLText(n)
+		name = iconText(n)
 	}
 	if strings.TrimSpace(name) == "" {
 		name, _ = Attr(n, "title")
