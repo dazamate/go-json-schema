@@ -39,6 +39,29 @@ func TestPayments(t *testing.T) {
 			{Path: "html:body", Severity: audit.Warning, Message: "the page shows how to pay (Discover): set acceptedPaymentMethod on the business: a PaymentCard for each card (Discover)"},
 		}},
 		{"a discover link", audittest.Input{Draft: noDraft, PageHTML: payLine(`<a href="/new" title="Discover more">New</a>`), PageURL: paymentsURL}, nil},
+		// totallyirishgifts.com footer
+		{"an Irish footer's wallets", audittest.Input{Draft: noDraft, PageHTML: payLine("We Accept Visa Mastercard PayPal Apple Pay Google Pay Link Klarna Revolut Pay Amazon Pay"), PageURL: paymentsURL}, []audit.Issue{
+			{Path: "html:body", Severity: audit.Warning, Message: "the page shows how to pay (Visa, Mastercard, PayPal, Apple Pay, Google Pay, Klarna, Revolut Pay, Amazon Pay): set acceptedPaymentMethod on the business: a PaymentCard for each card (Visa, Mastercard); a PaymentMethod for each other way to pay (PayPal, Apple Pay, Google Pay, Klarna, Revolut Pay, Amazon Pay)"},
+		}},
+		// kasaustralia.com footer
+		{"a footer's spaced Union Pay and EU wallets", audittest.Input{Draft: noDraft, PageHTML: payLine("American Express Apple Pay Bizum Google Pay Mastercard PayPal Satispay Shop Pay Union Pay Visa"), PageURL: paymentsURL}, []audit.Issue{
+			{Path: "html:body", Severity: audit.Warning, Message: "the page shows how to pay (American Express, Apple Pay, Bizum, Google Pay, Mastercard, PayPal, Satispay, Shop Pay, Union Pay, Visa): set acceptedPaymentMethod on the business: a PaymentCard for each card (American Express, Mastercard, Union Pay, Visa); a PaymentMethod for each other way to pay (Apple Pay, Bizum, Google Pay, PayPal, Satispay, Shop Pay)"},
+		}},
+		{"buy now, pay later and US wallets", audittest.Input{Draft: noDraft, PageHTML: payLine("Pay with Clearpay, Affirm, Sezzle, Venmo or Cash App. Samsung Pay and Maestro too."), PageURL: paymentsURL}, []audit.Issue{
+			{Path: "html:body", Severity: audit.Warning, Message: "the page shows how to pay (Clearpay, Affirm, Sezzle, Venmo, Cash App, Samsung Pay, Maestro): set acceptedPaymentMethod on the business: a PaymentCard for each card (Maestro); a PaymentMethod for each other way to pay (Clearpay, Affirm, Sezzle, Venmo, Cash App, Samsung Pay)"},
+		}},
+		{"Indian and Canadian and Benelux ways to pay", audittest.Input{Draft: noDraft, PageHTML: payLine("Pay by UPI, Paytm, RuPay, Interac, iDEAL or Bancontact."), PageURL: paymentsURL}, []audit.Issue{
+			{Path: "html:body", Severity: audit.Warning, Message: "the page shows how to pay (UPI, Paytm, RuPay, Interac, iDEAL, Bancontact): set acceptedPaymentMethod on the business: a PaymentCard for each card (RuPay); a PaymentMethod for each other way to pay (UPI, Paytm, Interac, iDEAL, Bancontact)"},
+		}},
+		{"affirm and maestro as words", audittest.Input{Draft: noDraft, PageHTML: payLine("We affirm our commitment. Affirm Studio and the maestro of the kitchen."), PageURL: paymentsURL}, nil},
+		{"wire transfer and a cheque", audittest.Input{Draft: noDraft, PageHTML: payLine("Pay by wire transfer, BACS or cheque."), PageURL: paymentsURL}, []audit.Issue{
+			{Path: "html:body", Severity: audit.Warning, Message: "the page shows how to pay (https://schema.org/ByBankTransferInAdvance, https://schema.org/CheckInAdvance): set acceptedPaymentMethod on the business: a PaymentMethod with paymentMethodType https://schema.org/ByBankTransferInAdvance and https://schema.org/CheckInAdvance (a PaymentMethodType)"},
+		}},
+		{"pay on delivery", audittest.Input{Draft: noDraft, PageHTML: payLine("Pay on delivery is available."), PageURL: paymentsURL}, []audit.Issue{
+			{Path: "html:body", Severity: audit.Warning, Message: "the page shows how to pay (https://schema.org/COD): set acceptedPaymentMethod on the business: a PaymentMethod with paymentMethodType https://schema.org/COD (a PaymentMethodType)"},
+		}},
+		// reliancedigital.in: "COD Not Available"
+		{"cash on delivery not offered", audittest.Input{Draft: noDraft, PageHTML: payLine("Cash on delivery not available for this pincode."), PageURL: paymentsURL}, nil},
 		{"acceptedPaymentMethod is there", audittest.Input{Draft: carried, PageHTML: paymentsPage, PageURL: paymentsURL}, nil},
 		{"a page that names no way to pay", audittest.Input{Draft: noDraft, PageHTML: returnsPage, PageURL: returnsURL}, nil},
 		{"a page that sells nothing", audittest.Input{Draft: noDraft, PageHTML: sellingNoMore(paymentsPage), PageURL: paymentsURL}, nil},

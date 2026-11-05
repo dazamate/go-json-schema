@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"regexp"
 	"slices"
+	"strconv"
 	"strings"
 
 	"github.com/dazamate/go-json-schema/internal/vocabtool/audit"
@@ -19,7 +20,11 @@ type returnFact struct {
 }
 
 var (
-	returnWindow   = regexp.MustCompile(`(?i)\b(\d+)[- ]day (?:free )?(?:returns?|money[- ]back|refunds?|exchanges?)\b|\breturn(?:ed)?\s+(?:\w+\s+){0,3}?within (\d+) days\b|\b(\d+) days to return\b`)
+	// returnWindow finds the return window: "30-day returns", "30 days free
+	// return", "returns accepted within 30 days", "return most items to us
+	// within 4 weeks", "30 days to return"
+	returnWindow   = regexp.MustCompile(`(?i)\b(\d+)[- ]days?[ -](?:free )?(?:returns?|money[- ]back|refunds?|exchanges?)\b|\breturns?(?:ed)?\s+(?:\w+\s+){0,5}?within (\d+|one|a) (days|weeks|months?)\b|\b(\d+) days to return\b`)
+	returnWord     = regexp.MustCompile(`(?i)\breturns?(?:ed)?\b`)
 	returnNone     = regexp.MustCompile(`(?i)\bno returns\b|\breturns (?:are )?not accepted\b|\ball sales (?:are )?final\b|\bnon-?returnable\b`)
 	returnSentence = regexp.MustCompile(`(?i)[^.!?]*\b(?:returns?|returned|refunds?|exchanges?)\b[^.!?]*[.!?]?`)
 	returnFacts    = []struct {
@@ -64,8 +69,13 @@ func returnsOf(c *audit.Context) *returns {
 		p := c.Page
 		r := &returns{}
 		if m := returnWindow.FindStringSubmatch(p.Text); m != nil {
-			days := txt.FirstNonEmpty(m[1:]...)
-			r.facts = append(r.facts, returnFact{m[0], "merchantReturnDays", days}, returnFact{m[0], "returnPolicyCategory", "MerchantReturnFiniteReturnWindow"})
+			days, said := returnDays(m), m[0]
+			// the statement starts at the last "return" before the window, not at a
+			// heading ("Returns") over it
+			if idx := returnWord.FindAllStringIndex(said, -1); m[2] != "" && len(idx) > 1 {
+				said = said[idx[len(idx)-1][0]:]
+			}
+			r.facts = append(r.facts, returnFact{said, "merchantReturnDays", days}, returnFact{said, "returnPolicyCategory", "MerchantReturnFiniteReturnWindow"})
 		}
 		if m := returnNone.FindString(p.Text); m != "" {
 			r.facts = append(r.facts, returnFact{m, "returnPolicyCategory", "MerchantReturnNotPermitted"})
@@ -139,4 +149,23 @@ func (r *returns) what() string {
 		return fmt.Sprintf("states a return policy (%s)", txt.QuoteAll(said))
 	}
 	return "links its return policy"
+}
+
+// returnDays is the number of days the return window match gives: a window
+// in weeks or months counts 7 or 30 days to the week or month.
+func returnDays(m []string) string {
+	if m[2] == "" {
+		return txt.FirstNonEmpty(m[1], m[4])
+	}
+	n := 1
+	if m[2] != "one" && m[2] != "a" {
+		n, _ = strconv.Atoi(m[2])
+	}
+	switch u := strings.ToLower(m[3]); {
+	case strings.HasPrefix(u, "week"):
+		n *= 7
+	case strings.HasPrefix(u, "month"):
+		n *= 30
+	}
+	return strconv.Itoa(n)
 }

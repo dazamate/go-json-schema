@@ -10,9 +10,10 @@ func init() { audit.Register(BusinessType{}) }
 
 var _ audit.Retyper = BusinessType{}
 
-// BusinessType warns when a shop's business node is typed more generally
-// than the shop: one that sells online is an OnlineStore, and one with a
-// street address the Store subtype for its trade. It leaves be a node an
+// BusinessType warns when a business node is typed more generally than the
+// business: a shop that sells online is an OnlineStore, and one with a street
+// address the type for its trade (a Store subtype, or the LocalBusiness
+// subtype of a service such as Dentist or Hotel). It leaves be a node an
 // earlier source in the retype ledger told. It needs the page's document, on
 // a page search engines index.
 type BusinessType struct{}
