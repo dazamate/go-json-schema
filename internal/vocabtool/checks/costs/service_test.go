@@ -21,6 +21,23 @@ func TestService(t *testing.T) {
 		}},
 		{"heating costs", audittest.Input{Draft: bareDraft, PageHTML: guideTitled("Heating Costs"), PageURL: costGuideURL}, nil},
 		{"car running costs", audittest.Input{Draft: bareDraft, PageHTML: guideTitled("Car Running Costs"), PageURL: costGuideURL}, nil},
+		{"the cost of living", audittest.Input{Draft: bareDraft, PageHTML: guideTitled("The Cost of Living in Leeds"), PageURL: costGuideURL}, nil},
+		{"a cost to someone", audittest.Input{Draft: bareDraft, PageHTML: guideTitled("The Cost to Your Business of Downtime"), PageURL: costGuideURL}, nil},
+		{"any trade's gerund", audittest.Input{Draft: bareDraft, PageHTML: guideTitled("Landscaping Costs in Melbourne: A Realistic 2026 Guide"), PageURL: costGuideURL}, []audit.Issue{
+			{Path: "html:body", Severity: audit.Warning, Message: `the page is about the cost of the service "Landscaping" but no Service describes it: add one (name, serviceType, areaServed, offers or priceSpecification for the prices shown, provider when it is the business's own) and make it the WebPage's about or mainEntity`},
+		}},
+		{"any trade's job", audittest.Input{Draft: bareDraft, PageHTML: guideTitled("Cost to Tile a Bathroom"), PageURL: costGuideURL}, []audit.Issue{
+			{Path: "html:body", Severity: audit.Warning, Message: `the page is about the cost of the service "Tile a Bathroom" but no Service describes it: add one (name, serviceType, areaServed, offers or priceSpecification for the prices shown, provider when it is the business's own) and make it the WebPage's about or mainEntity`},
+		}},
+		{"the cost of a trade's work", audittest.Input{Draft: bareDraft, PageHTML: guideTitled("The Cost of Plastering a Room"), PageURL: costGuideURL}, []audit.Issue{
+			{Path: "html:body", Severity: audit.Warning, Message: `the page is about the cost of the service "Plastering a Room" but no Service describes it: add one (name, serviceType, areaServed, offers or priceSpecification for the prices shown, provider when it is the business's own) and make it the WebPage's about or mainEntity`},
+		}},
+		{"what a provider charges", audittest.Input{Draft: bareDraft, PageHTML: guideTitled("How Much Do Plumbers Charge?"), PageURL: costGuideURL}, []audit.Issue{
+			{Path: "html:body", Severity: audit.Warning, Message: `the page is about the cost of the service "Plumbers" but no Service describes it: add one (name, serviceType, areaServed, offers or priceSpecification for the prices shown, provider when it is the business's own) and make it the WebPage's about or mainEntity`},
+		}},
+		{"a job named by its noun", audittest.Input{Draft: bareDraft, PageHTML: guideTitled("Kitchen Renovation Costs"), PageURL: costGuideURL}, []audit.Issue{
+			{Path: "html:body", Severity: audit.Warning, Message: `the page is about the cost of the service "Kitchen Renovation" but no Service describes it: add one (name, serviceType, areaServed, offers or priceSpecification for the prices shown, provider when it is the business's own) and make it the WebPage's about or mainEntity`},
+		}},
 		{"what a gerund costs", audittest.Input{Draft: bareDraft, PageHTML: guideTitled("How Much Does Moving Cost?"), PageURL: costGuideURL}, []audit.Issue{
 			{Path: "html:body", Severity: audit.Warning, Message: `the page is about the cost of the service "Moving" but no Service describes it: add one (name, serviceType, areaServed, offers or priceSpecification for the prices shown, provider when it is the business's own) and make it the WebPage's about or mainEntity`},
 		}},
