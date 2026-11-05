@@ -29,6 +29,8 @@ func TestFormAction(t *testing.T) {
 		{"a delivery zip lookup", at(webPage, `<div id="variants"><form class="form--edd" method="post"><input type="text" id="zipcode" name="zipcode" placeholder="Enter your ZIP code"><button type="submit"></button></form></div>`), nil},
 		{"an order lookup", at(webPage, `<div id="modal"><form action="/information/track-your-order" method="get"><input type="text" name="orderId" placeholder="Enter Order Number Here"><button type="submit">Track your order</button></form></div>`), nil},
 		{"a translate widget's vote form", at(webPage, `<div id="pane"><form id="goog-gt-votingForm" action="//translate.googleapis.com/translate_voting?client=te" method="post"><input type="text" name="sl"><input type="text" name="tl"><input type="text" name="query"></form></div>`), nil},
+		{"a cart drawer's checkout", at(webPage, `<div id="drawer"><form class="psh-CartFooter_Buttons" action="/cart" method="POST"><button type="submit" name="checkout" id="checkout">Checkout Securely</button><a href="/cart">View cart</a></form></div>`), nil},
+		{"a cart drawer's checkout with a note field", at(webPage, `<div id="drawer"><form action="/cart" method="POST"><textarea name="note"></textarea><button type="submit" name="checkout">Checkout</button></form></div>`), nil},
 		// the other form checks have these
 		{"a pre-order form", at(webPage, `<form action="/pre-order"><button>Pre-order now</button></form>`), nil},
 		{"an add-to-bag form", at(webPage, `<form action="/cart/add"><button>Add to bag</button></form>`), nil},

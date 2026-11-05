@@ -102,6 +102,14 @@ func signsUp(n *xhtml.Node, text string, ids map[string]bool) bool {
 	return subscribeName.MatchString(strings.Join(names, " "))
 }
 
+// cartAction reports an action that is the cart page, whatever its query.
+func cartAction(action string) bool {
+	if i := strings.IndexAny(action, "?#"); i >= 0 {
+		action = action[:i]
+	}
+	return webpage.CartPath.MatchString(strings.TrimRight(action, "/"))
+}
+
 // sendsNothing reports a form that is no message to the business, so no
 // Action of the draft describes it: a login, a switcher of country or
 // currency, a filter or poll of choices, a search that is not a search box,
@@ -109,6 +117,11 @@ func signsUp(n *xhtml.Node, text string, ids map[string]bool) bool {
 // runs, or the one form an ASP.NET page wraps around the whole page.
 func sendsNothing(n *xhtml.Node, action string) bool {
 	if len(webpage.QueryAll(n, `input[type="password"]`)) > 0 {
+		return true
+	}
+	// the cart's own form (a drawer's checkout button, an update-quantities
+	// form) goes to the cart page; nothing there is a message to the business
+	if cartAction(action) {
 		return true
 	}
 	if accountPath.MatchString(action) || widgetAction.MatchString(action) || searchPath.MatchString(action) {
