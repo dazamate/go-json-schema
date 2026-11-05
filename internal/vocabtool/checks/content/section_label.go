@@ -1,6 +1,7 @@
 package content
 
 import (
+	"regexp"
 	"slices"
 	"strings"
 
@@ -13,6 +14,9 @@ import (
 )
 
 func init() { audit.Register(SectionLabel{}) }
+
+// backLabel is a link back to a listing, not the name of a section.
+var backLabel = regexp.MustCompile(`(?i)^\W*(?:back|home|return|all|more|see|view|read)\b|^[‹«←<]`)
 
 // SectionLabel warns when a short label sits right above the page's h1 (a
 // kicker naming the section) and the Article does not carry it as its
@@ -46,12 +50,27 @@ func (SectionLabel) Run(c *audit.Context) []audit.Issue {
 	for prev != nil && prev.Type != xhtml.ElementNode {
 		prev = prev.PrevSibling
 	}
-	if prev == nil || !slices.Contains([]atom.Atom{atom.P, atom.Span, atom.Div, atom.A}, prev.DataAtom) || len(webpage.QueryAll(prev, "time, nav, a[href]")) > 0 {
+	if prev == nil || !slices.Contains([]atom.Atom{atom.P, atom.Span, atom.Div, atom.A}, prev.DataAtom) || len(webpage.QueryAll(prev, "time, nav")) > 0 {
 		return nil
 	}
 	label := webpage.HTMLText(prev)
 	if n := len(strings.Fields(label)); n == 0 || n > 5 {
 		return nil
+	}
+	// a tagline (Independently tested. Never sponsored) is a sentence, not the
+	// name of a section
+	if strings.ContainsAny(label, ".!?") {
+		return nil
+	}
+	// a kicker may link to its section's page (News), but a byline or a
+	// trail of links is not one, and nor is a link back
+	switch links := webpage.QueryAll(prev, "a[href]"); {
+	case len(links) > 1:
+		return nil
+	case len(links) == 1:
+		if href, _ := webpage.Attr(links[0], "href"); strings.HasPrefix(href, "#") || webpage.HTMLText(links[0]) != label || backLabel.MatchString(label) {
+			return nil
+		}
 	}
 	art := c.Nodes[i]
 	if slices.ContainsFunc(jsonld.Strs(art.N, "articleSection"), func(s string) bool { return txt.NormWords(s) == txt.NormWords(label) }) {

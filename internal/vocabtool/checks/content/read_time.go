@@ -124,17 +124,18 @@ func pageReadingTime(p *webpage.Facts) []string {
 }
 
 // durationMinutes is an ISO 8601 duration in minutes ("PT1H30M", "PT05M",
-// "P0DT90M"), and whether it is one.
+// "P0DT90M", "PT18M11S"), and whether it is one.
 func durationMinutes(d string) (int, bool) {
 	m := isoDuration.FindStringSubmatch(strings.TrimSpace(d))
 	if m == nil || m[0] == "P" || strings.HasSuffix(strings.ToUpper(m[0]), "T") {
 		return 0, false
 	}
 	n := func(s string) int { v, _ := strconv.Atoi(s); return v }
-	return n(m[1])*24*60 + n(m[2])*60 + n(m[3]), true
+	// a plugin that counts words gives PT18M11S: seconds round to the minute
+	return n(m[1])*24*60 + n(m[2])*60 + n(m[3]) + (n(m[4])+30)/60, true
 }
 
-var isoDuration = regexp.MustCompile(`(?i)^P(?:(\d+)D)?(?:T(?:(\d+)H)?(?:(\d+)M)?)?$`)
+var isoDuration = regexp.MustCompile(`(?i)^P(?:(\d+)D)?(?:T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?)?$`)
 
 // equal reports a timeRequired that is the page's time: the same minutes, or
 // the same words when it is no duration.
