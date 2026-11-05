@@ -63,3 +63,46 @@ func TestRegisterDuplicatePanics(t *testing.T) {
 		t.Errorf("Group(dup/) = %d checks, want 1", len(got))
 	}
 }
+
+// boom is a check that panics.
+type boom struct{ id string }
+
+// ID is the boom's ID.
+func (b boom) ID() string { return b.id }
+
+// Run panics.
+func (boom) Run(*Context) []Issue { panic("kaboom") }
+
+func TestRunRecoversPanickingCheck(t *testing.T) {
+	isolate(t)
+	was := repanic
+	repanic = false
+	t.Cleanup(func() { repanic = was })
+	ok := Issue{Path: "$.ok", Severity: Warning, Message: "fine"}
+	Register(fake{id: "rec/before", issues: []Issue{ok}})
+	Register(boom{id: "rec/boom"})
+	Register(fake{id: "rec/after", issues: []Issue{{Path: "$.z", Severity: Info, Message: "last"}}})
+	got := Run(&Context{}, Group("rec/"))
+	want := []Issue{
+		ok,
+		{Path: "$", Severity: Warning, Message: "internal error in check rec/boom: kaboom"},
+		{Path: "$.z", Severity: Info, Message: "last"},
+	}
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("Run\n got %v\nwant %v", got, want)
+	}
+}
+
+func TestRunRepanicsInTests(t *testing.T) {
+	isolate(t)
+	if !repanic {
+		t.Fatal("repanic is off under go test")
+	}
+	Register(boom{id: "rep/boom"})
+	defer func() {
+		if recover() == nil {
+			t.Error("a check's panic did not propagate under go test")
+		}
+	}()
+	Run(&Context{}, Group("rep/"))
+}

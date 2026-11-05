@@ -3,6 +3,7 @@ package vocabtool
 import (
 	"os"
 	"path/filepath"
+	"reflect"
 	"slices"
 	"strings"
 	"testing"
@@ -84,4 +85,14 @@ func isRegistered[K audit.Check](id string) bool {
 		}
 	}
 	return false
+}
+
+// TestChecksHoldNoState: one check value serves every audit, and audits run
+// concurrently, so a registered check's type has no fields to hold state in.
+func TestChecksHoldNoState(t *testing.T) {
+	for _, c := range audit.Checks() {
+		if ty := reflect.TypeOf(c); ty.Size() != 0 {
+			t.Errorf("check %s is a %s of size %d: a check holds no state", c.ID(), ty, ty.Size())
+		}
+	}
 }

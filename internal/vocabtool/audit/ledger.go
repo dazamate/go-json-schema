@@ -66,8 +66,11 @@ type priceLedger struct {
 }
 
 // TakenBefore is the union of the amounts the takers before id in the order
-// take. An ID outside the order sees every taker's amounts: the catch-all
-// prices check reports what is left.
+// take. A registered check outside the order that is no taker sees every
+// taker's amounts: the catch-all prices check reports what is left. An ID that
+// is a taker missing from the order, or no registered check at all (a typo in
+// a taker's own ID), panics: it would otherwise be read as coming after every
+// taker, and the check would silently give a different answer.
 func (c *Context) TakenBefore(id string) Taken {
 	l := Memo(c, priceLedgerKey{}, func() priceLedger {
 		l := priceLedger{before: map[string]Taken{}, all: Taken{}}
@@ -83,6 +86,11 @@ func (c *Context) TakenBefore(id string) Taken {
 	})
 	if t, ok := l.before[id]; ok {
 		return maps.Clone(t)
+	}
+	if k, ok := byID[id]; !ok {
+		panic(fmt.Sprintf("audit: TakenBefore(%q): no registered check has this ID", id))
+	} else if _, taker := k.(PriceTaker); taker {
+		panic(fmt.Sprintf("audit: TakenBefore(%q): this PriceTaker is not in the price order", id))
 	}
 	return maps.Clone(l.all)
 }
@@ -155,8 +163,10 @@ type retypeLedger struct {
 	all    Retyped
 }
 
-// RetypedBefore is the ledger's state before id in the order. An ID outside
-// the order sees every source.
+// RetypedBefore is the ledger's state before id in the order. A registered
+// check outside the order that is no retyper sees every source. An ID that is
+// a retyper missing from the order, or no registered check at all (a typo in a
+// retyper's own ID), panics, as TakenBefore does.
 func (c *Context) RetypedBefore(id string) Retyped {
 	l := Memo(c, retypeLedgerKey{}, func() retypeLedger {
 		l := retypeLedger{before: map[string]Retyped{}, all: Retyped{Told: map[*jsonld.Object]bool{}, Named: map[*jsonld.Object][]string{}}}
@@ -179,6 +189,11 @@ func (c *Context) RetypedBefore(id string) Retyped {
 	})
 	if r, ok := l.before[id]; ok {
 		return r.clone()
+	}
+	if k, ok := byID[id]; !ok {
+		panic(fmt.Sprintf("audit: RetypedBefore(%q): no registered check has this ID", id))
+	} else if _, retyper := k.(Retyper); retyper {
+		panic(fmt.Sprintf("audit: RetypedBefore(%q): this Retyper is not in the retype order", id))
 	}
 	return l.all.clone()
 }

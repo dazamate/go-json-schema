@@ -36,7 +36,9 @@ func Issuef(path, severity, format string, args ...any) Issue {
 }
 
 // Check is one rule of the audit. Its ID is "<area>/<kebab-name>": stable,
-// unique, and the area is the package the check lives in.
+// unique, and the area is the package the check lives in. One check value
+// serves every audit, and audits run concurrently, so a check holds no state:
+// what it finds is memoized on the Context.
 type Check interface {
 	ID() string
 	Run(ctx *Context) []Issue

@@ -3,6 +3,7 @@ package audit
 import (
 	"maps"
 	"reflect"
+	"strings"
 	"testing"
 
 	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
@@ -35,6 +36,7 @@ func TestTakenBefore(t *testing.T) {
 	for _, k := range []*taker{a, b, c} {
 		Register(k)
 	}
+	Register(fake{id: "test/after"}) // a check that takes no prices
 	priceOrder = []string{"test/a", "test/b", "test/c"}
 	ctx := &Context{}
 	for _, tc := range []struct {
@@ -44,7 +46,7 @@ func TestTakenBefore(t *testing.T) {
 		{"test/a", Taken{}},
 		{"test/b", Taken{10: true}},
 		{"test/c", Taken{10: true, 20: true}},
-		{"test/after", Taken{10: true, 20: true, 30: true}}, // outside the order: every taker
+		{"test/after", Taken{10: true, 20: true, 30: true}}, // registered, outside the order: every taker
 		{"test/b", Taken{10: true}},
 	} {
 		if got := ctx.TakenBefore(tc.id); !maps.Equal(got, tc.want) {
@@ -110,4 +112,47 @@ func TestRetypedBefore(t *testing.T) {
 			t.Errorf("%s retyped %d times, want once", r.id, r.calls)
 		}
 	}
+}
+
+// mustPanic fails the test unless f panics with a message holding want.
+func mustPanic(t *testing.T, want string, f func()) {
+	t.Helper()
+	defer func() {
+		r := recover()
+		if r == nil {
+			t.Errorf("no panic, want one holding %q", want)
+		} else if msg, _ := r.(string); !strings.Contains(msg, want) {
+			t.Errorf("panic %v, want one holding %q", r, want)
+		}
+	}()
+	f()
+}
+
+func TestTakenBeforeRejectsUnknownIDs(t *testing.T) {
+	isolate(t)
+	Register(&taker{fake: fake{id: "test/a"}, takes: []float64{10}})
+	Register(&taker{fake: fake{id: "test/stray"}, takes: []float64{20}})
+	Register(fake{id: "test/prices"})
+	priceOrder = []string{"test/a"}
+	ctx := &Context{}
+	mustPanic(t, "not in the price order", func() { ctx.TakenBefore("test/stray") })
+	mustPanic(t, "no registered check", func() { ctx.TakenBefore("test/typo") })
+	if got := ctx.TakenBefore("test/prices"); !maps.Equal(got, Taken{10: true}) {
+		t.Errorf("a non-taker outside the order saw %v, want every taker's", got)
+	}
+}
+
+func TestRetypedBeforeRejectsUnknownIDs(t *testing.T) {
+	isolate(t)
+	Register(&retyper{fake: fake{id: "test/a"}})
+	Register(&retyper{fake: fake{id: "test/stray"}})
+	Register(fake{id: "test/other"})
+	retypeOrder = []struct {
+		ID     string
+		Blocks bool
+	}{{ID: "test/a"}}
+	ctx := &Context{}
+	mustPanic(t, "not in the retype order", func() { ctx.RetypedBefore("test/stray") })
+	mustPanic(t, "no registered check", func() { ctx.RetypedBefore("test/typo") })
+	ctx.RetypedBefore("test/other") // a non-retyper outside the order sees every source
 }
