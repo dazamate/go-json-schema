@@ -13,11 +13,6 @@ import (
 
 func init() { audit.Register(legacyAll{}) }
 
-// PageElementsKey is the memo key of the page elements report, the sections
-// of the page and the draft nodes that mark them up. Check copies it into
-// Report.PageElements.
-type PageElementsKey struct{}
-
 // legacyAll is every check the old checker still makes, in today's order.
 type legacyAll struct{}
 
@@ -32,16 +27,6 @@ func (legacyAll) Run(ctx *audit.Context) []audit.Issue {
 	}
 	c := newChecker(ctx.Vocab)
 	all := ctx.Nodes
-	if ctx.HTML != nil {
-		// a page search engines skip still lists its sections, unasked
-		elements := c.pageElements(all, ctx.HTML, ctx.Page == nil || ctx.Page.Private == "")
-		audit.Memo(ctx, PageElementsKey{}, func() []PageElement { return elements })
-	}
-	text := ""
-	if ctx.Page != nil {
-		text = ctx.Page.Text
-	}
-	c.pageEntities(all, text)
 	if ctx.Page != nil {
 		c.content(all, ctx.Page)
 	}

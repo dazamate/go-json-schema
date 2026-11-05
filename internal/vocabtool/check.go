@@ -6,6 +6,7 @@ import (
 
 	"github.com/dazamate/go-json-schema/internal/vocabtool/audit"
 	_ "github.com/dazamate/go-json-schema/internal/vocabtool/checks/all" // register every check
+	"github.com/dazamate/go-json-schema/internal/vocabtool/checks/onpage"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/vocab"
 )
@@ -33,12 +34,7 @@ type Report struct {
 // PageElement is a section of the page that a specific schema.org type
 // describes: a WebPageElement subtype, or a BreadcrumbList for a breadcrumb
 // nav. MarkedBy is the path of the draft node that marks it up, "" for none.
-type PageElement struct {
-	Type     string `json:"type"`
-	Selector string `json:"selector"`
-	Name     string `json:"name,omitempty"`
-	MarkedBy string `json:"marked_by,omitempty"`
-}
+type PageElement = onpage.PageElement
 
 // CheckOptions controls the published form and the page checks.
 type CheckOptions struct {
@@ -69,7 +65,7 @@ func (t *Tool) Check(draft json.RawMessage, opts CheckOptions) (Report, error) {
 	if rep.Issues == nil {
 		rep.Issues = []Issue{}
 	}
-	rep.PageElements = audit.Memo(ctx, PageElementsKey{}, func() []PageElement { return nil })
+	rep.PageElements = onpage.Elements(ctx)
 	for _, i := range rep.Issues {
 		switch i.Severity {
 		case Error:

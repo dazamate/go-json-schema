@@ -2,6 +2,7 @@ package jsonld
 
 import (
 	"fmt"
+	"regexp"
 	"slices"
 	"strconv"
 	"strings"
@@ -259,3 +260,15 @@ func HasWikidataClass(n *Object) bool {
 		return m != nil && classtype.Of([]string{m[1]}, false) != ""
 	})
 }
+
+// EntityProps are the properties whose entities stand for what a page is
+// about or names. knowsAbout, and the WebSite's about, describe the whole
+// site, not one page.
+var EntityProps = []string{"about", "mentions"}
+
+// topLevel matches the path of a node at the top of the draft: the root, or a
+// direct member of its @graph or of an array root.
+var topLevel = regexp.MustCompile(`^\$(?:\.@graph)?(?:\[\d+\])?$`)
+
+// TopLevel reports whether the path is a node at the top of the draft.
+func TopLevel(path string) bool { return topLevel.MatchString(path) }

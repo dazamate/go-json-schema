@@ -115,3 +115,11 @@ func NormLink(s string) string {
 	}
 	return NormURL(u)
 }
+
+// disambiguation is a Wikipedia disambiguation at the end of a title: the
+// "(honor)" of "Toast (honor)".
+var disambiguation = regexp.MustCompile(`\s*\([^)]*\)\s*$`)
+
+// WithoutDisambiguation is the name without a Wikipedia disambiguation at its
+// end: "Toast (honor)" is "Toast".
+func WithoutDisambiguation(name string) string { return disambiguation.ReplaceAllString(name, "") }

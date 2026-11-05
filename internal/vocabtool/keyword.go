@@ -227,7 +227,7 @@ func entityRefs(all []jsonld.Node, l jsonld.Node) []struct {
 		prop, path string
 		n          *jsonld.Object
 	}
-	for _, prop := range pageEntityProps {
+	for _, prop := range jsonld.EntityProps {
 		raw, ok := l.N.Get(prop)
 		if !ok {
 			continue
@@ -284,7 +284,7 @@ func (c *checker) organizations(all []jsonld.Node, keyword string) {
 			if name == "" {
 				name = "an organization"
 			}
-			if base := txt.NormWords(disambiguation.ReplaceAllString(name, "")); base != "" && strings.Contains(kw, " "+base+" ") {
+			if base := txt.NormWords(txt.WithoutDisambiguation(name)); base != "" && strings.Contains(kw, " "+base+" ") {
 				continue
 			}
 			company := c.isCompany(r.n)

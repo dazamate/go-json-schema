@@ -63,8 +63,6 @@ var privateNotes = map[webpage.Kind]string{
 // the markup only on a page search engines index.
 func (c *checker) content(all []jsonld.Node, p *webpage.Facts) {
 	d := jsonld.NewIndex(all)
-	c.shownText(all, p)
-	c.anchors(all, p)
 	if p.Private != "" {
 		what := p.Private
 		if p.Private == "noindex" {
@@ -124,67 +122,6 @@ func (c *checker) shop(all []jsonld.Node, p *webpage.Facts, d *jsonld.Index) {
 	c.whereAndWhen(all, p)
 	c.faq(all, p)
 	c.founding(all, p)
-}
-
-// shownProps are the texts the markup must repeat word for word.
-var shownProps = []struct{ typ, prop string }{
-	{"HowToStep", "name"}, {"HowToStep", "text"}, {"HowToSection", "name"},
-	{"HowToDirection", "text"}, {"HowToTip", "text"},
-	{"Question", "name"}, {"Answer", "text"},
-	{"Review", "reviewBody"}, {"Quotation", "text"},
-}
-
-// shownText warns on text the markup gives as the page's that the page does
-// not show: a HowTo step, a question, an answer, a review.
-func (c *checker) shownText(all []jsonld.Node, p *webpage.Facts) {
-	for _, l := range all {
-		for _, sp := range shownProps {
-			if !c.is(l.N, sp.typ) {
-				continue
-			}
-			for _, s := range jsonld.Strs(l.N, sp.prop) {
-				if w := txt.NormWords(txt.StripTags(s)); w != "" && !strings.Contains(p.Norm, " "+w+" ") {
-					c.add(l.Path+"."+sp.prop, Warning, "%s %s %q is not on the page: the markup must repeat the visible text", sp.typ, sp.prop, txt.Clip(s, 80))
-				}
-			}
-		}
-	}
-}
-
-// anchors warns on a link to this page whose #fragment is no id on it.
-func (c *checker) anchors(all []jsonld.Node, p *webpage.Facts) {
-	if p.Doc == nil || p.Base == nil {
-		return
-	}
-	ids := map[string]bool{}
-	var walk func(*xhtml.Node)
-	walk = func(n *xhtml.Node) {
-		if id, ok := webpage.Attr(n, "id"); ok && n.Type == xhtml.ElementNode {
-			ids[id] = true
-		}
-		for ch := n.FirstChild; ch != nil; ch = ch.NextSibling {
-			walk(ch)
-		}
-	}
-	walk(p.Doc)
-	page := txt.NormURL(p.Base)
-	for _, l := range all {
-		for _, k := range l.N.Keys {
-			if strings.HasPrefix(k, "@") || k == "sameAs" {
-				continue
-			}
-			for _, v := range jsonld.Values(l.N.Vals[k]) {
-				s, _ := v.(string)
-				u, err := url.Parse(s)
-				if s == "" || err != nil || u.Fragment == "" || !u.IsAbs() || txt.NormURL(u) != page {
-					continue
-				}
-				if !ids[u.Fragment] {
-					c.add(l.Path+"."+k, Warning, "%s points at #%s, which is no id on the page", s, u.Fragment)
-				}
-			}
-		}
-	}
 }
 
 // copyright warns when the page shows a copyright year the markup lacks.
