@@ -41,3 +41,31 @@ func TestPageDates(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) { audittest.Expect(t, site.PageDates{}, tc.in, tc.want) })
 	}
 }
+
+// TestPageDatesOtherWordings pins how other sites date their pages:
+// "Updated : April 2026" (willowsbeautysalon.co.uk), "Updated on October 5,
+// 2026" (allrecipes.com), "This page was last edited on 9 October 2026"
+// (wikipedia.org), "Posted 5th June 2021" and a UK or US numeric date.
+func TestPageDatesOtherWordings(t *testing.T) {
+	ask := func(quote, prop, iso string) string {
+		return `the page dates itself (` + quote + `) but no node has that date: set ` + prop + ` ` + iso + ` on the WebPage or Article (dateModified for an update, datePublished for publication, lastReviewed for a review or check)`
+	}
+	for _, tc := range []struct {
+		name, text, quote, prop, iso string
+	}{
+		{"a space before the colon", "Updated : April 2026", "Updated : April 2026", "dateModified", "2026-04"},
+		{"updated on, month day year", "Submitted by Dora Updated on October 5, 2026 Tested by", "Updated on October 5, 2026", "dateModified", "2026-10-05"},
+		{"last edited on", "This page was last edited on 9 October 2026, at 15:44 (UTC).", "last edited on 9 October 2026", "dateModified", "2026-10-09"},
+		{"posted with an ordinal", "Posted 5th June 2021 by Sam", "Posted 5th June 2021", "datePublished", "2021-06-05"},
+		{"medically reviewed with a day-first numeric date", "Medically reviewed on 14/03/2024", "Medically reviewed on 14/03/2024", "lastReviewed", "2024-03-14"},
+		{"a month-first numeric date", "Last modified: 03/14/2024", "Last modified: 03/14/2024", "dateModified", "2024-03-14"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			audittest.Expect(t, site.PageDates{}, audittest.Input{Draft: bareDraft, PageText: tc.text, PageURL: movingURL}, []audit.Issue{
+				{Path: "html:body", Severity: audit.Warning, Message: ask(`"`+tc.quote+`"`, tc.prop, tc.iso)},
+			})
+		})
+	}
+	// 03/04/2024 is the 3rd of April or the 4th of March: neither is guessed
+	audittest.Expect(t, site.PageDates{}, audittest.Input{Draft: bareDraft, PageText: "Updated 03/04/2024", PageURL: movingURL}, nil)
+}
