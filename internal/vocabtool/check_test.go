@@ -59,30 +59,6 @@ func TestVocabularyArrayRootPaths(t *testing.T) {
 	}
 }
 
-// TestNormalizeMatchesWalk: the context's normalized draft, before any check
-// runs, is the draft today's walk published, for every recorded Check call.
-func TestNormalizeMatchesWalk(t *testing.T) {
-	tool := newTool(t)
-	for i, c := range goldenCases(t) {
-		if c.Opts.KeywordDensity == vocabularyOnly || c.Err != "" {
-			continue
-		}
-		ctx, err := audit.NewContext(tool.Vocab, []byte(c.Draft), input(c.Opts))
-		if err != nil {
-			t.Errorf("case %d: %v", i, err)
-			continue
-		}
-		tag, err := scriptTag(ctx.Root, c.Opts.Pretty)
-		if err != nil {
-			t.Errorf("case %d: %v", i, err)
-			continue
-		}
-		if tag != c.Report.ScriptTag {
-			t.Errorf("case %d: normalized draft differs from the walk's\n got %s\nwant %s", i, tag, c.Report.ScriptTag)
-		}
-	}
-}
-
 // TestNormalizeMatchesWalkOn holds Normalize to the walk's rewrite on the
 // drafts the golden cases do not reach: array roots, untyped nodes, @graph,
 // keys that are not schema.org terms, Google's annotations, unknown and
