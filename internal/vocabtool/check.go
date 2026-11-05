@@ -9,10 +9,11 @@ import (
 	"strconv"
 	"strings"
 
-	"golang.org/x/net/html"
-
 	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
+	"github.com/dazamate/go-json-schema/internal/vocabtool/txt"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/vocab"
+	"github.com/dazamate/go-json-schema/internal/vocabtool/webpage"
+	"golang.org/x/net/html"
 )
 
 // Issue severities. Only errors stop a draft being valid schema.org.
@@ -88,7 +89,7 @@ func (t *Tool) Check(draft json.RawMessage, opts CheckOptions) (Report, error) {
 	default:
 		return Report{}, fmt.Errorf("draft must be a JSON object or array")
 	}
-	c := checker{v: t.Vocab, suggested: map[*jsonld.Object]bool{}}
+	c := checker{v: t.Vocab, suggested: map[*jsonld.Object]bool{}, claimed: map[float64]bool{}}
 	c.walk("$", doc)
 	c.repeats(doc)
 	all := jsonld.Nodes("$", doc)
@@ -103,16 +104,16 @@ func (t *Tool) Check(draft json.RawMessage, opts CheckOptions) (Report, error) {
 			return Report{}, fmt.Errorf("page_html: %w", err)
 		}
 		if text == "" {
-			text = htmlText(page)
+			text = webpage.HTMLText(page)
 		}
 	}
-	var facts *pageFacts
+	var facts *webpage.Facts
 	if strings.TrimSpace(text) != "" {
-		facts = newPageFacts(page, text, opts.PageURL)
+		facts = webpage.New(page, text, opts.PageURL)
 	}
 	if page != nil {
 		// a page search engines skip still lists its sections, unasked
-		elements = c.pageElements(all, page, facts == nil || facts.private == "")
+		elements = c.pageElements(all, page, facts == nil || facts.Private == "")
 	}
 	c.pageEntities(all, text)
 	c.bare(all)
@@ -124,9 +125,9 @@ func (t *Tool) Check(draft json.RawMessage, opts CheckOptions) (Report, error) {
 	}
 	known := facts
 	if known == nil {
-		known = &pageFacts{}
+		known = &webpage.Facts{}
 		if u, err := url.Parse(strings.TrimSpace(opts.PageURL)); err == nil && u.IsAbs() {
-			known.url = u
+			known.URL = u
 		}
 	}
 	c.organizations(all, opts.Keyword)
@@ -170,7 +171,7 @@ func (t *Tool) Vocabulary(draft json.RawMessage) ([]Issue, error) {
 	default:
 		return nil, fmt.Errorf("draft must be a JSON object or array")
 	}
-	c := checker{v: t.Vocab, suggested: map[*jsonld.Object]bool{}}
+	c := checker{v: t.Vocab, suggested: map[*jsonld.Object]bool{}, claimed: map[float64]bool{}}
 	c.walk("$", root)
 	return c.issues, nil
 }
@@ -179,6 +180,17 @@ type checker struct {
 	v         *vocab.Vocab
 	issues    []Issue
 	suggested map[*jsonld.Object]bool // nodes already told to take a more specific type
+	claimed   map[float64]bool        // prices a check other than prices reports
+}
+
+// claim notes prices another check reports, so prices does not report them
+// again.
+func (c *checker) claim(text string) {
+	for _, m := range txt.PriceAmount.FindAllStringSubmatch(text, -1) {
+		if f, ok := txt.PriceOf(m); ok {
+			c.claimed[f] = true
+		}
+	}
 }
 
 func (c *checker) add(path, severity, format string, args ...any) {

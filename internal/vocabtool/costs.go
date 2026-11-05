@@ -7,6 +7,7 @@ import (
 
 	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/txt"
+	"github.com/dazamate/go-json-schema/internal/vocabtool/webpage"
 	xhtml "golang.org/x/net/html"
 	"golang.org/x/net/html/atom"
 )
@@ -55,8 +56,8 @@ func (c *checker) amounts(all []jsonld.Node) map[float64]bool {
 }
 
 // costs runs the cost checks on a site that sells nothing.
-func (c *checker) costs(all []jsonld.Node, p *pageFacts) {
-	if p.sells() {
+func (c *checker) costs(all []jsonld.Node, p *webpage.Facts) {
+	if p.Sells() {
 		return
 	}
 	marked := c.amounts(all)
@@ -64,7 +65,7 @@ func (c *checker) costs(all []jsonld.Node, p *pageFacts) {
 	fresh := func(text string) bool {
 		return slices.ContainsFunc(txt.PriceAmount.FindAllStringSubmatch(text, -1), func(m []string) bool {
 			f, ok := txt.PriceOf(m)
-			return ok && !marked[f] && !p.claimed[f]
+			return ok && !marked[f] && !c.claimed[f]
 		})
 	}
 	c.breakdowns(p, fresh)
@@ -88,12 +89,12 @@ func clause(s string, i, n int) string {
 // breakdowns warn on a total the page breaks into priced parts: a list,
 // definition list or table of two or more priced lines beside the total (an
 // output or data element, or a line labelled total).
-func (c *checker) breakdowns(p *pageFacts, fresh func(string) bool) {
-	if p.doc == nil {
+func (c *checker) breakdowns(p *webpage.Facts, fresh func(string) bool) {
+	if p.Doc == nil {
 		return
 	}
-	for _, list := range queryAll(p.doc, "dl, ul, ol, table") {
-		if chrome(list) || !shown(list) {
+	for _, list := range webpage.QueryAll(p.Doc, "dl, ul, ol, table") {
+		if webpage.Chrome(list) || !webpage.Shown(list) {
 			continue
 		}
 		var parts []string
@@ -105,14 +106,14 @@ func (c *checker) breakdowns(p *pageFacts, fresh func(string) bool) {
 				}
 			}
 		case atom.Table:
-			for _, tr := range queryAll(list, "tr") {
-				if t := htmlText(tr); txt.PriceAmount.MatchString(t) && len(queryAll(tr, "td")) > 0 {
+			for _, tr := range webpage.QueryAll(list, "tr") {
+				if t := webpage.HTMLText(tr); txt.PriceAmount.MatchString(t) && len(webpage.QueryAll(tr, "td")) > 0 {
 					parts = append(parts, t)
 				}
 			}
 		default:
-			for _, li := range queryAll(list, "li") {
-				if t := htmlText(li); txt.PriceAmount.MatchString(t) {
+			for _, li := range webpage.QueryAll(list, "li") {
+				if t := webpage.HTMLText(li); txt.PriceAmount.MatchString(t) {
 					parts = append(parts, t)
 				}
 			}
@@ -131,8 +132,8 @@ func (c *checker) breakdowns(p *pageFacts, fresh func(string) bool) {
 		// section
 		var box, total *xhtml.Node
 		for e, up := list.Parent, 0; e != nil && up < 3 && total == nil && e.DataAtom != atom.Main && e.DataAtom != atom.Body; e, up = e.Parent, up+1 {
-			for _, o := range queryAll(e, "output, data[value]") {
-				if !slices.Contains(ancestors(o), list) && txt.PriceAmount.MatchString(htmlText(o)) {
+			for _, o := range webpage.QueryAll(e, "output, data[value]") {
+				if !slices.Contains(ancestors(o), list) && txt.PriceAmount.MatchString(webpage.HTMLText(o)) {
 					box, total = e, o
 					break
 				}
@@ -141,30 +142,30 @@ func (c *checker) breakdowns(p *pageFacts, fresh func(string) bool) {
 				break
 			}
 		}
-		if total == nil || !fresh(htmlText(total)+" "+strings.Join(parts, " ")) {
+		if total == nil || !fresh(webpage.HTMLText(total)+" "+strings.Join(parts, " ")) {
 			continue
 		}
 		label := "the total"
 		for e := box; e != nil && e.DataAtom != atom.Body; e = e.Parent {
-			if hs := queryAll(e, "h2, h3, h4, h5"); len(hs) > 0 {
-				label = htmlText(hs[0])
+			if hs := webpage.QueryAll(e, "h2, h3, h4, h5"); len(hs) > 0 {
+				label = webpage.HTMLText(hs[0])
 				break
 			}
 		}
-		p.claim(htmlText(total) + " " + strings.Join(parts, " "))
-		c.add("html:"+selectorFor(p.doc, box), Warning, "the page breaks %q (%s) into %d priced parts: mark it up as a CompoundPriceSpecification (the PriceSpecification that sums its parts: minPrice, maxPrice, priceCurrency) with each part a priceComponent (a UnitPriceSpecification with priceComponentType such as DistanceFee for mileage, or a DeliveryChargeSpecification for a delivery or pickup charge)", label, htmlText(total), len(parts))
+		c.claim(webpage.HTMLText(total) + " " + strings.Join(parts, " "))
+		c.add("html:"+webpage.SelectorFor(p.Doc, box), Warning, "the page breaks %q (%s) into %d priced parts: mark it up as a CompoundPriceSpecification (the PriceSpecification that sums its parts: minPrice, maxPrice, priceCurrency) with each part a priceComponent (a UnitPriceSpecification with priceComponentType such as DistanceFee for mileage, or a DeliveryChargeSpecification for a delivery or pickup charge)", label, webpage.HTMLText(total), len(parts))
 	}
 }
 
 // rates warn on prices given per unit: an hour, a mile, a pound, per mover.
-func (c *checker) rates(p *pageFacts, fresh func(string) bool) {
+func (c *checker) rates(p *webpage.Facts, fresh func(string) bool) {
 	var list, codes []string
 	perPerson := false
-	for _, m := range rateRe.FindAllStringSubmatch(p.main, -1) {
+	for _, m := range rateRe.FindAllStringSubmatch(p.Main, -1) {
 		if !fresh(m[1]) {
 			continue
 		}
-		p.claim(m[1])
+		c.claim(m[1])
 		list = append(list, m[0])
 		code := rateUnits[strings.ToLower(m[3])]
 		if code == "" {
@@ -187,16 +188,16 @@ func (c *checker) rates(p *pageFacts, fresh func(string) bool) {
 
 // goods warn on goods the page prices across sellers: boxes, tape, packing
 // paper at typical prices.
-func (c *checker) goods(p *pageFacts, fresh func(string) bool) {
+func (c *checker) goods(p *webpage.Facts, fresh func(string) bool) {
 	var list []string
-	for _, m := range goodsRe.FindAllStringSubmatchIndex(p.main, -1) {
-		span, after := p.main[m[4]:m[5]], p.main[m[6]:m[7]]
-		sentence := clause(p.main, m[0], 200) + p.main[m[0]:m[1]]
+	for _, m := range goodsRe.FindAllStringSubmatchIndex(p.Main, -1) {
+		span, after := p.Main[m[4]:m[5]], p.Main[m[6]:m[7]]
+		sentence := clause(p.Main, m[0], 200) + p.Main[m[0]:m[1]]
 		if !fresh(span) || !(goodsSign.MatchString(after) || goodsSign.MatchString(sentence)) {
 			continue
 		}
-		p.claim(span)
-		list = append(list, p.main[m[2]:m[3]]+" "+span)
+		c.claim(span)
+		list = append(list, p.Main[m[2]:m[3]]+" "+span)
 	}
 	if len(list) > 0 {
 		c.add(pagePath, Warning, "the page prices goods (%s): add a Product for each with an AggregateOffer (lowPrice, highPrice, priceCurrency, and offerCount: how many sellers or sources the range spans)", txt.Examples(list))
@@ -205,14 +206,14 @@ func (c *checker) goods(p *pageFacts, fresh func(string) bool) {
 
 // estimates warn on prices given as costs or estimates of what others
 // charge: "a 1-bedroom move costs $380–$960".
-func (c *checker) estimates(p *pageFacts, fresh func(string) bool) {
+func (c *checker) estimates(p *webpage.Facts, fresh func(string) bool) {
 	var list []string
-	for _, m := range spanRe.FindAllStringSubmatchIndex(p.main, -1) {
-		span := p.main[m[2]:m[3]]
-		if !fresh(span) || !costWords.MatchString(clause(p.main, m[0], 80)) {
+	for _, m := range spanRe.FindAllStringSubmatchIndex(p.Main, -1) {
+		span := p.Main[m[2]:m[3]]
+		if !fresh(span) || !costWords.MatchString(clause(p.Main, m[0], 80)) {
 			continue
 		}
-		p.claim(span)
+		c.claim(span)
 		list = append(list, span)
 	}
 	if len(list) > 0 {
@@ -222,11 +223,11 @@ func (c *checker) estimates(p *pageFacts, fresh func(string) bool) {
 
 // service warns on a content page about what a service costs ("Cost to move
 // a piano", "How much do movers cost?") when no Service describes it.
-func (c *checker) service(all []jsonld.Node, p *pageFacts) {
-	if p.kind != "" || c.has(all, "Service") {
+func (c *checker) service(all []jsonld.Node, p *webpage.Facts) {
+	if p.Kind != "" || c.has(all, "Service") {
 		return
 	}
-	h := p.h1()
+	h := p.H1()
 	for _, re := range serviceCost {
 		if m := re.FindStringSubmatch(h); m != nil {
 			c.add(pagePath, Warning, "the page is about the cost of the service %q but no Service describes it: add one (name, serviceType, areaServed, offers or priceSpecification for the prices shown, provider when it is the business's own) and make it the WebPage's about or mainEntity", strings.TrimSpace(m[1]))

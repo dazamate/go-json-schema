@@ -10,6 +10,7 @@ import (
 
 	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/txt"
+	"github.com/dazamate/go-json-schema/internal/vocabtool/webpage"
 	xhtml "golang.org/x/net/html"
 	"golang.org/x/net/html/atom"
 )
@@ -19,9 +20,9 @@ import (
 // number, the dates a page gives itself and the article its main copy is.
 
 // site runs the site checks.
-func (c *checker) site(all []jsonld.Node, p *pageFacts, d *jsonld.Index) {
+func (c *checker) site(all []jsonld.Node, p *webpage.Facts, d *jsonld.Index) {
 	// the page graph asks need the page, as the WebSite's does
-	if p.doc != nil {
+	if p.Doc != nil {
 		c.publisher(all, p)
 		c.onlineBusiness(all, p)
 	}
@@ -37,11 +38,11 @@ var copyrightHolder = regexp.MustCompile(`(?i)(?:©|\(c\)|copyright)\s*(?:\d{4}\
 
 // publisher warns when no node publishes the site. A shop's business check
 // asks for its OnlineStore instead.
-func (c *checker) publisher(all []jsonld.Node, p *pageFacts) {
+func (c *checker) publisher(all []jsonld.Node, p *webpage.Facts) {
 	if jsonld.HasKey(all, "publisher") || jsonld.HasKey(all, "copyrightHolder") {
 		return
 	}
-	if p.sells() && !c.has(all, "Organization") {
+	if p.Sells() && !c.has(all, "Organization") {
 		return
 	}
 	if i := slices.IndexFunc(all, func(l jsonld.Node) bool { return c.is(l.N, "Organization") && len(l.N.Keys) > 1 }); i >= 0 {
@@ -50,7 +51,7 @@ func (c *checker) publisher(all []jsonld.Node, p *pageFacts) {
 		return
 	}
 	name := "name"
-	if m := copyrightHolder.FindStringSubmatch(p.text); m != nil {
+	if m := copyrightHolder.FindStringSubmatch(p.Text); m != nil {
 		name = fmt.Sprintf("name %q from the © line", strings.TrimSpace(m[1]))
 	}
 	c.add(pagePath, Warning, "no node publishes the page: add the business as an Organization (or the subtype that fits it, or the Person who runs the site) with %s, url, logo, and the page's telephone and email, and set it as the WebSite's publisher", name)
@@ -61,8 +62,8 @@ func (c *checker) publisher(all []jsonld.Node, p *pageFacts) {
 // markup, and none anywhere on the page, its footer included. It works
 // through its website, so it is an OnlineBusiness. A shop's business check
 // types a shop.
-func (c *checker) onlineBusiness(all []jsonld.Node, p *pageFacts) {
-	if p.sells() || streetAddress.MatchString(p.text) || openingTime.MatchString(p.text) {
+func (c *checker) onlineBusiness(all []jsonld.Node, p *webpage.Facts) {
+	if p.Sells() || webpage.StreetAddress.MatchString(p.Text) || openingTime.MatchString(p.Text) {
 		return
 	}
 	for _, l := range jsonld.Publishers(all) {
@@ -97,7 +98,7 @@ func tollFreeNumber(s string) bool {
 
 // tollFree warns on a toll-free number, in the markup or a tel: link, when no
 // ContactPoint says it is one.
-func (c *checker) tollFree(all []jsonld.Node, p *pageFacts) {
+func (c *checker) tollFree(all []jsonld.Node, p *webpage.Facts) {
 	if slices.ContainsFunc(all, func(l jsonld.Node) bool {
 		return slices.ContainsFunc(jsonld.Strs(l.N, "contactOption"), func(s string) bool { return strings.HasSuffix(s, "TollFree") })
 	}) {
@@ -115,10 +116,10 @@ func (c *checker) tollFree(all []jsonld.Node, p *pageFacts) {
 			warn(l.Path, strings.TrimSpace(t))
 		}
 	}
-	if p.doc != nil {
-		for _, a := range queryAll(p.doc, `a[href^="tel:"]`) {
-			h, _ := attr(a, "href")
-			warn("html:"+selectorFor(p.doc, a), strings.TrimSpace(strings.TrimPrefix(h, "tel:")))
+	if p.Doc != nil {
+		for _, a := range webpage.QueryAll(p.Doc, `a[href^="tel:"]`) {
+			h, _ := webpage.Attr(a, "href")
+			warn("html:"+webpage.SelectorFor(p.Doc, a), strings.TrimSpace(strings.TrimPrefix(h, "tel:")))
 		}
 	}
 }
@@ -153,7 +154,7 @@ func isoDate(s string) string {
 
 // pageDates warns on a date the page gives itself ("Last updated: June
 // 2021", "checked 28 October 2026") that no value in the draft holds.
-func (c *checker) pageDates(all []jsonld.Node, p *pageFacts) {
+func (c *checker) pageDates(all []jsonld.Node, p *webpage.Facts) {
 	var held []string
 	for _, l := range all {
 		for _, k := range l.N.Keys {
@@ -161,7 +162,7 @@ func (c *checker) pageDates(all []jsonld.Node, p *pageFacts) {
 		}
 	}
 	seen := map[string]bool{}
-	for _, m := range pageDate.FindAllStringSubmatch(p.main, -1) {
+	for _, m := range pageDate.FindAllStringSubmatch(p.Main, -1) {
 		iso := isoDate(m[2])
 		if iso == "" || seen[iso] || slices.ContainsFunc(held, func(s string) bool { return strings.HasPrefix(s, iso) }) {
 			continue
@@ -187,27 +188,27 @@ var legalPage = regexp.MustCompile(`(?i)\b(terms|conditions|privacy|cookies?|pol
 // or more or two sections or more, when no node is an Article. Short
 // articles are cards, and a shop's, contact, legal or policy page is no
 // article.
-func (c *checker) article(all []jsonld.Node, p *pageFacts) {
-	if p.doc == nil || p.kind != "" || c.has(all, "Article") || legalPage.MatchString(p.h1()) {
+func (c *checker) article(all []jsonld.Node, p *webpage.Facts) {
+	if p.Doc == nil || p.Kind != "" || c.has(all, "Article") || legalPage.MatchString(p.H1()) {
 		return
 	}
-	if segs := segments(p.url); len(segs) > 0 && legalPage.MatchString(strings.ReplaceAll(segs[len(segs)-1], "-", " ")) {
+	if segs := webpage.Segments(p.URL); len(segs) > 0 && legalPage.MatchString(strings.ReplaceAll(segs[len(segs)-1], "-", " ")) {
 		return
 	}
 	var best *xhtml.Node
 	words, sections := 0, 0
-	for _, a := range queryAll(p.doc, "article") {
-		if !shown(a) || chrome(a) || p.inCard(a) {
+	for _, a := range webpage.QueryAll(p.Doc, "article") {
+		if !webpage.Shown(a) || webpage.Chrome(a) || p.InCard(a) {
 			continue
 		}
-		if w := len(strings.Fields(htmlText(a))); w > words {
-			best, words, sections = a, w, len(queryAll(a, "h2"))
+		if w := len(strings.Fields(webpage.HTMLText(a))); w > words {
+			best, words, sections = a, w, len(webpage.QueryAll(a, "h2"))
 		}
 	}
 	if best == nil || (words < 300 && (sections < 2 || words < 150)) {
 		return
 	}
-	c.add("html:"+selectorFor(p.doc, best), Warning, "the page's main copy is an article (%d words, %d sections) but no node is an Article: add one (headline from the h1, articleSection, wordCount, author, datePublished, dateModified, publisher, isPartOf and mainEntityOfPage the WebPage), and give the WebPage a potentialAction ReadAction targeting its URL", words, sections)
+	c.add("html:"+webpage.SelectorFor(p.Doc, best), Warning, "the page's main copy is an article (%d words, %d sections) but no node is an Article: add one (headline from the h1, articleSection, wordCount, author, datePublished, dateModified, publisher, isPartOf and mainEntityOfPage the WebPage), and give the WebPage a potentialAction ReadAction targeting its URL", words, sections)
 }
 
 var topPath = regexp.MustCompile(`^\$(?:\.@graph)?(?:\[\d+\])?$`)
@@ -216,7 +217,7 @@ var topPath = regexp.MustCompile(`^\$(?:\.@graph)?(?:\[\d+\])?$`)
 // level before one nested in another (a catalog's link to the same page),
 // the one whose url is the page's before the first that is not an FAQPage
 // part.
-func (c *checker) mainWebPage(all []jsonld.Node, p *pageFacts) (jsonld.Node, bool) {
+func (c *checker) mainWebPage(all []jsonld.Node, p *webpage.Facts) (jsonld.Node, bool) {
 	var best jsonld.Node
 	rank := 0
 	for _, l := range all {
@@ -227,9 +228,9 @@ func (c *checker) mainWebPage(all []jsonld.Node, p *pageFacts) (jsonld.Node, boo
 		if !c.is(l.N, "FAQPage") {
 			r = 1
 		}
-		if p.url != nil {
+		if p.URL != nil {
 			for _, s := range append(jsonld.Strs(l.N, "url"), jsonld.Strs(l.N, "@id")...) {
-				if u, err := url.Parse(s); err == nil && u.Fragment == "" && txt.NormURL(u) == txt.NormURL(p.url) {
+				if u, err := url.Parse(s); err == nil && u.Fragment == "" && txt.NormURL(u) == txt.NormURL(p.URL) {
 					r = 2
 				}
 			}
@@ -259,13 +260,13 @@ type phase struct {
 // its text.
 func taskName(li *xhtml.Node) string {
 	for _, sel := range []string{"label span", "span", "label", "strong"} {
-		if ns := queryAll(li, sel); len(ns) > 0 {
-			if t := htmlText(ns[0]); t != "" {
+		if ns := webpage.QueryAll(li, sel); len(ns) > 0 {
+			if t := webpage.HTMLText(ns[0]); t != "" {
 				return t
 			}
 		}
 	}
-	return htmlText(li)
+	return webpage.HTMLText(li)
 }
 
 // phases are the headings under the section's own heading that head a list,
@@ -273,8 +274,8 @@ func taskName(li *xhtml.Node) string {
 func phases(box, head *xhtml.Node) []phase {
 	level := headingLevel(head)
 	var out []phase
-	for _, h := range queryAll(box, "h2, h3, h4, h5") {
-		if headingLevel(h) <= level || chrome(h) {
+	for _, h := range webpage.QueryAll(box, "h2, h3, h4, h5") {
+		if headingLevel(h) <= level || webpage.Chrome(h) {
 			continue
 		}
 		var list *xhtml.Node
@@ -287,15 +288,15 @@ func phases(box, head *xhtml.Node) []phase {
 			}
 			if s.DataAtom == atom.Ul || s.DataAtom == atom.Ol {
 				list = s
-			} else if ls := queryAll(s, "ul, ol"); len(ls) > 0 {
+			} else if ls := webpage.QueryAll(s, "ul, ol"); len(ls) > 0 {
 				list = ls[0]
 			}
 		}
 		if list == nil {
 			continue
 		}
-		ph := phase{name: htmlText(h)}
-		for _, li := range queryAll(list, "li") {
+		ph := phase{name: webpage.HTMLText(h)}
+		for _, li := range webpage.QueryAll(list, "li") {
 			ph.tasks = append(ph.tasks, taskName(li))
 		}
 		out = append(out, ph)
@@ -306,13 +307,13 @@ func phases(box, head *xhtml.Node) []phase {
 // checklists warn on a checklist the page gives, a section headed as one or
 // whose phases are times ("8 weeks before", "Moving day"), each over a list
 // of tasks, that no HowTo carries.
-func (c *checker) checklists(all []jsonld.Node, p *pageFacts, d *jsonld.Index) {
-	if p.doc == nil {
+func (c *checker) checklists(all []jsonld.Node, p *webpage.Facts, d *jsonld.Index) {
+	if p.Doc == nil {
 		return
 	}
 	done := map[*xhtml.Node]bool{}
-	for _, h := range queryAll(p.doc, "h2, h3") {
-		if chrome(h) || !shown(h) {
+	for _, h := range webpage.QueryAll(p.Doc, "h2, h3") {
+		if webpage.Chrome(h) || !webpage.Shown(h) {
 			continue
 		}
 		var box *xhtml.Node
@@ -333,12 +334,12 @@ func (c *checker) checklists(all []jsonld.Node, p *pageFacts, d *jsonld.Index) {
 				timed++
 			}
 		}
-		for _, t := range queryAll(box, `time[datetime^="P"]`) {
+		for _, t := range webpage.QueryAll(box, `time[datetime^="P"]`) {
 			if headingLevel(t.Parent) > headingLevel(h) {
 				timed++
 			}
 		}
-		if len(phs) == 0 || tasks < 3 || !(checklistTitle.MatchString(htmlText(h)) || timed >= 2) {
+		if len(phs) == 0 || tasks < 3 || !(checklistTitle.MatchString(webpage.HTMLText(h)) || timed >= 2) {
 			continue
 		}
 		done[box] = true
@@ -346,7 +347,7 @@ func (c *checker) checklists(all []jsonld.Node, p *pageFacts, d *jsonld.Index) {
 		if slices.ContainsFunc(d.Strs, func(s string) bool { return strings.Contains(txt.NormWords(s), first) }) {
 			continue
 		}
-		c.add("html:"+selectorFor(p.doc, box), Warning, "the page's checklist %q has %d phases and %d tasks: add a HowTo (name, step: a HowToSection for each phase with a HowToStep for each task, name and text word for word, a HowToTip for a task's note, a HowToSupply or HowToTool where a task names one, and itemListOrder https://schema.org/ItemListOrderAscending) in the WebPage's hasPart", htmlText(h), len(phs), tasks)
+		c.add("html:"+webpage.SelectorFor(p.Doc, box), Warning, "the page's checklist %q has %d phases and %d tasks: add a HowTo (name, step: a HowToSection for each phase with a HowToStep for each task, name and text word for word, a HowToTip for a task's note, a HowToSupply or HowToTool where a task names one, and itemListOrder https://schema.org/ItemListOrderAscending) in the WebPage's hasPart", webpage.HTMLText(h), len(phs), tasks)
 	}
 }
 
@@ -367,22 +368,22 @@ type tool struct {
 // controls or more and an output or live region, or fewer under a
 // calculator's or estimate's name. A checklist's boxes and a form's fields
 // are not tools.
-func (p *pageFacts) tools() []tool {
-	if p.doc == nil {
+func tools(p *webpage.Facts) []tool {
+	if p.Doc == nil {
 		return nil
 	}
 	var found []*xhtml.Node
-	visit(p.doc, func(n *xhtml.Node) {
+	webpage.Visit(p.Doc, func(n *xhtml.Node) {
 		switch n.DataAtom {
 		case atom.Section, atom.Div, atom.Article, atom.Aside, atom.Figure:
 		default:
 			return
 		}
-		if id, _ := attr(n, "id"); id == "" || !cssIdent.MatchString(id) || chrome(n) {
+		if id, _ := webpage.Attr(n, "id"); id == "" || !webpage.CSSIdent.MatchString(id) || webpage.Chrome(n) {
 			return
 		}
 		inputs, boxes := 0, 0
-		visit(n, func(c *xhtml.Node) {
+		webpage.Visit(n, func(c *xhtml.Node) {
 			if c.DataAtom != atom.Input && c.DataAtom != atom.Select && c.DataAtom != atom.Textarea {
 				return
 			}
@@ -391,7 +392,7 @@ func (p *pageFacts) tools() []tool {
 					return
 				}
 			}
-			switch ty, _ := attr(c, "type"); strings.ToLower(ty) {
+			switch ty, _ := webpage.Attr(c, "type"); strings.ToLower(ty) {
 			case "hidden", "submit", "button":
 			case "checkbox", "radio":
 				boxes++
@@ -399,8 +400,8 @@ func (p *pageFacts) tools() []tool {
 				inputs++
 			}
 		})
-		live := len(queryAll(n, `output, [aria-live]`))
-		head := txt.Clip(htmlText(n), 300)
+		live := len(webpage.QueryAll(n, `output, [aria-live]`))
+		head := txt.Clip(webpage.HTMLText(n), 300)
 		if live == 0 || inputs == 0 || boxes > inputs || (inputs < 3 && !toolWords.MatchString(head)) {
 			return
 		}
@@ -412,19 +413,19 @@ func (p *pageFacts) tools() []tool {
 		if slices.ContainsFunc(found, func(o *xhtml.Node) bool { return o != n && slices.Contains(ancestors(o)[1:], n) }) {
 			continue
 		}
-		id, _ := attr(n, "id")
-		name := sectionName(n)
+		id, _ := webpage.Attr(n, "id")
+		name := webpage.SectionName(n)
 		for _, sel := range []string{"header p", "p", "label"} {
 			if name != "" && !strings.HasSuffix(name, "?") {
 				break
 			}
-			if ps := queryAll(n, sel); len(ps) > 0 && len(strings.Fields(htmlText(ps[0]))) <= 8 && htmlText(ps[0]) != "" {
-				name = htmlText(ps[0])
+			if ps := webpage.QueryAll(n, sel); len(ps) > 0 && len(strings.Fields(webpage.HTMLText(ps[0]))) <= 8 && webpage.HTMLText(ps[0]) != "" {
+				name = webpage.HTMLText(ps[0])
 			}
 		}
 		var buttons []string
-		for _, b := range queryAll(n, "button") {
-			buttons = append(buttons, htmlText(b))
+		for _, b := range webpage.QueryAll(n, "button") {
+			buttons = append(buttons, webpage.HTMLText(b))
 		}
 		out = append(out, tool{n, id, name, quoteWords.MatchString(name + " " + strings.Join(buttons, " "))})
 	}
@@ -433,8 +434,8 @@ func (p *pageFacts) tools() []tool {
 
 // tools warn on the page's interactive tools that no WebApplication names,
 // and on a quote tool that no QuoteAction targets.
-func (c *checker) tools(all []jsonld.Node, p *pageFacts, d *jsonld.Index) {
-	tools := p.tools()
+func (c *checker) tools(all []jsonld.Node, p *webpage.Facts, d *jsonld.Index) {
+	tools := tools(p)
 	if len(tools) == 0 {
 		return
 	}

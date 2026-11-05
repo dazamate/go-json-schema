@@ -9,9 +9,9 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/andybalholm/cascadia"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/txt"
+	"github.com/dazamate/go-json-schema/internal/vocabtool/webpage"
 	xhtml "golang.org/x/net/html"
 	"golang.org/x/net/html/atom"
 )
@@ -25,139 +25,6 @@ import (
 
 const pagePath = "html:body" // an issue about the page as a whole
 
-// pageFacts is what the content checks read from the rendered page.
-type pageFacts struct {
-	doc     *xhtml.Node // nil when only the page's text is known
-	text    string      // the visible text, whitespace collapsed
-	norm    string      // txt.NormWords(text), padded with spaces
-	main    string      // the visible text outside the site's header, footer and navs
-	base    *url.URL    // the page's canonical URL, else its address, or nil
-	url     *url.URL    // the page's address, else its canonical URL, or nil
-	kind    pageKind
-	private string           // why search engines skip the page ("" when they index it)
-	claimed map[float64]bool // prices a check other than prices reports
-
-	cards     []*card // product cards, found once
-	cardsDone bool
-}
-
-func newPageFacts(doc *xhtml.Node, text, address string) *pageFacts {
-	p := &pageFacts{doc: doc, text: text, norm: " " + txt.NormWords(text) + " ", main: text, claimed: map[float64]bool{}}
-	if u, err := url.Parse(strings.TrimSpace(address)); err == nil && u.IsAbs() {
-		p.url = u
-	}
-	if doc != nil {
-		p.base = canonical(doc)
-		p.main = mainText(doc)
-	}
-	if p.base == nil {
-		p.base = p.url
-	}
-	if p.url == nil {
-		p.url = p.base
-	}
-	p.kind = p.classify()
-	switch {
-	case doc != nil && noindex(doc):
-		p.private = "noindex"
-	case privateKinds[p.kind] != "":
-		p.private = privateKinds[p.kind]
-	}
-	return p
-}
-
-// mainText is the visible text outside the site's header, footer and navs.
-func mainText(doc *xhtml.Node) string { return strings.Join(mainLines(doc), " ") }
-
-// lineBreaks are the elements that start and end a line of text.
-var lineBreaks = map[atom.Atom]bool{
-	atom.Address: true, atom.Article: true, atom.Aside: true, atom.Blockquote: true, atom.Br: true, atom.Caption: true,
-	atom.Dd: true, atom.Details: true, atom.Div: true, atom.Dl: true, atom.Dt: true, atom.Fieldset: true,
-	atom.Figcaption: true, atom.Figure: true, atom.Footer: true, atom.Form: true, atom.H1: true, atom.H2: true,
-	atom.H3: true, atom.H4: true, atom.H5: true, atom.H6: true, atom.Header: true, atom.Hr: true, atom.Legend: true,
-	atom.Li: true, atom.Main: true, atom.Ol: true, atom.P: true, atom.Pre: true, atom.Section: true, atom.Summary: true,
-	atom.Table: true, atom.Td: true, atom.Th: true, atom.Tr: true, atom.Ul: true,
-}
-
-// mainLines is mainText a line at a time: a block element starts and ends a
-// line, so a line never runs into the next block's words.
-func mainLines(doc *xhtml.Node) []string {
-	var lines []string
-	var b strings.Builder
-	end := func() {
-		if l := strings.Join(strings.Fields(b.String()), " "); l != "" {
-			lines = append(lines, l)
-		}
-		b.Reset()
-	}
-	var walk func(*xhtml.Node)
-	walk = func(n *xhtml.Node) {
-		for ch := n.FirstChild; ch != nil; ch = ch.NextSibling {
-			if skipped(ch) || ch.DataAtom == atom.Nav || ((ch.DataAtom == atom.Header || ch.DataAtom == atom.Footer) && !scoped(ch)) {
-				continue
-			}
-			if ch.Type == xhtml.TextNode {
-				b.WriteString(ch.Data)
-				b.WriteByte(' ')
-			}
-			block := ch.Type == xhtml.ElementNode && lineBreaks[ch.DataAtom]
-			if block {
-				end()
-			}
-			walk(ch)
-			if block {
-				end()
-			}
-		}
-	}
-	walk(doc)
-	end()
-	return lines
-}
-
-// canonical is the page's canonical link, or its og:url.
-func canonical(doc *xhtml.Node) *url.URL {
-	for _, sel := range []string{`link[rel~="canonical"]`, `meta[property="og:url"]`} {
-		for _, n := range queryAll(doc, sel) {
-			v, _ := attr(n, "href")
-			if v == "" {
-				v, _ = attr(n, "content")
-			}
-			if u, err := url.Parse(strings.TrimSpace(v)); err == nil && u.IsAbs() {
-				return u
-			}
-		}
-	}
-	return nil
-}
-
-func queryAll(n *xhtml.Node, sel string) []*xhtml.Node {
-	return cascadia.QueryAll(n, cascadia.MustCompile(sel))
-}
-
-// shown reports whether a visitor can see the element: no ancestor of it is
-// skipped.
-func shown(n *xhtml.Node) bool {
-	for e := n; e != nil; e = e.Parent {
-		if skipped(e) {
-			return false
-		}
-	}
-	return true
-}
-
-// abs resolves a link on the page to a normalized absolute URL.
-func (p *pageFacts) abs(ref string) string {
-	u, err := url.Parse(strings.TrimSpace(ref))
-	if err != nil {
-		return ref
-	}
-	if p.base != nil {
-		u = p.base.ResolveReference(u)
-	}
-	return txt.NormURL(u)
-}
-
 // is reports whether the node has the type or a subtype of it.
 func (c *checker) is(n *jsonld.Object, ty string) bool {
 	return c.v.Is(jsonld.TypeNames(n), ty)
@@ -165,13 +32,13 @@ func (c *checker) is(n *jsonld.Object, ty string) bool {
 
 // pageNode is the path of the WebPage the draft describes the page with:
 // the one whose url is the canonical URL, or else the first WebPage.
-func (c *checker) pageNode(all []jsonld.Node, p *pageFacts) string {
+func (c *checker) pageNode(all []jsonld.Node, p *webpage.Facts) string {
 	first := ""
 	for _, l := range all {
 		if !c.is(l.N, "WebPage") || len(l.N.Keys) < 2 {
 			continue
 		}
-		if p.base != nil && slices.ContainsFunc(jsonld.Strs(l.N, "url"), func(s string) bool { return txt.NormLink(s) == txt.NormURL(p.base) }) {
+		if p.Base != nil && slices.ContainsFunc(jsonld.Strs(l.N, "url"), func(s string) bool { return txt.NormLink(s) == txt.NormURL(p.Base) }) {
 			return l.Path
 		}
 		if first == "" {
@@ -185,30 +52,30 @@ func (c *checker) pageNode(all []jsonld.Node, p *pageFacts) string {
 }
 
 // privateNotes say what a page search engines skip would be typed as.
-var privateNotes = map[pageKind]string{
-	kindSearch:   "its WebPage is a SearchResultsPage",
-	kindCheckout: "its WebPage is a CheckoutPage",
+var privateNotes = map[webpage.Kind]string{
+	webpage.KindSearch:   "its WebPage is a SearchResultsPage",
+	webpage.KindCheckout: "its WebPage is a CheckoutPage",
 }
 
 // content runs the checks that compare the draft with the page. What the
 // markup repeats is held to the page always; what the page shows is asked of
 // the markup only on a page search engines index.
-func (c *checker) content(all []jsonld.Node, p *pageFacts) {
+func (c *checker) content(all []jsonld.Node, p *webpage.Facts) {
 	d := jsonld.NewIndex(all)
 	c.shownText(all, p)
 	c.anchors(all, p)
 	c.offers(all)
 	c.personNames(all)
 	c.pageNames(all)
-	if p.private != "" {
-		what := p.private
-		if p.private == "noindex" {
+	if p.Private != "" {
+		what := p.Private
+		if p.Private == "noindex" {
 			what = "the page is noindex"
 		} else {
 			what = "the page is " + what
 		}
 		note := ""
-		if n := privateNotes[p.kind]; n != "" {
+		if n := privateNotes[p.Kind]; n != "" {
 			note = "; if you mark it up at all, " + n
 		}
 		c.add(pagePath, Info, "%s: search engines leave its structured data out, so the shop checks skip it%s", what, note)
@@ -241,24 +108,24 @@ func (c *checker) content(all []jsonld.Node, p *pageFacts) {
 // shop runs the shop checks: the sitewide nodes, the page's type, and what a
 // product page, a listing and the shop's policies show. They run before
 // prices, which leaves out the prices they report.
-func (c *checker) shop(all []jsonld.Node, p *pageFacts, d *jsonld.Index) {
-	if p.doc != nil {
+func (c *checker) shop(all []jsonld.Node, p *webpage.Facts, d *jsonld.Index) {
+	if p.Doc != nil {
 		c.pageType(all, p)
 		c.website(all, p)
-		if p.sells() || p.address() != "" {
+		if p.Sells() || p.Address() != "" {
 			c.business(all, p)
 		}
 		c.logo(all, p)
 		c.social(p, d)
 		c.catalog(all, p)
 	}
-	if p.kind == kindProduct {
+	if p.Kind == webpage.KindProduct {
 		c.product(all, p, d)
 	}
 	c.listing(all, p, d)
 	// what a shop's pages state about its own sales; on another site the
 	// same words ("a damaged item", "pay by bank transfer") are about others
-	if p.sells() {
+	if p.Sells() {
 		c.sale(all, p)
 		c.stock(all, p)
 		c.members(all, p)
@@ -283,14 +150,14 @@ var shownProps = []struct{ typ, prop string }{
 
 // shownText warns on text the markup gives as the page's that the page does
 // not show: a HowTo step, a question, an answer, a review.
-func (c *checker) shownText(all []jsonld.Node, p *pageFacts) {
+func (c *checker) shownText(all []jsonld.Node, p *webpage.Facts) {
 	for _, l := range all {
 		for _, sp := range shownProps {
 			if !c.is(l.N, sp.typ) {
 				continue
 			}
 			for _, s := range jsonld.Strs(l.N, sp.prop) {
-				if w := txt.NormWords(txt.StripTags(s)); w != "" && !strings.Contains(p.norm, " "+w+" ") {
+				if w := txt.NormWords(txt.StripTags(s)); w != "" && !strings.Contains(p.Norm, " "+w+" ") {
 					c.add(l.Path+"."+sp.prop, Warning, "%s %s %q is not on the page: the markup must repeat the visible text", sp.typ, sp.prop, txt.Clip(s, 80))
 				}
 			}
@@ -299,22 +166,22 @@ func (c *checker) shownText(all []jsonld.Node, p *pageFacts) {
 }
 
 // anchors warns on a link to this page whose #fragment is no id on it.
-func (c *checker) anchors(all []jsonld.Node, p *pageFacts) {
-	if p.doc == nil || p.base == nil {
+func (c *checker) anchors(all []jsonld.Node, p *webpage.Facts) {
+	if p.Doc == nil || p.Base == nil {
 		return
 	}
 	ids := map[string]bool{}
 	var walk func(*xhtml.Node)
 	walk = func(n *xhtml.Node) {
-		if id, ok := attr(n, "id"); ok && n.Type == xhtml.ElementNode {
+		if id, ok := webpage.Attr(n, "id"); ok && n.Type == xhtml.ElementNode {
 			ids[id] = true
 		}
 		for ch := n.FirstChild; ch != nil; ch = ch.NextSibling {
 			walk(ch)
 		}
 	}
-	walk(p.doc)
-	page := txt.NormURL(p.base)
+	walk(p.Doc)
+	page := txt.NormURL(p.Base)
 	for _, l := range all {
 		for _, k := range l.N.Keys {
 			if strings.HasPrefix(k, "@") || k == "sameAs" {
@@ -334,11 +201,9 @@ func (c *checker) anchors(all []jsonld.Node, p *pageFacts) {
 	}
 }
 
-var copyrightLine = regexp.MustCompile(`(?i)(?:©|\(c\)|copyright)\s*(?:\d{4}\s*[-–]\s*)?(\d{4})`)
-
 // copyright warns when the page shows a copyright year the markup lacks.
-func (c *checker) copyright(all []jsonld.Node, p *pageFacts) {
-	m := copyrightLine.FindStringSubmatch(p.text)
+func (c *checker) copyright(all []jsonld.Node, p *webpage.Facts) {
+	m := webpage.CopyrightLine.FindStringSubmatch(p.Text)
 	if m == nil {
 		return
 	}
@@ -358,8 +223,8 @@ var readingTime = regexp.MustCompile(`(?i)\b(\d{1,3})[\s-]*min(?:ute)?s?\.?\s+re
 
 // readTime warns when the page gives a reading time and no node has it as
 // timeRequired.
-func (c *checker) readTime(all []jsonld.Node, p *pageFacts) {
-	m := readingTime.FindStringSubmatch(p.text)
+func (c *checker) readTime(all []jsonld.Node, p *webpage.Facts) {
+	m := readingTime.FindStringSubmatch(p.Text)
 	if m == nil {
 		return
 	}
@@ -388,8 +253,8 @@ func (c *checker) readTime(all []jsonld.Node, p *pageFacts) {
 // sectionLabel warns when a short label sits right above the page's h1 (a
 // kicker naming the section) and the Article does not carry it as its
 // articleSection.
-func (c *checker) sectionLabel(all []jsonld.Node, p *pageFacts) {
-	if p.doc == nil {
+func (c *checker) sectionLabel(all []jsonld.Node, p *webpage.Facts) {
+	if p.Doc == nil {
 		return
 	}
 	i := slices.IndexFunc(all, func(l jsonld.Node) bool { return c.is(l.N, "Article") })
@@ -397,7 +262,7 @@ func (c *checker) sectionLabel(all []jsonld.Node, p *pageFacts) {
 		return
 	}
 	var h1 *xhtml.Node
-	visit(p.doc, func(n *xhtml.Node) {
+	webpage.Visit(p.Doc, func(n *xhtml.Node) {
 		if h1 == nil && n.DataAtom == atom.H1 {
 			h1 = n
 		}
@@ -409,10 +274,10 @@ func (c *checker) sectionLabel(all []jsonld.Node, p *pageFacts) {
 	for prev != nil && prev.Type != xhtml.ElementNode {
 		prev = prev.PrevSibling
 	}
-	if prev == nil || !slices.Contains([]atom.Atom{atom.P, atom.Span, atom.Div, atom.A}, prev.DataAtom) || len(queryAll(prev, "time, nav, a[href]")) > 0 {
+	if prev == nil || !slices.Contains([]atom.Atom{atom.P, atom.Span, atom.Div, atom.A}, prev.DataAtom) || len(webpage.QueryAll(prev, "time, nav, a[href]")) > 0 {
 		return
 	}
-	label := htmlText(prev)
+	label := webpage.HTMLText(prev)
 	if n := len(strings.Fields(label)); n == 0 || n > 5 {
 		return
 	}
@@ -430,11 +295,11 @@ var (
 
 // media warns on a video or audio the page plays that no VideoObject or
 // AudioObject has as its contentUrl or embedUrl.
-func (c *checker) media(all []jsonld.Node, p *pageFacts) {
-	if p.doc == nil {
+func (c *checker) media(all []jsonld.Node, p *webpage.Facts) {
+	if p.Doc == nil {
 		return
 	}
-	visit(p.doc, func(n *xhtml.Node) {
+	webpage.Visit(p.Doc, func(n *xhtml.Node) {
 		kind, src := "", ""
 		switch n.DataAtom {
 		case atom.Video, atom.Audio:
@@ -442,12 +307,12 @@ func (c *checker) media(all []jsonld.Node, p *pageFacts) {
 			if n.DataAtom == atom.Audio {
 				kind = "AudioObject"
 			}
-			src, _ = attr(n, "src")
-			if s := queryAll(n, "source[src]"); src == "" && len(s) > 0 {
-				src, _ = attr(s[0], "src")
+			src, _ = webpage.Attr(n, "src")
+			if s := webpage.QueryAll(n, "source[src]"); src == "" && len(s) > 0 {
+				src, _ = webpage.Attr(s[0], "src")
 			}
 		case atom.Iframe:
-			src, _ = attr(n, "src")
+			src, _ = webpage.Attr(n, "src")
 			switch {
 			case videoSrc.MatchString(src):
 				kind = "VideoObject"
@@ -466,7 +331,7 @@ func (c *checker) media(all []jsonld.Node, p *pageFacts) {
 				return
 			}
 			for _, k := range []string{"contentUrl", "embedUrl", "url"} {
-				if slices.ContainsFunc(jsonld.Strs(l.N, k), func(s string) bool { return p.abs(s) == p.abs(src) }) {
+				if slices.ContainsFunc(jsonld.Strs(l.N, k), func(s string) bool { return p.Abs(s) == p.Abs(src) }) {
 					return
 				}
 			}
@@ -475,36 +340,30 @@ func (c *checker) media(all []jsonld.Node, p *pageFacts) {
 		if what == "" {
 			what = "a " + n.Data
 		}
-		c.add("html:"+selectorFor(p.doc, n), Warning, "the page plays %s but no %s has it as contentUrl or embedUrl: add one (name, description, thumbnailUrl, uploadDate) linked from the WebPage", what, kind)
+		c.add("html:"+webpage.SelectorFor(p.Doc, n), Warning, "the page plays %s but no %s has it as contentUrl or embedUrl: add one (name, description, thumbnailUrl, uploadDate) linked from the WebPage", what, kind)
 	})
 }
 
 // search warns on a search box, or a link to the site's search page, with no
 // SearchAction in the draft.
-func (c *checker) search(all []jsonld.Node, p *pageFacts) {
-	if p.doc == nil || slices.ContainsFunc(all, func(l jsonld.Node) bool { return c.is(l.N, "SearchAction") }) {
+func (c *checker) search(all []jsonld.Node, p *webpage.Facts) {
+	if p.Doc == nil || slices.ContainsFunc(all, func(l jsonld.Node) bool { return c.is(l.N, "SearchAction") }) {
 		return
 	}
-	for _, n := range queryAll(p.doc, `input[type="search"], [role="search"] input, input[role="searchbox"]`) {
-		if shown(n) {
-			c.add("html:"+selectorFor(p.doc, n), Warning, "the page has a search box but no SearchAction: add one to the WebSite's potentialAction, with a target urlTemplate holding {search_term_string}")
+	for _, n := range webpage.QueryAll(p.Doc, `input[type="search"], [role="search"] input, input[role="searchbox"]`) {
+		if webpage.Shown(n) {
+			c.add("html:"+webpage.SelectorFor(p.Doc, n), Warning, "the page has a search box but no SearchAction: add one to the WebSite's potentialAction, with a target urlTemplate holding {search_term_string}")
 			return
 		}
 	}
-	for _, a := range queryAll(p.doc, "a[href]") {
-		u, ok := p.siteLink(a)
-		label, _ := attr(a, "aria-label")
-		if ok && shown(a) && slices.Contains(segments(mustParse(u)), "search") && strings.Contains(strings.ToLower(label+" "+htmlText(a)), "search") {
-			c.add("html:"+selectorFor(p.doc, a), Warning, "the page links the site's search page (%s) but no SearchAction: add one to the WebSite's potentialAction, target an EntryPoint whose urlTemplate is the search page's address with {search_term_string} as the query", u)
+	for _, a := range webpage.QueryAll(p.Doc, "a[href]") {
+		u, ok := p.SiteLink(a)
+		label, _ := webpage.Attr(a, "aria-label")
+		if ok && webpage.Shown(a) && slices.Contains(webpage.Segments(webpage.MustParse(u)), "search") && strings.Contains(strings.ToLower(label+" "+webpage.HTMLText(a)), "search") {
+			c.add("html:"+webpage.SelectorFor(p.Doc, a), Warning, "the page links the site's search page (%s) but no SearchAction: add one to the WebSite's potentialAction, target an EntryPoint whose urlTemplate is the search page's address with {search_term_string} as the query", u)
 			return
 		}
 	}
-}
-
-// mustParse parses a URL this package normalized.
-func mustParse(s string) *url.URL {
-	u, _ := url.Parse(s)
-	return u
 }
 
 var phoneNumber = regexp.MustCompile(`\+?\d[\d ()-]{6,}\d`)
@@ -521,7 +380,7 @@ func telKey(s string) string {
 
 // contacts warns on a tel: or mailto: link no node carries, and on a
 // telephone or email in the markup that the page does not show.
-func (c *checker) contacts(all []jsonld.Node, p *pageFacts) {
+func (c *checker) contacts(all []jsonld.Node, p *webpage.Facts) {
 	type val struct{ key, raw, path string }
 	var tels, mails []val
 	for _, l := range all {
@@ -535,33 +394,33 @@ func (c *checker) contacts(all []jsonld.Node, p *pageFacts) {
 		}
 	}
 	shownTel, shownMail := map[string]bool{}, map[string]bool{}
-	for _, m := range phoneNumber.FindAllString(p.text, -1) {
+	for _, m := range phoneNumber.FindAllString(p.Text, -1) {
 		shownTel[telKey(m)] = true
 	}
-	if p.doc != nil {
-		visit(p.doc, func(n *xhtml.Node) {
+	if p.Doc != nil {
+		webpage.Visit(p.Doc, func(n *xhtml.Node) {
 			if n.DataAtom != atom.A {
 				return
 			}
-			h, _ := attr(n, "href")
+			h, _ := webpage.Attr(n, "href")
 			low := strings.ToLower(h)
 			switch {
 			case strings.HasPrefix(low, "tel:"):
 				k := telKey(h)
 				shownTel[k] = true
 				if !slices.ContainsFunc(tels, func(v val) bool { return v.key == k }) {
-					c.add("html:"+selectorFor(p.doc, n), Warning, "the page links %s but no node has that telephone: set telephone on the business or a ContactPoint", h)
+					c.add("html:"+webpage.SelectorFor(p.Doc, n), Warning, "the page links %s but no node has that telephone: set telephone on the business or a ContactPoint", h)
 				}
 			case strings.HasPrefix(low, "mailto:"):
 				a, _, _ := strings.Cut(strings.TrimPrefix(low, "mailto:"), "?")
 				shownMail[a] = true
 				if !slices.ContainsFunc(mails, func(v val) bool { return v.key == a }) {
-					c.add("html:"+selectorFor(p.doc, n), Warning, "the page links %s but no node has that email: set email on the business or a ContactPoint", h)
+					c.add("html:"+webpage.SelectorFor(p.Doc, n), Warning, "the page links %s but no node has that email: set email on the business or a ContactPoint", h)
 				}
 			}
 		})
 	}
-	lowText := strings.ToLower(p.text)
+	lowText := strings.ToLower(p.Text)
 	for _, v := range tels {
 		if !shownTel[v.key] {
 			c.add(v.path, Warning, "telephone %s is not on the page: only a number the page shows goes in the markup", v.raw)
@@ -580,15 +439,15 @@ func (c *checker) contacts(all []jsonld.Node, p *pageFacts) {
 // with role search.
 func inSearch(n *xhtml.Node) bool {
 	for e := n; e != nil; e = e.Parent {
-		if role, _ := attr(e, "role"); e.Type == xhtml.ElementNode && (e.Data == "search" || role == "search") {
+		if role, _ := webpage.Attr(e, "role"); e.Type == xhtml.ElementNode && (e.Data == "search" || role == "search") {
 			return true
 		}
 	}
 	return false
 }
 
-func (c *checker) forms(all []jsonld.Node, p *pageFacts, d *jsonld.Index) {
-	if p.doc == nil {
+func (c *checker) forms(all []jsonld.Node, p *webpage.Facts, d *jsonld.Index) {
+	if p.Doc == nil {
 		return
 	}
 	type target struct {
@@ -618,33 +477,33 @@ func (c *checker) forms(all []jsonld.Node, p *pageFacts, d *jsonld.Index) {
 		}
 	}
 	warned := map[string]bool{}
-	visit(p.doc, func(n *xhtml.Node) {
+	webpage.Visit(p.Doc, func(n *xhtml.Node) {
 		if n.DataAtom != atom.Form {
 			return
 		}
 		// a search box is the SearchAction's; a dialog's form only closes it
-		if method, _ := attr(n, "method"); inSearch(n) || len(queryAll(n, `input[type="search"]`)) > 0 || strings.EqualFold(strings.TrimSpace(method), "dialog") {
+		if method, _ := webpage.Attr(n, "method"); inSearch(n) || len(webpage.QueryAll(n, `input[type="search"]`)) > 0 || strings.EqualFold(strings.TrimSpace(method), "dialog") {
 			return
 		}
 		ids := map[string]bool{}
 		near := ""
 		for e := n; e != nil; e = e.Parent {
-			if id, ok := attr(e, "id"); ok && id != "" && e.Type == xhtml.ElementNode {
+			if id, ok := webpage.Attr(e, "id"); ok && id != "" && e.Type == xhtml.ElementNode {
 				ids[id] = true
 				if near == "" {
 					near = id
 				}
 			}
 		}
-		action, _ := attr(n, "action")
-		method, _ := attr(n, "method")
+		action, _ := webpage.Attr(n, "action")
+		method, _ := webpage.Attr(n, "method")
 		method = strings.ToUpper(strings.TrimSpace(method))
 		if method == "" {
 			method = "GET"
 		}
 		var hit []target
 		for _, t := range targets {
-			if (t.u.Fragment != "" && ids[t.u.Fragment]) || (action != "" && txt.NormURL(t.u) == p.abs(action)) {
+			if (t.u.Fragment != "" && ids[t.u.Fragment]) || (action != "" && txt.NormURL(t.u) == p.Abs(action)) {
 				hit = append(hit, t)
 			}
 		}
@@ -653,16 +512,16 @@ func (c *checker) forms(all []jsonld.Node, p *pageFacts, d *jsonld.Index) {
 			if near != "" {
 				where = "with an EntryPoint target whose urlTemplate is the page URL plus #" + near
 			}
-			text := htmlText(n)
+			text := webpage.HTMLText(n)
 			switch {
 			case preOrder.MatchString(text):
-				c.add("html:"+selectorFor(p.doc, n), Warning, "the page's pre-order form has no Action whose target points at it: add a PreOrderAction as the Offer's potentialAction, target an EntryPoint (urlTemplate %s, httpMethod %s)", p.abs(action), method)
-			case cartForm.MatchString(action) || addToCart.MatchString(text):
-				c.add("html:"+selectorFor(p.doc, n), Warning, "the page's add-to-bag form has no Action whose target points at it: add a BuyAction as the Offer's potentialAction, target an EntryPoint (urlTemplate %s, httpMethod %s, actionPlatform https://schema.org/DesktopWebPlatform and https://schema.org/MobileWebPlatform)", p.abs(action), method)
-			case subscribeForm.MatchString(text+" "+htmlText(n.Parent)) && len(queryAll(n, `input[type="email"], input[name*="email"]`)) > 0:
-				c.add("html:"+selectorFor(p.doc, n), Warning, "the page's newsletter form has no Action whose target points at it: add a SubscribeAction (to the business) %s", where)
+				c.add("html:"+webpage.SelectorFor(p.Doc, n), Warning, "the page's pre-order form has no Action whose target points at it: add a PreOrderAction as the Offer's potentialAction, target an EntryPoint (urlTemplate %s, httpMethod %s)", p.Abs(action), method)
+			case webpage.CartForm.MatchString(action) || webpage.AddToCart.MatchString(text):
+				c.add("html:"+webpage.SelectorFor(p.Doc, n), Warning, "the page's add-to-bag form has no Action whose target points at it: add a BuyAction as the Offer's potentialAction, target an EntryPoint (urlTemplate %s, httpMethod %s, actionPlatform https://schema.org/DesktopWebPlatform and https://schema.org/MobileWebPlatform)", p.Abs(action), method)
+			case subscribeForm.MatchString(text+" "+webpage.HTMLText(n.Parent)) && len(webpage.QueryAll(n, `input[type="email"], input[name*="email"]`)) > 0:
+				c.add("html:"+webpage.SelectorFor(p.Doc, n), Warning, "the page's newsletter form has no Action whose target points at it: add a SubscribeAction (to the business) %s", where)
 			default:
-				c.add("html:"+selectorFor(p.doc, n), Warning, "the page's form has no Action whose target points at it: add the Action it performs (AskAction, QuoteAction, ReserveAction, SubscribeAction and the like) %s", where)
+				c.add("html:"+webpage.SelectorFor(p.Doc, n), Warning, "the page's form has no Action whose target points at it: add the Action it performs (AskAction, QuoteAction, ReserveAction, SubscribeAction and the like) %s", where)
 			}
 			return
 		}
@@ -687,7 +546,6 @@ func (c *checker) forms(all []jsonld.Node, p *pageFacts, d *jsonld.Index) {
 }
 
 var (
-	cartForm      = regexp.MustCompile(`(?i)(cart|basket|bag)\b`)
 	subscribeForm = regexp.MustCompile(`(?i)\b(subscribe|newsletter|sign up|join our)\b`)
 )
 
@@ -695,7 +553,7 @@ var registration = regexp.MustCompile(`(?i)\b(ABN|ACN|ARBN|NZBN|UEN|EIN|GSTIN|VA
 
 // registrations warns on a labelled business or licence number the page
 // shows that no taxID, vatID or identifier carries.
-func (c *checker) registrations(all []jsonld.Node, p *pageFacts) {
+func (c *checker) registrations(all []jsonld.Node, p *webpage.Facts) {
 	var have []string
 	for _, l := range all {
 		for _, k := range []string{"taxID", "vatID", "identifier", "leiCode", "duns", "iso6523Code"} {
@@ -710,7 +568,7 @@ func (c *checker) registrations(all []jsonld.Node, p *pageFacts) {
 		}
 	}
 	seen := map[string]bool{}
-	for _, m := range registration.FindAllStringSubmatch(p.text, -1) {
+	for _, m := range registration.FindAllStringSubmatch(p.Text, -1) {
 		num := txt.Digits(m[2])
 		if seen[num] || slices.Contains(have, num) {
 			continue
@@ -734,29 +592,29 @@ var (
 // romanisation or translation in brackets, either way round: 敬茶 (ging3
 // caa4), red dates (紅棗). A longer run in that script is a sentence, not a
 // term.
-func (c *checker) terms(all []jsonld.Node, p *pageFacts) {
+func (c *checker) terms(all []jsonld.Node, p *webpage.Facts) {
 	var found []string
 	add := func(t string) {
 		if t = strings.TrimSpace(t); t != "" && !slices.Contains(found, t) {
 			found = append(found, t)
 		}
 	}
-	for _, m := range termThenGloss.FindAllStringSubmatch(p.text, -1) {
+	for _, m := range termThenGloss.FindAllStringSubmatch(p.Text, -1) {
 		g := m[2]
 		if utf8.RuneCountInString(m[1]) <= 6 && (romanised.MatchString(g) || (shortGloss.MatchString(g) && len(strings.Fields(g)) <= 4)) {
 			add(m[1])
 		}
 	}
-	for _, m := range glossThenTerm.FindAllStringSubmatch(p.text, -1) {
+	for _, m := range glossThenTerm.FindAllStringSubmatch(p.Text, -1) {
 		if utf8.RuneCountInString(m[1]) <= 6 {
 			add(m[1])
 		}
 	}
-	if p.doc != nil {
+	if p.Doc != nil {
 		// a label that several lists repeat (Includes, How long for each
 		// option) names a field of data; a glossary defines each term once
 		lists := map[string]int{}
-		for _, dl := range queryAll(p.doc, "dl") {
+		for _, dl := range webpage.QueryAll(p.Doc, "dl") {
 			seen := map[string]bool{}
 			for _, d := range pairs(dl) {
 				if k := txt.NormWords(d.label); !seen[k] {
@@ -768,16 +626,16 @@ func (c *checker) terms(all []jsonld.Node, p *pageFacts) {
 		repeats := func(dl *xhtml.Node) bool {
 			return slices.ContainsFunc(pairs(dl), func(d detail) bool { return lists[txt.NormWords(d.label)] > 1 })
 		}
-		visit(p.doc, func(n *xhtml.Node) {
+		webpage.Visit(p.Doc, func(n *xhtml.Node) {
 			switch n.DataAtom {
 			case atom.Dfn:
-				add(htmlText(n))
+				add(webpage.HTMLText(n))
 			case atom.Dl:
 				// a list of short values (Shipping rate: $7.95), or a
 				// product's details, is data the shop checks read, and a
 				// shop's dl beside a "Shop lockets" link sells: neither is a
 				// glossary
-				if !keyValueList(n) && p.kind != kindProduct && !p.promo(n) && !repeats(n) {
+				if !keyValueList(n) && p.Kind != webpage.KindProduct && !p.Promo(n) && !repeats(n) {
 					for _, d := range pairs(n) {
 						add(d.label)
 					}
@@ -809,47 +667,22 @@ func (c *checker) terms(all []jsonld.Node, p *pageFacts) {
 	c.add(pagePath, Warning, "the page defines %d terms (%s%s) that no DefinedTerm names: add a DefinedTermSet to the WebPage's hasPart with a DefinedTerm for each (name, alternateName for its romanisation or translation, description)", len(missing), strings.Join(list, ", "), more)
 }
 
-// chrome reports an element in the page's own header, footer or a nav.
-func chrome(n *xhtml.Node) bool {
-	for e := n.Parent; e != nil; e = e.Parent {
-		switch e.DataAtom {
-		case atom.Nav:
-			return true
-		case atom.Header, atom.Footer:
-			if !scoped(e) {
-				return true
-			}
-		}
-	}
-	return false
-}
-
-// siteChromeAround reports an element in the site's own header or footer.
-func siteChromeAround(n *xhtml.Node) bool {
-	for e := n.Parent; e != nil; e = e.Parent {
-		if (e.DataAtom == atom.Header || e.DataAtom == atom.Footer) && !scoped(e) {
-			return true
-		}
-	}
-	return false
-}
-
 func attrInt(n *xhtml.Node, key string) int {
-	v, _ := attr(n, key)
+	v, _ := webpage.Attr(n, key)
 	i, _ := strconv.Atoi(strings.TrimSpace(v))
 	return i
 }
 
 // imgURLs are an image's src and srcset URLs, resolved.
-func (p *pageFacts) imgURLs(n *xhtml.Node) []string {
+func imgURLs(p *webpage.Facts, n *xhtml.Node) []string {
 	var out []string
-	if s, _ := attr(n, "src"); s != "" {
-		out = append(out, p.abs(s))
+	if s, _ := webpage.Attr(n, "src"); s != "" {
+		out = append(out, p.Abs(s))
 	}
-	srcset, _ := attr(n, "srcset")
+	srcset, _ := webpage.Attr(n, "srcset")
 	for _, part := range strings.Split(srcset, ",") {
 		if f := strings.Fields(part); len(f) > 0 {
-			out = append(out, p.abs(f[0]))
+			out = append(out, p.Abs(f[0]))
 		}
 	}
 	return out
@@ -859,8 +692,8 @@ func (p *pageFacts) imgURLs(n *xhtml.Node) []string {
 // header, footer and navs) that no ImageObject or image URL in the draft
 // names, and on an ImageObject for one that lacks its width, height or a
 // description.
-func (c *checker) images(all []jsonld.Node, p *pageFacts) {
-	if p.doc == nil {
+func (c *checker) images(all []jsonld.Node, p *webpage.Facts) {
+	if p.Doc == nil {
 		return
 	}
 	objs := map[string]jsonld.Node{}
@@ -869,31 +702,31 @@ func (c *checker) images(all []jsonld.Node, p *pageFacts) {
 		if c.is(l.N, "ImageObject") {
 			for _, k := range []string{"contentUrl", "url", "thumbnailUrl"} {
 				for _, s := range jsonld.Strs(l.N, k) {
-					objs[p.abs(s)] = l
+					objs[p.Abs(s)] = l
 				}
 			}
 			continue
 		}
 		for _, k := range []string{"image", "logo", "photo", "primaryImageOfPage", "thumbnailUrl"} {
 			for _, s := range jsonld.Strs(l.N, k) {
-				plain[p.abs(s)] = true
+				plain[p.Abs(s)] = true
 			}
 		}
 	}
 	reported := map[string]bool{}
-	visit(p.doc, func(n *xhtml.Node) {
+	webpage.Visit(p.Doc, func(n *xhtml.Node) {
 		// a product card's image is its Product's, which the listing check asks for
-		if n.DataAtom != atom.Img || chrome(n) || p.inCard(n) {
+		if n.DataAtom != atom.Img || webpage.Chrome(n) || p.InCard(n) {
 			return
 		}
-		alt, _ := attr(n, "alt")
+		alt, _ := webpage.Attr(n, "alt")
 		w, h := attrInt(n, "width"), attrInt(n, "height")
 		if strings.TrimSpace(alt) == "" || (w > 0 && w <= 2) || (h > 0 && h <= 2) {
 			return
 		}
 		var obj *jsonld.Node
 		covered := false
-		for _, u := range p.imgURLs(n) {
+		for _, u := range imgURLs(p, n) {
 			if o, ok := objs[u]; ok {
 				obj, covered = &o, true
 				break
@@ -901,7 +734,7 @@ func (c *checker) images(all []jsonld.Node, p *pageFacts) {
 			covered = covered || plain[u]
 		}
 		if !covered {
-			c.add("html:"+selectorFor(p.doc, n), Warning, "the page's image %q has no ImageObject: add one (contentUrl, width, height, description from its alt text) as the image of the page or of the node it shows", txt.Clip(alt, 60))
+			c.add("html:"+webpage.SelectorFor(p.Doc, n), Warning, "the page's image %q has no ImageObject: add one (contentUrl, width, height, description from its alt text) as the image of the page or of the node it shows", txt.Clip(alt, 60))
 			return
 		}
 		if obj == nil || reported[obj.Path] {
@@ -941,14 +774,14 @@ func linkHeading(n *xhtml.Node) bool {
 			return true
 		}
 	}
-	links := queryAll(n, "a")
-	return len(links) == 1 && strings.TrimSpace(htmlText(links[0])) == strings.TrimSpace(htmlText(n))
+	links := webpage.QueryAll(n, "a")
+	return len(links) == 1 && strings.TrimSpace(webpage.HTMLText(links[0])) == strings.TrimSpace(webpage.HTMLText(n))
 }
 
 // counts warns on a heading that counts its items ("16 ideas", "Four
 // steps") when no ItemList or HowTo in the draft has that many.
-func (c *checker) counts(all []jsonld.Node, p *pageFacts) {
-	if p.doc == nil {
+func (c *checker) counts(all []jsonld.Node, p *webpage.Facts) {
+	if p.Doc == nil {
 		return
 	}
 	have := map[int]bool{}
@@ -966,16 +799,16 @@ func (c *checker) counts(all []jsonld.Node, p *pageFacts) {
 			}
 		}
 	}
-	visit(p.doc, func(n *xhtml.Node) {
+	webpage.Visit(p.Doc, func(n *xhtml.Node) {
 		switch n.DataAtom {
 		case atom.H1, atom.H2, atom.H3, atom.H4:
 		default:
 			return
 		}
-		if chrome(n) || linkHeading(n) || p.inCard(n) {
+		if webpage.Chrome(n) || linkHeading(n) || p.InCard(n) {
 			return
 		}
-		t := htmlText(n)
+		t := webpage.HTMLText(n)
 		for _, m := range countHeading.FindAllStringSubmatch(t, -1) {
 			if unitNouns[strings.ToLower(m[2])] {
 				continue
@@ -987,7 +820,7 @@ func (c *checker) counts(all []jsonld.Node, p *pageFacts) {
 			if k < 2 || have[k] || !slices.Contains(sectionCounts(n), k) {
 				continue
 			}
-			c.add("html:"+selectorFor(p.doc, n), Warning, "the heading %q counts %d items: add an ItemList of them (numberOfItems %d, a ListItem each) or a HowTo with %d steps, in the WebPage's hasPart", txt.Clip(t, 60), k, k, k)
+			c.add("html:"+webpage.SelectorFor(p.Doc, n), Warning, "the heading %q counts %d items: add an ItemList of them (numberOfItems %d, a ListItem each) or a HowTo with %d steps, in the WebPage's hasPart", txt.Clip(t, 60), k, k, k)
 			return
 		}
 	})
@@ -1005,7 +838,7 @@ func sectionCounts(h *xhtml.Node) []int {
 	var walk func(*xhtml.Node)
 	walk = func(n *xhtml.Node) {
 		for c := n.FirstChild; c != nil && !stop; c = c.NextSibling {
-			if skipped(c) || c.Type != xhtml.ElementNode {
+			if webpage.Skipped(c) || c.Type != xhtml.ElementNode {
 				continue
 			}
 			if c == h {
@@ -1028,12 +861,12 @@ func sectionCounts(h *xhtml.Node) []int {
 					switch c.DataAtom {
 					case atom.Ul, atom.Ol:
 						if !listDone {
-							items, listDone = len(queryAll(c, "li")), true
+							items, listDone = len(webpage.QueryAll(c, "li")), true
 						}
 					case atom.Details:
 						details++
 					case atom.Tr:
-						if len(queryAll(c, "td")) > 0 {
+						if len(webpage.QueryAll(c, "td")) > 0 {
 							rows++
 						}
 					}
@@ -1062,7 +895,7 @@ func headingLevel(n *xhtml.Node) int {
 // idBox is the nearest ancestor with an id, or the body.
 func idBox(n *xhtml.Node) *xhtml.Node {
 	for e := n.Parent; e != nil; e = e.Parent {
-		if id, ok := attr(e, "id"); (ok && cssIdent.MatchString(id)) || e.DataAtom == atom.Body {
+		if id, ok := webpage.Attr(e, "id"); (ok && webpage.CSSIdent.MatchString(id)) || e.DataAtom == atom.Body {
 			return e
 		}
 	}
@@ -1072,20 +905,20 @@ func idBox(n *xhtml.Node) *xhtml.Node {
 // outsideLinks warns on a group of three or more links to other sites, under
 // one ancestor with an id, whose URLs no node in the draft names: partners,
 // vendors or sources the page features.
-func (c *checker) outsideLinks(p *pageFacts, d *jsonld.Index) {
-	if p.doc == nil || p.base == nil {
+func (c *checker) outsideLinks(p *webpage.Facts, d *jsonld.Index) {
+	if p.Doc == nil || p.Base == nil {
 		return
 	}
 	type group struct{ urls, labels []string }
 	var order []*xhtml.Node
 	groups := map[*xhtml.Node]*group{}
-	visit(p.doc, func(n *xhtml.Node) {
+	webpage.Visit(p.Doc, func(n *xhtml.Node) {
 		if n.DataAtom != atom.A {
 			return
 		}
-		h, _ := attr(n, "href")
+		h, _ := webpage.Attr(n, "href")
 		u, err := url.Parse(strings.TrimSpace(h))
-		if err != nil || (u.Scheme != "http" && u.Scheme != "https") || strings.EqualFold(u.Hostname(), p.base.Hostname()) {
+		if err != nil || (u.Scheme != "http" && u.Scheme != "https") || strings.EqualFold(u.Hostname(), p.Base.Hostname()) {
 			return
 		}
 		// the business's profiles and share buttons have checks of their own
@@ -1105,9 +938,9 @@ func (c *checker) outsideLinks(p *pageFacts, d *jsonld.Index) {
 		}
 		if !slices.Contains(g.urls, key) {
 			g.urls = append(g.urls, key)
-			label := strings.TrimSpace(htmlText(n))
+			label := strings.TrimSpace(webpage.HTMLText(n))
 			if label == "" {
-				label, _ = attr(n, "aria-label")
+				label, _ = webpage.Attr(n, "aria-label")
 			}
 			if label = txt.Clip(label, 40); label != "" && !slices.Contains(g.labels, label) {
 				g.labels = append(g.labels, label)
@@ -1123,77 +956,72 @@ func (c *checker) outsideLinks(p *pageFacts, d *jsonld.Index) {
 		if len(labels) > 8 {
 			labels = append(labels[:8:8], "…")
 		}
-		c.add("html:"+selectorFor(p.doc, box), Warning, "%d links to outside sites here (%s) name no node: when they are businesses or people the page features, add an ItemList of them to the WebPage's hasPart, each with url and sameAs; when they are sources, list them as citation", len(g.urls), strings.Join(labels, ", "))
+		c.add("html:"+webpage.SelectorFor(p.Doc, box), Warning, "%d links to outside sites here (%s) name no node: when they are businesses or people the page features, add an ItemList of them to the WebPage's hasPart, each with url and sameAs; when they are sources, list them as citation", len(g.urls), strings.Join(labels, ", "))
 	}
 }
-
-var (
-	relatedLabel = regexp.MustCompile(`(?i)^(?:related\b|keep reading|read next|read more|more (?:for|from|on|like this|guides|articles|reading)|you (?:may|might) also like|see also|further reading|in this (?:guide|section|series|hub)\b|guides in\b)`)
-	guideLabel   = regexp.MustCompile(`(?i)^(?:in this (?:guide|section|series|hub)\b|guides in\b)`)
-)
 
 // related warns when a block the page labels as related reading links to
 // pages of the site that the WebPage's relatedLink does not list. A block of
 // product cards is the Product's related products instead.
-func (c *checker) related(all []jsonld.Node, p *pageFacts, d *jsonld.Index) {
-	if p.doc == nil {
+func (c *checker) related(all []jsonld.Node, p *webpage.Facts, d *jsonld.Index) {
+	if p.Doc == nil {
 		return
 	}
 	var rel []string
 	for _, l := range all {
 		if c.is(l.N, "WebPage") {
 			for _, s := range jsonld.Strs(l.N, "relatedLink") {
-				rel = append(rel, p.abs(s))
+				rel = append(rel, p.Abs(s))
 			}
 		}
 	}
-	for _, b := range p.relatedBoxes() {
-		t, box := b.label, b.n
-		var cards []*card
-		for _, cd := range p.productCards() {
-			if cd.related && slices.Contains(ancestors(cd.n), box) {
+	for _, b := range p.RelatedBoxes() {
+		t, box := b.Label, b.N
+		var cards []*webpage.Card
+		for _, cd := range p.ProductCards() {
+			if cd.Related && slices.Contains(ancestors(cd.N), box) {
 				cards = append(cards, cd)
 			}
 		}
 		if len(cards) > 0 {
 			var names []string
 			for _, cd := range cards {
-				if !d.URLs[cd.url] && !slices.Contains(names, cd.name) {
-					names = append(names, cd.name)
+				if !d.URLs[cd.URL] && !slices.Contains(names, cd.Name) {
+					names = append(names, cd.Name)
 				}
 			}
 			if len(names) > 0 {
-				c.add("html:"+selectorFor(p.doc, box), Warning, "the page's %q block lists products (%s) that the Product's isRelatedTo and isSimilarTo do not name: add each as a Product (name, url, image, offers)", t, strings.Join(names, ", "))
+				c.add("html:"+webpage.SelectorFor(p.Doc, box), Warning, "the page's %q block lists products (%s) that the Product's isRelatedTo and isSimilarTo do not name: add each as a Product (name, url, image, offers)", t, strings.Join(names, ", "))
 			}
 			continue
 		}
 		// a guide's own pages, listed on its hub, are a part of the page
-		if guideLabel.MatchString(t) {
+		if webpage.GuideLabel.MatchString(t) {
 			var pages []string
-			for _, u := range p.siteLinks(box) {
+			for _, u := range p.SiteLinks(box) {
 				if !slices.Contains(pages, u) {
 					pages = append(pages, u)
 				}
 			}
 			if len(pages) >= 3 && slices.ContainsFunc(pages, func(u string) bool { return !d.URLs[u] }) {
-				c.add("html:"+selectorFor(p.doc, box), Warning, "the page's %q block lists %d pages of the site: add an ItemList of them (a ListItem for each with position, url and name) to the WebPage's hasPart; a hub page whose purpose is the list is a CollectionPage with the ItemList as its mainEntity", t, len(pages))
+				c.add("html:"+webpage.SelectorFor(p.Doc, box), Warning, "the page's %q block lists %d pages of the site: add an ItemList of them (a ListItem for each with position, url and name) to the WebPage's hasPart; a hub page whose purpose is the list is a CollectionPage with the ItemList as its mainEntity", t, len(pages))
 			}
 			continue
 		}
 		var missing []string
-		visit(box, func(a *xhtml.Node) {
+		webpage.Visit(box, func(a *xhtml.Node) {
 			if a.DataAtom != atom.A {
 				return
 			}
-			h, _ := attr(a, "href")
+			h, _ := webpage.Attr(a, "href")
 			pu, err := url.Parse(strings.TrimSpace(h))
 			if h == "" || strings.HasPrefix(h, "#") || err != nil {
 				return
 			}
-			if p.base != nil {
-				pu = p.base.ResolveReference(pu)
+			if p.Base != nil {
+				pu = p.Base.ResolveReference(pu)
 			}
-			if (p.base != nil && !strings.EqualFold(pu.Hostname(), p.base.Hostname())) || (p.base == nil && pu.IsAbs()) {
+			if (p.Base != nil && !strings.EqualFold(pu.Hostname(), p.Base.Hostname())) || (p.Base == nil && pu.IsAbs()) {
 				return
 			}
 			if link := pu.String(); !slices.Contains(rel, txt.NormURL(pu)) && !slices.Contains(missing, link) {
@@ -1201,7 +1029,7 @@ func (c *checker) related(all []jsonld.Node, p *pageFacts, d *jsonld.Index) {
 			}
 		})
 		if len(missing) > 0 {
-			c.add("html:"+selectorFor(p.doc, box), Warning, "the page's %q links are not in the WebPage's relatedLink: add %s", t, strings.Join(missing, ", "))
+			c.add("html:"+webpage.SelectorFor(p.Doc, box), Warning, "the page's %q links are not in the WebPage's relatedLink: add %s", t, strings.Join(missing, ", "))
 		}
 	}
 }
@@ -1219,8 +1047,8 @@ var responseTime = regexp.MustCompile(`(?i)\b(?:repl(?:y|ies)|responds?|response
 
 // responseTime warns when the page promises a reply time and no
 // ServiceChannel has it as processingTime.
-func (c *checker) responseTime(all []jsonld.Node, p *pageFacts) {
-	m := responseTime.FindString(p.text)
+func (c *checker) responseTime(all []jsonld.Node, p *webpage.Facts) {
+	m := responseTime.FindString(p.Text)
 	if m == "" || slices.ContainsFunc(all, func(l jsonld.Node) bool { return len(jsonld.Scalars(l.N, "processingTime")) > 0 }) {
 		return
 	}
@@ -1240,7 +1068,7 @@ var (
 // prices warns on prices the page shows that no price property carries, on
 // a price without its currency, and on tax wording the PriceSpecification
 // does not match.
-func (c *checker) prices(all []jsonld.Node, p *pageFacts) {
+func (c *checker) prices(all []jsonld.Node, p *webpage.Facts) {
 	// marked holds every amount the draft carries; sold, only the prices of
 	// things for sale, which tax wording is about (a shipping rate's
 	// MonetaryAmount is not one)
@@ -1266,7 +1094,7 @@ func (c *checker) prices(all []jsonld.Node, p *pageFacts) {
 	// prices in the site's header, footer and menus, a saving ("save $50")
 	// and an instalment are no item's price; the shop checks report the
 	// prices they own (was prices, shipping rates, product cards)
-	ms := txt.PriceAmount.FindAllStringSubmatch(notPrices.ReplaceAllString(p.main, " "), -1)
+	ms := txt.PriceAmount.FindAllStringSubmatch(notPrices.ReplaceAllString(p.Main, " "), -1)
 	if len(ms) == 0 {
 		return
 	}
@@ -1280,19 +1108,19 @@ func (c *checker) prices(all []jsonld.Node, p *pageFacts) {
 		}
 		seen[f] = true
 		anySold = anySold || sold[f]
-		if !marked[f] && !p.claimed[f] {
+		if !marked[f] && !c.claimed[f] {
 			missing = append(missing, strings.TrimSpace(m[0]))
 		}
 	}
 	switch {
 	case len(missing) == 0:
-	case p.sells():
+	case p.Sells():
 		c.add(pagePath, Warning, "the page shows prices (%s) that no price property carries: mark each up on the item it is the price of, as an Offer's price or, for a range, an AggregateOffer's lowPrice and highPrice, with priceCurrency and offerCount", strings.Join(missing, ", "))
 	default:
 		// a site that sells nothing shows what others charge
 		c.add(pagePath, Warning, "the page shows prices (%s) that no price property carries: mark each up on the thing it is the price of, as a MonetaryAmount (value, or minValue and maxValue, currency) for a cost or estimate of what others charge, or an Offer's price only for what the business itself sells", strings.Join(missing, ", "))
 	}
-	t := taxWords.FindStringSubmatch(p.text)
+	t := taxWords.FindStringSubmatch(p.Text)
 	if t == nil || !anySold {
 		return
 	}
@@ -1315,8 +1143,8 @@ func (c *checker) prices(all []jsonld.Node, p *pageFacts) {
 // its figure.
 func attribution(n *xhtml.Node) string {
 	for e := n; e != nil && e.DataAtom != atom.Body; e = e.Parent {
-		if cs := queryAll(e, "cite"); len(cs) > 0 {
-			return " (" + strings.TrimSpace(htmlText(cs[0])) + ")"
+		if cs := webpage.QueryAll(e, "cite"); len(cs) > 0 {
+			return " (" + strings.TrimSpace(webpage.HTMLText(cs[0])) + ")"
 		}
 		if e.DataAtom == atom.Figure {
 			break
@@ -1330,8 +1158,8 @@ func attribution(n *xhtml.Node) string {
 // testimonial is a Review, another quote a Quotation. A string of three
 // words or more carries a quote it contains; a shorter one only the quote it
 // is.
-func (c *checker) quotes(p *pageFacts, d *jsonld.Index) {
-	if p.doc == nil {
+func (c *checker) quotes(p *webpage.Facts, d *jsonld.Index) {
+	if p.Doc == nil {
 		return
 	}
 	var carried []string
@@ -1343,8 +1171,8 @@ func (c *checker) quotes(p *pageFacts, d *jsonld.Index) {
 			carried = append(carried, " "+w+" ")
 		}
 	}
-	visit(p.doc, func(n *xhtml.Node) {
-		text, who := htmlText(n), ""
+	webpage.Visit(p.Doc, func(n *xhtml.Node) {
+		text, who := webpage.HTMLText(n), ""
 		switch {
 		case n.DataAtom == atom.Blockquote:
 			who = attribution(n)
@@ -1361,7 +1189,7 @@ func (c *checker) quotes(p *pageFacts, d *jsonld.Index) {
 		if q == "" || exact[q] || slices.ContainsFunc(carried, func(s string) bool { return strings.Contains(s, " "+q+" ") }) {
 			return
 		}
-		c.add("html:"+selectorFor(p.doc, n), Warning, "the page quotes %q%s and no node carries it: a customer's opinion of a business, product or service is a Review of it (reviewBody, author, itemReviewed); another quotation is a Quotation (text, creator)", txt.Clip(text, 60), who)
+		c.add("html:"+webpage.SelectorFor(p.Doc, n), Warning, "the page quotes %q%s and no node carries it: a customer's opinion of a business, product or service is a Review of it (reviewBody, author, itemReviewed); another quotation is a Quotation (text, creator)", txt.Clip(text, 60), who)
 	})
 }
 
@@ -1378,7 +1206,7 @@ func pullQuote(n *xhtml.Node) (quote, who string, ok bool) {
 			return "", "", false
 		}
 	}
-	t := strings.TrimSpace(htmlText(n))
+	t := strings.TrimSpace(webpage.HTMLText(n))
 	for open, shut := range quoteMarks {
 		if !strings.HasPrefix(t, open) {
 			continue
@@ -1389,7 +1217,7 @@ func pullQuote(n *xhtml.Node) (quote, who string, ok bool) {
 		}
 		quote = strings.TrimSpace(t[len(open) : len(open)+end])
 		rest := strings.TrimSpace(t[len(open)+end+len(shut):])
-		cites := queryAll(n, "cite")
+		cites := webpage.QueryAll(n, "cite")
 		if n.Parent != nil {
 			for ch := n.Parent.FirstChild; ch != nil; ch = ch.NextSibling {
 				if ch.DataAtom == atom.Cite {
@@ -1399,7 +1227,7 @@ func pullQuote(n *xhtml.Node) (quote, who string, ok bool) {
 		}
 		switch {
 		case len(cites) > 0:
-			who = strings.TrimSpace(htmlText(cites[0]))
+			who = strings.TrimSpace(webpage.HTMLText(cites[0]))
 		case strings.HasPrefix(rest, "@") || strings.HasPrefix(rest, "—") || strings.HasPrefix(rest, "–") || strings.HasPrefix(rest, "-"):
 			who = strings.TrimSpace(strings.TrimLeft(rest, "—–- "))
 		}
@@ -1417,20 +1245,20 @@ var ratingShown = regexp.MustCompile(`(?i)\b(\d(?:\.\d)?)\s*(?:/\s*(?:5|10)\b|ou
 
 // ratings warns on ratings the page shows that no Rating carries as its
 // ratingValue.
-func (c *checker) ratings(all []jsonld.Node, p *pageFacts) {
+func (c *checker) ratings(all []jsonld.Node, p *webpage.Facts) {
 	var shownVals [][]string
-	for _, loc := range ratingShown.FindAllStringSubmatchIndex(p.text, -1) {
-		m := p.text[loc[0]:loc[1]]
+	for _, loc := range ratingShown.FindAllStringSubmatchIndex(p.Text, -1) {
+		m := p.Text[loc[0]:loc[1]]
 		// "1 / 10" with no rating word before it is a gallery's counter
-		if integerOutOf.MatchString(m) && !ratingWord.MatchString(p.text[max(0, loc[0]-30):loc[0]]) {
+		if integerOutOf.MatchString(m) && !ratingWord.MatchString(p.Text[max(0, loc[0]-30):loc[0]]) {
 			continue
 		}
-		shownVals = append(shownVals, []string{m, p.text[loc[2]:loc[3]]})
+		shownVals = append(shownVals, []string{m, p.Text[loc[2]:loc[3]]})
 	}
-	if p.doc != nil {
-		visit(p.doc, func(n *xhtml.Node) {
+	if p.Doc != nil {
+		webpage.Visit(p.Doc, func(n *xhtml.Node) {
 			for _, k := range []string{"aria-label", "title"} {
-				if v, ok := attr(n, k); ok {
+				if v, ok := webpage.Attr(n, k); ok {
 					shownVals = append(shownVals, ratingShown.FindAllStringSubmatch(v, -1)...)
 				}
 			}

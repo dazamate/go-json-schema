@@ -8,6 +8,7 @@ import (
 
 	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/txt"
+	"github.com/dazamate/go-json-schema/internal/vocabtool/webpage"
 	xhtml "golang.org/x/net/html"
 )
 
@@ -16,8 +17,8 @@ import (
 // measure.
 
 // figures runs the figure checks.
-func (c *checker) figures(all []jsonld.Node, p *pageFacts, d *jsonld.Index) {
-	if p.doc == nil {
+func (c *checker) figures(all []jsonld.Node, p *webpage.Facts, d *jsonld.Index) {
+	if p.Doc == nil {
 		return
 	}
 	c.charts(all, p, d)
@@ -30,15 +31,15 @@ func (c *checker) figures(all []jsonld.Node, p *pageFacts, d *jsonld.Index) {
 
 // charts warn on figures drawn in SVG, with a caption, that no ImageObject
 // carries: images reads only img elements.
-func (c *checker) charts(all []jsonld.Node, p *pageFacts, d *jsonld.Index) {
+func (c *checker) charts(all []jsonld.Node, p *webpage.Facts, d *jsonld.Index) {
 	var first *xhtml.Node
 	var caps []string
-	for _, f := range queryAll(p.doc, "figure") {
-		fc := queryAll(f, "figcaption")
-		if chrome(f) || !shown(f) || len(fc) == 0 || len(queryAll(f, "svg")) == 0 || len(queryAll(f, "img, video, iframe, table")) > 0 {
+	for _, f := range webpage.QueryAll(p.Doc, "figure") {
+		fc := webpage.QueryAll(f, "figcaption")
+		if webpage.Chrome(f) || !webpage.Shown(f) || len(fc) == 0 || len(webpage.QueryAll(f, "svg")) == 0 || len(webpage.QueryAll(f, "img, video, iframe, table")) > 0 {
 			continue
 		}
-		cp := htmlText(fc[0])
+		cp := webpage.HTMLText(fc[0])
 		if cp == "" || heldText(d, cp) {
 			continue
 		}
@@ -54,28 +55,28 @@ func (c *checker) charts(all []jsonld.Node, p *pageFacts, d *jsonld.Index) {
 	if len(caps) > 1 {
 		what = fmt.Sprintf("%d charts (%s)", len(caps), txt.Examples(caps))
 	}
-	c.add("html:"+selectorFor(p.doc, first), Warning, "the page draws %s with no ImageObject: add one for each (caption word for word, encodingFormat image/svg+xml, about the Dataset it draws) as the image of the WebPage or the Dataset", what)
+	c.add("html:"+webpage.SelectorFor(p.Doc, first), Warning, "the page draws %s with no ImageObject: add one for each (caption word for word, encodingFormat image/svg+xml, about the Dataset it draws) as the image of the WebPage or the Dataset", what)
 }
 
 // summary warns on a block that sums the page up (Key takeaways, TL;DR, At
 // a glance) when the markup has no abstract and no speakable part.
-func (c *checker) summary(all []jsonld.Node, p *pageFacts) {
-	if jsonld.HasKey(all, "abstract") || jsonld.HasKey(all, "speakable") || p.sells() {
+func (c *checker) summary(all []jsonld.Node, p *webpage.Facts) {
+	if jsonld.HasKey(all, "abstract") || jsonld.HasKey(all, "speakable") || p.Sells() {
 		return
 	}
-	for _, n := range queryAll(p.doc, "aside, section, div, ul, ol") {
-		if chrome(n) || !shown(n) {
+	for _, n := range webpage.QueryAll(p.Doc, "aside, section, div, ul, ol") {
+		if webpage.Chrome(n) || !webpage.Shown(n) {
 			continue
 		}
-		label, _ := attr(n, "aria-label")
-		if !summaryLabel.MatchString(label) {
-			h := queryAll(n, "h2, h3")
-			if len(h) == 0 || len(strings.Fields(htmlText(h[0]))) > 4 || !summaryLabel.MatchString(htmlText(h[0])) {
+		label, _ := webpage.Attr(n, "aria-label")
+		if !webpage.SummaryLabel.MatchString(label) {
+			h := webpage.QueryAll(n, "h2, h3")
+			if len(h) == 0 || len(strings.Fields(webpage.HTMLText(h[0]))) > 4 || !webpage.SummaryLabel.MatchString(webpage.HTMLText(h[0])) {
 				continue
 			}
-			label = htmlText(h[0])
+			label = webpage.HTMLText(h[0])
 		}
-		c.add("html:"+selectorFor(p.doc, n), Warning, "the page's %q block sums the page up: set its text as the Article's abstract, or point a SpeakableSpecification's cssSelector at it (the WebPage's speakable), or give each line as a Statement (text) in the WebPage's hasPart", label)
+		c.add("html:"+webpage.SelectorFor(p.Doc, n), Warning, "the page's %q block sums the page up: set its text as the Article's abstract, or point a SpeakableSpecification's cssSelector at it (the WebPage's speakable), or give each line as a Statement (text) in the WebPage's hasPart", label)
 		return
 	}
 }
@@ -89,23 +90,23 @@ var (
 // vehicles warn on a table that lists vehicles with their capacity (truck
 // sizes and what each holds) when no node names them. A table whose caption
 // or header names vehicles lists one in each row (10 ft, 15 ft).
-func (c *checker) vehicles(p *pageFacts, d *jsonld.Index) {
-	for _, tbl := range queryAll(p.doc, "table") {
-		if chrome(tbl) || !capacity.MatchString(htmlText(tbl)) {
+func (c *checker) vehicles(p *webpage.Facts, d *jsonld.Index) {
+	for _, tbl := range webpage.QueryAll(p.Doc, "table") {
+		if webpage.Chrome(tbl) || !capacity.MatchString(webpage.HTMLText(tbl)) {
 			continue
 		}
 		head := ""
-		for _, n := range queryAll(tbl, "caption, thead, tr:first-child th") {
-			head += " " + htmlText(n)
+		for _, n := range webpage.QueryAll(tbl, "caption, thead, tr:first-child th") {
+			head += " " + webpage.HTMLText(n)
 		}
 		every := vehicleName.MatchString(head) || vehicleKind.MatchString(head)
 		var names []string
-		for _, tr := range queryAll(tbl, "tr") {
-			cells := queryAll(tr, "th, td")
-			if len(cells) < 2 || len(queryAll(tr, "td")) == 0 {
+		for _, tr := range webpage.QueryAll(tbl, "tr") {
+			cells := webpage.QueryAll(tr, "th, td")
+			if len(cells) < 2 || len(webpage.QueryAll(tr, "td")) == 0 {
 				continue
 			}
-			if n := htmlText(cells[0]); (every || vehicleName.MatchString(n)) && len(strings.Fields(n)) <= 5 && !heldText(d, n) {
+			if n := webpage.HTMLText(cells[0]); (every || vehicleName.MatchString(n)) && len(strings.Fields(n)) <= 5 && !heldText(d, n) {
 				names = append(names, n)
 			}
 		}
@@ -113,14 +114,14 @@ func (c *checker) vehicles(p *pageFacts, d *jsonld.Index) {
 			continue
 		}
 		name := ""
-		if cs := queryAll(tbl, "caption"); len(cs) > 0 {
-			name = htmlText(cs[0])
+		if cs := webpage.QueryAll(tbl, "caption"); len(cs) > 0 {
+			name = webpage.HTMLText(cs[0])
 		}
 		at := tbl
 		if b := idBox(tbl); b != nil && b.DataAtom != 0 && slices.Contains([]string{"section", "article", "div", "figure"}, b.Data) {
 			at = b
 		}
-		c.add("html:"+selectorFor(p.doc, at), Warning, "the page's table %q lists vehicles (%s) with their capacity: add a Vehicle for each (name, cargoVolume, payload, vehicleConfiguration), in an ItemList or as the items of the Offer or Service they are for. A Vehicle is a kind of Product, and Search Console's Product snippets report marks one without offers, review or aggregateRating invalid: give each offers with the rental or sale price the page shows for it (an AggregateOffer for a range: lowPrice, highPrice, priceCurrency, offerCount)", name, txt.Examples(names))
+		c.add("html:"+webpage.SelectorFor(p.Doc, at), Warning, "the page's table %q lists vehicles (%s) with their capacity: add a Vehicle for each (name, cargoVolume, payload, vehicleConfiguration), in an ItemList or as the items of the Offer or Service they are for. A Vehicle is a kind of Product, and Search Console's Product snippets report marks one without offers, review or aggregateRating invalid: give each offers with the rental or sale price the page shows for it (an AggregateOffer for a range: lowPrice, highPrice, priceCurrency, offerCount)", name, txt.Examples(names))
 		return
 	}
 }
@@ -133,7 +134,7 @@ var (
 // definitions warn on terms the copy defines ("Released value, the basic
 // cover a mover includes, pays …", "A binding estimate means …") and uses
 // again, when no DefinedTerm names them.
-func (c *checker) definitions(all []jsonld.Node, p *pageFacts) {
+func (c *checker) definitions(all []jsonld.Node, p *webpage.Facts) {
 	var named []string
 	for _, l := range all {
 		if c.is(l.N, "DefinedTerm") {
@@ -142,10 +143,10 @@ func (c *checker) definitions(all []jsonld.Node, p *pageFacts) {
 			}
 		}
 	}
-	lower := strings.ToLower(p.main)
+	lower := strings.ToLower(p.Main)
 	var terms []string
 	for _, re := range []*regexp.Regexp{appositive, meansDef} {
-		for _, m := range re.FindAllStringSubmatch(p.main, -1) {
+		for _, m := range re.FindAllStringSubmatch(p.Main, -1) {
 			t := m[1]
 			if strings.Count(lower, strings.ToLower(t)) < 3 || slices.Contains(named, txt.NormWords(t)) || slices.Contains(terms, t) {
 				continue
@@ -168,8 +169,8 @@ var quantity = regexp.MustCompile(`(?i)(?:^|[^$\d.,])(\d[\d,]*(?:\.\d+)?(?:\s*(?
 // quantities warn on measured quantities a tool's output or a data element
 // gives (4–6.5 hours, 4,500–6,500 lb) whose numbers the markup does not hold.
 // A shop's sizes are the product checks'.
-func (c *checker) quantities(all []jsonld.Node, p *pageFacts) {
-	if p.sells() {
+func (c *checker) quantities(all []jsonld.Node, p *webpage.Facts) {
+	if p.Sells() {
 		return
 	}
 	held := map[float64]bool{}
@@ -185,11 +186,11 @@ func (c *checker) quantities(all []jsonld.Node, p *pageFacts) {
 		}
 	}
 	var list []string
-	for _, n := range queryAll(p.doc, "output, data") {
-		if chrome(n) {
+	for _, n := range webpage.QueryAll(p.Doc, "output, data") {
+		if webpage.Chrome(n) {
 			continue
 		}
-		for _, m := range quantity.FindAllStringSubmatch(htmlText(n), -1) {
+		for _, m := range quantity.FindAllStringSubmatch(webpage.HTMLText(n), -1) {
 			q := strings.TrimSpace(m[1] + " " + m[2])
 			all := true
 			for _, s := range numberIn.FindAllString(strings.ReplaceAll(m[1], ",", ""), -1) {
@@ -211,29 +212,29 @@ var proCon = regexp.MustCompile(`(?i)^(?:for it|against it|pros|cons|advantages|
 
 // options warn on a section that weighs options against each other, two or
 // more cards each with pros and cons headings, when no Guide carries it.
-func (c *checker) options(all []jsonld.Node, p *pageFacts) {
+func (c *checker) options(all []jsonld.Node, p *webpage.Facts) {
 	if c.has(all, "Guide") {
 		return
 	}
-	for _, s := range queryAll(p.doc, "section") {
-		if chrome(s) || !shown(s) {
+	for _, s := range webpage.QueryAll(p.Doc, "section") {
+		if webpage.Chrome(s) || !webpage.Shown(s) {
 			continue
 		}
 		var names []string
-		for _, a := range queryAll(s, "article, li") {
-			hs := queryAll(a, "h3, h4, h5")
+		for _, a := range webpage.QueryAll(s, "article, li") {
+			hs := webpage.QueryAll(a, "h3, h4, h5")
 			pc := 0
 			for _, h := range hs {
-				if proCon.MatchString(htmlText(h)) {
+				if proCon.MatchString(webpage.HTMLText(h)) {
 					pc++
 				}
 			}
-			if pc >= 2 && !proCon.MatchString(htmlText(hs[0])) {
-				names = append(names, htmlText(hs[0]))
+			if pc >= 2 && !proCon.MatchString(webpage.HTMLText(hs[0])) {
+				names = append(names, webpage.HTMLText(hs[0]))
 			}
 		}
 		if len(names) >= 2 {
-			c.add("html:"+selectorFor(p.doc, s), Warning, "the page weighs options (%s) with their pros and cons: make the Article a Guide (about each option, reviewAspect for each criterion it weighs)", txt.Examples(names))
+			c.add("html:"+webpage.SelectorFor(p.Doc, s), Warning, "the page weighs options (%s) with their pros and cons: make the Article a Guide (about each option, reviewAspect for each criterion it weighs)", txt.Examples(names))
 			return
 		}
 	}

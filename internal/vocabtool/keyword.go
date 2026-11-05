@@ -9,6 +9,7 @@ import (
 
 	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/txt"
+	"github.com/dazamate/go-json-schema/internal/vocabtool/webpage"
 )
 
 // DefaultKeywordDensity is the share of the markup's words, in percent, that
@@ -67,7 +68,7 @@ func density(hits, words, kwWords int) float64 {
 // headline and description properties must carry it, every description on the
 // page's own content nodes must reach the target density, and so must the
 // markup's text as a whole.
-func (c *checker) keyword(all []jsonld.Node, doc *jsonld.Object, keyword string, target float64, p *pageFacts) {
+func (c *checker) keyword(all []jsonld.Node, doc *jsonld.Object, keyword string, target float64, p *webpage.Facts) {
 	kw := txt.NormWords(keyword)
 	if kw == "" {
 		return
@@ -77,7 +78,7 @@ func (c *checker) keyword(all []jsonld.Node, doc *jsonld.Object, keyword string,
 	}
 	kwWords := len(strings.Fields(kw))
 	if p == nil {
-		p = &pageFacts{}
+		p = &webpage.Facts{}
 	}
 	page, hasPage := c.mainWebPage(all, p)
 	pageURL := ""
@@ -179,15 +180,15 @@ func (c *checker) keyword(all []jsonld.Node, doc *jsonld.Object, keyword string,
 
 // ownURL is the page's URL as its nodes' @ids start with it: its url, else
 // its @id without the fragment, else the page's address.
-func ownURL(n *jsonld.Object, p *pageFacts) string {
+func ownURL(n *jsonld.Object, p *webpage.Facts) string {
 	for _, s := range append(jsonld.Strs(n, "url"), jsonld.Strs(n, "@id")...) {
 		if u, err := url.Parse(s); err == nil && u.IsAbs() {
 			u.Fragment = ""
 			return u.String()
 		}
 	}
-	if p.url != nil {
-		u := *p.url
+	if p.URL != nil {
+		u := *p.URL
 		u.Fragment = ""
 		return u.String()
 	}
@@ -312,9 +313,9 @@ var looseProps = []string{"about", "mentions", "knowsAbout", "areaServed", "spat
 // own, so the page's entities read as loose things with no parent. Nesting
 // each where it is first referenced, keeping its @id, makes the graph one
 // tree.
-func (c *checker) looseNodes(all []jsonld.Node, p *pageFacts) {
+func (c *checker) looseNodes(all []jsonld.Node, p *webpage.Facts) {
 	if p == nil {
-		p = &pageFacts{}
+		p = &webpage.Facts{}
 	}
 	page, _ := c.mainWebPage(all, p)
 	own := map[*jsonld.Object]bool{page.N: true}

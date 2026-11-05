@@ -9,6 +9,7 @@ import (
 
 	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/txt"
+	"github.com/dazamate/go-json-schema/internal/vocabtool/webpage"
 	xhtml "golang.org/x/net/html"
 	"golang.org/x/net/html/atom"
 )
@@ -30,7 +31,7 @@ var (
 )
 
 // sources runs the source checks.
-func (c *checker) sources(all []jsonld.Node, p *pageFacts, d *jsonld.Index) {
+func (c *checker) sources(all []jsonld.Node, p *webpage.Facts, d *jsonld.Index) {
 	c.rules(p, d)
 	c.permits(all, p)
 	c.agencies(p, d)
@@ -45,21 +46,21 @@ func heldText(d *jsonld.Index, s string) bool {
 
 // rules warn on the laws and regulations the page cites ("49 CFR 375.401")
 // that no value in the draft names.
-func (c *checker) rules(p *pageFacts, d *jsonld.Index) {
+func (c *checker) rules(p *webpage.Facts, d *jsonld.Index) {
 	var list []string
-	for _, m := range ruleCite.FindAllString(p.main, -1) {
+	for _, m := range ruleCite.FindAllString(p.Main, -1) {
 		if !slices.Contains(list, m) && !heldText(d, m) {
 			list = append(list, m)
 		}
 	}
-	if p.doc != nil {
-		for _, a := range queryAll(p.doc, "a[href]") {
-			h, _ := attr(a, "href")
+	if p.Doc != nil {
+		for _, a := range webpage.QueryAll(p.Doc, "a[href]") {
+			h, _ := webpage.Attr(a, "href")
 			u, err := url.Parse(strings.TrimSpace(h))
-			if err != nil || !lawHost.MatchString(u.Hostname()) || chrome(a) {
+			if err != nil || !lawHost.MatchString(u.Hostname()) || webpage.Chrome(a) {
 				continue
 			}
-			if t := htmlText(a); t != "" && !slices.Contains(list, t) && !heldText(d, t) && !d.URLs[txt.NormURL(u)] {
+			if t := webpage.HTMLText(a); t != "" && !slices.Contains(list, t) && !heldText(d, t) && !d.URLs[txt.NormURL(u)] {
 				list = append(list, t)
 			}
 		}
@@ -76,9 +77,9 @@ func (c *checker) rules(p *pageFacts, d *jsonld.Index) {
 
 // govLink is a link to a government site, outside the page's chrome.
 func govLink(a *xhtml.Node) (*url.URL, bool) {
-	h, _ := attr(a, "href")
+	h, _ := webpage.Attr(a, "href")
 	u, err := url.Parse(strings.TrimSpace(h))
-	if err != nil || !u.IsAbs() || !govHost.MatchString(u.Hostname()) || lawHost.MatchString(u.Hostname()) || chrome(a) {
+	if err != nil || !u.IsAbs() || !govHost.MatchString(u.Hostname()) || lawHost.MatchString(u.Hostname()) || webpage.Chrome(a) {
 		return nil, false
 	}
 	return u, true
@@ -86,29 +87,29 @@ func govLink(a *xhtml.Node) (*url.URL, bool) {
 
 // permits warn on a section that explains a permit or licence a government
 // issues, by a link to its site, when no Permit is in the draft.
-func (c *checker) permits(all []jsonld.Node, p *pageFacts) {
-	if p.doc == nil || c.has(all, "Permit") {
+func (c *checker) permits(all []jsonld.Node, p *webpage.Facts) {
+	if p.Doc == nil || c.has(all, "Permit") {
 		return
 	}
 	var done []*xhtml.Node
-	for _, s := range queryAll(p.doc, "section, article") {
-		if chrome(s) || !shown(s) || slices.ContainsFunc(done, func(o *xhtml.Node) bool { return slices.Contains(ancestors(s), o) }) {
+	for _, s := range webpage.QueryAll(p.Doc, "section, article") {
+		if webpage.Chrome(s) || !webpage.Shown(s) || slices.ContainsFunc(done, func(o *xhtml.Node) bool { return slices.Contains(ancestors(s), o) }) {
 			continue
 		}
 		// the permit is the section's topic: its heading says so, or a part
 		// of the page names it with its fee or lead time
-		text := htmlText(s)
-		head := sectionName(s)
+		text := webpage.HTMLText(s)
+		head := webpage.SectionName(s)
 		named := permitName.FindStringSubmatch(text)
-		leaf := len(queryAll(s, "section, article")) == 0
+		leaf := len(webpage.QueryAll(s, "section, article")) == 0
 		if !permitWord.MatchString(head) && (named == nil || !leaf || !permitTerms.MatchString(text)) {
 			continue
 		}
 		var issuer string
-		for _, a := range queryAll(s, "a[href]") {
+		for _, a := range webpage.QueryAll(s, "a[href]") {
 			if u, ok := govLink(a); ok {
 				issuer = u.Hostname()
-				if t := htmlText(a); len(strings.Fields(t)) <= 8 && agencyName.MatchString(t) {
+				if t := webpage.HTMLText(a); len(strings.Fields(t)) <= 8 && agencyName.MatchString(t) {
 					issuer = fmt.Sprintf("%s (%s)", t, u.Hostname())
 				}
 				break
@@ -122,14 +123,14 @@ func (c *checker) permits(all []jsonld.Node, p *pageFacts) {
 		if named != nil && !permitWord.MatchString(head) {
 			name = strings.TrimSpace(strings.TrimPrefix(strings.TrimPrefix(named[1], "A "), "The "))
 		}
-		c.add("html:"+selectorFor(p.doc, s), Warning, "the page explains the permit %q (from %s): add a GovernmentPermit (name, issuedBy the GovernmentOrganization, issuedThrough the GovernmentService that issues it, validIn the City or State, validFor, offers for its fee, url)", name, issuer)
+		c.add("html:"+webpage.SelectorFor(p.Doc, s), Warning, "the page explains the permit %q (from %s): add a GovernmentPermit (name, issuedBy the GovernmentOrganization, issuedThrough the GovernmentService that issues it, validIn the City or State, validFor, offers for its fee, url)", name, issuer)
 	}
 }
 
 // agencies warn on the government agencies the page links that no value in
 // the draft names: their sites, by host.
-func (c *checker) agencies(p *pageFacts, d *jsonld.Index) {
-	if p.doc == nil {
+func (c *checker) agencies(p *webpage.Facts, d *jsonld.Index) {
+	if p.Doc == nil {
 		return
 	}
 	hosts := map[string]bool{}
@@ -140,7 +141,7 @@ func (c *checker) agencies(p *pageFacts, d *jsonld.Index) {
 	}
 	var list []string
 	seen := map[string]bool{}
-	for _, a := range queryAll(p.doc, "a[href]") {
+	for _, a := range webpage.QueryAll(p.Doc, "a[href]") {
 		u, ok := govLink(a)
 		host := ""
 		if ok {
@@ -151,7 +152,7 @@ func (c *checker) agencies(p *pageFacts, d *jsonld.Index) {
 		}
 		seen[host] = true
 		// a link names the agency, or else the page it links to
-		name := htmlText(a)
+		name := webpage.HTMLText(a)
 		if heldText(d, name) {
 			continue
 		}
@@ -166,15 +167,15 @@ func (c *checker) agencies(p *pageFacts, d *jsonld.Index) {
 }
 
 // documents warn on the documents the page links (PDFs) that no node names.
-func (c *checker) documents(p *pageFacts, d *jsonld.Index) {
+func (c *checker) documents(p *webpage.Facts, d *jsonld.Index) {
 	var list []string
-	for _, a := range queryAll(p.doc, "a[href]") {
-		h, _ := attr(a, "href")
+	for _, a := range webpage.QueryAll(p.Doc, "a[href]") {
+		h, _ := webpage.Attr(a, "href")
 		u, err := url.Parse(strings.TrimSpace(h))
-		if err != nil || chrome(a) || !strings.HasSuffix(strings.ToLower(u.Path), ".pdf") || d.URLs[p.abs(h)] {
+		if err != nil || webpage.Chrome(a) || !strings.HasSuffix(strings.ToLower(u.Path), ".pdf") || d.URLs[p.Abs(h)] {
 			continue
 		}
-		if t := htmlText(a); t != "" && !heldText(d, t) {
+		if t := webpage.HTMLText(a); t != "" && !heldText(d, t) {
 			list = append(list, fmt.Sprintf("%q", t))
 		}
 	}
@@ -186,8 +187,8 @@ func (c *checker) documents(p *pageFacts, d *jsonld.Index) {
 // citations warn on the sources the page credits, in cite elements and
 // "Source:" lines, that no value in the draft names. A quote's cite names its
 // author, which the quote checks read.
-func (c *checker) citations(p *pageFacts, d *jsonld.Index) {
-	if p.doc == nil {
+func (c *checker) citations(p *webpage.Facts, d *jsonld.Index) {
+	if p.Doc == nil {
 		return
 	}
 	var list []string
@@ -200,24 +201,24 @@ func (c *checker) citations(p *pageFacts, d *jsonld.Index) {
 		}
 		list = append(list, txt.Clip(s, 60))
 	}
-	for _, n := range queryAll(p.doc, "cite") {
-		if chrome(n) || !shown(n) || slices.ContainsFunc(ancestors(n), func(e *xhtml.Node) bool {
-			return e.DataAtom == atom.Blockquote || e.DataAtom == atom.Figure && len(queryAll(e, "blockquote")) > 0
+	for _, n := range webpage.QueryAll(p.Doc, "cite") {
+		if webpage.Chrome(n) || !webpage.Shown(n) || slices.ContainsFunc(ancestors(n), func(e *xhtml.Node) bool {
+			return e.DataAtom == atom.Blockquote || e.DataAtom == atom.Figure && len(webpage.QueryAll(e, "blockquote")) > 0
 		}) {
 			continue
 		}
 		// an @handle, or a cite beside a quotation, attributes a quote
-		if t := htmlText(n); strings.HasPrefix(t, "@") || (n.Parent != nil && quoted.MatchString(htmlText(n.Parent))) {
+		if t := webpage.HTMLText(n); strings.HasPrefix(t, "@") || (n.Parent != nil && quoted.MatchString(webpage.HTMLText(n.Parent))) {
 			continue
 		}
-		add(htmlText(n))
+		add(webpage.HTMLText(n))
 	}
-	for _, line := range mainLines(p.doc) { // a source line ends with its block
+	for _, line := range webpage.MainLines(p.Doc) { // a source line ends with its block
 		for _, m := range sourceLine.FindAllStringSubmatch(line, -1) {
 			add(m[1])
 		}
 	}
-	for _, s := range labelledSources(p.doc) {
+	for _, s := range labelledSources(p.Doc) {
 		if m := sourceLine.FindStringSubmatch("Source: " + s); m != nil {
 			add(m[1])
 		}
@@ -240,10 +241,10 @@ func labelledSources(doc *xhtml.Node) []string {
 	var walk func(*xhtml.Node)
 	walk = func(n *xhtml.Node) {
 		for ch := n.FirstChild; ch != nil; ch = ch.NextSibling {
-			if ch.Type != xhtml.ElementNode || skipped(ch) {
+			if ch.Type != xhtml.ElementNode || webpage.Skipped(ch) {
 				continue
 			}
-			if !lineBreaks[ch.DataAtom] || chrome(ch) || !sourceLabel.MatchString(htmlText(ch)) {
+			if !webpage.LineBreaks[ch.DataAtom] || webpage.Chrome(ch) || !sourceLabel.MatchString(webpage.HTMLText(ch)) {
 				walk(ch)
 				continue
 			}
@@ -251,12 +252,12 @@ func labelledSources(doc *xhtml.Node) []string {
 			case next == nil:
 			case next.DataAtom == atom.Ul || next.DataAtom == atom.Ol:
 				for li := next.FirstChild; li != nil; li = li.NextSibling {
-					if li.DataAtom == atom.Li && !skipped(li) {
-						out = append(out, htmlText(li))
+					if li.DataAtom == atom.Li && !webpage.Skipped(li) {
+						out = append(out, webpage.HTMLText(li))
 					}
 				}
 			default:
-				out = append(out, htmlText(next))
+				out = append(out, webpage.HTMLText(next))
 			}
 		}
 	}

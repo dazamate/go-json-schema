@@ -7,6 +7,7 @@ import (
 
 	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/txt"
+	"github.com/dazamate/go-json-schema/internal/vocabtool/webpage"
 	xhtml "golang.org/x/net/html"
 	"golang.org/x/net/html/atom"
 )
@@ -35,13 +36,13 @@ type dataBlock struct {
 // dataBlocks are the sections that show a captioned figure or table, each
 // with its source: the first cite in it, else its "Source:" line, up to the
 // colon that starts the detail.
-func (p *pageFacts) dataBlocks() []dataBlock {
-	if p.doc == nil {
+func dataBlocks(p *webpage.Facts) []dataBlock {
+	if p.Doc == nil {
 		return nil
 	}
 	var out []dataBlock
-	for _, cap := range queryAll(p.doc, "figcaption, caption") {
-		if chrome(cap) || !shown(cap) {
+	for _, cap := range webpage.QueryAll(p.Doc, "figcaption, caption") {
+		if webpage.Chrome(cap) || !webpage.Shown(cap) {
 			continue
 		}
 		var box *xhtml.Node
@@ -55,13 +56,13 @@ func (p *pageFacts) dataBlocks() []dataBlock {
 			continue
 		}
 		source := ""
-		if cs := queryAll(box, "cite"); len(cs) > 0 {
-			source = htmlText(cs[0])
-		} else if m := sourceText.FindStringSubmatch(htmlText(box)); m != nil {
+		if cs := webpage.QueryAll(box, "cite"); len(cs) > 0 {
+			source = webpage.HTMLText(cs[0])
+		} else if m := sourceText.FindStringSubmatch(webpage.HTMLText(box)); m != nil {
 			source = m[1]
 		}
 		source, _, _ = strings.Cut(source, ":")
-		out = append(out, dataBlock{box, htmlText(cap), strings.TrimSpace(source)})
+		out = append(out, dataBlock{box, webpage.HTMLText(cap), strings.TrimSpace(source)})
 	}
 	return out
 }
@@ -69,7 +70,7 @@ func (p *pageFacts) dataBlocks() []dataBlock {
 // data warns on the page's data blocks that no Dataset describes, their lead
 // figures that no Observation carries, and a pay table that no Occupation's
 // estimatedSalary carries. A pay table's amounts are wages, not prices.
-func (c *checker) data(all []jsonld.Node, p *pageFacts, d *jsonld.Index) {
+func (c *checker) data(all []jsonld.Node, p *webpage.Facts, d *jsonld.Index) {
 	var observed, stated []string
 	for _, l := range all {
 		if c.is(l.N, "Observation") {
@@ -81,21 +82,21 @@ func (c *checker) data(all []jsonld.Node, p *pageFacts, d *jsonld.Index) {
 			}
 		}
 	}
-	for _, b := range p.dataBlocks() {
-		text := htmlText(b.n)
-		at := "html:" + selectorFor(p.doc, b.n)
+	for _, b := range dataBlocks(p) {
+		text := webpage.HTMLText(b.n)
+		at := "html:" + webpage.SelectorFor(p.Doc, b.n)
 		pay := payWords.MatchString(b.caption) && percentile.MatchString(text)
 		if pay {
-			p.claim(text)
+			c.claim(text)
 			if !jsonld.HasKey(all, "estimatedSalary") {
 				job := "the occupation"
 				if m := payFor.FindStringSubmatch(b.caption); m != nil {
 					job = strings.TrimSpace(m[1])
 				}
 				area := "the area"
-				for _, tr := range queryAll(b.n, "tr") {
-					if ths := queryAll(tr, "th"); len(ths) > 0 && len(queryAll(tr, "td")) > 0 {
-						area = htmlText(ths[0])
+				for _, tr := range webpage.QueryAll(b.n, "tr") {
+					if ths := webpage.QueryAll(tr, "th"); len(ths) > 0 && len(webpage.QueryAll(tr, "td")) > 0 {
+						area = webpage.HTMLText(ths[0])
 						break
 					}
 				}
@@ -112,8 +113,8 @@ func (c *checker) data(all []jsonld.Node, p *pageFacts, d *jsonld.Index) {
 			continue
 		}
 		// the block's lead sentence gives its headline figure
-		for _, para := range queryAll(b.n, "p") {
-			t := htmlText(para)
+		for _, para := range webpage.QueryAll(b.n, "p") {
+			t := webpage.HTMLText(para)
 			// a price is an estimate, not the data's figure
 			if inside(para, atom.Figure, atom.Details, atom.Small) || strings.Contains(t, "Source") || len(strings.Fields(t)) > 30 || txt.PriceAmount.MatchString(t) {
 				continue

@@ -11,6 +11,7 @@ import (
 
 	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/txt"
+	"github.com/dazamate/go-json-schema/internal/vocabtool/webpage"
 	xhtml "golang.org/x/net/html"
 	"golang.org/x/net/html/atom"
 )
@@ -43,8 +44,8 @@ func holdsNumber(vals []string, f float64) bool {
 }
 
 // product runs the checks for a product page.
-func (c *checker) product(all []jsonld.Node, p *pageFacts, d *jsonld.Index) {
-	name := p.h1()
+func (c *checker) product(all []jsonld.Node, p *webpage.Facts, d *jsonld.Index) {
+	name := p.H1()
 	prods := c.products(all)
 	if len(prods) == 0 {
 		c.add(pagePath, Warning, "the page sells %q but no Product describes it: add a Product as the ItemPage's mainEntity (name, image, description, sku, brand a Brand, offers an Offer with url, price, priceCurrency, availability, itemCondition and seller the business)", txt.Clip(name, 80))
@@ -52,11 +53,11 @@ func (c *checker) product(all []jsonld.Node, p *pageFacts, d *jsonld.Index) {
 	c.choices(all, p)
 	c.sizes(all, p)
 	c.details(all, p)
-	head := name + " · " + p.title()
+	head := name + " · " + title(p)
 	if m := setOf.FindStringSubmatch(head); m != nil && !c.has(all, "ProductCollection") {
 		c.add(pagePath, Warning, "the page sells %q, a set of %s: type its Product a ProductCollection and list the pieces in includesObject, a TypeAndQuantityNode for each (typeOfGood, amountOfThisGood)", txt.Clip(name, 80), firstNonEmpty(m[1:]...))
 	}
-	if m := oneOfAKind.FindString(head + " · " + p.main); m != "" && !c.has(all, "IndividualProduct") {
+	if m := oneOfAKind.FindString(head + " · " + p.Main); m != "" && !c.has(all, "IndividualProduct") {
 		c.add(pagePath, Warning, "the page says %q: type the Product IndividualProduct (with its serialNumber if it has one)", m)
 	}
 	if m := audienceWords.FindString(head); m != "" && !c.has(all, "PeopleAudience") {
@@ -71,22 +72,22 @@ func (c *checker) product(all []jsonld.Node, p *pageFacts, d *jsonld.Index) {
 		}
 		c.add(pagePath, Warning, "the product is named for %q: set its audience, a PeopleAudience (%s)", m, gender)
 	}
-	if m := madeIn.FindStringSubmatch(p.main); m != nil && !jsonld.HasKey(all, "countryOfOrigin") {
+	if m := madeIn.FindStringSubmatch(p.Main); m != nil && !jsonld.HasKey(all, "countryOfOrigin") {
 		c.add(pagePath, Warning, "the page says %q: set the Product's countryOfOrigin, a Country (name %s)", m[0], m[1])
 	}
-	if m := warranty.FindString(p.main); m != "" && !c.has(all, "WarrantyPromise") {
+	if m := warranty.FindString(p.Main); m != "" && !c.has(all, "WarrantyPromise") {
 		c.add(pagePath, Warning, "the page promises %q: set the Offer's warranty, a WarrantyPromise (durationOfWarranty a QuantitativeValue with unitCode ANN, warrantyScope)", m)
 	}
-	if m := certified.FindString(p.main); m != "" && !c.has(all, "Certification") {
+	if m := certified.FindString(p.Main); m != "" && !c.has(all, "Certification") {
 		c.add(pagePath, Warning, "the page says %q: set the Product's hasCertification, a Certification (name, issuedBy the certifying body, certificationIdentification)", m)
 	}
-	if p.doc != nil && !c.has(all, "3DModel") {
-		for _, n := range queryAll(p.doc, `model-viewer, [src$=".glb"], [src$=".gltf"], [href$=".usdz"], [href$=".glb"]`) {
-			src, _ := attr(n, "src")
+	if p.Doc != nil && !c.has(all, "3DModel") {
+		for _, n := range webpage.QueryAll(p.Doc, `model-viewer, [src$=".glb"], [src$=".gltf"], [href$=".usdz"], [href$=".glb"]`) {
+			src, _ := webpage.Attr(n, "src")
 			if src == "" {
-				src, _ = attr(n, "href")
+				src, _ = webpage.Attr(n, "href")
 			}
-			c.add("html:"+selectorFor(p.doc, n), Warning, "the page shows a 3D model (%s): add a 3DModel (contentUrl, encodingFormat) as the Product's subjectOf", src)
+			c.add("html:"+webpage.SelectorFor(p.Doc, n), Warning, "the page shows a 3D model (%s): add a 3DModel (contentUrl, encodingFormat) as the Product's subjectOf", src)
 			break
 		}
 	}
@@ -112,12 +113,12 @@ func firstNonEmpty(ss ...string) string {
 }
 
 // title is the page's title element.
-func (p *pageFacts) title() string {
-	if p.doc == nil {
+func title(p *webpage.Facts) string {
+	if p.Doc == nil {
 		return ""
 	}
-	for _, t := range queryAll(p.doc, "title") {
-		return htmlText(t)
+	for _, t := range webpage.QueryAll(p.Doc, "title") {
+		return webpage.HTMLText(t)
 	}
 	return ""
 }
@@ -165,32 +166,32 @@ func ownText(n *xhtml.Node) string {
 
 // optionGroups are the choices the page offers outside product cards: a
 // fieldset of radio buttons under a legend, or a labelled select.
-func (p *pageFacts) optionGroups() []optionGroup {
-	if p.doc == nil {
+func optionGroups(p *webpage.Facts) []optionGroup {
+	if p.Doc == nil {
 		return nil
 	}
 	label := func(n *xhtml.Node) string {
-		if id, _ := attr(n, "id"); id != "" {
-			for _, l := range queryAll(p.doc, "label[for]") {
-				if f, _ := attr(l, "for"); f == id {
-					return htmlText(l)
+		if id, _ := webpage.Attr(n, "id"); id != "" {
+			for _, l := range webpage.QueryAll(p.Doc, "label[for]") {
+				if f, _ := webpage.Attr(l, "for"); f == id {
+					return webpage.HTMLText(l)
 				}
 			}
 		}
-		v, _ := attr(n, "value")
+		v, _ := webpage.Attr(n, "value")
 		return v
 	}
 	var out []optionGroup
-	for _, fs := range queryAll(p.doc, "fieldset") {
-		if !shown(fs) || chrome(fs) || p.inCard(fs) {
+	for _, fs := range webpage.QueryAll(p.Doc, "fieldset") {
+		if !webpage.Shown(fs) || webpage.Chrome(fs) || p.InCard(fs) {
 			continue
 		}
 		g := optionGroup{}
-		for _, lg := range queryAll(fs, "legend") {
+		for _, lg := range webpage.QueryAll(fs, "legend") {
 			g.name = ownText(lg)
 			break
 		}
-		for _, in := range queryAll(fs, `input[type="radio"]`) {
+		for _, in := range webpage.QueryAll(fs, `input[type="radio"]`) {
 			if v := strings.TrimSpace(label(in)); v != "" && !slices.Contains(g.values, v) {
 				g.values = append(g.values, v)
 			}
@@ -199,18 +200,18 @@ func (p *pageFacts) optionGroups() []optionGroup {
 			out = append(out, g)
 		}
 	}
-	for _, sel := range queryAll(p.doc, "select") {
-		name, _ := attr(sel, "name")
-		id, _ := attr(sel, "id")
-		if !shown(sel) || chrome(sel) || p.inCard(sel) || optionSkip.MatchString(name+" "+id) {
+	for _, sel := range webpage.QueryAll(p.Doc, "select") {
+		name, _ := webpage.Attr(sel, "name")
+		id, _ := webpage.Attr(sel, "id")
+		if !webpage.Shown(sel) || webpage.Chrome(sel) || p.InCard(sel) || optionSkip.MatchString(name+" "+id) {
 			continue
 		}
 		g := optionGroup{name: strings.TrimSpace(label(sel))}
-		if l, _ := attr(sel, "aria-label"); g.name == "" || g.name == name {
+		if l, _ := webpage.Attr(sel, "aria-label"); g.name == "" || g.name == name {
 			g.name = orDefault(l, orDefault(g.name, name))
 		}
-		for _, o := range queryAll(sel, "option") {
-			if v := htmlText(o); v != "" && !optionBlank.MatchString(v) && !slices.Contains(g.values, v) {
+		for _, o := range webpage.QueryAll(sel, "option") {
+			if v := webpage.HTMLText(o); v != "" && !optionBlank.MatchString(v) && !slices.Contains(g.values, v) {
 				g.values = append(g.values, v)
 			}
 		}
@@ -224,8 +225,8 @@ func (p *pageFacts) optionGroups() []optionGroup {
 // choices warns when the page offers a choice of size, colour and the like
 // and the draft has no ProductGroup for it, or one whose variesBy or variants
 // do not say what they vary by.
-func (c *checker) choices(all []jsonld.Node, p *pageFacts) {
-	groups := p.optionGroups()
+func (c *checker) choices(all []jsonld.Node, p *webpage.Facts) {
+	groups := optionGroups(p)
 	if len(groups) == 0 {
 		return
 	}
@@ -317,8 +318,8 @@ var sizeMeasure = regexp.MustCompile(`\b(\d{1,2}(?:\.\d)?|XXS|XS|XXL|XL|[SML])\s
 
 // sizes warns when the page gives its sizes with their measurements (6 - 16mm
 // inner diameter) and no SizeSpecification carries them.
-func (c *checker) sizes(all []jsonld.Node, p *pageFacts) {
-	ms := sizeMeasure.FindAllStringSubmatch(p.main, -1)
+func (c *checker) sizes(all []jsonld.Node, p *webpage.Facts) {
+	ms := sizeMeasure.FindAllStringSubmatch(p.Main, -1)
 	if len(ms) < 2 || c.has(all, "SizeSpecification") {
 		return
 	}
@@ -374,13 +375,13 @@ func detailProp(label string) string {
 // keyValueList reports a dl of short values (Material: Silver), not a
 // glossary of definitions.
 func keyValueList(dl *xhtml.Node) bool {
-	dds := queryAll(dl, "dd")
+	dds := webpage.QueryAll(dl, "dd")
 	if len(dds) == 0 {
 		return false
 	}
 	long := 0
 	for _, dd := range dds {
-		t := htmlText(dd)
+		t := webpage.HTMLText(dd)
 		if len(strings.Fields(t)) >= 6 || strings.HasSuffix(t, ".") {
 			long++
 		}
@@ -393,13 +394,13 @@ func keyValueList(dl *xhtml.Node) bool {
 func pairs(dl *xhtml.Node) []detail {
 	var out []detail
 	var label string
-	visit(dl, func(n *xhtml.Node) {
+	webpage.Visit(dl, func(n *xhtml.Node) {
 		switch n.DataAtom {
 		case atom.Dt:
-			label = htmlText(n)
+			label = webpage.HTMLText(n)
 		case atom.Dd:
 			if label != "" {
-				out = append(out, detail{label, htmlText(n)})
+				out = append(out, detail{label, webpage.HTMLText(n)})
 				label = ""
 			}
 		}
@@ -410,28 +411,28 @@ func pairs(dl *xhtml.Node) []detail {
 // productDetails are the details a product page lists outside cards and its
 // header and footer: key/value lists, two-column tables, and "Material:
 // silver" lines.
-func (p *pageFacts) productDetails() []detail {
-	if p.doc == nil {
+func productDetails(p *webpage.Facts) []detail {
+	if p.Doc == nil {
 		return nil
 	}
 	var out []detail
-	keep := func(n *xhtml.Node) bool { return shown(n) && !chrome(n) && !p.inCard(n) }
-	for _, dl := range queryAll(p.doc, "dl") {
-		if keep(dl) && (keyValueList(dl) || p.kind == kindProduct) {
+	keep := func(n *xhtml.Node) bool { return webpage.Shown(n) && !webpage.Chrome(n) && !p.InCard(n) }
+	for _, dl := range webpage.QueryAll(p.Doc, "dl") {
+		if keep(dl) && (keyValueList(dl) || p.Kind == webpage.KindProduct) {
 			out = append(out, pairs(dl)...)
 		}
 	}
-	for _, tr := range queryAll(p.doc, "tr") {
-		cells := queryAll(tr, "th, td")
+	for _, tr := range webpage.QueryAll(p.Doc, "tr") {
+		cells := webpage.QueryAll(tr, "th, td")
 		if keep(tr) && len(cells) == 2 {
-			out = append(out, detail{htmlText(cells[0]), htmlText(cells[1])})
+			out = append(out, detail{webpage.HTMLText(cells[0]), webpage.HTMLText(cells[1])})
 		}
 	}
-	for _, n := range queryAll(p.doc, "li, p") {
+	for _, n := range webpage.QueryAll(p.Doc, "li, p") {
 		if !keep(n) {
 			continue
 		}
-		if m := detailLine.FindStringSubmatch(htmlText(n)); m != nil {
+		if m := detailLine.FindStringSubmatch(webpage.HTMLText(n)); m != nil {
 			out = append(out, detail{m[1], m[2]})
 		}
 	}
@@ -441,10 +442,10 @@ func (p *pageFacts) productDetails() []detail {
 // details warns on product details the page lists that the Product does not
 // carry: in the property the label names, or as an additionalProperty
 // PropertyValue of that name.
-func (c *checker) details(all []jsonld.Node, p *pageFacts) {
+func (c *checker) details(all []jsonld.Node, p *webpage.Facts) {
 	prods := c.products(all)
 	var missing []string
-	for _, d := range p.productDetails() {
+	for _, d := range productDetails(p) {
 		if !strings.ContainsFunc(d.value, unicode.IsLetter) && !strings.ContainsFunc(d.value, unicode.IsDigit) {
 			continue
 		}
@@ -537,19 +538,19 @@ var (
 // wasPrices are the was prices the page shows outside its header, footer and
 // navs: struck through, in an element marked as the old price, or written
 // after "was" or "RRP".
-func (p *pageFacts) wasPrices() []string {
+func wasPrices(p *webpage.Facts) []string {
 	var out []string
 	add := func(s string) {
 		if s = strings.TrimSpace(s); s != "" && !slices.Contains(out, s) {
 			out = append(out, s)
 		}
 	}
-	if p.doc != nil {
-		visit(p.doc, func(n *xhtml.Node) {
-			if chrome(n) {
+	if p.Doc != nil {
+		webpage.Visit(p.Doc, func(n *xhtml.Node) {
+			if webpage.Chrome(n) {
 				return
 			}
-			t := htmlText(n)
+			t := webpage.HTMLText(n)
 			ms := txt.PriceAmount.FindAllString(t, -1)
 			if len(ms) != 1 || len(strings.Fields(t)) > 3 {
 				return
@@ -560,14 +561,14 @@ func (p *pageFacts) wasPrices() []string {
 				return
 			}
 			for _, k := range []string{"class", "data-testid", "itemprop", "id"} {
-				if v, _ := attr(n, k); v != "" && wasClass.MatchString(v) {
+				if v, _ := webpage.Attr(n, k); v != "" && wasClass.MatchString(v) {
 					add(ms[0])
 					return
 				}
 			}
 		})
 	}
-	for _, m := range wasText.FindAllStringSubmatch(p.main, -1) {
+	for _, m := range wasText.FindAllStringSubmatch(p.Main, -1) {
 		add(m[1])
 	}
 	return out
@@ -575,8 +576,8 @@ func (p *pageFacts) wasPrices() []string {
 
 // sale warns on was prices no StrikethroughPrice carries, and on a discount
 // shown with no was price.
-func (c *checker) sale(all []jsonld.Node, p *pageFacts) {
-	was := p.wasPrices()
+func (c *checker) sale(all []jsonld.Node, p *webpage.Facts) {
+	was := wasPrices(p)
 	var marked []string
 	for _, l := range all {
 		if c.is(l.N, "PriceSpecification") && slices.ContainsFunc(jsonld.Strs(l.N, "priceType"), func(s string) bool {
@@ -587,19 +588,19 @@ func (c *checker) sale(all []jsonld.Node, p *pageFacts) {
 	}
 	var missing []string
 	for _, w := range was {
-		p.claim(w)
+		c.claim(w)
 		m := txt.PriceAmount.FindStringSubmatch(w)
 		if f, ok := txt.PriceOf(m); ok && !holdsNumber(marked, f) {
 			missing = append(missing, w)
 		}
 	}
 	switch {
-	case len(missing) == 1 && p.kind == kindProduct:
+	case len(missing) == 1 && p.Kind == webpage.KindProduct:
 		c.add(pagePath, Warning, "the page shows %s as a was price: add it to the Offer's priceSpecification as a UnitPriceSpecification with priceType https://schema.org/StrikethroughPrice and price %s, beside the sale price (Google's sale-price markup)", missing[0], txt.DigitsOf(missing[0]))
 	case len(missing) > 0:
 		c.add(pagePath, Warning, "the page shows was prices (%s) on sale items: give each item's Offer a UnitPriceSpecification with priceType https://schema.org/StrikethroughPrice and its was price", strings.Join(missing, ", "))
 	case len(was) == 0:
-		if m := discount.FindString(p.main); m != "" && len(marked) == 0 {
+		if m := discount.FindString(p.Main); m != "" && len(marked) == 0 {
 			c.add(pagePath, Warning, "the page shows a discount (%q) but no was price the markup can carry: show the was price, and mark it up as a UnitPriceSpecification with priceType https://schema.org/StrikethroughPrice", m)
 		}
 	}
@@ -607,10 +608,10 @@ func (c *checker) sale(all []jsonld.Node, p *pageFacts) {
 
 // offers warns on what the page says about its products' availability,
 // condition and sale dates that no Offer says.
-func (c *checker) stock(all []jsonld.Node, p *pageFacts) {
+func (c *checker) stock(all []jsonld.Node, p *webpage.Facts) {
 	levels := jsonld.Under(all, "inventoryLevel")
 	var low []string
-	for _, m := range lowStock.FindAllStringSubmatch(p.main, -1) {
+	for _, m := range lowStock.FindAllStringSubmatch(p.Main, -1) {
 		f, _ := txt.Amount(firstNonEmpty(m[1:]...))
 		if !holdsNumber(levels, f) && !jsonld.KeyMember(all, "availability", "LimitedAvailability") && !slices.Contains(low, m[0]) {
 			low = append(low, m[0])
@@ -622,27 +623,27 @@ func (c *checker) stock(all []jsonld.Node, p *pageFacts) {
 		}
 		c.add(pagePath, Warning, "the page says %s: set each such product's Offer inventoryLevel (a QuantitativeValue with the number left as value) and availability https://schema.org/LimitedAvailability", quoteAll(low))
 	}
-	for _, loc := range soldOut.FindAllStringIndex(p.main, -1) {
-		if soldOutSkip.MatchString(p.main[:loc[0]]) {
+	for _, loc := range soldOut.FindAllStringIndex(p.Main, -1) {
+		if soldOutSkip.MatchString(p.Main[:loc[0]]) {
 			continue
 		}
 		if !jsonld.KeyMember(all, "availability", "SoldOut", "OutOfStock") {
-			c.add(pagePath, Warning, "the page shows %q: set that product's Offer availability https://schema.org/SoldOut (or OutOfStock)", p.main[loc[0]:loc[1]])
+			c.add(pagePath, Warning, "the page shows %q: set that product's Offer availability https://schema.org/SoldOut (or OutOfStock)", p.Main[loc[0]:loc[1]])
 		}
 		break
 	}
-	if m := backOrder.FindString(p.main); m != "" && !jsonld.KeyMember(all, "availability", "BackOrder") {
+	if m := backOrder.FindString(p.Main); m != "" && !jsonld.KeyMember(all, "availability", "BackOrder") {
 		c.add(pagePath, Warning, "the page says %q: set the Offer's availability https://schema.org/BackOrder", m)
 	}
-	if m := preOrder.FindString(p.main); m != "" && (!jsonld.KeyMember(all, "availability", "PreOrder") || !c.has(all, "PreOrderAction")) {
+	if m := preOrder.FindString(p.Main); m != "" && (!jsonld.KeyMember(all, "availability", "PreOrder") || !c.has(all, "PreOrderAction")) {
 		c.add(pagePath, Warning, "the page takes pre-orders (%q): set the Offer's availability https://schema.org/PreOrder and add a PreOrderAction as its potentialAction (target the order form), with availabilityStarts when the page gives a date", m)
 	}
 	for _, cd := range conditions {
-		if m := cd.re.FindString(p.main); m != "" && !jsonld.KeyMember(all, "itemCondition", cd.member) {
+		if m := cd.re.FindString(p.Main); m != "" && !jsonld.KeyMember(all, "itemCondition", cd.member) {
 			c.add(pagePath, Warning, "the page says %q: set the Offer's itemCondition https://schema.org/%s (an OfferItemCondition)", m, cd.member)
 		}
 	}
-	if m := saleEnds.FindStringSubmatch(p.main); m != nil && !jsonld.HasKey(all, "priceValidUntil") {
+	if m := saleEnds.FindStringSubmatch(p.Main); m != nil && !jsonld.HasKey(all, "priceValidUntil") {
 		when := m[1]
 		for _, layout := range []string{"2 January 2006", "January 2, 2006", "January 2 2006", "2006-01-02"} {
 			if t, err := time.Parse(layout, m[1]); err == nil {
@@ -656,75 +657,75 @@ func (c *checker) stock(all []jsonld.Node, p *pageFacts) {
 
 // engagement warns on what the page invites a visitor to do with its
 // products, and on the review count it shows, that the markup lacks.
-func (c *checker) engagement(all []jsonld.Node, p *pageFacts) {
-	if m := reviewCount.FindStringSubmatch(p.main); m != nil {
+func (c *checker) engagement(all []jsonld.Node, p *webpage.Facts) {
+	if m := reviewCount.FindStringSubmatch(p.Main); m != nil {
 		n, _ := strconv.Atoi(strings.ReplaceAll(m[1], ",", ""))
 		counts := append(jsonld.Under(all, "reviewCount"), jsonld.Under(all, "ratingCount")...)
 		if n > 0 && !holdsNumber(counts, float64(n)) {
 			c.add(pagePath, Warning, "the page counts %d reviews: set the Product's aggregateRating, an AggregateRating (ratingValue, bestRating, reviewCount %d)", n, n)
 		}
 	}
-	if p.doc == nil {
+	if p.Doc == nil {
 		return
 	}
 	once := map[string]bool{}
-	visit(p.doc, func(n *xhtml.Node) {
+	webpage.Visit(p.Doc, func(n *xhtml.Node) {
 		if n.DataAtom != atom.A && n.DataAtom != atom.Button {
 			return
 		}
-		t := strings.TrimSpace(htmlText(n))
-		lbl, _ := attr(n, "aria-label")
-		href, _ := attr(n, "href")
+		t := strings.TrimSpace(webpage.HTMLText(n))
+		lbl, _ := webpage.Attr(n, "aria-label")
+		href, _ := webpage.Attr(n, "href")
 		switch {
 		case writeReview.MatchString(t) && !once["review"] && !c.has(all, "ReviewAction"):
 			once["review"] = true
-			c.add("html:"+selectorFor(p.doc, n), Warning, "the page invites reviews (%q): add a ReviewAction (target the review form) to the Product's potentialAction", t)
+			c.add("html:"+webpage.SelectorFor(p.Doc, n), Warning, "the page invites reviews (%q): add a ReviewAction (target the review form) to the Product's potentialAction", t)
 		case shareLink.MatchString(href) && !once["share"] && !c.has(all, "ShareAction"):
 			once["share"] = true
-			c.add("html:"+selectorFor(p.doc, n), Warning, "the page has share buttons: add a ShareAction to the page's (or the Product's) potentialAction")
-		case wishWords.MatchString(t+" "+lbl) && !chrome(n) && !once["want"] && !c.has(all, "WantAction"):
+			c.add("html:"+webpage.SelectorFor(p.Doc, n), Warning, "the page has share buttons: add a ShareAction to the page's (or the Product's) potentialAction")
+		case wishWords.MatchString(t+" "+lbl) && !webpage.Chrome(n) && !once["want"] && !c.has(all, "WantAction"):
 			once["want"] = true
-			c.add("html:"+selectorFor(p.doc, n), Warning, "the page lets a visitor save products to a wishlist (%q): add a WantAction (target the wishlist page) to each Product's potentialAction", txt.Clip(orDefault(lbl, t), 60))
+			c.add("html:"+webpage.SelectorFor(p.Doc, n), Warning, "the page lets a visitor save products to a wishlist (%q): add a WantAction (target the wishlist page) to each Product's potentialAction", txt.Clip(orDefault(lbl, t), 60))
 		case trackOrder.MatchString(t) && !once["track"] && !c.has(all, "TrackAction"):
 			once["track"] = true
-			c.add("html:"+selectorFor(p.doc, n), Warning, "the page links order tracking (%q): add a TrackAction (target that page) to the business's potentialAction", t)
+			c.add("html:"+webpage.SelectorFor(p.Doc, n), Warning, "the page links order tracking (%q): add a TrackAction (target that page) to the business's potentialAction", t)
 		}
 	})
 }
 
 // members warns on member prices and loyalty points no MemberProgram covers.
-func (c *checker) members(all []jsonld.Node, p *pageFacts) {
-	if m := memberPrice.FindString(p.main); m != "" && !c.has(all, "MemberProgram") {
+func (c *checker) members(all []jsonld.Node, p *webpage.Facts) {
+	if m := memberPrice.FindString(p.Main); m != "" && !c.has(all, "MemberProgram") {
 		c.add(pagePath, Warning, "the page shows a member price (%q): add a MemberProgram (name, hasTiers a MemberProgramTier with hasTierBenefit https://schema.org/TierBenefitLoyaltyPrice) as the business's hasMemberProgram, and give the Offer a UnitPriceSpecification of the member price with validForMemberTier that tier", m)
 	}
-	if m := pointsEarned.FindStringSubmatch(p.main); m != nil && !jsonld.HasKey(all, "membershipPointsEarned") {
+	if m := pointsEarned.FindStringSubmatch(p.Main); m != nil && !jsonld.HasKey(all, "membershipPointsEarned") {
 		c.add(pagePath, Warning, "the page says %q: set membershipPointsEarned %s on the Offer's UnitPriceSpecification (validForMemberTier the MemberProgramTier with hasTierBenefit https://schema.org/TierBenefitLoyaltyPoints)", m[0], strings.ReplaceAll(m[1], ",", ""))
 	}
 }
 
 // extras warns on a card surcharge, a unit price and a paid add-on the page
 // shows that no node carries.
-func (c *checker) extras(all []jsonld.Node, p *pageFacts) {
-	if m := surcharge.FindString(p.main); m != "" && !c.has(all, "PaymentChargeSpecification") {
+func (c *checker) extras(all []jsonld.Node, p *webpage.Facts) {
+	if m := surcharge.FindString(p.Main); m != "" && !c.has(all, "PaymentChargeSpecification") {
 		c.add(pagePath, Warning, "the page says %q: add a PaymentChargeSpecification (appliesToPaymentMethod the cards it applies to, and the charge) to the Offer's priceSpecification", m)
 	}
-	if m := unitPrice.FindString(p.main); m != "" && !jsonld.HasKey(all, "referenceQuantity") {
-		p.claim(m)
+	if m := unitPrice.FindString(p.Main); m != "" && !jsonld.HasKey(all, "referenceQuantity") {
+		c.claim(m)
 		c.add(pagePath, Warning, "the page gives a unit price (%q): add a UnitPriceSpecification with that price and referenceQuantity (a QuantitativeValue with value and unitCode) to the Offer's priceSpecification", m)
 	}
-	if m := addOn.FindString(p.main); m != "" && !jsonld.HasKey(all, "addOn") {
-		p.claim(m)
+	if m := addOn.FindString(p.Main); m != "" && !jsonld.HasKey(all, "addOn") {
+		c.claim(m)
 		c.add(pagePath, Warning, "the page offers %q as an extra: add it as the Offer's addOn, an Offer (name, price, priceCurrency)", m)
 	}
 }
 
 // founding warns when the page says when, and by whom, the business was
 // founded and the business node does not.
-func (c *checker) founding(all []jsonld.Node, p *pageFacts) {
-	if m := founded.FindStringSubmatch(p.main); m != nil && !jsonld.HasKey(all, "foundingDate") {
+func (c *checker) founding(all []jsonld.Node, p *webpage.Facts) {
+	if m := founded.FindStringSubmatch(p.Main); m != nil && !jsonld.HasKey(all, "foundingDate") {
 		c.add(pagePath, Warning, "the page says %q: set the business's foundingDate %s", m[0], m[1])
 	}
-	if m := foundedBy.FindStringSubmatch(p.main); m != nil && !jsonld.HasKey(all, "founder") {
+	if m := foundedBy.FindStringSubmatch(p.Main); m != nil && !jsonld.HasKey(all, "founder") {
 		given, family, _ := strings.Cut(m[1], " ")
 		c.add(pagePath, Warning, "the page names the business's founder, %s: set its founder, a Person (name, givenName %s, familyName %s)", m[1], given, family)
 	}
