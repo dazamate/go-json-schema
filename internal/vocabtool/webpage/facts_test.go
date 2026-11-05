@@ -64,6 +64,22 @@ func TestMainSkipsLandmarkRoles(t *testing.T) {
 	}
 }
 
+// TestAddressInFooter checks that a business's address in its site footer
+// is the page's: loveitlandscaping.com.au, vicisouthbank.com.au and
+// smithpartners.co.nz give theirs only there.
+func TestAddressInFooter(t *testing.T) {
+	for src, want := range map[string]string{
+		`<html><body><main><h1>Landscaping costs in Melbourne</h1></main><footer><div class="col-contact contact-footer"><h2 class="contact-title contact-top">Melbourne, Australia</h2> <p class="contact-address text-muted"><strong>11 Frederick St, Sunbury, VIC 3429</strong></p></div><ul><li><a href="/">Home</a></li></ul></footer></body></html>`: "11 Frederick St, Sunbury, VIC 3429",
+		`<html><body><main><h1>Menu</h1></main><footer><div class="elementor-widget-container"> <p>174 Grey St, South Brisbane 4101</p> </div><p>Trading Open 7 Days</p></footer></body></html>`:                                                                                                                                                           "174 Grey St, South Brisbane 4101",
+		`<html><body><main><h1>Property lawyers</h1></main><div id="flex-footer" role="contentinfo"><p>Lincoln Manor</p><p>293 Lincoln Road, Henderson, Auckland 0610</p></div></body></html>`:                                                                                                                                                             "293 Lincoln Road, Henderson, Auckland 0610",
+	} {
+		doc := parse(t, src)
+		if got := New(doc, HTMLText(doc), "https://site.test/page").Address(); got != want {
+			t.Errorf("Address() = %q, want %q", got, want)
+		}
+	}
+}
+
 func TestMainSkipsChrome(t *testing.T) {
 	doc := parse(t, `<html><body><header><a href="/">Acme Shop</a></header>
 		<main><h1>Lockets</h1><p>Hand made.</p></main></body></html>`)

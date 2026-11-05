@@ -135,16 +135,32 @@ func (p *Facts) Abs(ref string) string {
 
 // Address is a street address the page shows: an address element that holds
 // a street address (an author's byline in an address element holds a name or
-// an email), or a number and street name.
+// an email), or a number and street name in its main copy, else in the
+// site's footer, where a business gives its own.
 func (p *Facts) Address() string {
-	if p.Doc != nil {
-		for _, n := range QueryAll(p.Doc, "address") {
-			if t := HTMLText(n); t != "" && Shown(n) && addressShape.MatchString(t) {
-				return t
-			}
+	if p.Doc == nil {
+		return strings.TrimSpace(StreetAddress.FindString(p.Main))
+	}
+	for _, n := range QueryAll(p.Doc, "address") {
+		if t := HTMLText(n); t != "" && Shown(n) && addressShape.MatchString(t) {
+			return t
 		}
 	}
-	return strings.TrimSpace(StreetAddress.FindString(p.Main))
+	if a := strings.TrimSpace(StreetAddress.FindString(p.Main)); a != "" {
+		return a
+	}
+	a := ""
+	Visit(p.Doc, func(n *html.Node) {
+		if a != "" || landmark(n) != atom.Footer || scoped(n) {
+			return
+		}
+		for _, l := range MainLines(n) {
+			if a = strings.TrimSpace(StreetAddress.FindString(l)); a != "" {
+				return
+			}
+		}
+	})
+	return a
 }
 
 // addressShape is what an address element must hold: a number and a street
