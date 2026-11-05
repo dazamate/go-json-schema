@@ -436,12 +436,19 @@ neighbourhood is cached for 30 days.
 - Its test, `<snake_name>_test.go`, sits beside it in package `<area>_test` and
   uses `audittest.Expect`. Give it a case that fires, a quiet case, and a quiet
   case for each gate. `TestEveryCheckHasATest` fails without the file.
-- Gate the check on the `Context`: `c.Indexed()` for a page search engines
-  index, `c.Page.Sells()` for a shop, `c.HTML != nil` for a rendered page.
+- Gate the check on the `Context`: `c.Indexed()` for a check that reads page
+  facts (it holds `c.Page`), or `c.Page != nil` where the check runs on
+  unindexed pages too, and `c.Page.Doc != nil` when it reads the parsed
+  document. `c.Page.Sells()` gates a shop. Do not gate on `c.HTML != nil`:
+  `c.Page` is nil when the HTML has no visible text, though `c.HTML` is not.
+- A check holds no state: one value serves every audit, and audits run
+  concurrently. Memoize a find on the `Context` instead.
 - A check that takes prices, or tells a node to take a subtype, implements
   `audit.PriceTaker` or `audit.Retyper` and adds its ID to `priceOrder` or
   `retypeOrder` in `internal/vocabtool/audit/ledger.go`. A check left out of the
-  order is never asked; `TestLedgerOrdersListEveryTaker` fails on it.
+  order is never asked; `TestLedgerOrdersListEveryTaker` fails on it. A ledger
+  check passes its own `k.ID()` to `TakenBefore` and `RetypedBefore`; a wrong
+  ID panics.
 - A find that several checks of an area share goes in a helper file of that
   area, memoized with `audit.Memo`.
 
