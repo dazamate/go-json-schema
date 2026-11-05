@@ -8,7 +8,7 @@ import (
 
 func init() { audit.Register(Warranty{}) }
 
-var warranty = regexp.MustCompile(`(?i)\b(?:\d+|one|two|three|five|ten)[- ](?:years?|yrs?|months?)['’]?\s+warranty\b|\blifetime warranty\b|\bwarranty (?:of|for) \d+ (?:years?|months?)\b`)
+var warranty = regexp.MustCompile(`(?i)\b(?:\d+|one|two|three|four|five|six|ten|twelve)[- ](?:years?|yrs?|months?)['’]?\s+(?:[a-z']+\s+){0,2}?warranty\b|\b(?:lifetime|limited lifetime) (?:limited )?warranty\b|\bwarranty(?: period)?(?: of| for|:)?\s+(?:\d+|one|two|three|five|ten)[- ]?(?:years?|yrs?|months?)\b`)
 
 // Warranty warns when a product page promises a warranty and the draft has no
 // WarrantyPromise: the Offer carries the promise and its length.
