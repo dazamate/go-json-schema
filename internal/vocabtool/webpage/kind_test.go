@@ -106,10 +106,49 @@ func TestCartForm(t *testing.T) {
 		"/cart":                                    false, // the cart drawer's checkout
 		"/cart/checkout":                           false,
 		"/collections/beanbag-chairs":              false,
+		"/trolley/add":                             true, // a UK grocer's trolley
+		"/addtotrolley":                            true,
+		"/shop/officeworks/c/workplace-supplies/trolleys--steps-ladders/hand-trolleys": false,
 	} {
 		if got := CartForm.MatchString(action); got != want {
 			t.Errorf("CartForm(%q) = %v, want %v", action, got, want)
 		}
+	}
+}
+
+// TestCartWords checks a shop that calls its cart a trolley, as UK grocers
+// do ("Add to trolley", /trolley), against officeworks.com.au's and
+// oliverbonas.com's trolleys for sale ("Hand Trolleys", "Drinks Trolleys").
+func TestCartWords(t *testing.T) {
+	for text, want := range map[string]bool{
+		"Add to trolley":        true,
+		"Add to my bag":         true,
+		"Add it to your basket": true,
+		"Add to cart":           true,
+		"Hand Trolleys":         false,
+		"Drinks Trolleys":       false,
+		"Add to wishlist":       false,
+		"Add to list":           false,
+	} {
+		if got := AddToCart.MatchString(text); got != want {
+			t.Errorf("AddToCart(%q) = %v, want %v", text, got, want)
+		}
+	}
+	for path, want := range map[string]bool{
+		"/trolley": true,
+		"/basket":  true,
+		"/shop/officeworks/c/workplace-supplies/cleaning-supplies/cleaning-equipment/cleaning-trolleys": false,
+	} {
+		if got := CartPath.MatchString(path); got != want {
+			t.Errorf("CartPath(%q) = %v, want %v", path, got, want)
+		}
+	}
+	doc := parse(t, `<html><body><h1>Your trolley</h1><p>2 items</p></body></html>`)
+	if got := New(doc, HTMLText(doc), "https://grocer.test/trolley").Kind; got != KindCart {
+		t.Errorf("/trolley: Kind = %q, want %q", got, KindCart)
+	}
+	if got := New(doc, HTMLText(doc), "https://grocer.test/my-shop").Kind; got != KindCart {
+		t.Errorf("h1 Your trolley: Kind = %q, want %q", got, KindCart)
 	}
 }
 
