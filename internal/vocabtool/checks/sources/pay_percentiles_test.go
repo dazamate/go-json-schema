@@ -1,7 +1,6 @@
 package sources_test
 
 import (
-	"strings"
 	"testing"
 
 	"github.com/dazamate/go-json-schema/internal/vocabtool/audit"
@@ -38,11 +37,6 @@ const (
 	barePage = `{"@context":"https://schema.org","@type":"WebPage","url":"https://movers.test/san-diego/","name":"Moving to San Diego"}`
 )
 
-// noindex is the page kept out of search.
-func noindex(page string) string {
-	return strings.Replace(page, "<html>", `<html><head><meta name="robots" content="noindex"></head>`, 1)
-}
-
 func TestPayPercentiles(t *testing.T) {
 	paid := `{"@context":"https://schema.org","@type":"Occupation","name":"Hand laborers and material movers","estimatedSalary":{"@type":"MonetaryAmountDistribution","median":20.83,"currency":"USD"}}`
 	for _, tc := range []struct {
@@ -54,7 +48,7 @@ func TestPayPercentiles(t *testing.T) {
 			{Path: "html:#mover-pay", Severity: audit.Warning, Message: `the page shows pay percentiles for "hand laborers and material movers" in San Diego-Chula Vista-Carlsbad, CA metro area: add an Occupation (name, occupationLocation) with estimatedSalary as a MonetaryAmountDistribution (percentile10, percentile25, median, percentile75, percentile90, currency, unitText HOUR or YEAR)`},
 		}},
 		{"an estimatedSalary carries it", audittest.Input{Draft: paid, PageHTML: dataPage, PageURL: dataURL}, nil},
-		{"a noindex page", audittest.Input{Draft: barePage, PageHTML: noindex(dataPage), PageURL: dataURL}, nil},
+		{"a noindex page", audittest.Input{Draft: barePage, PageHTML: audittest.Noindex(dataPage), PageURL: dataURL}, nil},
 		{"no page", audittest.Input{Draft: barePage, PageURL: dataURL}, nil},
 	} {
 		t.Run(tc.name, func(t *testing.T) { audittest.Expect(t, sources.PayPercentiles{}, tc.in, tc.want) })

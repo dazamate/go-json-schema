@@ -32,8 +32,8 @@ func TestRates(t *testing.T) {
 		{"one rate twice", audittest.Input{Draft: bareDraft, PageText: "Movers charge $40 an hour, and packers $40 an hour.", PageURL: costGuideURL}, hourly},
 		{"wages a pay table took", audittest.Input{Draft: bareDraft, PageHTML: payTable, PageURL: costGuideURL}, nil},
 		{"the markup carries them", audittest.Input{Draft: markedDraft, PageHTML: costGuide, PageURL: costGuideURL}, nil},
-		{"a shop's page", audittest.Input{Draft: bareDraft, PageHTML: selling(costGuide), PageURL: costGuideURL}, nil},
-		{"a noindex page", audittest.Input{Draft: bareDraft, PageHTML: noindex(costGuide), PageURL: costGuideURL}, nil},
+		{"a shop's page", audittest.Input{Draft: bareDraft, PageHTML: audittest.Selling(costGuide), PageURL: costGuideURL}, nil},
+		{"a noindex page", audittest.Input{Draft: bareDraft, PageHTML: audittest.Noindex(costGuide), PageURL: costGuideURL}, nil},
 		{"no page", audittest.Input{Draft: bareDraft, PageURL: costGuideURL}, nil},
 	} {
 		t.Run(tc.name, func(t *testing.T) { audittest.Expect(t, costs.Rates{}, tc.in, tc.want) })

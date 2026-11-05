@@ -139,9 +139,8 @@ func describeReturnFact(f returnFact) string {
 }
 
 var (
-	basedIn     = regexp.MustCompile(`\b(?i:based in\s+(?:the\s+)?)([A-Z][A-Za-z]+(?: [A-Z][A-Za-z]+)?)`)
-	openingTime = regexp.MustCompile(`(?i)\b(?:mon(?:day)?|tue(?:s(?:day)?)?|wed(?:nesday)?|thu(?:rs(?:day)?)?|fri(?:day)?|sat(?:urday)?|sun(?:day)?|weekdays|open today)\b[^.\n]{0,40}?\b\d{1,2}(?:[:.]\d{2})?\s*(?:am|pm)?\s*(?:-|–|to)\s*\d{1,2}(?:[:.]\d{2})?\s*(?:am|pm)?`)
-	mapSrc      = regexp.MustCompile(`(?i)google\.[a-z.]+/maps|maps\.google\.|openstreetmap\.org|bing\.com/maps|maps\.apple\.com`)
+	basedIn = regexp.MustCompile(`\b(?i:based in\s+(?:the\s+)?)([A-Z][A-Za-z]+(?: [A-Z][A-Za-z]+)?)`)
+	mapSrc  = regexp.MustCompile(`(?i)google\.[a-z.]+/maps|maps\.google\.|openstreetmap\.org|bing\.com/maps|maps\.apple\.com`)
 )
 
 // whereAndWhen warns on the business's address, location, opening hours and
@@ -156,7 +155,7 @@ func (c *checker) whereAndWhen(all []jsonld.Node, p *webpage.Facts) {
 		code := txt.OrDefault(txt.CountryCode(m[1]), "its two-letter code")
 		c.add(pagePath, Warning, "the page says the business is based in %s: set its address, a PostalAddress with addressCountry %s", m[1], code)
 	}
-	if m := openingTime.FindString(p.Main); m != "" && !jsonld.HasKey(all, "openingHoursSpecification") && !jsonld.HasKey(all, "openingHours") && !jsonld.HasKey(all, "hoursAvailable") {
+	if m := webpage.OpeningTime.FindString(p.Main); m != "" && !jsonld.HasKey(all, "openingHoursSpecification") && !jsonld.HasKey(all, "openingHours") && !jsonld.HasKey(all, "hoursAvailable") {
 		c.add(pagePath, Warning, "the page gives opening hours (%q): set the store's openingHoursSpecification, an OpeningHoursSpecification for each run of days (dayOfWeek, DayOfWeek members such as https://schema.org/Monday, opens, closes); an online shop's hours go on its ContactPoint as hoursAvailable", m)
 	}
 	if p.Doc != nil && !jsonld.HasKey(all, "geo") {

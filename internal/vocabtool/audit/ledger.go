@@ -117,10 +117,20 @@ func (r Retyped) clone() Retyped {
 
 // retypeOrder lists the retypers by ID, in the order they tell nodes. A
 // blocking source's nodes count as told; every source's subtypes count as
-// named.
-var retypeOrder []struct {
+// named. A property only a subtype takes speaks first, then the node's
+// Wikidata class, then its name or URL, which only names: the page's kind
+// still types a WebPage whose name named another subtype. Then the page's
+// kind, the shop's business, and last a business with no premises.
+var retypeOrder = []struct {
 	ID     string
 	Blocks bool
+}{
+	{ID: "terms/subtype-property", Blocks: true},
+	{ID: "graph/class-type", Blocks: true},
+	{ID: "graph/named-type", Blocks: false},
+	{ID: "shop/page-kind-type", Blocks: true},
+	{ID: "shop/business-type", Blocks: true},
+	{ID: "site/online-business", Blocks: true},
 }
 
 // retypeLedgerKey is the memo key of the retype ledger.

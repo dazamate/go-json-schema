@@ -9,6 +9,8 @@ import (
 
 func init() { audit.Register(Goods{}) }
 
+var _ audit.PriceTaker = Goods{}
+
 var (
 	goodsRe   = regexp.MustCompile(`(?i)\b(boxes|box|tape|packing paper|paper|bubble wrap|mattress bags?|moving blankets?|furniture pads?|dollies|dolly|stretch wrap|packing peanuts)\b[^$.]{0,45}?` + priceSpan + `([^.$]{0,25})`)
 	goodsSign = regexp.MustCompile(`(?i)\b(?:each|apiece|a pack|per pack|a roll|per roll|published prices|retail prices|typical (?:store|retail) prices)\b`)

@@ -31,11 +31,6 @@ const (
 	noDraft    = `{"@context":"https://schema.org","@graph":[]}`
 )
 
-// noindex is the page kept out of search.
-func noindex(page string) string {
-	return strings.Replace(page, "<head>", `<head><meta name="robots" content="noindex">`, 1)
-}
-
 // sellingNoMore is the page without its cart link and add-to-cart form.
 func sellingNoMore(page string) string {
 	return strings.NewReplacer(cartLink, "", buyForm, "").Replace(page)
@@ -59,7 +54,7 @@ func TestWasPrice(t *testing.T) {
 		{"two was prices", audittest.Input{Draft: noDraft, PageHTML: twoOnSale, PageURL: productURL}, nil},
 		{"a was price on another page of the shop", audittest.Input{Draft: noDraft, PageHTML: salePage, PageURL: salePageURL}, nil},
 		{"a page that sells nothing", audittest.Input{Draft: noDraft, PageHTML: sellingNoMore(productPage), PageURL: productURL}, nil},
-		{"a noindex page", audittest.Input{Draft: noDraft, PageHTML: noindex(productPage), PageURL: productURL}, nil},
+		{"a noindex page", audittest.Input{Draft: noDraft, PageHTML: audittest.Noindex(productPage), PageURL: productURL}, nil},
 		{"no page", audittest.Input{Draft: noDraft, PageURL: productURL}, nil},
 	} {
 		t.Run(tc.name, func(t *testing.T) { audittest.Expect(t, product.WasPrice{}, tc.in, tc.want) })

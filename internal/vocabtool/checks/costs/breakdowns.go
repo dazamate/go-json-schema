@@ -14,6 +14,8 @@ import (
 
 func init() { audit.Register(Breakdowns{}) }
 
+var _ audit.PriceTaker = Breakdowns{}
+
 var goodsNoun = regexp.MustCompile(`(?i)\b(?:boxes|box|tape|packing paper|bubble wrap|mattress bags?|moving blankets?|furniture pads?|dollies|dolly|stretch wrap|packing peanuts)\b`)
 
 // Breakdowns warns on a total the page breaks into priced parts: a list,

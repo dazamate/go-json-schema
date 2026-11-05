@@ -103,15 +103,11 @@ func (c *checker) content(all []jsonld.Node, p *webpage.Facts) {
 	c.ratings(all, p)
 }
 
-// shop runs the shop checks: the sitewide nodes, the page's type, and what a
-// product page and the shop's policies show.
+// shop runs the shop checks still here: the sitewide WebSite, logo and
+// profiles, and what a product page and the shop's policies show.
 func (c *checker) shop(all []jsonld.Node, p *webpage.Facts, d *jsonld.Index) {
 	if p.Doc != nil {
-		c.pageType(all, p)
 		c.website(all, p)
-		if p.Sells() || p.Address() != "" {
-			c.business(all, p)
-		}
 		c.logo(all, p)
 		c.social(p, d)
 		c.catalog(all, p)
@@ -1323,9 +1319,4 @@ func (c *checker) reviews(all []jsonld.Node) {
 			c.add(l.Path, Warning, "this Review has no itemReviewed: name what it reviews, or put it in that item's review")
 		}
 	}
-}
-
-// numericOnly reports a property whose ranges are all numbers.
-func numericOnly(ranges []string) bool {
-	return len(ranges) > 0 && !slices.ContainsFunc(ranges, func(r string) bool { return r != "Number" && r != "Integer" && r != "Float" })
 }

@@ -25,7 +25,7 @@ func TestTaxMismatch(t *testing.T) {
 		}},
 		{"the markup agrees", audittest.Input{Draft: taxed("320", "true"), PageHTML: productPage, PageURL: productURL}, nil},
 		{"no price the draft sells is shown", audittest.Input{Draft: taxed("999", "false"), PageHTML: productPage, PageURL: productURL}, nil},
-		{"a noindex page", audittest.Input{Draft: taxed("320", "false"), PageHTML: noindex(productPage), PageURL: productURL}, nil},
+		{"a noindex page", audittest.Input{Draft: taxed("320", "false"), PageHTML: audittest.Noindex(productPage), PageURL: productURL}, nil},
 		{"no page", audittest.Input{Draft: taxed("320", "false"), PageURL: productURL}, nil},
 	} {
 		t.Run(tc.name, func(t *testing.T) { audittest.Expect(t, costs.TaxMismatch{}, tc.in, tc.want) })

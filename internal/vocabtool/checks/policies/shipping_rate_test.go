@@ -24,11 +24,6 @@ const (
 	noDraft     = `{"@context":"https://schema.org","@graph":[]}`
 )
 
-// noindex is the page kept out of search.
-func noindex(page string) string {
-	return strings.Replace(page, "<head>", `<head><meta name="robots" content="noindex">`, 1)
-}
-
 // sellingNoMore is the page without its cart link.
 func sellingNoMore(page string) string { return strings.Replace(page, cartLink, "", 1) }
 
@@ -49,7 +44,7 @@ func TestShippingRate(t *testing.T) {
 		}},
 		{"a shipping node carries it", audittest.Input{Draft: carried, PageHTML: shippingPage, PageURL: shippingURL}, nil},
 		{"a page that sells nothing", audittest.Input{Draft: noDraft, PageHTML: sellingNoMore(shippingPage), PageURL: shippingURL}, nil},
-		{"a noindex page", audittest.Input{Draft: noDraft, PageHTML: noindex(shippingPage), PageURL: shippingURL}, nil},
+		{"a noindex page", audittest.Input{Draft: noDraft, PageHTML: audittest.Noindex(shippingPage), PageURL: shippingURL}, nil},
 		{"no page", audittest.Input{Draft: noDraft, PageURL: shippingURL}, nil},
 	} {
 		t.Run(tc.name, func(t *testing.T) { audittest.Expect(t, policies.ShippingRate{}, tc.in, tc.want) })

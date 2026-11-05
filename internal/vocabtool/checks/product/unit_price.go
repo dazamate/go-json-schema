@@ -6,6 +6,8 @@ import (
 
 func init() { audit.Register(UnitPrice{}) }
 
+var _ audit.PriceTaker = UnitPrice{}
+
 // UnitPrice warns on a unit price a shop's page gives ("$4.50 per 100 g")
 // when no UnitPriceSpecification has a referenceQuantity. It takes the price
 // of each extra it and AddOn report, so the prices checks do not ask for

@@ -20,7 +20,7 @@ func TestSurcharge(t *testing.T) {
 		}},
 		{"a PaymentChargeSpecification carries it", audittest.Input{Draft: charged, PageHTML: productPage, PageURL: productURL}, nil},
 		{"a page that sells nothing", audittest.Input{Draft: noDraft, PageHTML: sellingNoMore(productPage), PageURL: productURL}, nil},
-		{"a noindex page", audittest.Input{Draft: noDraft, PageHTML: noindex(productPage), PageURL: productURL}, nil},
+		{"a noindex page", audittest.Input{Draft: noDraft, PageHTML: audittest.Noindex(productPage), PageURL: productURL}, nil},
 		{"no page", audittest.Input{Draft: noDraft, PageURL: productURL}, nil},
 	} {
 		t.Run(tc.name, func(t *testing.T) { audittest.Expect(t, product.Surcharge{}, tc.in, tc.want) })

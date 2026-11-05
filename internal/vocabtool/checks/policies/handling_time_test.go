@@ -20,7 +20,7 @@ func TestHandlingTime(t *testing.T) {
 		}},
 		{"a handlingTime carries it", audittest.Input{Draft: carried, PageHTML: shippingPage, PageURL: shippingURL}, nil},
 		{"a page that sells nothing", audittest.Input{Draft: noDraft, PageHTML: sellingNoMore(shippingPage), PageURL: shippingURL}, nil},
-		{"a noindex page", audittest.Input{Draft: noDraft, PageHTML: noindex(shippingPage), PageURL: shippingURL}, nil},
+		{"a noindex page", audittest.Input{Draft: noDraft, PageHTML: audittest.Noindex(shippingPage), PageURL: shippingURL}, nil},
 		{"no page", audittest.Input{Draft: noDraft, PageURL: shippingURL}, nil},
 	} {
 		t.Run(tc.name, func(t *testing.T) { audittest.Expect(t, policies.HandlingTime{}, tc.in, tc.want) })

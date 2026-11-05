@@ -36,7 +36,7 @@ func TestObservation(t *testing.T) {
 		}},
 		{"Observations carry the figures", audittest.Input{Draft: observed, PageHTML: dataPage, PageURL: dataURL}, nil},
 		{"an Observation named by the sentence", audittest.Input{Draft: named, PageHTML: tulsa, PageURL: "https://movers.test/tulsa/"}, nil},
-		{"a noindex page", audittest.Input{Draft: barePage, PageHTML: noindex(dataPage), PageURL: dataURL}, nil},
+		{"a noindex page", audittest.Input{Draft: barePage, PageHTML: audittest.Noindex(dataPage), PageURL: dataURL}, nil},
 		{"no page", audittest.Input{Draft: barePage, PageURL: dataURL}, nil},
 	} {
 		t.Run(tc.name, func(t *testing.T) { audittest.Expect(t, sources.Observation{}, tc.in, tc.want) })

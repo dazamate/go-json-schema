@@ -34,7 +34,7 @@ func TestSaleItems(t *testing.T) {
 		{"a StrikethroughPrice carries one", audittest.Input{Draft: struckThrough("389"), PageHTML: twoOnSale, PageURL: productURL}, nil},
 		{"a product page's one was price", audittest.Input{Draft: noDraft, PageHTML: productPage, PageURL: productURL}, nil},
 		{"a page that sells nothing", audittest.Input{Draft: noDraft, PageHTML: sellingNoMore(twoOnSale), PageURL: productURL}, nil},
-		{"a noindex page", audittest.Input{Draft: noDraft, PageHTML: noindex(twoOnSale), PageURL: productURL}, nil},
+		{"a noindex page", audittest.Input{Draft: noDraft, PageHTML: audittest.Noindex(twoOnSale), PageURL: productURL}, nil},
 		{"no page", audittest.Input{Draft: noDraft, PageURL: productURL}, nil},
 	} {
 		t.Run(tc.name, func(t *testing.T) { audittest.Expect(t, product.SaleItems{}, tc.in, tc.want) })

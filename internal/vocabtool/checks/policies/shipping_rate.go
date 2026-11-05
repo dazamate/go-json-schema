@@ -9,6 +9,8 @@ import (
 
 func init() { audit.Register(ShippingRate{}) }
 
+var _ audit.PriceTaker = ShippingRate{}
+
 var shipCountry = regexp.MustCompile(`(?i)\b(?:shipping|delivery|postage|ship|orders?)\s+(?:within|to|across|in)\s+(?:the )?(Australia|AU|New Zealand|NZ|United States|USA|US|United Kingdom|UK|Canada)\b|\bfree (Australian|NZ|US|UK|Canadian) (?:shipping|delivery|postage)\b`)
 
 // ShippingRate warns on a shipping rate a shop's page gives that no shipping

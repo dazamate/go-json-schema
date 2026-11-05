@@ -43,19 +43,6 @@ const (
 		{"@type":"Product","name":"Medium box","offers":{"@type":"AggregateOffer","lowPrice":1.82,"highPrice":2.69,"priceCurrency":"USD"}}]}`
 )
 
-// selling is the page with a link to a cart: a shop's page.
-func selling(page string) string {
-	return strings.Replace(page, "<body>", `<body><header><nav><a href="/cart">Cart</a></nav></header>`, 1)
-}
-
-// noindex is the page kept out of search.
-func noindex(page string) string {
-	if strings.Contains(page, "<head>") {
-		return strings.Replace(page, "<head>", `<head><meta name="robots" content="noindex">`, 1)
-	}
-	return strings.Replace(page, "<body>", `<head><meta name="robots" content="noindex"></head><body>`, 1)
-}
-
 func TestBreakdowns(t *testing.T) {
 	broken := []audit.Issue{
 		{Path: "html:body > main > article:nth-of-type(2)", Severity: audit.Warning, Message: `the page breaks "Rent a truck" ($58–$103) into 3 priced parts: mark it up as a CompoundPriceSpecification (the PriceSpecification that sums its parts: minPrice, maxPrice, priceCurrency) with each part a priceComponent (a UnitPriceSpecification with priceComponentType such as DistanceFee for mileage, or a DeliveryChargeSpecification for a delivery or pickup charge)`},
@@ -70,8 +57,8 @@ func TestBreakdowns(t *testing.T) {
 		{"the same breakdown twice", audittest.Input{Draft: bareDraft, PageHTML: strings.Replace(costGuide, truckArticle, truckArticle+"\n"+truckArticle, 1), PageURL: costGuideURL}, broken},
 		{"the markup carries it", audittest.Input{Draft: markedDraft, PageHTML: costGuide, PageURL: costGuideURL}, nil},
 		{"only the page's text", audittest.Input{Draft: bareDraft, PageText: "Rent a truck: $58–$103. A 20 ft truck, one day in town: $39–$40. Mileage, 20 miles round trip: $13–$50.", PageURL: costGuideURL}, nil},
-		{"a shop's page", audittest.Input{Draft: bareDraft, PageHTML: selling(costGuide), PageURL: costGuideURL}, nil},
-		{"a noindex page", audittest.Input{Draft: bareDraft, PageHTML: noindex(costGuide), PageURL: costGuideURL}, nil},
+		{"a shop's page", audittest.Input{Draft: bareDraft, PageHTML: audittest.Selling(costGuide), PageURL: costGuideURL}, nil},
+		{"a noindex page", audittest.Input{Draft: bareDraft, PageHTML: audittest.Noindex(costGuide), PageURL: costGuideURL}, nil},
 		{"no page", audittest.Input{Draft: bareDraft, PageURL: costGuideURL}, nil},
 	} {
 		t.Run(tc.name, func(t *testing.T) { audittest.Expect(t, costs.Breakdowns{}, tc.in, tc.want) })

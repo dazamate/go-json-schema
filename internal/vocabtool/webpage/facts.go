@@ -149,6 +149,10 @@ func (p *Facts) Address() string {
 // StreetAddress finds a street address in text: a number and a street name.
 var StreetAddress = regexp.MustCompile(`\b\d{1,5}[A-Za-z]?\s+(?:[A-Z][a-z]+\s){1,3}(?:Street|St|Road|Rd|Avenue|Ave|Lane|Ln|Drive|Dr|Boulevard|Blvd|Highway|Hwy|Parade|Pde|Place|Pl|Terrace|Tce|Way|Court|Ct|Crescent|Cres)\b\.?[^.\n]{0,60}`)
 
+// OpeningTime finds opening hours in text: a day, or "weekdays" or "open
+// today", then a run of hours such as "Mon–Fri 8am–5pm".
+var OpeningTime = regexp.MustCompile(`(?i)\b(?:mon(?:day)?|tue(?:s(?:day)?)?|wed(?:nesday)?|thu(?:rs(?:day)?)?|fri(?:day)?|sat(?:urday)?|sun(?:day)?|weekdays|open today)\b[^.\n]{0,40}?\b\d{1,2}(?:[:.]\d{2})?\s*(?:am|pm)?\s*(?:-|–|to)\s*\d{1,2}(?:[:.]\d{2})?\s*(?:am|pm)?`)
+
 // H1 is the text of the page's first visible h1.
 func (p *Facts) H1() string {
 	if p.Doc == nil {

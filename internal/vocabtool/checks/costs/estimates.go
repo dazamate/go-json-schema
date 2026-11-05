@@ -9,6 +9,8 @@ import (
 
 func init() { audit.Register(Estimates{}) }
 
+var _ audit.PriceTaker = Estimates{}
+
 var (
 	spanRe    = regexp.MustCompile(priceSpan)
 	costWords = regexp.MustCompile(`(?i)\b(?:costs?|estimates?|estimated|typical(?:ly)?|average|on average|ranges?|runs?|expect|roughly)\b`)

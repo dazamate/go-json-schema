@@ -8,6 +8,8 @@ import (
 
 func init() { audit.Register(WasPrice{}) }
 
+var _ audit.PriceTaker = WasPrice{}
+
 // WasPrice warns on a product page's was price that no StrikethroughPrice
 // carries: Google shows a sale price beside the price it was. It takes every
 // was price a shop's page shows, carried or not, for the sale checks, so the

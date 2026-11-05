@@ -25,7 +25,7 @@ func TestPriceCurrency(t *testing.T) {
 		{"a priceCurrency", audittest.Input{Draft: `{"@context":"https://schema.org","@type":"Offer","price":"10","priceCurrency":"USD"}`, PageHTML: page, PageURL: url}, nil},
 		{"a currency", audittest.Input{Draft: `{"@context":"https://schema.org","@type":"MonetaryAmount","value":10,"currency":"USD"}`, PageHTML: page, PageURL: url}, nil},
 		{"a value outside a price", audittest.Input{Draft: `{"@context":"https://schema.org","@type":"QuantitativeValue","value":10}`, PageHTML: page, PageURL: url}, nil},
-		{"a noindex page", audittest.Input{Draft: `{"@context":"https://schema.org","@type":"Offer","price":"10"}`, PageHTML: noindex(page), PageURL: url}, nil},
+		{"a noindex page", audittest.Input{Draft: `{"@context":"https://schema.org","@type":"Offer","price":"10"}`, PageHTML: audittest.Noindex(page), PageURL: url}, nil},
 		{"no page", audittest.Input{Draft: `{"@context":"https://schema.org","@type":"Offer","price":"10"}`, PageURL: url}, nil},
 	} {
 		t.Run(tc.name, func(t *testing.T) { audittest.Expect(t, costs.PriceCurrency{}, tc.in, tc.want) })

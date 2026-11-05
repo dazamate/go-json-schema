@@ -25,7 +25,7 @@ func TestTaxUnset(t *testing.T) {
 		{"the markup sets it", audittest.Input{Draft: taxed("320", "true"), PageHTML: productPage, PageURL: productURL}, nil},
 		{"no word of tax", audittest.Input{Draft: priced, PageHTML: strings.Replace(productPage, "GST included", "", 1), PageURL: productURL}, nil},
 		{"no price the draft sells is shown", audittest.Input{Draft: noDraft, PageHTML: productPage, PageURL: productURL}, nil},
-		{"a noindex page", audittest.Input{Draft: priced, PageHTML: noindex(productPage), PageURL: productURL}, nil},
+		{"a noindex page", audittest.Input{Draft: priced, PageHTML: audittest.Noindex(productPage), PageURL: productURL}, nil},
 		{"no page", audittest.Input{Draft: priced, PageURL: productURL}, nil},
 	} {
 		t.Run(tc.name, func(t *testing.T) { audittest.Expect(t, costs.TaxUnset{}, tc.in, tc.want) })

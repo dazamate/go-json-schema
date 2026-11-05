@@ -27,7 +27,7 @@ func TestDataset(t *testing.T) {
 			{Path: "html:#typical-home", Severity: audit.Warning, Message: `the page shows data from U.S. Census Bureau, American Community Survey, 2020-2024 ("Homes by bedrooms, 2020-2024") ` + ask},
 		}},
 		{"a Dataset names each", audittest.Input{Draft: described, PageHTML: dataPage, PageURL: dataURL}, nil},
-		{"a noindex page", audittest.Input{Draft: barePage, PageHTML: noindex(dataPage), PageURL: dataURL}, nil},
+		{"a noindex page", audittest.Input{Draft: barePage, PageHTML: audittest.Noindex(dataPage), PageURL: dataURL}, nil},
 		{"no page", audittest.Input{Draft: barePage, PageURL: dataURL}, nil},
 	} {
 		t.Run(tc.name, func(t *testing.T) { audittest.Expect(t, sources.Dataset{}, tc.in, tc.want) })

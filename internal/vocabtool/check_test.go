@@ -87,26 +87,41 @@ func TestNormalizeMatchesWalk(t *testing.T) {
 // drafts the golden cases do not reach: array roots, untyped nodes, @graph,
 // keys that are not schema.org terms, Google's annotations, unknown and
 // mixed-range properties, nested arrays and other spellings of a member's
-// URL. Rewrites says whether the walk changes the draft at all.
+// URL. Walked is the draft as the vocabulary walk published it, recorded
+// before the walk moved to the terms checks, which no longer rewrite.
+// Rewrites says whether the walk changes the draft at all.
 func TestNormalizeMatchesWalkOn(t *testing.T) {
 	tool := newTool(t)
 	for _, tc := range []struct {
-		name, draft string
-		rewrites    bool
+		name, draft, walked string
+		rewrites            bool
 	}{
-		{"array root", `[{"@type":"Offer","availability":"InStock"},{"@type":"Offer","availability":"OutOfStock"}]`, true},
-		{"untyped node under @graph", `{"@graph":[{"availability":"InStock"}]}`, true},
-		{"@graph in a property value", `{"@type":"WebPage","mainEntity":{"@graph":[{"availability":"InStock"}]}}`, true},
-		{"untyped node in a property value", `{"@type":"Product","offers":{"availability":"InStock"}}`, true},
-		{"prefixed and foreign keys", `{"@type":"Offer","schema:availability":"InStock","https://schema.org/availability":"InStock","ex:availability":"InStock"}`, true},
-		{"foreign key alone", `{"@type":"Offer","ex:availability":"InStock","ex:offers":{"@type":"Offer","availability":"InStock"}}`, false},
-		{"Google annotation", `{"@type":"SearchAction","query-input":{"@type":"Offer","availability":"InStock"},"target-output":"InStock"}`, false},
-		{"unknown property", `{"@type":"Product","fooBar":{"@type":"Offer","availability":"InStock"}}`, false},
-		{"mixed range", `{"@type":"ItemList","itemListOrder":"Ascending"}`, false},
-		{"mixed range as a URL", `{"@type":"ItemList","itemListOrder":"https://schema.org/ItemListOrderAscending"}`, false},
-		{"not a member", `{"@type":"Offer","availability":"Nope"}`, false},
-		{"nested arrays", `{"@type":"Product","offers":[[{"@type":"Offer","availability":["InStock",["OutOfStock"]]}]]}`, true},
-		{"other URL spellings", `{"@type":"Offer","availability":["http://schema.org/InStock","schema:OutOfStock","https://schema.org/PreOrder"]}`, true},
+		{"array root", `[{"@type":"Offer","availability":"InStock"},{"@type":"Offer","availability":"OutOfStock"}]`,
+			`[{"@type":"Offer","availability":"https://schema.org/InStock"},{"@type":"Offer","availability":"https://schema.org/OutOfStock"}]`, true},
+		{"untyped node under @graph", `{"@graph":[{"availability":"InStock"}]}`,
+			`{"@graph":[{"availability":"https://schema.org/InStock"}]}`, true},
+		{"@graph in a property value", `{"@type":"WebPage","mainEntity":{"@graph":[{"availability":"InStock"}]}}`,
+			`{"@type":"WebPage","mainEntity":{"@graph":[{"availability":"https://schema.org/InStock"}]}}`, true},
+		{"untyped node in a property value", `{"@type":"Product","offers":{"availability":"InStock"}}`,
+			`{"@type":"Product","offers":{"availability":"https://schema.org/InStock"}}`, true},
+		{"prefixed and foreign keys", `{"@type":"Offer","schema:availability":"InStock","https://schema.org/availability":"InStock","ex:availability":"InStock"}`,
+			`{"@type":"Offer","schema:availability":"https://schema.org/InStock","https://schema.org/availability":"https://schema.org/InStock","ex:availability":"InStock"}`, true},
+		{"foreign key alone", `{"@type":"Offer","ex:availability":"InStock","ex:offers":{"@type":"Offer","availability":"InStock"}}`,
+			`{"@type":"Offer","ex:availability":"InStock","ex:offers":{"@type":"Offer","availability":"InStock"}}`, false},
+		{"Google annotation", `{"@type":"SearchAction","query-input":{"@type":"Offer","availability":"InStock"},"target-output":"InStock"}`,
+			`{"@type":"SearchAction","query-input":{"@type":"Offer","availability":"InStock"},"target-output":"InStock"}`, false},
+		{"unknown property", `{"@type":"Product","fooBar":{"@type":"Offer","availability":"InStock"}}`,
+			`{"@type":"Product","fooBar":{"@type":"Offer","availability":"InStock"}}`, false},
+		{"mixed range", `{"@type":"ItemList","itemListOrder":"Ascending"}`,
+			`{"@type":"ItemList","itemListOrder":"Ascending"}`, false},
+		{"mixed range as a URL", `{"@type":"ItemList","itemListOrder":"https://schema.org/ItemListOrderAscending"}`,
+			`{"@type":"ItemList","itemListOrder":"https://schema.org/ItemListOrderAscending"}`, false},
+		{"not a member", `{"@type":"Offer","availability":"Nope"}`,
+			`{"@type":"Offer","availability":"Nope"}`, false},
+		{"nested arrays", `{"@type":"Product","offers":[[{"@type":"Offer","availability":["InStock",["OutOfStock"]]}]]}`,
+			`{"@type":"Product","offers":[[{"@type":"Offer","availability":["https://schema.org/InStock",["OutOfStock"]]}]]}`, true},
+		{"other URL spellings", `{"@type":"Offer","availability":["http://schema.org/InStock","schema:OutOfStock","https://schema.org/PreOrder"]}`,
+			`{"@type":"Offer","availability":["https://schema.org/InStock","https://schema.org/OutOfStock","https://schema.org/PreOrder"]}`, true},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			decode := func() any {
@@ -123,14 +138,13 @@ func TestNormalizeMatchesWalkOn(t *testing.T) {
 				}
 				return string(b)
 			}
-			orig, walked, normal := decode(), decode(), decode()
-			newChecker(tool.Vocab).walk("$", walked)
+			orig, normal := decode(), decode()
 			audit.Normalize(tool.Vocab, normal)
-			if w, n := encode(walked), encode(normal); w != n {
-				t.Errorf("Normalize differs from the walk\n walk %s\n norm %s", w, n)
+			if n := encode(normal); n != tc.walked {
+				t.Errorf("Normalize differs from the walk\n walk %s\n norm %s", tc.walked, n)
 			}
-			if changed := encode(walked) != encode(orig); changed != tc.rewrites {
-				t.Errorf("walk rewrote the draft: %v, want %v: %s", changed, tc.rewrites, encode(walked))
+			if changed := tc.walked != encode(orig); changed != tc.rewrites {
+				t.Errorf("walk rewrote the draft: %v, want %v: %s", changed, tc.rewrites, tc.walked)
 			}
 		})
 	}

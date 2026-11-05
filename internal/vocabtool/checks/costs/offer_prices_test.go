@@ -49,7 +49,7 @@ func TestOfferPrices(t *testing.T) {
 		{"an Offer carries it", audittest.Input{Draft: priced, PageHTML: productPage, PageURL: productURL}, nil},
 		{"a listing's filter, cards and starting price", audittest.Input{Draft: noDraft, PageHTML: listingPage, PageURL: listingURL}, nil},
 		{"a site that sells nothing", audittest.Input{Draft: bareDraft, PageHTML: costGuide, PageURL: costGuideURL}, nil},
-		{"a noindex page", audittest.Input{Draft: noDraft, PageHTML: noindex(productPage), PageURL: productURL}, nil},
+		{"a noindex page", audittest.Input{Draft: noDraft, PageHTML: audittest.Noindex(productPage), PageURL: productURL}, nil},
 		{"no page", audittest.Input{Draft: noDraft, PageURL: productURL}, nil},
 	} {
 		t.Run(tc.name, func(t *testing.T) { audittest.Expect(t, costs.OfferPrices{}, tc.in, tc.want) })

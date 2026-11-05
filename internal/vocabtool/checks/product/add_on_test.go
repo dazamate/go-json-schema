@@ -23,7 +23,7 @@ func TestAddOn(t *testing.T) {
 		}},
 		{"an addOn carries it", audittest.Input{Draft: carried, PageHTML: productPage, PageURL: productURL}, nil},
 		{"a page that sells nothing", audittest.Input{Draft: noDraft, PageHTML: unsold, PageURL: productURL}, nil},
-		{"a noindex page", audittest.Input{Draft: noDraft, PageHTML: noindex(productPage), PageURL: productURL}, nil},
+		{"a noindex page", audittest.Input{Draft: noDraft, PageHTML: audittest.Noindex(productPage), PageURL: productURL}, nil},
 		{"no page", audittest.Input{Draft: noDraft, PageURL: productURL}, nil},
 	} {
 		t.Run(tc.name, func(t *testing.T) { audittest.Expect(t, product.AddOn{}, tc.in, tc.want) })

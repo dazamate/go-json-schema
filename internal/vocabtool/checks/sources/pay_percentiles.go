@@ -11,6 +11,8 @@ import (
 
 func init() { audit.Register(PayPercentiles{}) }
 
+var _ audit.PriceTaker = PayPercentiles{}
+
 var payFor = regexp.MustCompile(`(?i)\bpay (?:for|of) ([^,(]+)`)
 
 // PayPercentiles warns on a table of pay by percentile that no Occupation's

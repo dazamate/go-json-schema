@@ -250,7 +250,7 @@ func OwnItems(n *Object) []string {
 }
 
 // HasWikidataClass reports a Wikidata class in the node's additionalType that
-// the classtype table maps: classTypes types such a node, not its name (the
+// the classtype table maps: graph/class-type types such a node, not its name (the
 // Blue Mountains are a region, not a Mountain). A topic class the table does
 // not map, such as wedding on a WebPage, leaves the name signal on.
 func HasWikidataClass(n *Object) bool {

@@ -12,6 +12,8 @@ import (
 
 func init() { audit.Register(Listing{}) }
 
+var _ audit.PriceTaker = Listing{}
+
 // Listing warns on the product cards a page lists that no ItemList carries.
 // A listing's products are its subject; a row of them elsewhere, such as the
 // home page's best sellers, is a part of the page. It takes the prices of

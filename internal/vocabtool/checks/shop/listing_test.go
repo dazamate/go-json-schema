@@ -37,11 +37,6 @@ const (
 	noDraft    = `{"@context":"https://schema.org","@graph":[]}`
 )
 
-// noindex is the page kept out of search.
-func noindex(page string) string {
-	return strings.Replace(page, "<head>", `<head><meta name="robots" content="noindex">`, 1)
-}
-
 func TestListing(t *testing.T) {
 	carried := `{"@context":"https://schema.org","@type":"ItemList","itemListElement":[
 		{"@type":"ListItem","position":1,"url":"https://harbour.test/products/opal-ring"},
@@ -60,7 +55,7 @@ func TestListing(t *testing.T) {
 		}},
 		{"an ItemList carries the cards", audittest.Input{Draft: carried, PageHTML: listing, PageURL: listingURL}, nil},
 		{"one card is no listing", audittest.Input{Draft: noDraft, PageHTML: listingPage(opalCard), PageURL: listingURL}, nil},
-		{"a noindex page", audittest.Input{Draft: noDraft, PageHTML: noindex(listing), PageURL: listingURL}, nil},
+		{"a noindex page", audittest.Input{Draft: noDraft, PageHTML: audittest.Noindex(listing), PageURL: listingURL}, nil},
 		{"no page", audittest.Input{Draft: noDraft, PageURL: listingURL}, nil},
 	} {
 		t.Run(tc.name, func(t *testing.T) { audittest.Expect(t, shop.Listing{}, tc.in, tc.want) })

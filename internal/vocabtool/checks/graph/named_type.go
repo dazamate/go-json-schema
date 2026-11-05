@@ -1,4 +1,4 @@
-package vocabtool
+package graph
 
 import (
 	"net/url"
@@ -6,91 +6,42 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/dazamate/go-json-schema/internal/classtype"
+	"github.com/dazamate/go-json-schema/internal/vocabtool/audit"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/txt"
 )
 
-// A node can be typed more specifically than it is. Three signals say so,
-// each naming a strict subtype of the node's type that the vocabulary offers:
-//
-//   - a property it uses is not listed for its type but is for a subtype
-//     (openingHours on an Organization: LocalBusiness);
-//   - its first Wikidata class maps to a subtype (a Place whose class is
-//     city: City);
-//   - its name, headline or URL path names a subtype (a WebPage at /about/:
-//     AboutPage).
-//
-// Only stable types are suggested: not pending, retired, meta, superseded,
-// a data type or an enumeration.
+func init() { audit.Register(NamedType{}) }
 
-// single is the node's one known type, or "" when it has none or several.
-func (c *checker) single(n *jsonld.Object) string {
-	types := jsonld.TypeNames(n)
-	if len(types) != 1 {
-		return ""
-	}
-	if _, ok := c.v.V.Classes[types[0]]; !ok {
-		return ""
-	}
-	return types[0]
-}
+var _ audit.Retyper = NamedType{}
 
-// classTypes warns about a node whose first Wikidata class in additionalType
-// maps, in the classtype table the research tools type entities with, to a
-// strict subtype of its type: a Thing or Place whose class is city is a City.
-// Only the first class counts: it is an instance-of class, while a later one
-// may be a subclass-of class. An item that is itself a class (a kind of
-// thing) stays a Thing however, which the draft does not show, so this is a
-// warning to weigh, not an error. A node whose own item, in sameAs or a
-// Wikidata identifier, is a class in the table is a kind of thing for sure,
-// and only the types whose items are always classes apply to it.
-func (c *checker) classTypes(all []jsonld.Node) {
-	for _, l := range all {
-		ty := c.single(l.N)
-		if ty == "" {
-			continue
-		}
-		classes := jsonld.Strs(l.N, "additionalType")
-		if len(classes) == 0 {
-			continue
-		}
-		m := jsonld.WikidataItem.FindStringSubmatch(classes[0])
-		if m == nil {
-			continue
-		}
-		// another class that gives the node its type backs it: the Blue
-		// Mountains are a mountain range and a region, so a Place
-		if slices.ContainsFunc(classes[1:], func(cl string) bool {
-			o := jsonld.WikidataItem.FindStringSubmatch(cl)
-			return o != nil && classtype.Of([]string{o[1]}, false) == ty
-		}) {
-			continue
-		}
-		kind := slices.ContainsFunc(jsonld.OwnItems(l.N), func(q string) bool { return classtype.Of([]string{q}, false) != "" })
-		if want := classtype.Of([]string{m[1]}, kind); want != "" && want != ty && slices.Contains(c.v.V.Ancestors(want), ty) {
-			also := ""
-			if want == "LandmarksOrHistoricalBuildings" {
-				also = ", with TouristAttraction too when visitors go to see it"
-			}
-			c.add(l.Path, Warning, "%s with the Wikidata class %s: type it %s%s, unless the item is a kind of thing rather than one", ty, m[1], want, also)
-			c.suggested[l.N] = true
-		}
-	}
-}
-
-// namedTypes warns about a node whose name, headline or URL path names a
+// NamedType warns about a node whose name, headline or URL path names a
 // strict subtype of its type, by every distinguishing word of the subtype's
 // name: a WebPage at /about/ is an AboutPage, a LocalBusiness named "Park
 // Street Bakery" a Bakery. The most specific match wins. A Thing, a Wikidata
 // entity or a node with a Wikidata class (typed by its class) and a
-// WebPageElement (webPageElements checks those) are left out, as is a node
-// another signal already retyped. A breadcrumb's items name the pages they
-// link, not what the items are.
-func (c *checker) namedTypes(all []jsonld.Node) {
+// WebPageElement (the element checks type those) are left out, as is a node
+// an earlier source in the retype ledger told. A breadcrumb's items name the
+// pages they link, not what the items are. It names its subtypes in the
+// ledger but tells no node: the page's kind still may.
+type NamedType struct{}
+
+// ID is the check's ID.
+func (NamedType) ID() string { return "graph/named-type" }
+
+// named is a node, its one type, the label it is named by and the subtypes
+// that label names.
+type named struct {
+	jsonld.Node
+	ty, label string
+	best      []string
+}
+
+// find is every node not told before whose name or URL names a subtype.
+func (NamedType) find(c *audit.Context, before audit.Retyped) []named {
 	crumbs := map[*jsonld.Object]bool{}
-	for _, l := range all {
-		if c.is(l.N, "BreadcrumbList") {
+	for _, l := range c.Nodes {
+		if c.Is(l.N, "BreadcrumbList") {
 			raw, _ := l.N.Get("itemListElement")
 			for _, v := range jsonld.Values(raw) {
 				if o, ok := v.(*jsonld.Object); ok {
@@ -99,9 +50,10 @@ func (c *checker) namedTypes(all []jsonld.Node) {
 			}
 		}
 	}
-	for _, l := range all {
-		ty := c.single(l.N)
-		if ty == "" || ty == "Thing" || c.suggested[l.N] || crumbs[l.N] || len(jsonld.WikidataItems(l.N)) > 0 || jsonld.HasWikidataClass(l.N) || slices.Contains(c.v.V.Ancestors(ty), "WebPageElement") {
+	var out []named
+	for _, l := range c.Nodes {
+		ty := c.Single(l.N)
+		if ty == "" || ty == "Thing" || before.Told[l.N] || crumbs[l.N] || len(jsonld.WikidataItems(l.N)) > 0 || jsonld.HasWikidataClass(l.N) || slices.Contains(c.Vocab.V.Ancestors(ty), "WebPageElement") {
 			continue
 		}
 		label := strings.Join(append(jsonld.Strs(l.N, "name"), jsonld.Strs(l.N, "headline")...), " ")
@@ -122,11 +74,11 @@ func (c *checker) namedTypes(all []jsonld.Node) {
 		}
 		var best []string
 		depth := 0
-		for _, d := range c.v.Descendants(ty) {
+		for _, d := range c.Vocab.Descendants(ty) {
 			if unnamedTypes[d] || !namesType(text, typeAlternatives(d, ty)) {
 				continue
 			}
-			switch n := len(c.v.V.Ancestors(d)); {
+			switch n := len(c.Vocab.V.Ancestors(d)); {
 			case n > depth:
 				best, depth = []string{d}, n
 			case n == depth:
@@ -134,9 +86,28 @@ func (c *checker) namedTypes(all []jsonld.Node) {
 			}
 		}
 		if len(best) > 0 {
-			c.add(l.Path, Warning, "%s %q: its name or URL names the subtype %s; type it %s", ty, label, strings.Join(best, " or "), strings.Join(best, " or "))
+			out = append(out, named{l, ty, label, best})
 		}
 	}
+	return out
+}
+
+// Run reports each node with the subtypes its name or URL names.
+func (k NamedType) Run(c *audit.Context) []audit.Issue {
+	var out []audit.Issue
+	for _, f := range k.find(c, c.RetypedBefore(k.ID())) {
+		out = append(out, audit.Issuef(f.Path, audit.Warning, "%s %q: its name or URL names the subtype %s; type it %s", f.ty, f.label, strings.Join(f.best, " or "), strings.Join(f.best, " or ")))
+	}
+	return out
+}
+
+// Retypes names the subtypes each node's name or URL names.
+func (k NamedType) Retypes(c *audit.Context, before audit.Retyped) []audit.Retype {
+	var out []audit.Retype
+	for _, f := range k.find(c, before) {
+		out = append(out, audit.Retype{Node: f.N, Named: f.best})
+	}
+	return out
 }
 
 // typeStopWords are not distinguishing words of a type name; "WP" abbreviates

@@ -19,8 +19,8 @@ func TestGoods(t *testing.T) {
 		}},
 		{"goods priced with no sign of sellers", audittest.Input{Draft: bareDraft, PageText: "Our boxes cost $3.", PageURL: costGuideURL}, nil},
 		{"the markup carries them", audittest.Input{Draft: markedDraft, PageHTML: costGuide, PageURL: costGuideURL}, nil},
-		{"a shop's page", audittest.Input{Draft: bareDraft, PageHTML: selling(costGuide), PageURL: costGuideURL}, nil},
-		{"a noindex page", audittest.Input{Draft: bareDraft, PageHTML: noindex(costGuide), PageURL: costGuideURL}, nil},
+		{"a shop's page", audittest.Input{Draft: bareDraft, PageHTML: audittest.Selling(costGuide), PageURL: costGuideURL}, nil},
+		{"a noindex page", audittest.Input{Draft: bareDraft, PageHTML: audittest.Noindex(costGuide), PageURL: costGuideURL}, nil},
 		{"no page", audittest.Input{Draft: bareDraft, PageURL: costGuideURL}, nil},
 	} {
 		t.Run(tc.name, func(t *testing.T) { audittest.Expect(t, costs.Goods{}, tc.in, tc.want) })

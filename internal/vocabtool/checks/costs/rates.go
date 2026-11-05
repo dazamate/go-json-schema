@@ -11,6 +11,8 @@ import (
 
 func init() { audit.Register(Rates{}) }
 
+var _ audit.PriceTaker = Rates{}
+
 var (
 	rateRe    = regexp.MustCompile(`(?i)` + priceSpan + `\s*(?:an?|per|/)\s*(?:(mover|person|worker|crew member)\s+(?:an?|per|/)\s*)?(hour|hr|mile|mi|pound|lb|month|day|week|square foot|sq\.? ?ft|cubic foot|foot|ft|box|room|item|load|trip|mover|person)\b`)
 	rateUnits = map[string]string{"hour": "HUR", "hr": "HUR", "mile": "SMI", "mi": "SMI", "pound": "LBR", "lb": "LBR", "month": "MON", "day": "DAY", "week": "WEE",

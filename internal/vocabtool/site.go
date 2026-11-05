@@ -16,15 +16,15 @@ import (
 )
 
 // Site checks: what every site's pages call for, shop or not. The business
-// that publishes the site, its type when it works only online, its toll-free
-// number, the dates a page gives itself and the article its main copy is.
+// that publishes the site, its toll-free number, the dates a page gives
+// itself and the article its main copy is. Its type when it works only
+// online is checks/site's online-business.
 
 // site runs the site checks.
 func (c *checker) site(all []jsonld.Node, p *webpage.Facts, d *jsonld.Index) {
 	// the page graph asks need the page, as the WebSite's does
 	if p.Doc != nil {
 		c.publisher(all, p)
-		c.onlineBusiness(all, p)
 	}
 	c.tollFree(all, p)
 	c.pageDates(all, p)
@@ -36,8 +36,8 @@ func (c *checker) site(all []jsonld.Node, p *webpage.Facts, d *jsonld.Index) {
 
 var copyrightHolder = regexp.MustCompile(`(?i)(?:©|\(c\)|copyright)\s*(?:\d{4}\s*[-–]\s*)?\d{4}\s+([^·|.,©]{2,60}?)\s*(?:[·|.,]|\ball rights\b|$)`)
 
-// publisher warns when no node publishes the site. A shop's business check
-// asks for its OnlineStore instead.
+// publisher warns when no node publishes the site. A shop's business checks
+// ask for its OnlineStore instead.
 func (c *checker) publisher(all []jsonld.Node, p *webpage.Facts) {
 	if jsonld.HasKey(all, "publisher") || jsonld.HasKey(all, "copyrightHolder") {
 		return
@@ -55,28 +55,6 @@ func (c *checker) publisher(all []jsonld.Node, p *webpage.Facts) {
 		name = fmt.Sprintf("name %q from the © line", strings.TrimSpace(m[1]))
 	}
 	c.add(pagePath, Warning, "no node publishes the page: add the business as an Organization (or the subtype that fits it, or the Person who runs the site) with %s, url, logo, and the page's telephone and email, and set it as the WebSite's publisher", name)
-}
-
-// onlineBusiness warns on a site's publishing Organization, typed no more
-// specifically, that shows no premises: no address, location or hours in the
-// markup, and none anywhere on the page, its footer included. It works
-// through its website, so it is an OnlineBusiness. A shop's business check
-// types a shop.
-func (c *checker) onlineBusiness(all []jsonld.Node, p *webpage.Facts) {
-	if p.Sells() || webpage.StreetAddress.MatchString(p.Text) || openingTime.MatchString(p.Text) {
-		return
-	}
-	for _, l := range jsonld.Publishers(all) {
-		if c.single(l.N) != "Organization" || c.suggested[l.N] || len(jsonld.Strs(l.N, "url")) == 0 {
-			continue
-		}
-		if slices.ContainsFunc([]string{"address", "location", "geo", "openingHours", "openingHoursSpecification", "hasMap"}, func(k string) bool { _, ok := l.N.Get(k); return ok }) {
-			continue
-		}
-		name := txt.OrDefault(strings.Join(jsonld.Strs(l.N, "name"), " "), "the business")
-		c.add(l.Path, Warning, "Organization %q shows no premises and works through its website: type it OnlineBusiness", name)
-		c.suggested[l.N] = true
-	}
 }
 
 // tollFreePrefix holds the North American toll-free area codes.

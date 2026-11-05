@@ -23,7 +23,7 @@ func TestProductCount(t *testing.T) {
 		{"a count below the cards shown", audittest.Input{Draft: noDraft, PageHTML: strings.Replace(listing, "48 products", "2 products", 1), PageURL: listingURL}, nil},
 		{"a page that is no listing", audittest.Input{Draft: noDraft, PageHTML: listing, PageURL: homeURL}, nil},
 		{"one card is no listing", audittest.Input{Draft: noDraft, PageHTML: listingPage(opalCard), PageURL: listingURL}, nil},
-		{"a noindex page", audittest.Input{Draft: noDraft, PageHTML: noindex(listing), PageURL: listingURL}, nil},
+		{"a noindex page", audittest.Input{Draft: noDraft, PageHTML: audittest.Noindex(listing), PageURL: listingURL}, nil},
 		{"no page", audittest.Input{Draft: noDraft, PageURL: listingURL}, nil},
 	} {
 		t.Run(tc.name, func(t *testing.T) { audittest.Expect(t, shop.ProductCount{}, tc.in, tc.want) })
