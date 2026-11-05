@@ -13,7 +13,7 @@ func init() { audit.Register(Model3D{}) }
 type Model3D struct{}
 
 // ID is the check's ID.
-func (Model3D) ID() string { return "product/3d-model" }
+func (Model3D) ID() string { return "product/model-3d" }
 
 // Run reports the first 3D model the page embeds or links, at its element.
 func (Model3D) Run(c *audit.Context) []audit.Issue {

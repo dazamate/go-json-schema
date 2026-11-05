@@ -9,7 +9,6 @@ import (
 	"github.com/dazamate/go-json-schema/internal/vocabtool/checks/keyword"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/checks/onpage"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
-	"github.com/dazamate/go-json-schema/internal/vocabtool/vocab"
 )
 
 // Issue severities. Only errors stop a draft being valid schema.org.
@@ -117,21 +116,4 @@ func (t *Tool) Vocabulary(draft json.RawMessage) ([]Issue, error) {
 		return nil, err
 	}
 	return audit.Run(ctx, audit.Group("terms/")), nil
-}
-
-// checker makes the audit's checks that have not moved to their own files
-// yet. The legacy adapter check runs it.
-type checker struct {
-	v      *vocab.Vocab
-	issues []Issue
-}
-
-// newChecker is a checker with nothing found yet.
-func newChecker(v *vocab.Vocab) *checker {
-	return &checker{v: v}
-}
-
-// add notes an issue.
-func (c *checker) add(path, severity, format string, args ...any) {
-	c.issues = append(c.issues, audit.Issuef(path, severity, format, args...))
 }

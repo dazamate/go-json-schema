@@ -425,6 +425,26 @@ neighbourhood is cached for 30 days.
 - `SCHEMA_MCP_RECORD=1 go test ./internal/research` re-records the fixtures.
 - `SCHEMA_MCP_LIVE=1 go test ./internal/research -run TestLive -v` uses the real browser.
 
+## Adding a check
+
+`build_jsonld` runs one check per file, in `internal/vocabtool/checks/<area>/`.
+
+- The file is `<snake_name>.go`. It holds one exported struct with
+  `ID() string` (`"<area>/<kebab-name>"`) and
+  `Run(*audit.Context) []audit.Issue`, and registers it in `init()` with
+  `audit.Register`. Add a new area's package to `checks/all/all.go`.
+- Its test, `<snake_name>_test.go`, sits beside it in package `<area>_test` and
+  uses `audittest.Expect`. Give it a case that fires, a quiet case, and a quiet
+  case for each gate. `TestEveryCheckHasATest` fails without the file.
+- Gate the check on the `Context`: `c.Indexed()` for a page search engines
+  index, `c.Page.Sells()` for a shop, `c.HTML != nil` for a rendered page.
+- A check that takes prices, or tells a node to take a subtype, implements
+  `audit.PriceTaker` or `audit.Retyper` and adds its ID to `priceOrder` or
+  `retypeOrder` in `internal/vocabtool/audit/ledger.go`. A check left out of the
+  order is never asked; `TestLedgerOrdersListEveryTaker` fails on it.
+- A find that several checks of an area share goes in a helper file of that
+  area, memoized with `audit.Memo`.
+
 ## Regenerating
 
 The vocabulary is stored in the repo at

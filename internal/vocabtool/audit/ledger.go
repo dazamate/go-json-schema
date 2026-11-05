@@ -52,6 +52,9 @@ var priceOrder = []string{
 	"costs/estimates",
 }
 
+// PriceOrder is the IDs of the price takers, in the order they take prices.
+func PriceOrder() []string { return slices.Clone(priceOrder) }
+
 // priceLedgerKey is the memo key of the price ledger.
 type priceLedgerKey struct{}
 
@@ -131,6 +134,15 @@ var retypeOrder = []struct {
 	{ID: "shop/page-kind-type", Blocks: true},
 	{ID: "shop/business-type", Blocks: true},
 	{ID: "site/online-business", Blocks: true},
+}
+
+// RetypeOrder is the IDs of the retypers, in the order they tell nodes.
+func RetypeOrder() []string {
+	ids := make([]string, len(retypeOrder))
+	for i, s := range retypeOrder {
+		ids[i] = s.ID
+	}
+	return ids
 }
 
 // retypeLedgerKey is the memo key of the retype ledger.
