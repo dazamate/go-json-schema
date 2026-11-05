@@ -14,7 +14,7 @@ import (
 
 var (
 	toolWords  = regexp.MustCompile(`(?i)\b(?:calculator|estimator|estimate|picker|planner|quote)\b`)
-	quoteWords = regexp.MustCompile(`(?i)\bquotes?\b|\bfree [\w ]{0,20}estimates?\b|\byour (?:price|number)\b|\bget (?:a |my |your )?(?:price|estimate)\b`)
+	quoteWords = regexp.MustCompile(`(?i)\bquotes?\b|\bfree [\w ]{0,20}estimates?\b|\byour (?:price|number)\b|\bget (?:a |my |your )?(?:price|estimate)\b|\bestimated? (?:price|cost)s?\b`)
 )
 
 // tool is an interactive block the page offers: a calculator, an estimator.
@@ -22,6 +22,10 @@ type tool struct {
 	n        *xhtml.Node
 	id, name string
 	quote    bool
+	// path is where the tool is in the page, bare that it has no id of its
+	// own: id is then a name for the form to take.
+	path string
+	bare bool
 }
 
 // toolsKey is the memo key of the page's tools.
@@ -32,7 +36,8 @@ type toolsKey struct{}
 // controls or more and an output or live region, or fewer under a
 // calculator's or estimate's name. A checklist's boxes and a form's fields
 // are not tools. There are none without the page's document. The list is
-// shared: read it only.
+// shared: read it only. A calculator built in a form is a tool too (see
+// formTools).
 func pageTools(c *audit.Context) []tool {
 	return audit.Memo(c, toolsKey{}, func() []tool {
 		if c.Page == nil || c.Page.Doc == nil {
@@ -93,7 +98,14 @@ func pageTools(c *audit.Context) []tool {
 			for _, b := range webpage.QueryAll(n, "button") {
 				buttons = append(buttons, webpage.HTMLText(b))
 			}
-			out = append(out, tool{n, id, name, quoteWords.MatchString(name + " " + strings.Join(buttons, " "))})
+			out = append(out, tool{n, id, name, quoteWords.MatchString(name + " " + strings.Join(buttons, " ")), "html:#" + id, false})
+		}
+		for _, ft := range formTools(c) {
+			if !slices.ContainsFunc(found, func(o *xhtml.Node) bool {
+				return slices.Contains(webpage.Ancestors(o), ft.n) || slices.Contains(webpage.Ancestors(ft.n), o)
+			}) {
+				out = append(out, ft)
+			}
 		}
 		return out
 	})
