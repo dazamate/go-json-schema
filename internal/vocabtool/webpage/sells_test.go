@@ -9,6 +9,22 @@ var sellsRows = []struct {
 	want           bool
 }{
 	{
+		// autodiscount.co.nz: a dealer with no cart; its cards lead to other
+		// vehicles' pages, which a shop's product cards do
+		name: "vehicle cards",
+		url:  "https://www.autodiscount.co.nz/vehicle/2015-Toyota-Aqua/12434",
+		src:  autodiscountVehicle,
+		want: true,
+	},
+	{
+		// a SaaS feature page at a product address, with a plan price and a
+		// sign-up link: its own address sells nothing
+		name: "saas feature page",
+		url:  "https://www.notion.com/product/ai",
+		src:  `<html><body><h1>Notion AI</h1><p>Add to any plan for $10 per member / month.</p><a href="/signup">Get started</a> <a href="/pricing">See pricing</a></body></html>`,
+		want: false,
+	},
+	{
 		// oliverbonas.com: the basket is a button, not a link
 		name: "basket button",
 		url:  "https://www.oliverbonas.com/returns-and-refunds",

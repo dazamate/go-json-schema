@@ -46,7 +46,11 @@ var kindSegments = []struct {
 }
 
 var (
-	productSegment = regexp.MustCompile(`^(products?|p|item|items)$`)
+	// productSegment is the path segment a product's own page sits under:
+	// /products/ (Shopify), /p/, /dp/ (Amazon), /pd/, /item/, /goods/, and
+	// /vehicle/ on a dealer's site
+	productSegment = regexp.MustCompile(`^(products?|p|pd|dp|items?|goods|vehicles?)$`)
+	vehicleSegment = regexp.MustCompile(`^vehicles?$`)
 	ogProduct      = regexp.MustCompile(`(?i)^\s*product(?:\.item)?\s*$`)
 	fileExt        = regexp.MustCompile(`\.(?:html?|php\d?|aspx?|jsp|cfm)$`)
 	listingSegment = regexp.MustCompile(`^(categor(y|ies)|collections?|c|shop|store|catalog(ue)?|departments?)$`)
@@ -89,11 +93,16 @@ func Segments(u *url.URL) []string {
 }
 
 // ProductPath reports the address of a product page: a product segment with
-// the product's own after it (/products/gold-locket, /p/12345).
+// the product's own after it (/products/gold-locket, /p/12345). A vehicle's
+// page names it by its year or stock number (/vehicle/2015-Toyota-Aqua/12434);
+// /vehicles/registration is a topic, not a vehicle.
 func ProductPath(u *url.URL) bool {
 	segs := Segments(u)
 	i := slices.IndexFunc(segs, productSegment.MatchString)
-	return i >= 0 && i < len(segs)-1
+	if i < 0 || i == len(segs)-1 {
+		return false
+	}
+	return !vehicleSegment.MatchString(segs[i]) || strings.ContainsAny(strings.Join(segs[i+1:], "/"), "0123456789")
 }
 
 // categorySegment names a category or collection in an address.
