@@ -82,7 +82,6 @@ func (c *checker) content(all []jsonld.Node, p *webpage.Facts) {
 		c.add(pagePath, Info, "%s: search engines leave its structured data out, so the shop checks skip it%s", what, note)
 		return
 	}
-	c.shop(all, p, d)
 	c.copyright(all, p)
 	c.readTime(all, p)
 	c.sectionLabel(all, p)
@@ -99,21 +98,6 @@ func (c *checker) content(all []jsonld.Node, p *webpage.Facts) {
 	c.responseTime(all, p)
 	c.quotes(p, d)
 	c.ratings(all, p)
-}
-
-// shop runs the shop checks still here: the sitewide WebSite, logo and
-// profiles, and what a product page and the shop's policies show.
-func (c *checker) shop(all []jsonld.Node, p *webpage.Facts, d *jsonld.Index) {
-	if p.Doc != nil {
-		c.website(all, p)
-		c.logo(all, p)
-		c.social(p, d)
-		c.catalog(all, p)
-	}
-	// what a shop's pages state about its own sales; on another site the
-	// same words ("a damaged item", "pay by bank transfer") are about others
-	if p.Sells() {
-	}
 }
 
 // copyright warns when the page shows a copyright year the markup lacks.

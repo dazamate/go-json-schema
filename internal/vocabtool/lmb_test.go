@@ -10,6 +10,8 @@ import (
 	"strings"
 	"sync"
 	"testing"
+
+	"github.com/dazamate/go-json-schema/internal/vocabtool/webpage"
 )
 
 // The Lift My Boxes pages under testdata/lmb are a content site's, not a
@@ -202,12 +204,12 @@ func TestLMBStaysQuiet(t *testing.T) {
 
 func TestSocialProfileLeavesPolicyPagesOut(t *testing.T) {
 	for _, h := range []string{"https://twitter.com/en/privacy", "https://www.facebook.com/full_data_use_policy", "https://www.instagram.com/legal/terms/", "https://www.youtube.com/about/policies/"} {
-		if socialProfile(h) {
+		if webpage.SocialProfile(h) {
 			t.Errorf("%s is a profile", h)
 		}
 	}
 	for _, h := range []string{"https://www.instagram.com/queen_of_diamonds_jewellery/", "https://www.facebook.com/104992909320900", "https://www.linkedin.com/company/acme", "https://www.youtube.com/@acme", "https://x.com/acme"} {
-		if !socialProfile(h) {
+		if !webpage.SocialProfile(h) {
 			t.Errorf("%s is not a profile", h)
 		}
 	}

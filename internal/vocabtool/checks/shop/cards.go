@@ -1,7 +1,8 @@
-// Package shop holds the checks of what a shop's pages show: the product
-// cards a page lists, a listing's product count, starting price and sort
-// order, the page's WebPage and the type its kind of page takes, and the
-// business that runs the shop and its type.
+// Package shop holds the checks of what a shop's pages show of the shop: the
+// product cards a page lists, a listing's product count, starting price and
+// sort order, the page's WebPage and the type its kind of page takes, the
+// sitewide WebSite and its links to the page, the business that runs the shop
+// with its type, logo, social profiles and categories.
 package shop
 
 import (
