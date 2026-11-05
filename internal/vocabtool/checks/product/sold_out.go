@@ -12,6 +12,9 @@ func init() { audit.Register(SoldOut{}) }
 var (
 	soldOut     = regexp.MustCompile(`(?i)\b(sold out|out of stock)\b`)
 	soldOutSkip = regexp.MustCompile(`(?i)(hide|show|include|exclude|without)\s*$`)
+	// stockStates is a theme's list of every stock state at once ("Item is in
+	// stock / Only 11 left / Item is out of stock"), one of which shows.
+	stockStates = regexp.MustCompile(`(?i)\bin stock\b[^.]{0,80}$`)
 )
 
 // SoldOut warns when a shop's page shows a product as sold out and no Offer
@@ -29,7 +32,7 @@ func (SoldOut) Run(c *audit.Context) []audit.Issue {
 	}
 	main := c.Page.Main
 	for _, loc := range soldOut.FindAllStringIndex(main, -1) {
-		if soldOutSkip.MatchString(main[:loc[0]]) {
+		if soldOutSkip.MatchString(main[:loc[0]]) || stockStates.MatchString(main[max(0, loc[0]-100):loc[0]]) {
 			continue
 		}
 		if jsonld.KeyMember(c.Nodes, "availability", "SoldOut", "OutOfStock") {
