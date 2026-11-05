@@ -120,9 +120,17 @@ func TestProductSnippets(t *testing.T) {
 			if len(got) != len(tc.want) {
 				t.Fatalf("%d findings, want %d:\n%s", len(got), len(tc.want), strings.Join(got, "\n"))
 			}
-			for i, w := range tc.want {
-				if !regexp.MustCompile(w).MatchString(got[i]) {
-					t.Errorf("finding %d\n got %s\nwant /%s/", i, got[i], w)
+			used := make([]bool, len(got)) // findings, in any order, each matching one pattern
+			for _, w := range tc.want {
+				re, found := regexp.MustCompile(w), false
+				for i, g := range got {
+					if !used[i] && re.MatchString(g) {
+						used[i], found = true, true
+						break
+					}
+				}
+				if !found {
+					t.Errorf("no finding matches /%s/ in:\n%s", w, strings.Join(got, "\n"))
 				}
 			}
 		})

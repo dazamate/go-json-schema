@@ -3,33 +3,27 @@ package vocabtool
 import (
 	"encoding/json"
 	"fmt"
-	"net/url"
-	"regexp"
 	"slices"
 	"strconv"
 	"strings"
 
+	"github.com/dazamate/go-json-schema/internal/vocabtool/audit"
+	_ "github.com/dazamate/go-json-schema/internal/vocabtool/checks/all" // register every check
 	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/txt"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/vocab"
-	"github.com/dazamate/go-json-schema/internal/vocabtool/webpage"
-	"golang.org/x/net/html"
 )
 
 // Issue severities. Only errors stop a draft being valid schema.org.
 const (
-	Error   = "error"
-	Warning = "warning"
-	Info    = "info"
+	Error   = audit.Error
+	Warning = audit.Warning
+	Info    = audit.Info
 )
 
 // Issue is one finding about a draft, located by a JSONPath-like path, or for
 // a finding on the page itself, by "html:" and the element's CSS selector.
-type Issue struct {
-	Path     string `json:"path"`
-	Severity string `json:"severity"`
-	Message  string `json:"message"`
-}
+type Issue = audit.Issue
 
 // Report is the checked draft, ready to publish, plus what was found.
 type Report struct {
@@ -71,75 +65,16 @@ type CheckOptions struct {
 // (https://schema.org/docs/datamodel.html), so it is kept. Bare enum member
 // names such as InStock are expanded to their schema.org URL.
 func (t *Tool) Check(draft json.RawMessage, opts CheckOptions) (Report, error) {
-	root, err := jsonld.Decode(draft)
+	ctx, err := audit.NewContext(t.Vocab, draft, input(opts))
 	if err != nil {
-		return Report{}, fmt.Errorf("draft is not valid JSON: %w", err)
+		return Report{}, err
 	}
-	var doc *jsonld.Object
-	switch r := root.(type) {
-	case *jsonld.Object:
-		doc = r
-		if _, ok := doc.Get("@context"); !ok {
-			doc.Prepend("@context", "https://schema.org")
-		}
-	case []any:
-		doc = &jsonld.Object{}
-		doc.Set("@context", "https://schema.org")
-		doc.Set("@graph", r)
-	default:
-		return Report{}, fmt.Errorf("draft must be a JSON object or array")
-	}
-	c := checker{v: t.Vocab, suggested: map[*jsonld.Object]bool{}, claimed: map[float64]bool{}}
-	c.walk("$", doc)
-	c.repeats(doc)
-	all := jsonld.Nodes("$", doc)
-	c.classTypes(all)
-	c.namedTypes(all)
-	c.webPageElements(all)
-	text := opts.PageText
-	var elements []PageElement
-	var page *html.Node
-	if strings.TrimSpace(opts.PageHTML) != "" {
-		if page, err = html.Parse(strings.NewReader(opts.PageHTML)); err != nil {
-			return Report{}, fmt.Errorf("page_html: %w", err)
-		}
-		if text == "" {
-			text = webpage.HTMLText(page)
-		}
-	}
-	var facts *webpage.Facts
-	if strings.TrimSpace(text) != "" {
-		facts = webpage.New(page, text, opts.PageURL)
-	}
-	if page != nil {
-		// a page search engines skip still lists its sections, unasked
-		elements = c.pageElements(all, page, facts == nil || facts.Private == "")
-	}
-	c.pageEntities(all, text)
-	c.bare(all)
-	c.ownReviews(all)
-	c.reviews(all)
-	c.productSnippets(all)
-	if facts != nil {
-		c.content(all, facts)
-	}
-	known := facts
-	if known == nil {
-		known = &webpage.Facts{}
-		if u, err := url.Parse(strings.TrimSpace(opts.PageURL)); err == nil && u.IsAbs() {
-			known.URL = u
-		}
-	}
-	c.organizations(all, opts.Keyword)
-	c.looseNodes(all, known)
-	if strings.TrimSpace(opts.Keyword) != "" {
-		c.keyword(all, doc, opts.Keyword, opts.KeywordDensity, known)
-	}
-	rep := Report{Issues: c.issues, PageElements: elements}
+	rep := Report{Issues: audit.Run(ctx, audit.Checks())}
 	if rep.Issues == nil {
 		rep.Issues = []Issue{}
 	}
-	for _, i := range c.issues {
+	rep.PageElements = audit.Memo(ctx, PageElementsKey{}, func() []PageElement { return nil })
+	for _, i := range rep.Issues {
 		switch i.Severity {
 		case Error:
 			rep.Errors++
@@ -147,13 +82,31 @@ func (t *Tool) Check(draft json.RawMessage, opts CheckOptions) (Report, error) {
 			rep.Warnings++
 		}
 	}
-	body, err := jsonld.Encode(doc, opts.Pretty)
-	if err != nil {
+	if rep.ScriptTag, err = scriptTag(ctx.Root, opts.Pretty); err != nil {
 		return Report{}, err
 	}
-	safe := strings.NewReplacer("<", `<`, ">", `>`).Replace(string(body))
-	rep.ScriptTag = `<script type="application/ld+json">` + safe + `</script>`
 	return rep, nil
+}
+
+// input is what the audit is given beside the draft.
+func input(opts CheckOptions) audit.Input {
+	return audit.Input{
+		PageText:       opts.PageText,
+		PageHTML:       opts.PageHTML,
+		PageURL:        opts.PageURL,
+		Keyword:        opts.Keyword,
+		KeywordDensity: opts.KeywordDensity,
+	}
+}
+
+// scriptTag is the draft as Check publishes it: a JSON-LD script tag.
+func scriptTag(root any, pretty bool) (string, error) {
+	body, err := jsonld.Encode(root, pretty)
+	if err != nil {
+		return "", err
+	}
+	safe := strings.NewReplacer("<", `<`, ">", `>`).Replace(string(body))
+	return `<script type="application/ld+json">` + safe + `</script>`, nil
 }
 
 // Vocabulary checks a draft against the vocabulary alone: the walk Check
@@ -162,25 +115,25 @@ func (t *Tool) Check(draft json.RawMessage, opts CheckOptions) (Report, error) {
 // untyped node with properties and a property only a subtype takes are
 // warnings; a property outside its listed domains is info.
 func (t *Tool) Vocabulary(draft json.RawMessage) ([]Issue, error) {
-	root, err := jsonld.Decode(draft)
+	ctx, err := audit.NewVocabularyContext(t.Vocab, draft)
 	if err != nil {
-		return nil, fmt.Errorf("draft is not valid JSON: %w", err)
+		return nil, err
 	}
-	switch root.(type) {
-	case *jsonld.Object, []any:
-	default:
-		return nil, fmt.Errorf("draft must be a JSON object or array")
-	}
-	c := checker{v: t.Vocab, suggested: map[*jsonld.Object]bool{}, claimed: map[float64]bool{}}
-	c.walk("$", root)
-	return c.issues, nil
+	return audit.Run(ctx, audit.Group("terms/")), nil
 }
 
+// checker makes the audit's checks that have not moved to their own files
+// yet. The legacy adapter checks run it.
 type checker struct {
 	v         *vocab.Vocab
 	issues    []Issue
 	suggested map[*jsonld.Object]bool // nodes already told to take a more specific type
 	claimed   map[float64]bool        // prices a check other than prices reports
+}
+
+// newChecker is a checker with nothing found yet.
+func newChecker(v *vocab.Vocab) *checker {
+	return &checker{v: v, suggested: map[*jsonld.Object]bool{}, claimed: map[float64]bool{}}
 }
 
 // claim notes prices another check reports, so prices does not report them
@@ -193,8 +146,9 @@ func (c *checker) claim(text string) {
 	}
 }
 
+// add notes an issue.
 func (c *checker) add(path, severity, format string, args ...any) {
-	c.issues = append(c.issues, Issue{Path: path, Severity: severity, Message: fmt.Sprintf(format, args...)})
+	c.issues = append(c.issues, audit.Issuef(path, severity, format, args...))
 }
 
 // walk checks a value. Objects with @type are nodes; their properties are
@@ -223,10 +177,6 @@ func (c *checker) walk(path string, v any) {
 		}
 	}
 }
-
-// googleAnnotation is a property such as query-input that Google's action
-// markup adds beside a schema.org Action.
-var googleAnnotation = regexp.MustCompile(`^[a-z]+-(?:input|output)$`)
 
 // repeats warns about a node without an @id that names the same Wikidata
 // item as a node with one: it repeats that node, which a {"@id"} reference
@@ -328,7 +278,7 @@ func (c *checker) unknown(path, kind, name string) {
 
 func (c *checker) property(path, key string, types []string, n *jsonld.Object) {
 	term := jsonld.StripPrefix(key)
-	if googleAnnotation.MatchString(term) {
+	if audit.GoogleAnnotation.MatchString(term) {
 		c.add(path, Info, "%s is Google's action annotation, not a schema.org property; kept", key)
 		return
 	}
