@@ -105,6 +105,14 @@ func TestClassifyAddress(t *testing.T) {
 		"https://shop.test/refund_policy.html":                                KindReturns,
 		"https://www.tutorfinder.com.au/help/tutor_rates.php":                 KindOther,
 		"https://business.gov.au/Registrations/Register-licences-and-permits": KindOther,
+		// a bag is the cart only as the whole address; a /bag/ category sells
+		// bags (eaglecreek.com, herschel.com)
+		"https://www.asos.com/bag":                           KindCart,
+		"https://www.asos.com/en-gb/bag":                     KindCart,
+		"https://www.eaglecreek.com/collections/bag":         KindOther,
+		"https://www.herschel.com/shop/bag/backpacks":        KindOther,
+		"https://app.asana.com/create-account":               KindAccount,
+		"https://www.example.com/customer/create-an-account": KindAccount,
 	} {
 		doc := parse(t, `<html><body><main><p>Text.</p></main></body></html>`)
 		if got := New(doc, HTMLText(doc), u).Kind; got != want {

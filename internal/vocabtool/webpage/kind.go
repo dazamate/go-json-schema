@@ -34,9 +34,9 @@ var kindSegments = []struct {
 	kind Kind
 	re   *regexp.Regexp
 }{
-	{KindCart, regexp.MustCompile(`^(cart|basket|bag|trolley|shopping-bag|shopping-cart|shopping-basket|shopping-trolley)$`)},
+	{KindCart, regexp.MustCompile(`^(cart|basket|trolley|shopping-bag|shopping-cart|shopping-basket|shopping-trolley)$`)},
 	{KindCheckout, regexp.MustCompile(`^checkouts?$`)},
-	{KindAccount, regexp.MustCompile(`^(account|my-account|login|signin|sign-in|register|signup|sign-up|wishlist|wish-list|favourites|favorites)$`)},
+	{KindAccount, regexp.MustCompile(`^(account|my-account|login|signin|sign-in|register|signup|sign-up|create-account|create-an-account|new-account|wishlist|wish-list|favourites|favorites)$`)},
 	{KindSearch, regexp.MustCompile(`^search$`)},
 	{KindContact, regexp.MustCompile(`^contact(-?us)?$`)},
 	{KindAbout, regexp.MustCompile(`^(about|about-us|our-story)$`)},
@@ -141,6 +141,11 @@ func (p *Facts) classify() Kind {
 	slugs := make([]string, len(segs))
 	for i, s := range segs {
 		slugs[i] = strings.ReplaceAll(fileExt.ReplaceAllString(s, ""), "_", "-")
+	}
+	// a bag is the cart only as the whole address (/bag, /en-gb/bag): a /bag/
+	// category sells bags
+	if rest := slices.DeleteFunc(slices.Clone(slugs), LocaleSegment.MatchString); len(rest) == 1 && rest[0] == "bag" {
+		return KindCart
 	}
 	for _, ks := range kindSegments {
 		if slices.ContainsFunc(slugs, ks.re.MatchString) {
