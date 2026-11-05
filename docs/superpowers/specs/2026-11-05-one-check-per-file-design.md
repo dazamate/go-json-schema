@@ -200,7 +200,7 @@ The page elements report (`Report.PageElements`) is a memoized fact. `Check` cop
 
 The issue order changes from today. The issues do not.
 
-`Vocabulary` normalizes, then runs only the `vocab/` checks over the root as given. An array root keeps its `$[0]` paths, as today.
+`Vocabulary` normalizes, then runs only the `terms/` checks over the root as given. An array root keeps its `$[0]` paths, as today.
 
 ### Tests
 
@@ -229,7 +229,7 @@ The order is strangler-style, sequential, with one commit per step. The golden t
 2. **Areas, one at a time.** Move each area's checks to `checks/<area>`, one per file with tests, and delete them from the old `checker`.
    - Moving the price-taking and retyping checks switches them from the old mutable maps to the ledgers.
    - Until all such checks have moved, the adapter feeds the ledger. The builder settles the exact bridge.
-3. **Finish.** When the adapter is empty, delete it and `checker`. Point `Vocabulary` at the `vocab` group. Update the docs that describe the code layout: README, `guide.md` if it names files, and the server's description if it names files. Delete the golden test.
+3. **Finish.** When the adapter is empty, delete it and `checker`. Point `Vocabulary` at the `terms` group. Update the docs that describe the code layout: README, `guide.md` if it names files, and the server's description if it names files. Delete the golden test.
 
 ## Left to the builder
 
