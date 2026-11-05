@@ -30,10 +30,22 @@ func (PageKindType) find(c *audit.Context, before audit.Retyped) (p *pageNode, t
 	}
 	n := p.node.N
 	ty = c.Single(n)
-	if ty == "" || ty == p.want || !slices.Contains(c.Vocab.V.Ancestors(p.want), ty) || before.Told[n] || slices.Contains(before.Named[n], p.want) {
+	if ty == "" || ty == p.want || !slices.Contains(c.Vocab.V.Ancestors(p.want), ty) || before.Told[n] || firstNamed(before.Named[n]) == p.want {
 		return nil, "", false
 	}
 	return p, ty, true
+}
+
+// firstNamed is the first subtype the ledger names for a node. The name and
+// URL check's message names its subtypes as one list, and the message was the
+// only trace of it that the page's kind looked for, so only the first counts:
+// "type it AboutPage or ContactPage" leaves the page's kind free to say
+// ContactPage.
+func firstNamed(named []string) string {
+	if len(named) == 0 {
+		return ""
+	}
+	return named[0]
 }
 
 // Run reports the WebPage with the type its kind of page takes.

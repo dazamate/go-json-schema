@@ -42,3 +42,15 @@ func TestPageTypeQuietAfterNamedType(t *testing.T) {
 	})
 	audittest.Expect(t, shop.PageKindType{}, in, nil)
 }
+
+// TestPageTypeAfterNamedTwo: a name and URL that name two subtypes lead with
+// only one of them, so the page's kind still says the other.
+func TestPageTypeAfterNamedTwo(t *testing.T) {
+	in := audittest.Input{Draft: `{"@context":"https://schema.org","@type":"WebPage","url":"https://harbour.test/contact/","name":"About and contact"}`, PageHTML: contactPage, PageURL: contactURL}
+	audittest.Expect(t, graph.NamedType{}, in, []audit.Issue{
+		{Path: "$", Severity: audit.Warning, Message: `WebPage "About and contact": its name or URL names the subtype AboutPage or ContactPage; type it AboutPage or ContactPage`},
+	})
+	audittest.Expect(t, shop.PageKindType{}, in, []audit.Issue{
+		{Path: "$", Severity: audit.Warning, Message: "this WebPage is a contact page: type it ContactPage"},
+	})
+}
