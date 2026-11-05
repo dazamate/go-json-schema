@@ -9,6 +9,7 @@ import (
 	"slices"
 	"sort"
 	"strings"
+	"sync"
 
 	"github.com/dazamate/go-json-schema/internal/schemagen/vocab"
 )
@@ -20,6 +21,7 @@ type Vocab struct {
 	Props   map[string]*Prop
 	Members map[string]*Member
 
+	mu        sync.RWMutex // guards ancestors, which Ancestors fills as it is asked
 	ancestors map[string][]string
 }
 
@@ -150,7 +152,10 @@ func Parse(data []byte) (*Vocab, error) {
 
 // Ancestors returns class and every class it inherits from, sorted.
 func (v *Vocab) Ancestors(class string) []string {
-	if a, ok := v.ancestors[class]; ok {
+	v.mu.RLock()
+	a, ok := v.ancestors[class]
+	v.mu.RUnlock()
+	if ok {
 		return a
 	}
 	seen := map[string]bool{class: true}
@@ -172,7 +177,9 @@ func (v *Vocab) Ancestors(class string) []string {
 		out = append(out, c)
 	}
 	sort.Strings(out)
+	v.mu.Lock()
 	v.ancestors[class] = out
+	v.mu.Unlock()
 	return out
 }
 

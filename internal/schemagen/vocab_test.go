@@ -1,7 +1,9 @@
 package schemagen
 
 import (
+	"fmt"
 	"slices"
+	"sync"
 	"testing"
 )
 
@@ -38,6 +40,26 @@ func TestAncestorsFollowMultipleParents(t *testing.T) {
 	if !slices.Equal(got, want) {
 		t.Fatalf("got %v, want %v", got, want)
 	}
+}
+
+// Ancestors caches what it works out, so concurrent lookups of classes it has
+// not seen yet must not race: run it under go test -race.
+func TestAncestorsConcurrentLookups(t *testing.T) {
+	v := loadVocab(t)
+	var wg sync.WaitGroup
+	for g := 0; g < 8; g++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			for i := 0; i < 200; i++ {
+				class := fmt.Sprintf("Unknown%d", i)
+				if got := v.Ancestors(class); !slices.Equal(got, []string{class}) {
+					t.Errorf("Ancestors(%q) = %v", class, got)
+				}
+			}
+		}()
+	}
+	wg.Wait()
 }
 
 func TestApplicablePropertiesIncludeInherited(t *testing.T) {
