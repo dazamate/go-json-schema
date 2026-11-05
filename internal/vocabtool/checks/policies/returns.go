@@ -39,6 +39,8 @@ var (
 	}
 	seasonal    = regexp.MustCompile(`(?i)\b(?:holiday|christmas|seasonal|extended) returns?\b|\bbought between [^.]{3,40} (?:can be|may be) returned until\b`)
 	returnsLink = regexp.MustCompile(`(?i)\breturns?\b|\brefunds?\b`)
+	// "Return to shop": the verb for going back, not a policy
+	returnGoBack = regexp.MustCompile(`(?i)^\s*return\s+(?:to|home|back)\b`)
 )
 
 // returns is what a shop's page states about its returns, and the draft's
@@ -87,7 +89,7 @@ func returnsOf(c *audit.Context) *returns {
 			r.link = txt.NormURL(p.URL)
 		} else if p.Doc != nil {
 			for _, a := range webpage.QueryAll(p.Doc, "a[href]") {
-				if u, ok := p.SiteLink(a); ok && returnsLink.MatchString(webpage.HTMLText(a)) && len(strings.Fields(webpage.HTMLText(a))) <= 3 {
+				if u, ok := p.SiteLink(a); ok && returnsLink.MatchString(webpage.HTMLText(a)) && !returnGoBack.MatchString(webpage.HTMLText(a)) && len(strings.Fields(webpage.HTMLText(a))) <= 3 {
 					r.link = u
 					break
 				}

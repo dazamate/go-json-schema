@@ -1,6 +1,7 @@
 package policies_test
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/dazamate/go-json-schema/internal/vocabtool/audit"
@@ -22,6 +23,7 @@ func TestReturnLink(t *testing.T) {
 		{"the policy page itself", audittest.Input{Draft: policy, PageHTML: returnsPage, PageURL: returnsURL}, []audit.Issue{
 			{Path: "$", Severity: audit.Warning, Message: "the page links the return policy (https://harbour.test/pages/returns): set merchantReturnLink https://harbour.test/pages/returns on the MerchantReturnPolicy"},
 		}},
+		{"return to shop is no policy", audittest.Input{Draft: policy, PageHTML: strings.Replace(footerReturnsPage, `<a href="/pages/returns">Returns</a>`, `<a href="/collections/all">Return to shop</a> <a href="/pages/cart-help">Return to cart</a>`, 1), PageURL: homeURL}, nil},
 		{"the policy has the link", audittest.Input{Draft: linked, PageHTML: footerReturnsPage, PageURL: homeURL}, nil},
 		{"no MerchantReturnPolicy", audittest.Input{Draft: noDraft, PageHTML: footerReturnsPage, PageURL: homeURL}, nil},
 		{"no link to a policy", audittest.Input{Draft: policy, PageHTML: paymentsPage, PageURL: paymentsURL}, nil},
