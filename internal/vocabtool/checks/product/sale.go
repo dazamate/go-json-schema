@@ -1,7 +1,12 @@
-// Package product holds the offer checks: what a shop's pages say about its
-// own sales that the Offers must carry. On another site the same words ("a
-// 1.5% surcharge", "save 20%") are about others, so the checks run only on a
-// shop's pages.
+// Package product holds the product checks: they hold a shop's markup to
+// what its pages show of the products. A product page's own checks cover the
+// Product itself, its choices of size or colour, its details, sizes, sets and
+// audience. The checks that run on any page of a shop cover its offers (sale
+// and was prices, unit prices, surcharges, add-ons, stock, condition, sale
+// dates, member prices), the reviews, share and wishlist buttons and the
+// order tracking it shows, and when and by whom the business was founded.
+// On another site the same words ("a 1.5% surcharge", "save 20%") are about
+// others, so the offer checks run only on a shop's pages.
 package product
 
 import (
@@ -29,9 +34,28 @@ type sale struct {
 	missing []string // the was prices none of those carries
 }
 
-// saleOf is the sale a page search engines index of a shop shows; ok is
-// false on any other page.
+// saleKey is the memo key of the page's sale.
+type saleKey struct{}
+
+// saleFound is the memoized saleOf: the sale, and whether the page is a
+// shop's.
+type saleFound struct {
+	s  sale
+	ok bool
+}
+
+// saleOf is the sale a page search engines index of a shop shows, worked out
+// once for the checks that share it; ok is false on any other page.
 func saleOf(c *audit.Context) (s sale, ok bool) {
+	f := audit.Memo(c, saleKey{}, func() saleFound {
+		s, ok := findSale(c)
+		return saleFound{s, ok}
+	})
+	return f.s, f.ok
+}
+
+// findSale reads the sale off the page and the draft.
+func findSale(c *audit.Context) (s sale, ok bool) {
 	if !c.Indexed() || !c.Page.Sells() {
 		return sale{}, false
 	}

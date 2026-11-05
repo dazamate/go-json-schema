@@ -65,6 +65,9 @@ var (
 	cartPath  = regexp.MustCompile(`/(cart|basket|bag)$`)
 	CartForm  = regexp.MustCompile(`(?i)(cart|basket|bag)\b`)
 	AddToCart = regexp.MustCompile(`(?i)\b(add to (cart|bag|basket)|buy now|pre-?order)\b`)
+
+	// PreOrder finds a shop taking pre-orders ("Pre-order now").
+	PreOrder = regexp.MustCompile(`(?i)\bpre-?order(?: now)?\b`)
 )
 
 // Segments are a URL path's segments, lowercased.

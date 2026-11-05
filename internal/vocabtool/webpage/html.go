@@ -278,3 +278,20 @@ func NextElement(n *html.Node) *html.Node {
 	}
 	return nil
 }
+
+// KeyValueList reports a dl of short values (Material: Silver), not a
+// glossary of definitions.
+func KeyValueList(dl *html.Node) bool {
+	dds := QueryAll(dl, "dd")
+	if len(dds) == 0 {
+		return false
+	}
+	long := 0
+	for _, dd := range dds {
+		t := HTMLText(dd)
+		if len(strings.Fields(t)) >= 6 || strings.HasSuffix(t, ".") {
+			long++
+		}
+	}
+	return long*2 <= len(dds)
+}

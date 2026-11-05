@@ -31,6 +31,11 @@ func (c *checker) is(n *jsonld.Object, ty string) bool {
 	return c.v.Is(jsonld.TypeNames(n), ty)
 }
 
+// has reports a node of the type, or a subtype, in the draft.
+func (c *checker) has(all []jsonld.Node, ty string) bool {
+	return slices.ContainsFunc(all, func(l jsonld.Node) bool { return c.is(l.N, ty) })
+}
+
 // pageNode is the path of the WebPage the draft describes the page with:
 // the one whose url is the canonical URL, or else the first WebPage.
 func (c *checker) pageNode(all []jsonld.Node, p *webpage.Facts) string {
@@ -105,17 +110,10 @@ func (c *checker) shop(all []jsonld.Node, p *webpage.Facts, d *jsonld.Index) {
 		c.social(p, d)
 		c.catalog(all, p)
 	}
-	if p.Kind == webpage.KindProduct {
-		c.product(all, p, d)
-	}
 	// what a shop's pages state about its own sales; on another site the
 	// same words ("a damaged item", "pay by bank transfer") are about others
 	if p.Sells() {
-		c.stock(all, p)
-		c.members(all, p)
 	}
-	c.engagement(all, p)
-	c.founding(all, p)
 }
 
 // copyright warns when the page shows a copyright year the markup lacks.
@@ -431,7 +429,7 @@ func (c *checker) forms(all []jsonld.Node, p *webpage.Facts, d *jsonld.Index) {
 			}
 			text := webpage.HTMLText(n)
 			switch {
-			case preOrder.MatchString(text):
+			case webpage.PreOrder.MatchString(text):
 				c.add("html:"+webpage.SelectorFor(p.Doc, n), Warning, "the page's pre-order form has no Action whose target points at it: add a PreOrderAction as the Offer's potentialAction, target an EntryPoint (urlTemplate %s, httpMethod %s)", p.Abs(action), method)
 			case webpage.CartForm.MatchString(action) || webpage.AddToCart.MatchString(text):
 				c.add("html:"+webpage.SelectorFor(p.Doc, n), Warning, "the page's add-to-bag form has no Action whose target points at it: add a BuyAction as the Offer's potentialAction, target an EntryPoint (urlTemplate %s, httpMethod %s, actionPlatform https://schema.org/DesktopWebPlatform and https://schema.org/MobileWebPlatform)", p.Abs(action), method)
@@ -552,7 +550,7 @@ func (c *checker) terms(all []jsonld.Node, p *webpage.Facts) {
 				// product's details, is data the shop checks read, and a
 				// shop's dl beside a "Shop lockets" link sells: neither is a
 				// glossary
-				if !keyValueList(n) && p.Kind != webpage.KindProduct && !p.Promo(n) && !repeats(n) {
+				if !webpage.KeyValueList(n) && p.Kind != webpage.KindProduct && !p.Promo(n) && !repeats(n) {
 					for _, d := range webpage.Pairs(n) {
 						add(d.Label)
 					}
@@ -820,7 +818,7 @@ func (c *checker) outsideLinks(p *webpage.Facts, d *jsonld.Index) {
 			return
 		}
 		// the business's profiles and share buttons have checks of their own
-		if socialProfile(h) || shareLink.MatchString(h) {
+		if webpage.SocialProfile(h) || webpage.ShareLink.MatchString(h) {
 			return
 		}
 		key := txt.NormURL(u)
