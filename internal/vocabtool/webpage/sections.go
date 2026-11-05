@@ -60,6 +60,11 @@ func sectionType(n *html.Node) string {
 			return ""
 		}
 		return "Table"
+	case atom.Ol, atom.Ul, atom.Div, atom.P:
+		if trailBlock(n) {
+			return "BreadcrumbList"
+		}
+		t = roleTypes[role]
 	default:
 		t = roleTypes[role]
 	}
@@ -81,6 +86,42 @@ func sectionType(n *html.Node) string {
 		}
 	}
 	return t
+}
+
+// crumbPart is a word of a class or id that makes a breadcrumb name a part
+// of the trail or a block beside it ("breadcrumb-item",
+// "content-after-breadcrumb"), not the trail.
+var crumbPart = regexp.MustCompile(`^(?:item|items|link|links|sep|separator|current|label|icon|arrow|after|before|skip|content|text|home|last)$`)
+
+// namesTrail reports a class or id that names a breadcrumb trail itself:
+// one of its classes, or its id, holds breadcrumb or breadcrumbs among words
+// that name no part of it.
+func namesTrail(n *html.Node) bool {
+	id, _ := Attr(n, "id")
+	class, _ := Attr(n, "class")
+	for _, s := range append(strings.Fields(class), id) {
+		words := strings.FieldsFunc(strings.ToLower(s), func(r rune) bool { return r == '-' || r == '_' })
+		if slices.ContainsFunc(words, func(w string) bool { return w == "breadcrumb" || w == "breadcrumbs" }) &&
+			!slices.ContainsFunc(words, crumbPart.MatchString) {
+			return true
+		}
+	}
+	return false
+}
+
+// trailBlock reports a breadcrumb trail outside a nav: a list or block
+// named a breadcrumb that links two pages or more, outside any nav, and
+// holding no nav or other trail, so a wrapper around a trail is not one.
+func trailBlock(n *html.Node) bool {
+	if role, _ := Attr(n, "role"); role != "" || !namesTrail(n) || len(QueryAll(n, "a[href]")) < 2 || inNav(n) {
+		return false
+	}
+	for _, c := range QueryAll(n, "nav, [role=navigation], ol, ul, div, p") {
+		if c.DataAtom == atom.Nav || namesTrail(c) {
+			return false
+		}
+	}
+	return true
 }
 
 // inNav reports an element inside a nav: a nav element or a navigation

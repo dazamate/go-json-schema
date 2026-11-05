@@ -82,6 +82,22 @@ func TestPageSections(t *testing.T) {
 				<iframe id="slot" src="https://googleads.g.doubleclick.net/pagead/ads?client=ca-pub-1"></iframe></body></html>`,
 			want: "WPAdBlock #slot",
 		},
+		{
+			// taylorstitch.com: the trail is an ol, not in a nav
+			name: "breadcrumb list outside a nav",
+			src: `<html><body><div class="titling"><ol itemscope="" itemtype="https://schema.org/BreadcrumbList" class="breadcrumbs phase-retail"> <li itemprop="itemListElement"> <a itemprop="item" href="/"><span itemprop="name">Home</span></a></li><li itemprop="itemListElement"> <a itemprop="item" href="/collections/mens-shirts"><span itemprop="name">Shirts &amp; Button Downs</span></a></li></ol>
+				<h1>The Jack in Blue Everyday Oxford</h1></div></body></html>`,
+			want: "BreadcrumbList body > div > ol",
+		},
+		{
+			// loveitlandscaping.com.au: a wrapper div around Rank Math's
+			// breadcrumb nav; allrecipes.com: a list in a breadcrumb div
+			name: "breadcrumb wrapper and its trail",
+			src: `<html><body><div class="breadcrumb-wrapper"><nav aria-label="breadcrumbs" class="rank-math-breadcrumb"><p><a href="https://loveitlandscaping.com.au">Home</a><span class="separator"> » </span><span class="last">How Much Does Landscaping Cost?</span></p></nav></div>
+				<div id="mntl-universal-breadcrumbs--scroll_1-0" class="mntl-universal-breadcrumbs--scroll"><ul id="mntl-universal-breadcrumbs_1-0" class="mntl-universal-breadcrumbs"><li class="mntl-breadcrumbs__item"><a href="https://www.allrecipes.com/recipes/" class="mntl-breadcrumbs__link">Recipes</a></li><li class="mntl-breadcrumbs__item"><a href="https://www.allrecipes.com/recipes/79/desserts/" class="mntl-breadcrumbs__link">Desserts</a></li></ul></div>
+				<div id="content-after-breadcrumb" tabindex="-1"><p>Contact us</p><a href="/a">A</a><a href="/b">B</a></div></body></html>`,
+			want: `BreadcrumbList nav[aria-label="breadcrumbs"]; BreadcrumbList #mntl-universal-breadcrumbs_1-0`,
+		},
 	} {
 		if got := sectionsOf(t, r.src); got != r.want {
 			t.Errorf("%s:\n got %s\nwant %s", r.name, got, r.want)
