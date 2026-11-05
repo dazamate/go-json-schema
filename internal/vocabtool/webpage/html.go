@@ -262,6 +262,59 @@ func namesOverlay(e *html.Node) bool {
 	return false
 }
 
+// policyWord is a word that names a shop's policy: its shipping, returns or
+// guarantee.
+var policyWord = regexp.MustCompile(`^(?:shipping|delivery|postage|returns?|refunds?|exchanges?|guarantee|warranty)$`)
+
+// PolicyText is the visible text of the overlays the page opens over itself
+// for its shipping, returns or guarantee terms (taylorstitch.com's
+// dialog#shipping-dialog, a "Shipping & Returns" drawer): Main leaves
+// overlays out, but these terms are the shop's own. A cart, wishlist or help
+// overlay gives none.
+func (p *Facts) PolicyText() string {
+	if p.Doc == nil {
+		return ""
+	}
+	var out []string
+	var walk func(*html.Node)
+	walk = func(n *html.Node) {
+		for c := n.FirstChild; c != nil; c = c.NextSibling {
+			if OverlayBox(c) && namesPolicy(c) {
+				out = append(out, HTMLText(c))
+			} else {
+				walk(c)
+			}
+		}
+	}
+	walk(p.Doc)
+	return strings.Join(out, "\n")
+}
+
+// namesPolicy reports an overlay whose id, class, label or first heading
+// names a shop's policy.
+func namesPolicy(e *html.Node) bool {
+	id, _ := Attr(e, "id")
+	class, _ := Attr(e, "class")
+	label, _ := Attr(e, "aria-label")
+	names := []string{id, class, label}
+	var heading *html.Node
+	Visit(e, func(n *html.Node) {
+		if heading == nil && HeadingLevel(n) > 0 {
+			heading = n
+		}
+	})
+	if heading != nil {
+		names = append(names, HTMLText(heading))
+	}
+	for _, s := range names {
+		words := strings.FieldsFunc(strings.ToLower(s), func(r rune) bool { return r < 'a' || r > 'z' })
+		if slices.ContainsFunc(words, policyWord.MatchString) {
+			return true
+		}
+	}
+	return false
+}
+
 // hiddenStyle matches an inline style that hides its element.
 var hiddenStyle = regexp.MustCompile(`(?i)(?:^|;)\s*(?:display\s*:\s*none|visibility\s*:\s*hidden)\b`)
 

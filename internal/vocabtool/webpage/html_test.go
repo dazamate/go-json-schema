@@ -74,6 +74,30 @@ func TestCopyrightLine(t *testing.T) {
 // TestMainSkipsSiteFooterHolderFirst checks that a footer inside main whose
 // copyright line names the holder before the year is the site's footer, as
 // one with "© 2026" is.
+// TestPolicyText checks that the overlays named for a shop's shipping,
+// returns or guarantee give their text (taylorstitch.com's dialog#shipping-
+// dialog, a "Shipping & Returns" drawer), and a cart, wishlist or help one
+// does not.
+func TestPolicyText(t *testing.T) {
+	doc := parse(t, `<html><body><main><h1>Shirt</h1></main>
+		<dialog id="shipping-dialog"><p>Return an item for a full refund within 21 days.</p></dialog>
+		<div class="drawer" role="dialog"><h2>Shipping &amp; Returns</h2><p>Exchanges are free.</p></div>
+		<div class="oddit-cart-drawer"><p>Your cart $299.00</p></div>
+		<div role="dialog" aria-label="My wishlists"><p>View store credit.</p></div>
+		<div class="modal" role="dialog"><p>Earn 1 point for every $1 spent.</p></div></body></html>`)
+	got := New(doc, HTMLText(doc), "https://shop.test/products/shirt").PolicyText()
+	for _, want := range []string{"full refund", "Exchanges are free"} {
+		if !strings.Contains(got, want) {
+			t.Errorf("PolicyText() = %q, want %q in it", got, want)
+		}
+	}
+	for _, not := range []string{"$299.00", "store credit", "Earn 1 point", "Shirt"} {
+		if strings.Contains(got, not) {
+			t.Errorf("PolicyText() = %q, want no %q", got, not)
+		}
+	}
+}
+
 func TestMainSkipsSiteFooterHolderFirst(t *testing.T) {
 	doc := parse(t, `<html><body><main><h1>Returns and Refunds</h1><p>You can return most items to us within 30 days.</p>
 		<footer><p>Read our 566151 reviews</p><p>© Oliver Bonas 2026</p><a href="/privacy">Privacy Policy</a></footer></main></body></html>`)

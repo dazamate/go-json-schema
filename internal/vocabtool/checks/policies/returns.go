@@ -80,14 +80,19 @@ func returnsOf(c *audit.Context) *returns {
 		if m := returnNone.FindString(p.Text); m != "" {
 			r.facts = append(r.facts, returnFact{m, "returnPolicyCategory", "MerchantReturnNotPermitted"})
 		}
-		for _, s := range returnSentence.FindAllString(p.Main, -1) {
+		// the main copy, and the shipping or returns dialog a product page opens
+		copy := p.Main
+		if t := p.PolicyText(); t != "" {
+			copy += "\n" + t
+		}
+		for _, s := range returnSentence.FindAllString(copy, -1) {
 			for _, rf := range returnFacts {
 				if m := rf.re.FindString(s); m != "" && !slices.ContainsFunc(r.facts, func(f returnFact) bool { return f.member == rf.member }) {
 					r.facts = append(r.facts, returnFact{m, rf.prop, rf.member})
 				}
 			}
 		}
-		if m := seasonal.FindString(p.Main); m != "" {
+		if m := seasonal.FindString(copy); m != "" {
 			r.facts = append(r.facts, returnFact{m, "returnPolicySeasonalOverride", "MerchantReturnPolicySeasonalOverride"})
 		}
 		for _, l := range c.Nodes {
