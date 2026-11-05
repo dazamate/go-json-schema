@@ -1,6 +1,7 @@
 package content
 
 import (
+	"encoding/hex"
 	"net/url"
 	"regexp"
 	"slices"
@@ -44,6 +45,34 @@ func telKey(s string) string {
 		d = d[len(d)-8:]
 	}
 	return d
+}
+
+// obfuscated is how a page spells an address to hide it from robots:
+// "name [at] site [dot] com".
+var obfuscated = strings.NewReplacer(" [at] ", "@", "[at]", "@", " (at) ", "@", "(at)", "@", " [dot] ", ".", "[dot]", ".", " (dot) ", ".", "(dot)", ".")
+
+// deobfuscate reads an address a page spells with [at] and [dot].
+func deobfuscate(s string) string { return obfuscated.Replace(s) }
+
+// cfEmail decodes the address Cloudflare's email protection hides in a hex
+// string: the first byte is the key every other byte is xor-ed with. It is
+// "" for any other string.
+func cfEmail(h string) string {
+	if len(h) < 4 || len(h)%2 != 0 {
+		return ""
+	}
+	b, err := hex.DecodeString(h)
+	if err != nil {
+		return ""
+	}
+	out := make([]byte, len(b)-1)
+	for i, c := range b[1:] {
+		out[i] = c ^ b[0]
+	}
+	if !strings.Contains(string(out), "@") {
+		return ""
+	}
+	return strings.ToLower(string(out))
 }
 
 // contactFind is one contact detail the page and the draft disagree on: the
@@ -118,7 +147,23 @@ func contactsOf(c *audit.Context) contacts {
 				}
 			})
 		}
-		lowText := strings.ToLower(p.Text)
+		lowText := deobfuscate(strings.ToLower(p.Text))
+		if p.Doc != nil {
+			// Cloudflare hides an address in a hex string of an attribute or a link
+			webpage.Visit(p.Doc, func(n *xhtml.Node) {
+				for _, k := range []string{"data-cfemail", "href"} {
+					v, _ := webpage.Attr(n, k)
+					if i := strings.Index(v, "email-protection#"); k == "href" && i >= 0 {
+						v = v[i+len("email-protection#"):]
+					} else if k == "href" {
+						continue
+					}
+					if a := cfEmail(v); a != "" {
+						shownMail[a] = true
+					}
+				}
+			})
+		}
 		for _, v := range tels {
 			if !shownTel[v.key] {
 				out.telephones = append(out.telephones, contactFind{v.path, v.raw})
