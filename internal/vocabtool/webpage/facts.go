@@ -84,9 +84,10 @@ var LineBreaks = map[atom.Atom]bool{
 
 // MainLines is mainText a line at a time: a block element starts and ends a
 // line, so a line never runs into the next block's words. It leaves out the
-// drawers, modals and dialogs the page opens over itself (OverlayBox): a
+// drawers, modals and dialogs the page opens over itself (mainOverlay): a
 // cart drawer's picks or a help modal's terms are no copy of the page,
-// while an FAQ's closed details, a tab panel or a collapsed block are.
+// while an FAQ's closed details, a tab panel, a collapsed block or a
+// product's details drawer in main are.
 func MainLines(doc *html.Node) []string {
 	var lines []string
 	var b strings.Builder
@@ -96,10 +97,10 @@ func MainLines(doc *html.Node) []string {
 		}
 		b.Reset()
 	}
-	var walk func(*html.Node)
-	walk = func(n *html.Node) {
+	var walk func(n *html.Node, inMain bool)
+	walk = func(n *html.Node, inMain bool) {
 		for ch := n.FirstChild; ch != nil; ch = ch.NextSibling {
-			if l := landmark(ch); Skipped(ch) || l == atom.Nav || ((l == atom.Header || l == atom.Footer) && !scoped(ch)) || OverlayBox(ch) || namedChrome(ch) {
+			if l := landmark(ch); Skipped(ch) || l == atom.Nav || ((l == atom.Header || l == atom.Footer) && !scoped(ch)) || mainOverlay(ch, inMain) || namedChrome(ch) {
 				continue
 			}
 			if ch.Type == html.TextNode {
@@ -110,15 +111,28 @@ func MainLines(doc *html.Node) []string {
 			if block {
 				end()
 			}
-			walk(ch)
+			walk(ch, inMain || ch.DataAtom == atom.Main)
 			if block {
 				end()
 			}
 		}
 	}
-	walk(doc)
+	walk(doc, false)
 	end()
 	return lines
+}
+
+// mainOverlay reports an overlay Main leaves out: a dialog element or role
+// or an aria-modal anywhere; outside main, a block whose tag, class or id
+// names a drawer, modal, popup or mobile menu (a cart drawer). Inside main
+// such a name is the page's own copy as often (a product's details drawer).
+func mainOverlay(e *html.Node, inMain bool) bool {
+	if !OverlayBox(e) {
+		return false
+	}
+	role, _ := Attr(e, "role")
+	modal, _ := Attr(e, "aria-modal")
+	return !inMain || e.DataAtom == atom.Dialog || role == "dialog" || role == "alertdialog" || modal == "true"
 }
 
 // canonical is the page's canonical link, or its og:url.
