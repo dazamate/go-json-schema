@@ -13,7 +13,7 @@ import (
 
 var (
 	relatedLabel = regexp.MustCompile(`(?i)^(?:related\b|keep reading|read next|read more|more (?:for|from|on|like this|guides|articles|reading)|you (?:may|might) also like|see also|further reading|in this (?:guide|section|series|hub)\b|guides in\b|recommendations\b|recommended (?:for|products?|items?|reading|articles?|posts?|guides?)\b|recently viewed|(?:this )?goes well with|(?:customers|people) (?:also|who)\b|frequently bought|similar\b|complete the look|shop the look|pairs? (?:well )?with|(?:wear|style) it with)`)
-	GuideLabel   = regexp.MustCompile(`(?i)^(?:in this (?:guide|section|series|hub)\b|guides in\b)`)
+	GuideLabel   = regexp.MustCompile(`(?i)^(?:(?:(?:pages|parts|chapters|articles|steps) )?in this (?:guide|section|series|hub)\b|guides in\b)`)
 )
 
 // Card is a product card on a listing: the element that holds one product's
@@ -272,9 +272,18 @@ func (p *Facts) RelatedBoxes() []RelatedBox {
 		return nil
 	}
 	var out []RelatedBox
+	var named []*html.Node // the boxes their aria-label names
 	Visit(p.Doc, func(n *html.Node) {
 		switch n.DataAtom {
 		case atom.H2, atom.H3, atom.H4, atom.H5, atom.H6, atom.P, atom.Span:
+		case atom.Nav, atom.Aside, atom.Section:
+			// a guide's nav its label names, over a "Contents" heading
+			// (gov.uk's "Pages in this guide")
+			if l, _ := Attr(n, "aria-label"); GuideLabel.MatchString(strings.TrimSpace(l)) && !siteChromeAround(n) && len(p.SiteLinks(n)) >= 2 && !slices.ContainsFunc(out, func(b RelatedBox) bool { return b.N == n }) {
+				out = append(out, RelatedBox{strings.TrimSpace(l), n})
+				named = append(named, n)
+			}
+			return
 		default:
 			return
 		}
@@ -301,7 +310,10 @@ func (p *Facts) RelatedBoxes() []RelatedBox {
 			return
 		}
 	})
-	return out
+	// a box its label names gives way to the box its own heading gives
+	return slices.DeleteFunc(out, func(b RelatedBox) bool {
+		return slices.Contains(named, b.N) && slices.ContainsFunc(out, func(o RelatedBox) bool { return o.N != b.N && slices.Contains(Ancestors(o.N), b.N) })
+	})
 }
 
 // Sells reports a page of a shop: an add-to-cart form, a link to its cart or
