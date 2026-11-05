@@ -8,6 +8,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
+	"github.com/dazamate/go-json-schema/internal/vocabtool/txt"
 	xhtml "golang.org/x/net/html"
 	"golang.org/x/net/html/atom"
 )
@@ -216,8 +218,8 @@ func (p *pageFacts) siteLink(a *xhtml.Node) (string, bool) {
 	} else if u.IsAbs() {
 		return "", false
 	}
-	s := normURL(u)
-	if p.url != nil && s == normURL(p.url) {
+	s := txt.NormURL(u)
+	if p.url != nil && s == txt.NormURL(p.url) {
 		return "", false
 	}
 	return s, true
@@ -272,7 +274,7 @@ func (p *pageFacts) productCards() []*card {
 			if len(p.siteLinks(e)) > 1 {
 				return
 			}
-			if priceAmount.MatchString(htmlText(e)) {
+			if txt.PriceAmount.MatchString(htmlText(e)) {
 				if !seen[e] {
 					seen[e] = true
 					out = append(out, &card{n: e, url: u, name: cardName(e, a)})
@@ -320,7 +322,7 @@ func cardName(c, a *xhtml.Node) string {
 		name, _ = attr(a, "aria-label")
 	}
 	// a link that wraps the whole card carries its price too
-	return strings.Join(strings.Fields(priceAmount.ReplaceAllString(name, "")), " ")
+	return strings.Join(strings.Fields(txt.PriceAmount.ReplaceAllString(name, "")), " ")
 }
 
 // inCard reports whether n sits in a product card.
@@ -444,12 +446,12 @@ func (p *pageFacts) homeLink(a *xhtml.Node) bool {
 
 // pageType warns when the page has no WebPage node, or one typed more
 // generally than the kind of page it is.
-func (c *checker) pageType(all []located, p *pageFacts) {
+func (c *checker) pageType(all []jsonld.Node, p *pageFacts) {
 	want := kindPageType[p.kind]
 	if want == "" {
 		want = "WebPage"
 	}
-	i := slices.IndexFunc(all, func(l located) bool { return c.is(l.n, "WebPage") && len(l.n.keys) > 1 })
+	i := slices.IndexFunc(all, func(l jsonld.Node) bool { return c.is(l.N, "WebPage") && len(l.N.Keys) > 1 })
 	if i < 0 {
 		extra := map[pageKind]string{
 			kindProduct: "mainEntity the Product, breadcrumb the BreadcrumbList",
@@ -465,25 +467,25 @@ func (c *checker) pageType(all []located, p *pageFacts) {
 		return
 	}
 	l := all[i]
-	ty := c.single(l.n)
+	ty := c.single(l.N)
 	// the name and URL check may already have named the subtype
-	named := slices.ContainsFunc(c.issues, func(i Issue) bool { return i.Path == l.path && strings.Contains(i.Message, "subtype "+want) })
-	if ty != "" && ty != want && slices.Contains(c.v.V.Ancestors(want), ty) && !c.suggested[l.n] && !named {
-		c.add(l.path, Warning, "this %s is a %s page: type it %s", ty, strings.TrimPrefix(string(p.kind), "kind"), want)
-		c.suggested[l.n] = true
+	named := slices.ContainsFunc(c.issues, func(i Issue) bool { return i.Path == l.Path && strings.Contains(i.Message, "subtype "+want) })
+	if ty != "" && ty != want && slices.Contains(c.v.V.Ancestors(want), ty) && !c.suggested[l.N] && !named {
+		c.add(l.Path, Warning, "this %s is a %s page: type it %s", ty, strings.TrimPrefix(string(p.kind), "kind"), want)
+		c.suggested[l.N] = true
 	}
 }
 
 // website warns when the draft has no WebSite, or one without the page's
 // language.
-func (c *checker) website(all []located, p *pageFacts) {
+func (c *checker) website(all []jsonld.Node, p *pageFacts) {
 	lang := ""
 	if p.doc != nil {
 		for _, h := range queryAll(p.doc, "html[lang]") {
 			lang, _ = attr(h, "lang")
 		}
 	}
-	i := slices.IndexFunc(all, func(l located) bool { return c.is(l.n, "WebSite") && len(l.n.keys) > 1 })
+	i := slices.IndexFunc(all, func(l jsonld.Node) bool { return c.is(l.N, "WebSite") && len(l.N.Keys) > 1 })
 	if i < 0 {
 		home, id := "the site's home page", "the home page's URL + #website"
 		if p.url != nil {
@@ -493,21 +495,21 @@ func (c *checker) website(all []located, p *pageFacts) {
 		c.add(pagePath, Warning, "the draft has no WebSite: add the site's WebSite to every page (@id %s, url %s, name, inLanguage %s, publisher the business) and set the WebPage's isPartOf to it", id, home, orDefault(lang, "the page's language"))
 		return
 	}
-	if _, ok := all[i].n.get("inLanguage"); !ok && lang != "" {
-		c.add(all[i].path, Warning, "this WebSite has no inLanguage: set it %s, the page's language", lang)
+	if _, ok := all[i].N.Get("inLanguage"); !ok && lang != "" {
+		c.add(all[i].Path, Warning, "this WebSite has no inLanguage: set it %s, the page's language", lang)
 	}
 	wp, ok := c.mainWebPage(all, p)
 	if !ok {
 		return
 	}
-	if _, ok := wp.n.get("isPartOf"); !ok {
-		ref := strings.Join(append(strs(all[i].n, "@id"), strs(all[i].n, "url")...), ", ")
-		c.add(wp.path, Warning, "the WebPage has no isPartOf: set it to the WebSite ({\"@id\": %q})", orDefault(strings.SplitN(ref, ", ", 2)[0], "the WebSite's @id"))
+	if _, ok := wp.N.Get("isPartOf"); !ok {
+		ref := strings.Join(append(jsonld.Strs(all[i].N, "@id"), jsonld.Strs(all[i].N, "url")...), ", ")
+		c.add(wp.Path, Warning, "the WebPage has no isPartOf: set it to the WebSite ({\"@id\": %q})", orDefault(strings.SplitN(ref, ", ", 2)[0], "the WebSite's @id"))
 	}
 	// the breadcrumb nav's BreadcrumbList belongs to the page
 	crumbs := p.doc != nil && slices.ContainsFunc(pageSections(p.doc), func(s *section) bool { return s.Type == "BreadcrumbList" })
-	if _, ok := wp.n.get("breadcrumb"); !ok && crumbs && c.has(all, "BreadcrumbList") {
-		c.add(wp.path, Warning, "the WebPage has no breadcrumb: set it to the BreadcrumbList of the page's breadcrumb nav")
+	if _, ok := wp.N.Get("breadcrumb"); !ok && crumbs && c.has(all, "BreadcrumbList") {
+		c.add(wp.Path, Warning, "the WebPage has no breadcrumb: set it to the BreadcrumbList of the page's breadcrumb nav")
 	}
 }
 
@@ -603,17 +605,17 @@ func (p *pageFacts) address() string {
 // business warns when the draft has no business node, or one typed more
 // generally than a shop: an online shop is an OnlineStore, and one with a
 // street address the Store subtype for its trade.
-func (c *checker) business(all []located, p *pageFacts) {
+func (c *checker) business(all []jsonld.Node, p *pageFacts) {
 	addr := p.address()
 	want, why := "", ""
 	switch {
 	case addr != "":
 		want = p.storeType()
-		why = fmt.Sprintf("the page shows the street address %q", clip(addr, 60))
+		why = fmt.Sprintf("the page shows the street address %q", txt.Clip(addr, 60))
 	case p.sells():
 		want, why = "OnlineStore", "the site sells online"
 	}
-	i := slices.IndexFunc(all, func(l located) bool { return c.is(l.n, "Organization") && len(l.n.keys) > 1 })
+	i := slices.IndexFunc(all, func(l jsonld.Node) bool { return c.is(l.N, "Organization") && len(l.N.Keys) > 1 })
 	if i < 0 {
 		switch want {
 		case "":
@@ -626,17 +628,17 @@ func (c *checker) business(all []located, p *pageFacts) {
 		return
 	}
 	l := all[i]
-	ty := c.single(l.n)
-	if want != "" && ty != "" && ty != want && slices.Contains(c.v.V.Ancestors(want), ty) && !c.suggested[l.n] {
-		c.add(l.path, Warning, "%s: type this %s %s", why, ty, want)
-		c.suggested[l.n] = true
+	ty := c.single(l.N)
+	if want != "" && ty != "" && ty != want && slices.Contains(c.v.V.Ancestors(want), ty) && !c.suggested[l.N] {
+		c.add(l.Path, Warning, "%s: type this %s %s", why, ty, want)
+		c.suggested[l.N] = true
 	}
 }
 
 // logo warns when the site header shows the business's logo and no node has
 // a logo.
-func (c *checker) logo(all []located, p *pageFacts) {
-	if p.doc == nil || slices.ContainsFunc(all, func(l located) bool { _, ok := l.n.get("logo"); return ok }) {
+func (c *checker) logo(all []jsonld.Node, p *pageFacts) {
+	if p.doc == nil || slices.ContainsFunc(all, func(l jsonld.Node) bool { _, ok := l.N.Get("logo"); return ok }) {
 		return
 	}
 	for _, s := range pageSections(p.doc) {
@@ -669,7 +671,7 @@ func socialProfile(href string) bool {
 
 // social warns on links to the business's social profiles that no sameAs
 // lists.
-func (c *checker) social(p *pageFacts, d *draftIndex) {
+func (c *checker) social(p *pageFacts, d *jsonld.Index) {
 	if p.doc == nil {
 		return
 	}
@@ -679,7 +681,7 @@ func (c *checker) social(p *pageFacts, d *draftIndex) {
 		if !socialProfile(h) || !shown(a) {
 			continue
 		}
-		if k := normLink(h); !d.urls[k] && !slices.Contains(missing, k) {
+		if k := txt.NormLink(h); !d.URLs[k] && !slices.Contains(missing, k) {
 			missing = append(missing, k)
 		}
 	}
@@ -696,8 +698,8 @@ var categorySegment = regexp.MustCompile(`^(categor(y|ies)|collections?|c|depart
 
 // catalog warns when the site's menus list its categories and no node has an
 // OfferCatalog of them.
-func (c *checker) catalog(all []located, p *pageFacts) {
-	if p.doc == nil || slices.ContainsFunc(all, func(l located) bool { _, ok := l.n.get("hasOfferCatalog"); return ok }) {
+func (c *checker) catalog(all []jsonld.Node, p *pageFacts) {
+	if p.doc == nil || slices.ContainsFunc(all, func(l jsonld.Node) bool { _, ok := l.N.Get("hasOfferCatalog"); return ok }) {
 		return
 	}
 	var names []string
@@ -728,13 +730,13 @@ func (c *checker) catalog(all []located, p *pageFacts) {
 // listing warns on the product cards a page shows that no ItemList carries,
 // on a product count no ItemList has as numberOfItems, and on a sort order
 // no ItemList has as itemListOrder.
-func (c *checker) listing(all []located, p *pageFacts, d *draftIndex) {
+func (c *checker) listing(all []jsonld.Node, p *pageFacts, d *jsonld.Index) {
 	// a filter link (Under $10, $20 and over) names no item's price: its
 	// address holds a query, and its text is little besides the price
 	if p.doc != nil {
 		for _, a := range queryAll(p.doc, "a[href]") {
 			if u, ok := p.siteLink(a); ok && mustParse(u).RawQuery != "" {
-				if t := htmlText(a); len(strings.Fields(priceAmount.ReplaceAllString(t, ""))) <= 3 {
+				if t := htmlText(a); len(strings.Fields(txt.PriceAmount.ReplaceAllString(t, ""))) <= 3 {
 					p.claim(t)
 				}
 			}
@@ -752,7 +754,7 @@ func (c *checker) listing(all []located, p *pageFacts, d *draftIndex) {
 	}
 	var missing []string
 	for _, cd := range listed {
-		if !d.urls[cd.url] && !slices.Contains(missing, cd.name) {
+		if !d.URLs[cd.url] && !slices.Contains(missing, cd.name) {
 			missing = append(missing, cd.name)
 		}
 	}
@@ -772,12 +774,14 @@ func (c *checker) listing(all []located, p *pageFacts, d *draftIndex) {
 	if m := fromPrice.FindStringSubmatch(p.main); m != nil && p.kind == kindListing {
 		p.claim(m[0])
 		if !c.has(all, "AggregateOffer") {
-			c.add(pagePath, Warning, "the page says %q: give the CollectionPage offers, an AggregateOffer (lowPrice %s, highPrice, priceCurrency, offerCount)", m[0], digitsOf(m[1]))
+			c.add(pagePath, Warning, "the page says %q: give the CollectionPage offers, an AggregateOffer (lowPrice %s, highPrice, priceCurrency, offerCount)", m[0], txt.DigitsOf(m[1]))
 		}
 	}
 	if m := productCount.FindStringSubmatch(p.main); m != nil && p.kind == kindListing {
 		n, _ := strconv.Atoi(strings.ReplaceAll(m[1], ",", ""))
-		if n >= len(listed) && !slices.ContainsFunc(all, func(l located) bool { return slices.Contains(scalars(l.n, "numberOfItems"), strconv.Itoa(n)) }) {
+		if n >= len(listed) && !slices.ContainsFunc(all, func(l jsonld.Node) bool {
+			return slices.Contains(jsonld.Scalars(l.N, "numberOfItems"), strconv.Itoa(n))
+		}) {
 			c.add(pagePath, Warning, "the page says %q: set numberOfItems %d on the ItemList of its products", m[0], n)
 		}
 	}
@@ -814,8 +818,8 @@ var (
 
 // sortOrder warns when a sort control shows an ascending or descending order
 // and no ItemList has an itemListOrder.
-func (c *checker) sortOrder(all []located, p *pageFacts) {
-	if p.doc == nil || slices.ContainsFunc(all, func(l located) bool { _, ok := l.n.get("itemListOrder"); return ok }) {
+func (c *checker) sortOrder(all []jsonld.Node, p *pageFacts) {
+	if p.doc == nil || slices.ContainsFunc(all, func(l jsonld.Node) bool { _, ok := l.N.Get("itemListOrder"); return ok }) {
 		return
 	}
 	for _, sel := range queryAll(p.doc, "select") {
@@ -844,17 +848,9 @@ func (c *checker) sortOrder(all []located, p *pageFacts) {
 // claim notes prices another check reports, so prices does not report them
 // again.
 func (p *pageFacts) claim(text string) {
-	for _, m := range priceAmount.FindAllStringSubmatch(text, -1) {
-		if f, ok := priceOf(m); ok {
+	for _, m := range txt.PriceAmount.FindAllStringSubmatch(text, -1) {
+		if f, ok := txt.PriceOf(m); ok {
 			p.claimed[f] = true
 		}
 	}
-}
-
-// priceOf is the amount a priceAmount match gives.
-func priceOf(m []string) (float64, bool) {
-	if m[2] == "" {
-		return amount(m[1])
-	}
-	return amount(m[1] + "." + m[2])
 }

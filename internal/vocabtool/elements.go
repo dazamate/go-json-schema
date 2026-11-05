@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/andybalholm/cascadia"
+	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
 	"golang.org/x/net/html"
 	"golang.org/x/net/html/atom"
 )
@@ -345,7 +346,7 @@ func pageSections(doc *html.Node) []*section {
 // BreadcrumbList marks the breadcrumb navs. It warns on every section left
 // unmarked and on a cssSelector that is not valid CSS, selects nothing, or
 // selects only sections of another type.
-func (c *checker) pageElements(all []located, doc *html.Node, warn bool) []PageElement {
+func (c *checker) pageElements(all []jsonld.Node, doc *html.Node, warn bool) []PageElement {
 	if !warn {
 		// a page search engines skip: list its sections, ask for nothing
 		sections := pageSections(doc)
@@ -365,9 +366,9 @@ func (c *checker) pageElements(all []located, doc *html.Node, warn bool) []PageE
 			s.MarkedBy = path
 		}
 	}
-	bare := map[string][]located{} // element nodes without a cssSelector, by type
+	bare := map[string][]jsonld.Node{} // element nodes without a cssSelector, by type
 	for _, l := range all {
-		types := typeNames(l.n)
+		types := jsonld.TypeNames(l.N)
 		i := slices.IndexFunc(elementTypeNames, func(t string) bool { return slices.Contains(types, t) })
 		if i < 0 {
 			continue
@@ -375,11 +376,11 @@ func (c *checker) pageElements(all []located, doc *html.Node, warn bool) []PageE
 		t := elementTypeNames[i]
 		if t == "BreadcrumbList" {
 			for _, s := range byType[t] {
-				mark(s, l.path)
+				mark(s, l.Path)
 			}
 			continue
 		}
-		sels := strs(l.n, "cssSelector")
+		sels := jsonld.Strs(l.N, "cssSelector")
 		if len(sels) == 0 {
 			bare[t] = append(bare[t], l)
 			continue
@@ -387,7 +388,7 @@ func (c *checker) pageElements(all []located, doc *html.Node, warn bool) []PageE
 		for _, sel := range sels {
 			g, err := cascadia.ParseGroup(sel)
 			if err != nil {
-				c.add(l.path, Warning, "cssSelector %q is not a valid CSS selector", sel)
+				c.add(l.Path, Warning, "cssSelector %q is not a valid CSS selector", sel)
 				continue
 			}
 			var other []string
@@ -396,7 +397,7 @@ func (c *checker) pageElements(all []located, doc *html.Node, warn bool) []PageE
 				if g.Match(s.n) {
 					if s.Type == t {
 						hit = true
-						mark(s, l.path)
+						mark(s, l.Path)
 					} else {
 						other = append(other, s.Type)
 					}
@@ -405,19 +406,19 @@ func (c *checker) pageElements(all []located, doc *html.Node, warn bool) []PageE
 			switch {
 			case hit:
 			case len(other) > 0:
-				c.add(l.path, Warning, "cssSelector %q selects a %s, not a %s", sel, other[0], t)
+				c.add(l.Path, Warning, "cssSelector %q selects a %s, not a %s", sel, other[0], t)
 			case len(cascadia.QueryAll(doc, g)) == 0:
-				c.add(l.path, Warning, "cssSelector %q matches nothing on the page", sel)
+				c.add(l.Path, Warning, "cssSelector %q matches nothing on the page", sel)
 			}
 		}
 	}
 	for t, nodes := range bare {
 		if len(nodes) == 1 && len(byType[t]) == 1 {
-			mark(byType[t][0], nodes[0].path)
+			mark(byType[t][0], nodes[0].Path)
 			continue
 		}
 		for _, l := range nodes {
-			c.add(l.path, Warning, "%s has no cssSelector and the page has %d of its sections: give it the cssSelector of the one it marks up", t, len(byType[t]))
+			c.add(l.Path, Warning, "%s has no cssSelector and the page has %d of its sections: give it the cssSelector of the one it marks up", t, len(byType[t]))
 		}
 	}
 	out := make([]PageElement, len(sections))

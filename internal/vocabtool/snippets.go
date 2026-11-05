@@ -3,6 +3,8 @@ package vocabtool
 import (
 	"fmt"
 	"strings"
+
+	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
 )
 
 // The product snippet checks hold every Product node to Google's Product
@@ -30,25 +32,25 @@ const (
 
 // productSnippets checks each Product node and its offers. A bare reference to
 // a node is checked where the node itself is.
-func (c *checker) productSnippets(all []located) {
-	byID := map[string]*object{}
+func (c *checker) productSnippets(all []jsonld.Node) {
+	byID := map[string]*jsonld.Object{}
 	for _, l := range all {
-		if described(l.n) {
-			for _, id := range strs(l.n, "@id") {
+		if jsonld.Described(l.N) {
+			for _, id := range jsonld.Strs(l.N, "@id") {
 				if _, seen := byID[id]; !seen {
-					byID[id] = l.n
+					byID[id] = l.N
 				}
 			}
 		}
 	}
 	// resolve is the node a value is, following a bare {"@id"} reference.
-	resolve := func(v any) *object {
-		o, ok := v.(*object)
+	resolve := func(v any) *jsonld.Object {
+		o, ok := v.(*jsonld.Object)
 		if !ok {
 			return nil
 		}
-		if !described(o) {
-			for _, id := range strs(o, "@id") {
+		if !jsonld.Described(o) {
+			for _, id := range jsonld.Strs(o, "@id") {
 				if n, ok := byID[id]; ok {
 					return n
 				}
@@ -57,20 +59,20 @@ func (c *checker) productSnippets(all []located) {
 		return o
 	}
 	for _, l := range all {
-		if !described(l.n) || !c.is(l.n, "Product") {
+		if !jsonld.Described(l.N) || !c.is(l.N, "Product") {
 			continue
 		}
-		ty := typeNames(l.n)[0]
-		if _, ok := l.n.get("name"); !ok {
-			c.add(l.path, Warning, snippetCritical+`Missing field "name": give this %s the name the page shows for it`, ty)
+		ty := jsonld.TypeNames(l.N)[0]
+		if _, ok := l.N.Get("name"); !ok {
+			c.add(l.Path, Warning, snippetCritical+`Missing field "name": give this %s the name the page shows for it`, ty)
 		}
-		if c.is(l.n, "ProductGroup") {
+		if c.is(l.N, "ProductGroup") {
 			c.snippetOffers(l, resolve)
 			continue
 		}
 		var missing []string
 		for _, k := range []string{"offers", "review", "aggregateRating"} {
-			if _, ok := l.n.get(k); !ok {
+			if _, ok := l.N.Get(k); !ok {
 				missing = append(missing, k)
 			}
 		}
@@ -80,7 +82,7 @@ func (c *checker) productSnippets(all []located) {
 			if ty != "Product" {
 				kind = "a " + ty + ", a kind of Product, so the report reads it as one"
 			}
-			c.add(l.path, Warning, snippetCritical+`Either "offers", "review", or "aggregateRating" should be specified. This node is %s, and the item is invalid. Give it offers with the price the page shows for it (an Offer, or an AggregateOffer for a range), or review or aggregateRating only from real reviews and ratings the page shows. If the page shows none of them, it is not a product snippet: show the price, or type the node outside Product`, kind)
+			c.add(l.Path, Warning, snippetCritical+`Either "offers", "review", or "aggregateRating" should be specified. This node is %s, and the item is invalid. Give it offers with the price the page shows for it (an Offer, or an AggregateOffer for a range), or review or aggregateRating only from real reviews and ratings the page shows. If the page shows none of them, it is not a product snippet: show the price, or type the node outside Product`, kind)
 		case 0:
 		default:
 			var fields []string
@@ -88,20 +90,20 @@ func (c *checker) productSnippets(all []located) {
 				fields = append(fields, fmt.Sprintf(`Missing field %q`, k))
 			}
 			advice := ". Add offers only with the price the page shows"
-			if _, ok := l.n.get("offers"); ok {
+			if _, ok := l.N.Get("offers"); ok {
 				advice = `. Add review and aggregateRating only from real reviews and ratings the page shows, never invented ones: fake ratings break Google's review snippet guidelines and can bring a manual action`
 			}
-			c.add(l.path, Info, "%s%s%s", snippetNonCritical, strings.Join(fields, "; "), advice)
+			c.add(l.Path, Info, "%s%s%s", snippetNonCritical, strings.Join(fields, "; "), advice)
 		}
 		c.snippetOffers(l, resolve)
 	}
 }
 
 // snippetOffers checks each of a Product node's offers.
-func (c *checker) snippetOffers(l located, resolve func(any) *object) {
-	raw, _ := l.n.get("offers")
-	for i, v := range values(raw) {
-		path := l.path + ".offers"
+func (c *checker) snippetOffers(l jsonld.Node, resolve func(any) *jsonld.Object) {
+	raw, _ := l.N.Get("offers")
+	for i, v := range jsonld.Values(raw) {
+		path := l.Path + ".offers"
 		if _, list := raw.([]any); list {
 			path = fmt.Sprintf("%s[%d]", path, i)
 		}
@@ -113,11 +115,11 @@ func (c *checker) snippetOffers(l located, resolve func(any) *object) {
 
 // snippetOffer checks one of a Product's offers: an AggregateOffer's price
 // range, or an Offer's price, and the price specifications it nests.
-func (c *checker) snippetOffer(path string, o *object, resolve func(any) *object) {
-	has := func(n *object, k string) bool { _, ok := n.get(k); return ok }
-	var specs []*object
-	raw, _ := o.get("priceSpecification")
-	for _, v := range values(raw) {
+func (c *checker) snippetOffer(path string, o *jsonld.Object, resolve func(any) *jsonld.Object) {
+	has := func(n *jsonld.Object, k string) bool { _, ok := n.Get(k); return ok }
+	var specs []*jsonld.Object
+	raw, _ := o.Get("priceSpecification")
+	for _, v := range jsonld.Values(raw) {
 		if s := resolve(v); s != nil {
 			specs = append(specs, s)
 		}
@@ -162,18 +164,7 @@ func (c *checker) snippetOffer(path string, o *object, resolve func(any) *object
 			if _, list := raw.([]any); list {
 				p = fmt.Sprintf("%s[%d]", p, i)
 			}
-			c.add(p, Warning, snippetCritical+`Missing field "price" (in "offers.priceSpecification"): Google requires price on a %s under a product's offers, and minPrice and maxPrice do not stand in for it. Give it price, or carry a range on the offer alone (an AggregateOffer's lowPrice and highPrice)`, typeNames(s)[0])
+			c.add(p, Warning, snippetCritical+`Missing field "price" (in "offers.priceSpecification"): Google requires price on a %s under a product's offers, and minPrice and maxPrice do not stand in for it. Give it price, or carry a range on the offer alone (an AggregateOffer's lowPrice and highPrice)`, jsonld.TypeNames(s)[0])
 		}
 	}
-}
-
-// described reports a node that says something itself, not only a reference
-// to a node elsewhere: a property beyond @id and @type.
-func described(n *object) bool {
-	for _, k := range n.keys {
-		if !strings.HasPrefix(k, "@") {
-			return true
-		}
-	}
-	return false
 }

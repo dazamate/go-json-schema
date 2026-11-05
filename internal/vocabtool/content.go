@@ -2,7 +2,6 @@ package vocabtool
 
 import (
 	"fmt"
-	"html"
 	"net/url"
 	"regexp"
 	"slices"
@@ -11,6 +10,8 @@ import (
 	"unicode/utf8"
 
 	"github.com/andybalholm/cascadia"
+	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
+	"github.com/dazamate/go-json-schema/internal/vocabtool/txt"
 	xhtml "golang.org/x/net/html"
 	"golang.org/x/net/html/atom"
 )
@@ -28,7 +29,7 @@ const pagePath = "html:body" // an issue about the page as a whole
 type pageFacts struct {
 	doc     *xhtml.Node // nil when only the page's text is known
 	text    string      // the visible text, whitespace collapsed
-	norm    string      // normWords(text), padded with spaces
+	norm    string      // txt.NormWords(text), padded with spaces
 	main    string      // the visible text outside the site's header, footer and navs
 	base    *url.URL    // the page's canonical URL, else its address, or nil
 	url     *url.URL    // the page's address, else its canonical URL, or nil
@@ -41,7 +42,7 @@ type pageFacts struct {
 }
 
 func newPageFacts(doc *xhtml.Node, text, address string) *pageFacts {
-	p := &pageFacts{doc: doc, text: text, norm: " " + normWords(text) + " ", main: text, claimed: map[float64]bool{}}
+	p := &pageFacts{doc: doc, text: text, norm: " " + txt.NormWords(text) + " ", main: text, claimed: map[float64]bool{}}
 	if u, err := url.Parse(strings.TrimSpace(address)); err == nil && u.IsAbs() {
 		p.url = u
 	}
@@ -154,108 +155,27 @@ func (p *pageFacts) abs(ref string) string {
 	if p.base != nil {
 		u = p.base.ResolveReference(u)
 	}
-	return normURL(u)
-}
-
-// normURL drops the fragment, lowercases the scheme and host, and drops a
-// trailing slash, so links to one page compare equal.
-func normURL(u *url.URL) string {
-	v := *u
-	v.Fragment, v.RawFragment = "", ""
-	v.Scheme, v.Host = strings.ToLower(v.Scheme), strings.ToLower(v.Host)
-	if len(v.Path) > 1 {
-		v.Path = strings.TrimSuffix(v.Path, "/")
-		v.RawPath = ""
-	}
-	if v.Path == "/" {
-		v.Path = ""
-	}
-	return v.String()
-}
-
-func normLink(s string) string {
-	u, err := url.Parse(strings.TrimSpace(s))
-	if err != nil {
-		return s
-	}
-	return normURL(u)
-}
-
-// draftIndex holds what the content checks look up in the draft.
-type draftIndex struct {
-	strs []string           // every string value
-	urls map[string]bool    // every string value, as a normalized URL
-	path map[*object]string // every node's path
-}
-
-func indexDraft(all []located) *draftIndex {
-	d := &draftIndex{urls: map[string]bool{}, path: map[*object]string{}}
-	for _, l := range all {
-		d.path[l.n] = l.path
-		for _, k := range l.n.keys {
-			if strings.HasPrefix(k, "@") {
-				continue
-			}
-			for _, v := range values(l.n.vals[k]) {
-				if s, ok := v.(string); ok {
-					d.strs = append(d.strs, s)
-					d.urls[normLink(s)] = true
-				}
-			}
-		}
-	}
-	return d
+	return txt.NormURL(u)
 }
 
 // is reports whether the node has the type or a subtype of it.
-func (c *checker) is(n *object, ty string) bool {
-	return c.v.Is(typeNames(n), ty)
-}
-
-// scalars are a property's string, number and boolean values, as text.
-func scalars(n *object, key string) []string {
-	raw, _ := n.get(key)
-	var out []string
-	for _, v := range values(raw) {
-		switch x := v.(type) {
-		case string:
-			out = append(out, x)
-		case fmt.Stringer: // json.Number
-			out = append(out, x.String())
-		case bool:
-			out = append(out, strconv.FormatBool(x))
-		}
-	}
-	return out
-}
-
-var tags = regexp.MustCompile(`<[^>]*>`)
-
-// stripTags is the text of a value that may hold HTML.
-func stripTags(s string) string { return html.UnescapeString(tags.ReplaceAllString(s, " ")) }
-
-// clip shortens s to n runes.
-func clip(s string, n int) string {
-	s = strings.Join(strings.Fields(s), " ")
-	if utf8.RuneCountInString(s) <= n {
-		return s
-	}
-	return string([]rune(s)[:n]) + "…"
+func (c *checker) is(n *jsonld.Object, ty string) bool {
+	return c.v.Is(jsonld.TypeNames(n), ty)
 }
 
 // pageNode is the path of the WebPage the draft describes the page with:
 // the one whose url is the canonical URL, or else the first WebPage.
-func (c *checker) pageNode(all []located, p *pageFacts) string {
+func (c *checker) pageNode(all []jsonld.Node, p *pageFacts) string {
 	first := ""
 	for _, l := range all {
-		if !c.is(l.n, "WebPage") || len(l.n.keys) < 2 {
+		if !c.is(l.N, "WebPage") || len(l.N.Keys) < 2 {
 			continue
 		}
-		if p.base != nil && slices.ContainsFunc(strs(l.n, "url"), func(s string) bool { return normLink(s) == normURL(p.base) }) {
-			return l.path
+		if p.base != nil && slices.ContainsFunc(jsonld.Strs(l.N, "url"), func(s string) bool { return txt.NormLink(s) == txt.NormURL(p.base) }) {
+			return l.Path
 		}
 		if first == "" {
-			first = l.path
+			first = l.Path
 		}
 	}
 	if first == "" {
@@ -273,8 +193,8 @@ var privateNotes = map[pageKind]string{
 // content runs the checks that compare the draft with the page. What the
 // markup repeats is held to the page always; what the page shows is asked of
 // the markup only on a page search engines index.
-func (c *checker) content(all []located, p *pageFacts) {
-	d := indexDraft(all)
+func (c *checker) content(all []jsonld.Node, p *pageFacts) {
+	d := jsonld.NewIndex(all)
 	c.shownText(all, p)
 	c.anchors(all, p)
 	c.offers(all)
@@ -321,7 +241,7 @@ func (c *checker) content(all []located, p *pageFacts) {
 // shop runs the shop checks: the sitewide nodes, the page's type, and what a
 // product page, a listing and the shop's policies show. They run before
 // prices, which leaves out the prices they report.
-func (c *checker) shop(all []located, p *pageFacts, d *draftIndex) {
+func (c *checker) shop(all []jsonld.Node, p *pageFacts, d *jsonld.Index) {
 	if p.doc != nil {
 		c.pageType(all, p)
 		c.website(all, p)
@@ -363,15 +283,15 @@ var shownProps = []struct{ typ, prop string }{
 
 // shownText warns on text the markup gives as the page's that the page does
 // not show: a HowTo step, a question, an answer, a review.
-func (c *checker) shownText(all []located, p *pageFacts) {
+func (c *checker) shownText(all []jsonld.Node, p *pageFacts) {
 	for _, l := range all {
 		for _, sp := range shownProps {
-			if !c.is(l.n, sp.typ) {
+			if !c.is(l.N, sp.typ) {
 				continue
 			}
-			for _, s := range strs(l.n, sp.prop) {
-				if w := normWords(stripTags(s)); w != "" && !strings.Contains(p.norm, " "+w+" ") {
-					c.add(l.path+"."+sp.prop, Warning, "%s %s %q is not on the page: the markup must repeat the visible text", sp.typ, sp.prop, clip(s, 80))
+			for _, s := range jsonld.Strs(l.N, sp.prop) {
+				if w := txt.NormWords(txt.StripTags(s)); w != "" && !strings.Contains(p.norm, " "+w+" ") {
+					c.add(l.Path+"."+sp.prop, Warning, "%s %s %q is not on the page: the markup must repeat the visible text", sp.typ, sp.prop, txt.Clip(s, 80))
 				}
 			}
 		}
@@ -379,7 +299,7 @@ func (c *checker) shownText(all []located, p *pageFacts) {
 }
 
 // anchors warns on a link to this page whose #fragment is no id on it.
-func (c *checker) anchors(all []located, p *pageFacts) {
+func (c *checker) anchors(all []jsonld.Node, p *pageFacts) {
 	if p.doc == nil || p.base == nil {
 		return
 	}
@@ -394,20 +314,20 @@ func (c *checker) anchors(all []located, p *pageFacts) {
 		}
 	}
 	walk(p.doc)
-	page := normURL(p.base)
+	page := txt.NormURL(p.base)
 	for _, l := range all {
-		for _, k := range l.n.keys {
+		for _, k := range l.N.Keys {
 			if strings.HasPrefix(k, "@") || k == "sameAs" {
 				continue
 			}
-			for _, v := range values(l.n.vals[k]) {
+			for _, v := range jsonld.Values(l.N.Vals[k]) {
 				s, _ := v.(string)
 				u, err := url.Parse(s)
-				if s == "" || err != nil || u.Fragment == "" || !u.IsAbs() || normURL(u) != page {
+				if s == "" || err != nil || u.Fragment == "" || !u.IsAbs() || txt.NormURL(u) != page {
 					continue
 				}
 				if !ids[u.Fragment] {
-					c.add(l.path+"."+k, Warning, "%s points at #%s, which is no id on the page", s, u.Fragment)
+					c.add(l.Path+"."+k, Warning, "%s points at #%s, which is no id on the page", s, u.Fragment)
 				}
 			}
 		}
@@ -417,15 +337,15 @@ func (c *checker) anchors(all []located, p *pageFacts) {
 var copyrightLine = regexp.MustCompile(`(?i)(?:©|\(c\)|copyright)\s*(?:\d{4}\s*[-–]\s*)?(\d{4})`)
 
 // copyright warns when the page shows a copyright year the markup lacks.
-func (c *checker) copyright(all []located, p *pageFacts) {
+func (c *checker) copyright(all []jsonld.Node, p *pageFacts) {
 	m := copyrightLine.FindStringSubmatch(p.text)
 	if m == nil {
 		return
 	}
 	hasYear, hasHolder := false, false
 	for _, l := range all {
-		hasYear = hasYear || slices.Contains(scalars(l.n, "copyrightYear"), m[1])
-		if _, ok := l.n.get("copyrightHolder"); ok {
+		hasYear = hasYear || slices.Contains(jsonld.Scalars(l.N, "copyrightYear"), m[1])
+		if _, ok := l.N.Get("copyrightHolder"); ok {
 			hasHolder = true
 		}
 	}
@@ -438,7 +358,7 @@ var readingTime = regexp.MustCompile(`(?i)\b(\d{1,3})[\s-]*min(?:ute)?s?\.?\s+re
 
 // readTime warns when the page gives a reading time and no node has it as
 // timeRequired.
-func (c *checker) readTime(all []located, p *pageFacts) {
+func (c *checker) readTime(all []jsonld.Node, p *pageFacts) {
 	m := readingTime.FindStringSubmatch(p.text)
 	if m == nil {
 		return
@@ -446,17 +366,17 @@ func (c *checker) readTime(all []located, p *pageFacts) {
 	want := "PT" + m[1] + "M"
 	target := ""
 	for _, l := range all {
-		if !c.is(l.n, "CreativeWork") {
+		if !c.is(l.N, "CreativeWork") {
 			continue
 		}
-		for _, v := range scalars(l.n, "timeRequired") {
+		for _, v := range jsonld.Scalars(l.N, "timeRequired") {
 			if !strings.EqualFold(v, want) {
-				c.add(l.path+".timeRequired", Warning, "timeRequired is %s but the page says %q: make it %s", v, m[0], want)
+				c.add(l.Path+".timeRequired", Warning, "timeRequired is %s but the page says %q: make it %s", v, m[0], want)
 			}
 			return
 		}
-		if target == "" && c.is(l.n, "Article") {
-			target = l.path
+		if target == "" && c.is(l.N, "Article") {
+			target = l.Path
 		}
 	}
 	if target == "" {
@@ -468,11 +388,11 @@ func (c *checker) readTime(all []located, p *pageFacts) {
 // sectionLabel warns when a short label sits right above the page's h1 (a
 // kicker naming the section) and the Article does not carry it as its
 // articleSection.
-func (c *checker) sectionLabel(all []located, p *pageFacts) {
+func (c *checker) sectionLabel(all []jsonld.Node, p *pageFacts) {
 	if p.doc == nil {
 		return
 	}
-	i := slices.IndexFunc(all, func(l located) bool { return c.is(l.n, "Article") })
+	i := slices.IndexFunc(all, func(l jsonld.Node) bool { return c.is(l.N, "Article") })
 	if i < 0 {
 		return
 	}
@@ -497,10 +417,10 @@ func (c *checker) sectionLabel(all []located, p *pageFacts) {
 		return
 	}
 	art := all[i]
-	if slices.ContainsFunc(strs(art.n, "articleSection"), func(s string) bool { return normWords(s) == normWords(label) }) {
+	if slices.ContainsFunc(jsonld.Strs(art.N, "articleSection"), func(s string) bool { return txt.NormWords(s) == txt.NormWords(label) }) {
 		return
 	}
-	c.add(art.path, Warning, "the page labels the article %q above its h1: set articleSection %q", label, label)
+	c.add(art.Path, Warning, "the page labels the article %q above its h1: set articleSection %q", label, label)
 }
 
 var (
@@ -510,7 +430,7 @@ var (
 
 // media warns on a video or audio the page plays that no VideoObject or
 // AudioObject has as its contentUrl or embedUrl.
-func (c *checker) media(all []located, p *pageFacts) {
+func (c *checker) media(all []jsonld.Node, p *pageFacts) {
 	if p.doc == nil {
 		return
 	}
@@ -539,14 +459,14 @@ func (c *checker) media(all []located, p *pageFacts) {
 			return
 		}
 		for _, l := range all {
-			if !c.is(l.n, kind) {
+			if !c.is(l.N, kind) {
 				continue
 			}
 			if src == "" {
 				return
 			}
 			for _, k := range []string{"contentUrl", "embedUrl", "url"} {
-				if slices.ContainsFunc(strs(l.n, k), func(s string) bool { return p.abs(s) == p.abs(src) }) {
+				if slices.ContainsFunc(jsonld.Strs(l.N, k), func(s string) bool { return p.abs(s) == p.abs(src) }) {
 					return
 				}
 			}
@@ -561,8 +481,8 @@ func (c *checker) media(all []located, p *pageFacts) {
 
 // search warns on a search box, or a link to the site's search page, with no
 // SearchAction in the draft.
-func (c *checker) search(all []located, p *pageFacts) {
-	if p.doc == nil || slices.ContainsFunc(all, func(l located) bool { return c.is(l.n, "SearchAction") }) {
+func (c *checker) search(all []jsonld.Node, p *pageFacts) {
+	if p.doc == nil || slices.ContainsFunc(all, func(l jsonld.Node) bool { return c.is(l.N, "SearchAction") }) {
 		return
 	}
 	for _, n := range queryAll(p.doc, `input[type="search"], [role="search"] input, input[role="searchbox"]`) {
@@ -589,20 +509,10 @@ func mustParse(s string) *url.URL {
 
 var phoneNumber = regexp.MustCompile(`\+?\d[\d ()-]{6,}\d`)
 
-// digits are the digits in s.
-func digits(s string) string {
-	return strings.Map(func(r rune) rune {
-		if r >= '0' && r <= '9' {
-			return r
-		}
-		return -1
-	}, s)
-}
-
 // telKey compares phone numbers by their last eight digits, so +61 4 and
 // 04 forms of one number match.
 func telKey(s string) string {
-	d := digits(s)
+	d := txt.Digits(s)
 	if len(d) > 8 {
 		d = d[len(d)-8:]
 	}
@@ -611,17 +521,17 @@ func telKey(s string) string {
 
 // contacts warns on a tel: or mailto: link no node carries, and on a
 // telephone or email in the markup that the page does not show.
-func (c *checker) contacts(all []located, p *pageFacts) {
+func (c *checker) contacts(all []jsonld.Node, p *pageFacts) {
 	type val struct{ key, raw, path string }
 	var tels, mails []val
 	for _, l := range all {
-		for _, s := range strs(l.n, "telephone") {
+		for _, s := range jsonld.Strs(l.N, "telephone") {
 			if k := telKey(s); len(k) >= 6 {
-				tels = append(tels, val{k, s, l.path + ".telephone"})
+				tels = append(tels, val{k, s, l.Path + ".telephone"})
 			}
 		}
-		for _, s := range strs(l.n, "email") {
-			mails = append(mails, val{strings.ToLower(strings.TrimPrefix(s, "mailto:")), s, l.path + ".email"})
+		for _, s := range jsonld.Strs(l.N, "email") {
+			mails = append(mails, val{strings.ToLower(strings.TrimPrefix(s, "mailto:")), s, l.Path + ".email"})
 		}
 	}
 	shownTel, shownMail := map[string]bool{}, map[string]bool{}
@@ -677,31 +587,31 @@ func inSearch(n *xhtml.Node) bool {
 	return false
 }
 
-func (c *checker) forms(all []located, p *pageFacts, d *draftIndex) {
+func (c *checker) forms(all []jsonld.Node, p *pageFacts, d *jsonld.Index) {
 	if p.doc == nil {
 		return
 	}
 	type target struct {
 		path string
 		u    *url.URL
-		ep   *object
+		ep   *jsonld.Object
 	}
 	var targets []target
 	for _, l := range all {
-		if !c.is(l.n, "Action") {
+		if !c.is(l.N, "Action") {
 			continue
 		}
-		raw, _ := l.n.get("target")
-		for _, v := range values(raw) {
+		raw, _ := l.N.Get("target")
+		for _, v := range jsonld.Values(raw) {
 			switch x := v.(type) {
 			case string:
 				if u, err := url.Parse(x); err == nil {
-					targets = append(targets, target{l.path + ".target", u, nil})
+					targets = append(targets, target{l.Path + ".target", u, nil})
 				}
-			case *object:
-				for _, s := range append(strs(x, "urlTemplate"), strs(x, "url")...) {
+			case *jsonld.Object:
+				for _, s := range append(jsonld.Strs(x, "urlTemplate"), jsonld.Strs(x, "url")...) {
 					if u, err := url.Parse(s); err == nil {
-						targets = append(targets, target{d.path[x], u, x})
+						targets = append(targets, target{d.Path[x], u, x})
 					}
 				}
 			}
@@ -734,7 +644,7 @@ func (c *checker) forms(all []located, p *pageFacts, d *draftIndex) {
 		}
 		var hit []target
 		for _, t := range targets {
-			if (t.u.Fragment != "" && ids[t.u.Fragment]) || (action != "" && normURL(t.u) == p.abs(action)) {
+			if (t.u.Fragment != "" && ids[t.u.Fragment]) || (action != "" && txt.NormURL(t.u) == p.abs(action)) {
 				hit = append(hit, t)
 			}
 		}
@@ -761,7 +671,7 @@ func (c *checker) forms(all []located, p *pageFacts, d *draftIndex) {
 				continue
 			}
 			hm := ""
-			if v := strs(t.ep, "httpMethod"); len(v) > 0 {
+			if v := jsonld.Strs(t.ep, "httpMethod"); len(v) > 0 {
 				hm = strings.ToUpper(v[0])
 			}
 			switch {
@@ -785,23 +695,23 @@ var registration = regexp.MustCompile(`(?i)\b(ABN|ACN|ARBN|NZBN|UEN|EIN|GSTIN|VA
 
 // registrations warns on a labelled business or licence number the page
 // shows that no taxID, vatID or identifier carries.
-func (c *checker) registrations(all []located, p *pageFacts) {
+func (c *checker) registrations(all []jsonld.Node, p *pageFacts) {
 	var have []string
 	for _, l := range all {
 		for _, k := range []string{"taxID", "vatID", "identifier", "leiCode", "duns", "iso6523Code"} {
-			for _, s := range scalars(l.n, k) {
-				have = append(have, digits(s))
+			for _, s := range jsonld.Scalars(l.N, k) {
+				have = append(have, txt.Digits(s))
 			}
 		}
-		if c.is(l.n, "PropertyValue") {
-			for _, s := range scalars(l.n, "value") {
-				have = append(have, digits(s))
+		if c.is(l.N, "PropertyValue") {
+			for _, s := range jsonld.Scalars(l.N, "value") {
+				have = append(have, txt.Digits(s))
 			}
 		}
 	}
 	seen := map[string]bool{}
 	for _, m := range registration.FindAllStringSubmatch(p.text, -1) {
-		num := digits(m[2])
+		num := txt.Digits(m[2])
 		if seen[num] || slices.Contains(have, num) {
 			continue
 		}
@@ -824,7 +734,7 @@ var (
 // romanisation or translation in brackets, either way round: 敬茶 (ging3
 // caa4), red dates (紅棗). A longer run in that script is a sentence, not a
 // term.
-func (c *checker) terms(all []located, p *pageFacts) {
+func (c *checker) terms(all []jsonld.Node, p *pageFacts) {
 	var found []string
 	add := func(t string) {
 		if t = strings.TrimSpace(t); t != "" && !slices.Contains(found, t) {
@@ -849,14 +759,14 @@ func (c *checker) terms(all []located, p *pageFacts) {
 		for _, dl := range queryAll(p.doc, "dl") {
 			seen := map[string]bool{}
 			for _, d := range pairs(dl) {
-				if k := normWords(d.label); !seen[k] {
+				if k := txt.NormWords(d.label); !seen[k] {
 					seen[k] = true
 					lists[k]++
 				}
 			}
 		}
 		repeats := func(dl *xhtml.Node) bool {
-			return slices.ContainsFunc(pairs(dl), func(d detail) bool { return lists[normWords(d.label)] > 1 })
+			return slices.ContainsFunc(pairs(dl), func(d detail) bool { return lists[txt.NormWords(d.label)] > 1 })
 		}
 		visit(p.doc, func(n *xhtml.Node) {
 			switch n.DataAtom {
@@ -877,15 +787,15 @@ func (c *checker) terms(all []located, p *pageFacts) {
 	}
 	var named []string
 	for _, l := range all {
-		if c.is(l.n, "DefinedTerm") {
+		if c.is(l.N, "DefinedTerm") {
 			for _, k := range []string{"name", "alternateName", "termCode"} {
-				named = append(named, strs(l.n, k)...)
+				named = append(named, jsonld.Strs(l.N, k)...)
 			}
 		}
 	}
 	var missing []string
 	for _, t := range found {
-		if !slices.ContainsFunc(named, func(s string) bool { return strings.Contains(s, t) || normWords(s) == normWords(t) }) {
+		if !slices.ContainsFunc(named, func(s string) bool { return strings.Contains(s, t) || txt.NormWords(s) == txt.NormWords(t) }) {
 			missing = append(missing, t)
 		}
 	}
@@ -949,23 +859,23 @@ func (p *pageFacts) imgURLs(n *xhtml.Node) []string {
 // header, footer and navs) that no ImageObject or image URL in the draft
 // names, and on an ImageObject for one that lacks its width, height or a
 // description.
-func (c *checker) images(all []located, p *pageFacts) {
+func (c *checker) images(all []jsonld.Node, p *pageFacts) {
 	if p.doc == nil {
 		return
 	}
-	objs := map[string]located{}
+	objs := map[string]jsonld.Node{}
 	plain := map[string]bool{}
 	for _, l := range all {
-		if c.is(l.n, "ImageObject") {
+		if c.is(l.N, "ImageObject") {
 			for _, k := range []string{"contentUrl", "url", "thumbnailUrl"} {
-				for _, s := range strs(l.n, k) {
+				for _, s := range jsonld.Strs(l.N, k) {
 					objs[p.abs(s)] = l
 				}
 			}
 			continue
 		}
 		for _, k := range []string{"image", "logo", "photo", "primaryImageOfPage", "thumbnailUrl"} {
-			for _, s := range strs(l.n, k) {
+			for _, s := range jsonld.Strs(l.N, k) {
 				plain[p.abs(s)] = true
 			}
 		}
@@ -981,7 +891,7 @@ func (c *checker) images(all []located, p *pageFacts) {
 		if strings.TrimSpace(alt) == "" || (w > 0 && w <= 2) || (h > 0 && h <= 2) {
 			return
 		}
-		var obj *located
+		var obj *jsonld.Node
 		covered := false
 		for _, u := range p.imgURLs(n) {
 			if o, ok := objs[u]; ok {
@@ -991,25 +901,25 @@ func (c *checker) images(all []located, p *pageFacts) {
 			covered = covered || plain[u]
 		}
 		if !covered {
-			c.add("html:"+selectorFor(p.doc, n), Warning, "the page's image %q has no ImageObject: add one (contentUrl, width, height, description from its alt text) as the image of the page or of the node it shows", clip(alt, 60))
+			c.add("html:"+selectorFor(p.doc, n), Warning, "the page's image %q has no ImageObject: add one (contentUrl, width, height, description from its alt text) as the image of the page or of the node it shows", txt.Clip(alt, 60))
 			return
 		}
-		if obj == nil || reported[obj.path] {
+		if obj == nil || reported[obj.Path] {
 			return
 		}
 		var miss []string
-		if w > 0 && len(scalars(obj.n, "width")) == 0 {
+		if w > 0 && len(jsonld.Scalars(obj.N, "width")) == 0 {
 			miss = append(miss, fmt.Sprintf("width %d", w))
 		}
-		if h > 0 && len(scalars(obj.n, "height")) == 0 {
+		if h > 0 && len(jsonld.Scalars(obj.N, "height")) == 0 {
 			miss = append(miss, fmt.Sprintf("height %d", h))
 		}
-		if len(strs(obj.n, "description"))+len(strs(obj.n, "caption")) == 0 {
+		if len(jsonld.Strs(obj.N, "description"))+len(jsonld.Strs(obj.N, "caption")) == 0 {
 			miss = append(miss, "a description from its alt text")
 		}
 		if len(miss) > 0 {
-			reported[obj.path] = true
-			c.add(obj.path, Warning, "this ImageObject is the page's image %q: set %s", clip(alt, 60), strings.Join(miss, ", "))
+			reported[obj.Path] = true
+			c.add(obj.Path, Warning, "this ImageObject is the page's image %q: set %s", txt.Clip(alt, 60), strings.Join(miss, ", "))
 		}
 	})
 }
@@ -1037,21 +947,21 @@ func linkHeading(n *xhtml.Node) bool {
 
 // counts warns on a heading that counts its items ("16 ideas", "Four
 // steps") when no ItemList or HowTo in the draft has that many.
-func (c *checker) counts(all []located, p *pageFacts) {
+func (c *checker) counts(all []jsonld.Node, p *pageFacts) {
 	if p.doc == nil {
 		return
 	}
 	have := map[int]bool{}
 	for _, l := range all {
-		for _, s := range scalars(l.n, "numberOfItems") {
+		for _, s := range jsonld.Scalars(l.N, "numberOfItems") {
 			if i, err := strconv.Atoi(s); err == nil {
 				have[i] = true
 			}
 		}
-		if c.is(l.n, "ItemList") || c.is(l.n, "HowTo") {
+		if c.is(l.N, "ItemList") || c.is(l.N, "HowTo") {
 			for _, k := range []string{"itemListElement", "step"} {
-				if raw, ok := l.n.get(k); ok {
-					have[len(values(raw))] = true
+				if raw, ok := l.N.Get(k); ok {
+					have[len(jsonld.Values(raw))] = true
 				}
 			}
 		}
@@ -1077,7 +987,7 @@ func (c *checker) counts(all []located, p *pageFacts) {
 			if k < 2 || have[k] || !slices.Contains(sectionCounts(n), k) {
 				continue
 			}
-			c.add("html:"+selectorFor(p.doc, n), Warning, "the heading %q counts %d items: add an ItemList of them (numberOfItems %d, a ListItem each) or a HowTo with %d steps, in the WebPage's hasPart", clip(t, 60), k, k, k)
+			c.add("html:"+selectorFor(p.doc, n), Warning, "the heading %q counts %d items: add an ItemList of them (numberOfItems %d, a ListItem each) or a HowTo with %d steps, in the WebPage's hasPart", txt.Clip(t, 60), k, k, k)
 			return
 		}
 	})
@@ -1162,7 +1072,7 @@ func idBox(n *xhtml.Node) *xhtml.Node {
 // outsideLinks warns on a group of three or more links to other sites, under
 // one ancestor with an id, whose URLs no node in the draft names: partners,
 // vendors or sources the page features.
-func (c *checker) outsideLinks(p *pageFacts, d *draftIndex) {
+func (c *checker) outsideLinks(p *pageFacts, d *jsonld.Index) {
 	if p.doc == nil || p.base == nil {
 		return
 	}
@@ -1182,8 +1092,8 @@ func (c *checker) outsideLinks(p *pageFacts, d *draftIndex) {
 		if socialProfile(h) || shareLink.MatchString(h) {
 			return
 		}
-		key := normURL(u)
-		if d.urls[key] {
+		key := txt.NormURL(u)
+		if d.URLs[key] {
 			return
 		}
 		box := idBox(n)
@@ -1199,7 +1109,7 @@ func (c *checker) outsideLinks(p *pageFacts, d *draftIndex) {
 			if label == "" {
 				label, _ = attr(n, "aria-label")
 			}
-			if label = clip(label, 40); label != "" && !slices.Contains(g.labels, label) {
+			if label = txt.Clip(label, 40); label != "" && !slices.Contains(g.labels, label) {
 				g.labels = append(g.labels, label)
 			}
 		}
@@ -1225,14 +1135,14 @@ var (
 // related warns when a block the page labels as related reading links to
 // pages of the site that the WebPage's relatedLink does not list. A block of
 // product cards is the Product's related products instead.
-func (c *checker) related(all []located, p *pageFacts, d *draftIndex) {
+func (c *checker) related(all []jsonld.Node, p *pageFacts, d *jsonld.Index) {
 	if p.doc == nil {
 		return
 	}
 	var rel []string
 	for _, l := range all {
-		if c.is(l.n, "WebPage") {
-			for _, s := range strs(l.n, "relatedLink") {
+		if c.is(l.N, "WebPage") {
+			for _, s := range jsonld.Strs(l.N, "relatedLink") {
 				rel = append(rel, p.abs(s))
 			}
 		}
@@ -1248,7 +1158,7 @@ func (c *checker) related(all []located, p *pageFacts, d *draftIndex) {
 		if len(cards) > 0 {
 			var names []string
 			for _, cd := range cards {
-				if !d.urls[cd.url] && !slices.Contains(names, cd.name) {
+				if !d.URLs[cd.url] && !slices.Contains(names, cd.name) {
 					names = append(names, cd.name)
 				}
 			}
@@ -1265,7 +1175,7 @@ func (c *checker) related(all []located, p *pageFacts, d *draftIndex) {
 					pages = append(pages, u)
 				}
 			}
-			if len(pages) >= 3 && slices.ContainsFunc(pages, func(u string) bool { return !d.urls[u] }) {
+			if len(pages) >= 3 && slices.ContainsFunc(pages, func(u string) bool { return !d.URLs[u] }) {
 				c.add("html:"+selectorFor(p.doc, box), Warning, "the page's %q block lists %d pages of the site: add an ItemList of them (a ListItem for each with position, url and name) to the WebPage's hasPart; a hub page whose purpose is the list is a CollectionPage with the ItemList as its mainEntity", t, len(pages))
 			}
 			continue
@@ -1286,7 +1196,7 @@ func (c *checker) related(all []located, p *pageFacts, d *draftIndex) {
 			if (p.base != nil && !strings.EqualFold(pu.Hostname(), p.base.Hostname())) || (p.base == nil && pu.IsAbs()) {
 				return
 			}
-			if link := pu.String(); !slices.Contains(rel, normURL(pu)) && !slices.Contains(missing, link) {
+			if link := pu.String(); !slices.Contains(rel, txt.NormURL(pu)) && !slices.Contains(missing, link) {
 				missing = append(missing, link)
 			}
 		})
@@ -1309,61 +1219,54 @@ var responseTime = regexp.MustCompile(`(?i)\b(?:repl(?:y|ies)|responds?|response
 
 // responseTime warns when the page promises a reply time and no
 // ServiceChannel has it as processingTime.
-func (c *checker) responseTime(all []located, p *pageFacts) {
+func (c *checker) responseTime(all []jsonld.Node, p *pageFacts) {
 	m := responseTime.FindString(p.text)
-	if m == "" || slices.ContainsFunc(all, func(l located) bool { return len(scalars(l.n, "processingTime")) > 0 }) {
+	if m == "" || slices.ContainsFunc(all, func(l jsonld.Node) bool { return len(jsonld.Scalars(l.N, "processingTime")) > 0 }) {
 		return
 	}
 	path := pagePath
-	if i := slices.IndexFunc(all, func(l located) bool { return c.is(l.n, "ServiceChannel") }); i >= 0 {
-		path = all[i].path
+	if i := slices.IndexFunc(all, func(l jsonld.Node) bool { return c.is(l.N, "ServiceChannel") }); i >= 0 {
+		path = all[i].Path
 	}
 	c.add(path, Warning, "the page promises %q but no ServiceChannel has processingTime: set it as a Duration (P1D for a day) on the channel the promise is for", m)
 }
 
 var (
-	priceAmount = regexp.MustCompile(`(?:A\$|AU\$|AUD ?|US\$|USD ?|NZ\$|NZD ?|C\$|CA\$|S\$|HK\$|€|£|¥|₹|\$)\s?(\d{1,3}(?:,\d{3})+|\d+)(?:\.(\d{1,2}))?`)
-	taxWords    = regexp.MustCompile(`(?i)\b(plus|excl(?:uding|\.)?|ex|exclusive of|incl(?:uding|\.)?|inc\.?|inclusive of)\s+(GST|VAT|tax(?:es)?|sales tax)\b|\b(GST|VAT|tax(?:es)?)\s+(included|inclusive|incl\.?|excluded|exclusive|excl\.?|extra)\b`)
-	taxOut      = regexp.MustCompile(`(?i)^(?:plus|ex|excl|exclusive|excluded|extra)`)
-	notPrices   = regexp.MustCompile(`(?i)\b(?:save|payments? of|under|below|less than)\s+(?:A\$|AU\$|\$|£|€)\s?\d[\d,]*(?:\.\d{1,2})?`)
+	taxWords  = regexp.MustCompile(`(?i)\b(plus|excl(?:uding|\.)?|ex|exclusive of|incl(?:uding|\.)?|inc\.?|inclusive of)\s+(GST|VAT|tax(?:es)?|sales tax)\b|\b(GST|VAT|tax(?:es)?)\s+(included|inclusive|incl\.?|excluded|exclusive|excl\.?|extra)\b`)
+	taxOut    = regexp.MustCompile(`(?i)^(?:plus|ex|excl|exclusive|excluded|extra)`)
+	notPrices = regexp.MustCompile(`(?i)\b(?:save|payments? of|under|below|less than)\s+(?:A\$|AU\$|\$|£|€)\s?\d[\d,]*(?:\.\d{1,2})?`)
 )
-
-// amount reads a price's number.
-func amount(s string) (float64, bool) {
-	f, err := strconv.ParseFloat(strings.ReplaceAll(strings.TrimSpace(s), ",", ""), 64)
-	return f, err == nil
-}
 
 // prices warns on prices the page shows that no price property carries, on
 // a price without its currency, and on tax wording the PriceSpecification
 // does not match.
-func (c *checker) prices(all []located, p *pageFacts) {
+func (c *checker) prices(all []jsonld.Node, p *pageFacts) {
 	// marked holds every amount the draft carries; sold, only the prices of
 	// things for sale, which tax wording is about (a shipping rate's
 	// MonetaryAmount is not one)
 	marked, sold := map[float64]bool{}, map[float64]bool{}
 	for _, l := range all {
 		keys := []string{"price", "lowPrice", "highPrice", "minPrice", "maxPrice"}
-		if c.is(l.n, "MonetaryAmount") || c.is(l.n, "PriceSpecification") {
+		if c.is(l.N, "MonetaryAmount") || c.is(l.N, "PriceSpecification") {
 			keys = append(keys, "value", "minValue", "maxValue")
 		}
 		priced := false
 		for i, k := range keys {
-			for _, s := range scalars(l.n, k) {
-				if f, ok := amount(s); ok {
+			for _, s := range jsonld.Scalars(l.N, k) {
+				if f, ok := txt.Amount(s); ok {
 					marked[f], priced = true, true
 					sold[f] = sold[f] || i < 5
 				}
 			}
 		}
-		if priced && len(strs(l.n, "priceCurrency"))+len(strs(l.n, "currency")) == 0 {
-			c.add(l.path, Warning, "this %s has a price but no priceCurrency: set it (AUD, USD, EUR)", typeNames(l.n)[0])
+		if priced && len(jsonld.Strs(l.N, "priceCurrency"))+len(jsonld.Strs(l.N, "currency")) == 0 {
+			c.add(l.Path, Warning, "this %s has a price but no priceCurrency: set it (AUD, USD, EUR)", jsonld.TypeNames(l.N)[0])
 		}
 	}
 	// prices in the site's header, footer and menus, a saving ("save $50")
 	// and an instalment are no item's price; the shop checks report the
 	// prices they own (was prices, shipping rates, product cards)
-	ms := priceAmount.FindAllStringSubmatch(notPrices.ReplaceAllString(p.main, " "), -1)
+	ms := txt.PriceAmount.FindAllStringSubmatch(notPrices.ReplaceAllString(p.main, " "), -1)
 	if len(ms) == 0 {
 		return
 	}
@@ -1371,7 +1274,7 @@ func (c *checker) prices(all []located, p *pageFacts) {
 	seen := map[float64]bool{}
 	anySold := false
 	for _, m := range ms {
-		f, ok := priceOf(m)
+		f, ok := txt.PriceOf(m)
 		if !ok || seen[f] {
 			continue
 		}
@@ -1396,10 +1299,10 @@ func (c *checker) prices(all []located, p *pageFacts) {
 	incl := !taxOut.MatchString(firstNonEmpty(t[1], t[4]))
 	found := false
 	for _, l := range all {
-		for _, v := range scalars(l.n, "valueAddedTaxIncluded") {
+		for _, v := range jsonld.Scalars(l.N, "valueAddedTaxIncluded") {
 			found = true
 			if (v == "true") != incl {
-				c.add(l.path+".valueAddedTaxIncluded", Warning, "valueAddedTaxIncluded is %s but the page says %q", v, t[0])
+				c.add(l.Path+".valueAddedTaxIncluded", Warning, "valueAddedTaxIncluded is %s but the page says %q", v, t[0])
 			}
 		}
 	}
@@ -1427,14 +1330,14 @@ func attribution(n *xhtml.Node) string {
 // testimonial is a Review, another quote a Quotation. A string of three
 // words or more carries a quote it contains; a shorter one only the quote it
 // is.
-func (c *checker) quotes(p *pageFacts, d *draftIndex) {
+func (c *checker) quotes(p *pageFacts, d *jsonld.Index) {
 	if p.doc == nil {
 		return
 	}
 	var carried []string
 	exact := map[string]bool{}
-	for _, s := range d.strs {
-		w := normWords(stripTags(s))
+	for _, s := range d.Strs {
+		w := txt.NormWords(txt.StripTags(s))
 		exact[w] = true
 		if strings.Count(w, " ") >= 2 {
 			carried = append(carried, " "+w+" ")
@@ -1454,11 +1357,11 @@ func (c *checker) quotes(p *pageFacts, d *draftIndex) {
 		default:
 			return
 		}
-		q := normWords(text)
+		q := txt.NormWords(text)
 		if q == "" || exact[q] || slices.ContainsFunc(carried, func(s string) bool { return strings.Contains(s, " "+q+" ") }) {
 			return
 		}
-		c.add("html:"+selectorFor(p.doc, n), Warning, "the page quotes %q%s and no node carries it: a customer's opinion of a business, product or service is a Review of it (reviewBody, author, itemReviewed); another quotation is a Quotation (text, creator)", clip(text, 60), who)
+		c.add("html:"+selectorFor(p.doc, n), Warning, "the page quotes %q%s and no node carries it: a customer's opinion of a business, product or service is a Review of it (reviewBody, author, itemReviewed); another quotation is a Quotation (text, creator)", txt.Clip(text, 60), who)
 	})
 }
 
@@ -1514,7 +1417,7 @@ var ratingShown = regexp.MustCompile(`(?i)\b(\d(?:\.\d)?)\s*(?:/\s*(?:5|10)\b|ou
 
 // ratings warns on ratings the page shows that no Rating carries as its
 // ratingValue.
-func (c *checker) ratings(all []located, p *pageFacts) {
+func (c *checker) ratings(all []jsonld.Node, p *pageFacts) {
 	var shownVals [][]string
 	for _, loc := range ratingShown.FindAllStringSubmatchIndex(p.text, -1) {
 		m := p.text[loc[0]:loc[1]]
@@ -1535,9 +1438,9 @@ func (c *checker) ratings(all []located, p *pageFacts) {
 	}
 	have := map[float64]bool{}
 	for _, l := range all {
-		if c.is(l.n, "Rating") {
-			for _, s := range scalars(l.n, "ratingValue") {
-				if f, ok := amount(s); ok {
+		if c.is(l.N, "Rating") {
+			for _, s := range jsonld.Scalars(l.N, "ratingValue") {
+				if f, ok := txt.Amount(s); ok {
 					have[f] = true
 				}
 			}
@@ -1545,7 +1448,7 @@ func (c *checker) ratings(all []located, p *pageFacts) {
 	}
 	var missing []string
 	for _, m := range shownVals {
-		if f, ok := amount(m[1]); ok && !have[f] && !slices.Contains(missing, m[1]) {
+		if f, ok := txt.Amount(m[1]); ok && !have[f] && !slices.Contains(missing, m[1]) {
 			missing = append(missing, m[1])
 		}
 	}
@@ -1556,15 +1459,15 @@ func (c *checker) ratings(all []located, p *pageFacts) {
 
 // offers warns on an Offer that names no seller. An AggregateOffer gathers
 // many sellers' offers, so it needs none.
-func (c *checker) offers(all []located) {
+func (c *checker) offers(all []jsonld.Node) {
 	for _, l := range all {
-		if !c.is(l.n, "Offer") || c.is(l.n, "AggregateOffer") {
+		if !c.is(l.N, "Offer") || c.is(l.N, "AggregateOffer") {
 			continue
 		}
-		_, s := l.n.get("seller")
-		_, o := l.n.get("offeredBy")
+		_, s := l.N.Get("seller")
+		_, o := l.N.Get("offeredBy")
 		if !s && !o {
-			c.add(l.path, Warning, "this Offer names no seller: set seller (or offeredBy) to the business that makes it")
+			c.add(l.Path, Warning, "this Offer names no seller: set seller (or offeredBy) to the business that makes it")
 		}
 	}
 }
@@ -1573,16 +1476,16 @@ var personName = regexp.MustCompile(`^(\p{Lu}[\p{L}'’-]+)(?:\s+\p{Lu}[\p{L}'�
 
 // personNames warns on a Person named with a given and a family name that
 // does not give them apart.
-func (c *checker) personNames(all []located) {
+func (c *checker) personNames(all []jsonld.Node) {
 	for _, l := range all {
-		if !c.is(l.n, "Person") {
+		if !c.is(l.N, "Person") {
 			continue
 		}
-		_, g := l.n.get("givenName")
-		_, f := l.n.get("familyName")
-		for _, s := range strs(l.n, "name") {
+		_, g := l.N.Get("givenName")
+		_, f := l.N.Get("familyName")
+		for _, s := range jsonld.Strs(l.N, "name") {
 			if m := personName.FindStringSubmatch(strings.TrimSpace(s)); m != nil && !g && !f {
-				c.add(l.path, Warning, "this Person is named %q: set givenName %s and familyName %s", s, m[1], m[2])
+				c.add(l.Path, Warning, "this Person is named %q: set givenName %s and familyName %s", s, m[1], m[2])
 			}
 			break
 		}
@@ -1591,19 +1494,19 @@ func (c *checker) personNames(all []located) {
 
 // pageNames warns on a WebPage node, not a reference, that has no url or no
 // name.
-func (c *checker) pageNames(all []located) {
+func (c *checker) pageNames(all []jsonld.Node) {
 	for _, l := range all {
-		if !c.is(l.n, "WebPage") {
+		if !c.is(l.N, "WebPage") {
 			continue
 		}
 		var miss []string
 		for _, k := range []string{"url", "name"} {
-			if _, ok := l.n.get(k); !ok {
+			if _, ok := l.N.Get(k); !ok {
 				miss = append(miss, k)
 			}
 		}
 		if len(miss) > 0 {
-			c.add(l.path, Warning, "this %s has no %s: give it the page's", typeNames(l.n)[0], strings.Join(miss, " or "))
+			c.add(l.Path, Warning, "this %s has no %s: give it the page's", jsonld.TypeNames(l.N)[0], strings.Join(miss, " or "))
 		}
 	}
 }
@@ -1619,11 +1522,11 @@ var bareTypes = map[string]string{
 }
 
 // bare warns on a node typed only as one of the bare types.
-func (c *checker) bare(all []located) {
+func (c *checker) bare(all []jsonld.Node) {
 	for _, l := range all {
-		if types := typeNames(l.n); len(types) == 1 {
+		if types := jsonld.TypeNames(l.N); len(types) == 1 {
 			if use, ok := bareTypes[types[0]]; ok {
-				c.add(l.path, Warning, "a bare %s says little: use the subtype that fits (%s)", types[0], use)
+				c.add(l.Path, Warning, "a bare %s says little: use the subtype that fits (%s)", types[0], use)
 			}
 		}
 	}
@@ -1631,15 +1534,15 @@ func (c *checker) bare(all []located) {
 
 // ownReviews notes a Review or AggregateRating of the page's own publisher
 // or provider: valid markup, but Google shows no stars for it.
-func (c *checker) ownReviews(all []located) {
+func (c *checker) ownReviews(all []jsonld.Node) {
 	own := map[string]bool{}
 	for _, l := range all {
 		for _, k := range []string{"publisher", "provider"} {
-			raw, _ := l.n.get(k)
-			for _, v := range values(raw) {
+			raw, _ := l.N.Get(k)
+			for _, v := range jsonld.Values(raw) {
 				switch x := v.(type) {
-				case *object:
-					for _, id := range strs(x, "@id") {
+				case *jsonld.Object:
+					for _, id := range jsonld.Strs(x, "@id") {
 						own[id] = true
 					}
 				case string:
@@ -1649,23 +1552,23 @@ func (c *checker) ownReviews(all []located) {
 		}
 	}
 	isOwn := func(v any) bool {
-		if o, ok := v.(*object); ok {
-			return slices.ContainsFunc(strs(o, "@id"), func(id string) bool { return own[id] })
+		if o, ok := v.(*jsonld.Object); ok {
+			return slices.ContainsFunc(jsonld.Strs(o, "@id"), func(id string) bool { return own[id] })
 		}
 		s, _ := v.(string)
 		return own[s]
 	}
 	for _, l := range all {
-		if c.is(l.n, "Review") || c.is(l.n, "AggregateRating") {
-			raw, _ := l.n.get("itemReviewed")
-			if slices.ContainsFunc(values(raw), isOwn) {
-				c.add(l.path, Info, "a %s of the page's own business or person: the markup is valid, but Google shows no review stars for self-serving reviews", typeNames(l.n)[0])
+		if c.is(l.N, "Review") || c.is(l.N, "AggregateRating") {
+			raw, _ := l.N.Get("itemReviewed")
+			if slices.ContainsFunc(jsonld.Values(raw), isOwn) {
+				c.add(l.Path, Info, "a %s of the page's own business or person: the markup is valid, but Google shows no review stars for self-serving reviews", jsonld.TypeNames(l.N)[0])
 			}
 		}
-		if slices.ContainsFunc(strs(l.n, "@id"), func(id string) bool { return own[id] }) {
+		if slices.ContainsFunc(jsonld.Strs(l.N, "@id"), func(id string) bool { return own[id] }) {
 			for _, k := range []string{"review", "aggregateRating"} {
-				if _, ok := l.n.get(k); ok {
-					c.add(l.path+"."+k, Info, "the page's own business or person carries %s: the markup is valid, but Google shows no review stars for self-serving reviews", k)
+				if _, ok := l.N.Get(k); ok {
+					c.add(l.Path+"."+k, Info, "the page's own business or person carries %s: the markup is valid, but Google shows no review stars for self-serving reviews", k)
 				}
 			}
 		}
@@ -1676,16 +1579,16 @@ var reviewNested = regexp.MustCompile(`\.review(?:\[\d+\])?$`)
 
 // reviews warns on a Review without an author, or without the item it
 // reviews when it is not nested in that item's review.
-func (c *checker) reviews(all []located) {
+func (c *checker) reviews(all []jsonld.Node) {
 	for _, l := range all {
-		if !c.is(l.n, "Review") || len(l.n.keys) < 2 {
+		if !c.is(l.N, "Review") || len(l.N.Keys) < 2 {
 			continue
 		}
-		if _, ok := l.n.get("author"); !ok {
-			c.add(l.path, Warning, "this Review has no author: name who wrote it")
+		if _, ok := l.N.Get("author"); !ok {
+			c.add(l.Path, Warning, "this Review has no author: name who wrote it")
 		}
-		if _, ok := l.n.get("itemReviewed"); !ok && !reviewNested.MatchString(l.path) {
-			c.add(l.path, Warning, "this Review has no itemReviewed: name what it reviews, or put it in that item's review")
+		if _, ok := l.N.Get("itemReviewed"); !ok && !reviewNested.MatchString(l.Path) {
+			c.add(l.Path, Warning, "this Review has no itemReviewed: name what it reviews, or put it in that item's review")
 		}
 	}
 }

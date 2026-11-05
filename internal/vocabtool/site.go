@@ -8,6 +8,8 @@ import (
 	"strings"
 	"unicode"
 
+	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
+	"github.com/dazamate/go-json-schema/internal/vocabtool/txt"
 	xhtml "golang.org/x/net/html"
 	"golang.org/x/net/html/atom"
 )
@@ -17,7 +19,7 @@ import (
 // number, the dates a page gives itself and the article its main copy is.
 
 // site runs the site checks.
-func (c *checker) site(all []located, p *pageFacts, d *draftIndex) {
+func (c *checker) site(all []jsonld.Node, p *pageFacts, d *jsonld.Index) {
 	// the page graph asks need the page, as the WebSite's does
 	if p.doc != nil {
 		c.publisher(all, p)
@@ -31,70 +33,19 @@ func (c *checker) site(all []located, p *pageFacts, d *draftIndex) {
 	c.figures(all, p, d)
 }
 
-// byID finds a node in the draft by its @id.
-func byID(all []located, id string) (located, bool) {
-	for _, l := range all {
-		if slices.Contains(strs(l.n, "@id"), id) && len(l.n.keys) > 1 {
-			return l, true
-		}
-	}
-	return located{}, false
-}
-
-// refs are the nodes a property points at: nested nodes, and the nodes an
-// {"@id"} reference names.
-func refs(all []located, n *object, key string) []located {
-	raw, _ := n.get(key)
-	var out []located
-	for _, v := range values(raw) {
-		o, ok := v.(*object)
-		if !ok {
-			continue
-		}
-		if len(o.keys) > 1 {
-			if i := slices.IndexFunc(all, func(l located) bool { return l.n == o }); i >= 0 {
-				out = append(out, all[i])
-			}
-			continue
-		}
-		for _, id := range strs(o, "@id") {
-			if l, ok := byID(all, id); ok {
-				out = append(out, l)
-			}
-		}
-	}
-	return out
-}
-
-// publishers are the nodes the draft names as the site's publisher or
-// copyright holder.
-func publishers(all []located) []located {
-	var out []located
-	for _, l := range all {
-		for _, k := range []string{"publisher", "copyrightHolder"} {
-			for _, r := range refs(all, l.n, k) {
-				if !slices.ContainsFunc(out, func(o located) bool { return o.n == r.n }) {
-					out = append(out, r)
-				}
-			}
-		}
-	}
-	return out
-}
-
 var copyrightHolder = regexp.MustCompile(`(?i)(?:©|\(c\)|copyright)\s*(?:\d{4}\s*[-–]\s*)?\d{4}\s+([^·|.,©]{2,60}?)\s*(?:[·|.,]|\ball rights\b|$)`)
 
 // publisher warns when no node publishes the site. A shop's business check
 // asks for its OnlineStore instead.
-func (c *checker) publisher(all []located, p *pageFacts) {
-	if hasKey(all, "publisher") || hasKey(all, "copyrightHolder") {
+func (c *checker) publisher(all []jsonld.Node, p *pageFacts) {
+	if jsonld.HasKey(all, "publisher") || jsonld.HasKey(all, "copyrightHolder") {
 		return
 	}
 	if p.sells() && !c.has(all, "Organization") {
 		return
 	}
-	if i := slices.IndexFunc(all, func(l located) bool { return c.is(l.n, "Organization") && len(l.n.keys) > 1 }); i >= 0 {
-		org := orDefault(strings.Join(strs(all[i].n, "name"), " "), "the business")
+	if i := slices.IndexFunc(all, func(l jsonld.Node) bool { return c.is(l.N, "Organization") && len(l.N.Keys) > 1 }); i >= 0 {
+		org := orDefault(strings.Join(jsonld.Strs(all[i].N, "name"), " "), "the business")
 		c.add(pagePath, Warning, "no node publishes the page: set the Organization %q as the WebSite's publisher (and the copyrightHolder), by its @id", org)
 		return
 	}
@@ -110,20 +61,20 @@ func (c *checker) publisher(all []located, p *pageFacts) {
 // markup, and none anywhere on the page, its footer included. It works
 // through its website, so it is an OnlineBusiness. A shop's business check
 // types a shop.
-func (c *checker) onlineBusiness(all []located, p *pageFacts) {
+func (c *checker) onlineBusiness(all []jsonld.Node, p *pageFacts) {
 	if p.sells() || streetAddress.MatchString(p.text) || openingTime.MatchString(p.text) {
 		return
 	}
-	for _, l := range publishers(all) {
-		if c.single(l.n) != "Organization" || c.suggested[l.n] || len(strs(l.n, "url")) == 0 {
+	for _, l := range jsonld.Publishers(all) {
+		if c.single(l.N) != "Organization" || c.suggested[l.N] || len(jsonld.Strs(l.N, "url")) == 0 {
 			continue
 		}
-		if slices.ContainsFunc([]string{"address", "location", "geo", "openingHours", "openingHoursSpecification", "hasMap"}, func(k string) bool { _, ok := l.n.get(k); return ok }) {
+		if slices.ContainsFunc([]string{"address", "location", "geo", "openingHours", "openingHoursSpecification", "hasMap"}, func(k string) bool { _, ok := l.N.Get(k); return ok }) {
 			continue
 		}
-		name := orDefault(strings.Join(strs(l.n, "name"), " "), "the business")
-		c.add(l.path, Warning, "Organization %q shows no premises and works through its website: type it OnlineBusiness", name)
-		c.suggested[l.n] = true
+		name := orDefault(strings.Join(jsonld.Strs(l.N, "name"), " "), "the business")
+		c.add(l.Path, Warning, "Organization %q shows no premises and works through its website: type it OnlineBusiness", name)
+		c.suggested[l.N] = true
 	}
 }
 
@@ -146,9 +97,9 @@ func tollFreeNumber(s string) bool {
 
 // tollFree warns on a toll-free number, in the markup or a tel: link, when no
 // ContactPoint says it is one.
-func (c *checker) tollFree(all []located, p *pageFacts) {
-	if slices.ContainsFunc(all, func(l located) bool {
-		return slices.ContainsFunc(strs(l.n, "contactOption"), func(s string) bool { return strings.HasSuffix(s, "TollFree") })
+func (c *checker) tollFree(all []jsonld.Node, p *pageFacts) {
+	if slices.ContainsFunc(all, func(l jsonld.Node) bool {
+		return slices.ContainsFunc(jsonld.Strs(l.N, "contactOption"), func(s string) bool { return strings.HasSuffix(s, "TollFree") })
 	}) {
 		return
 	}
@@ -160,8 +111,8 @@ func (c *checker) tollFree(all []located, p *pageFacts) {
 		}
 	}
 	for _, l := range all {
-		for _, t := range strs(l.n, "telephone") {
-			warn(l.path, strings.TrimSpace(t))
+		for _, t := range jsonld.Strs(l.N, "telephone") {
+			warn(l.Path, strings.TrimSpace(t))
 		}
 	}
 	if p.doc != nil {
@@ -202,11 +153,11 @@ func isoDate(s string) string {
 
 // pageDates warns on a date the page gives itself ("Last updated: June
 // 2021", "checked 28 October 2026") that no value in the draft holds.
-func (c *checker) pageDates(all []located, p *pageFacts) {
+func (c *checker) pageDates(all []jsonld.Node, p *pageFacts) {
 	var held []string
 	for _, l := range all {
-		for _, k := range l.n.keys {
-			held = append(held, scalars(l.n, k)...)
+		for _, k := range l.N.Keys {
+			held = append(held, jsonld.Scalars(l.N, k)...)
 		}
 	}
 	seen := map[string]bool{}
@@ -236,7 +187,7 @@ var legalPage = regexp.MustCompile(`(?i)\b(terms|conditions|privacy|cookies?|pol
 // or more or two sections or more, when no node is an Article. Short
 // articles are cards, and a shop's, contact, legal or policy page is no
 // article.
-func (c *checker) article(all []located, p *pageFacts) {
+func (c *checker) article(all []jsonld.Node, p *pageFacts) {
 	if p.doc == nil || p.kind != "" || c.has(all, "Article") || legalPage.MatchString(p.h1()) {
 		return
 	}
@@ -265,25 +216,25 @@ var topPath = regexp.MustCompile(`^\$(?:\.@graph)?(?:\[\d+\])?$`)
 // level before one nested in another (a catalog's link to the same page),
 // the one whose url is the page's before the first that is not an FAQPage
 // part.
-func (c *checker) mainWebPage(all []located, p *pageFacts) (located, bool) {
-	var best located
+func (c *checker) mainWebPage(all []jsonld.Node, p *pageFacts) (jsonld.Node, bool) {
+	var best jsonld.Node
 	rank := 0
 	for _, l := range all {
-		if !c.is(l.n, "WebPage") || len(l.n.keys) < 2 {
+		if !c.is(l.N, "WebPage") || len(l.N.Keys) < 2 {
 			continue
 		}
 		r := 0
-		if !c.is(l.n, "FAQPage") {
+		if !c.is(l.N, "FAQPage") {
 			r = 1
 		}
 		if p.url != nil {
-			for _, s := range append(strs(l.n, "url"), strs(l.n, "@id")...) {
-				if u, err := url.Parse(s); err == nil && u.Fragment == "" && normURL(u) == normURL(p.url) {
+			for _, s := range append(jsonld.Strs(l.N, "url"), jsonld.Strs(l.N, "@id")...) {
+				if u, err := url.Parse(s); err == nil && u.Fragment == "" && txt.NormURL(u) == txt.NormURL(p.url) {
 					r = 2
 				}
 			}
 		}
-		if r > 0 && topPath.MatchString(l.path) {
+		if r > 0 && topPath.MatchString(l.Path) {
 			r += 2
 		}
 		if r > rank {
@@ -355,7 +306,7 @@ func phases(box, head *xhtml.Node) []phase {
 // checklists warn on a checklist the page gives, a section headed as one or
 // whose phases are times ("8 weeks before", "Moving day"), each over a list
 // of tasks, that no HowTo carries.
-func (c *checker) checklists(all []located, p *pageFacts, d *draftIndex) {
+func (c *checker) checklists(all []jsonld.Node, p *pageFacts, d *jsonld.Index) {
 	if p.doc == nil {
 		return
 	}
@@ -391,8 +342,8 @@ func (c *checker) checklists(all []located, p *pageFacts, d *draftIndex) {
 			continue
 		}
 		done[box] = true
-		first := normWords(phs[0].tasks[0])
-		if slices.ContainsFunc(d.strs, func(s string) bool { return strings.Contains(normWords(s), first) }) {
+		first := txt.NormWords(phs[0].tasks[0])
+		if slices.ContainsFunc(d.Strs, func(s string) bool { return strings.Contains(txt.NormWords(s), first) }) {
 			continue
 		}
 		c.add("html:"+selectorFor(p.doc, box), Warning, "the page's checklist %q has %d phases and %d tasks: add a HowTo (name, step: a HowToSection for each phase with a HowToStep for each task, name and text word for word, a HowToTip for a task's note, a HowToSupply or HowToTool where a task names one, and itemListOrder https://schema.org/ItemListOrderAscending) in the WebPage's hasPart", htmlText(h), len(phs), tasks)
@@ -449,7 +400,7 @@ func (p *pageFacts) tools() []tool {
 			}
 		})
 		live := len(queryAll(n, `output, [aria-live]`))
-		head := clip(htmlText(n), 300)
+		head := txt.Clip(htmlText(n), 300)
 		if live == 0 || inputs == 0 || boxes > inputs || (inputs < 3 && !toolWords.MatchString(head)) {
 			return
 		}
@@ -482,7 +433,7 @@ func (p *pageFacts) tools() []tool {
 
 // tools warn on the page's interactive tools that no WebApplication names,
 // and on a quote tool that no QuoteAction targets.
-func (c *checker) tools(all []located, p *pageFacts, d *draftIndex) {
+func (c *checker) tools(all []jsonld.Node, p *pageFacts, d *jsonld.Index) {
 	tools := p.tools()
 	if len(tools) == 0 {
 		return
@@ -491,13 +442,13 @@ func (c *checker) tools(all []located, p *pageFacts, d *draftIndex) {
 	// words (a site's Moving Cost Calculator is its #calculator)
 	var apps []string
 	for _, l := range all {
-		if c.is(l.n, "SoftwareApplication") {
-			apps = append(apps, normWords(strings.Join(strs(l.n, "name"), " ")))
+		if c.is(l.N, "SoftwareApplication") {
+			apps = append(apps, txt.NormWords(strings.Join(jsonld.Strs(l.N, "name"), " ")))
 		}
 	}
 	named := func(id string) bool {
 		words := strings.FieldsFunc(strings.ToLower(id), func(r rune) bool { return r == '-' || r == '_' })
-		return slices.ContainsFunc(d.strs, func(s string) bool { return strings.HasSuffix(s, "#"+id) }) ||
+		return slices.ContainsFunc(d.Strs, func(s string) bool { return strings.HasSuffix(s, "#"+id) }) ||
 			slices.ContainsFunc(apps, func(a string) bool {
 				return !slices.ContainsFunc(words, func(w string) bool { return !strings.Contains(" "+a+" ", " "+w+" ") })
 			})
@@ -515,16 +466,16 @@ func (c *checker) tools(all []located, p *pageFacts, d *draftIndex) {
 		if !t.quote {
 			continue
 		}
-		hit := slices.ContainsFunc(all, func(l located) bool {
-			if !c.is(l.n, "QuoteAction") {
+		hit := slices.ContainsFunc(all, func(l jsonld.Node) bool {
+			if !c.is(l.N, "QuoteAction") {
 				return false
 			}
-			for _, tg := range refs(all, l.n, "target") {
-				if slices.ContainsFunc(strs(tg.n, "urlTemplate"), func(s string) bool { return strings.HasSuffix(s, "#"+t.id) }) {
+			for _, tg := range jsonld.Refs(all, l.N, "target") {
+				if slices.ContainsFunc(jsonld.Strs(tg.N, "urlTemplate"), func(s string) bool { return strings.HasSuffix(s, "#"+t.id) }) {
 					return true
 				}
 			}
-			return slices.ContainsFunc(strs(l.n, "target"), func(s string) bool { return strings.HasSuffix(s, "#"+t.id) })
+			return slices.ContainsFunc(jsonld.Strs(l.N, "target"), func(s string) bool { return strings.HasSuffix(s, "#"+t.id) })
 		})
 		if !hit {
 			c.add("html:#"+t.id, Warning, "the page's quote tool (#%s) has no QuoteAction: add one to the WebApplication's or WebPage's potentialAction, with an EntryPoint target (urlTemplate the page's URL + #%s, actionPlatform https://schema.org/DesktopWebPlatform and https://schema.org/MobileWebPlatform)", t.id, t.id)

@@ -7,6 +7,8 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
+	"github.com/dazamate/go-json-schema/internal/vocabtool/txt"
 	xhtml "golang.org/x/net/html"
 	"golang.org/x/net/html/atom"
 )
@@ -28,7 +30,7 @@ var (
 )
 
 // sources runs the source checks.
-func (c *checker) sources(all []located, p *pageFacts, d *draftIndex) {
+func (c *checker) sources(all []jsonld.Node, p *pageFacts, d *jsonld.Index) {
 	c.rules(p, d)
 	c.permits(all, p)
 	c.agencies(p, d)
@@ -36,14 +38,14 @@ func (c *checker) sources(all []located, p *pageFacts, d *draftIndex) {
 }
 
 // heldText reports a draft string that holds s, words compared.
-func heldText(d *draftIndex, s string) bool {
-	w := normWords(s)
-	return w != "" && slices.ContainsFunc(d.strs, func(v string) bool { return strings.Contains(" "+normWords(v)+" ", " "+w+" ") })
+func heldText(d *jsonld.Index, s string) bool {
+	w := txt.NormWords(s)
+	return w != "" && slices.ContainsFunc(d.Strs, func(v string) bool { return strings.Contains(" "+txt.NormWords(v)+" ", " "+w+" ") })
 }
 
 // rules warn on the laws and regulations the page cites ("49 CFR 375.401")
 // that no value in the draft names.
-func (c *checker) rules(p *pageFacts, d *draftIndex) {
+func (c *checker) rules(p *pageFacts, d *jsonld.Index) {
 	var list []string
 	for _, m := range ruleCite.FindAllString(p.main, -1) {
 		if !slices.Contains(list, m) && !heldText(d, m) {
@@ -57,7 +59,7 @@ func (c *checker) rules(p *pageFacts, d *draftIndex) {
 			if err != nil || !lawHost.MatchString(u.Hostname()) || chrome(a) {
 				continue
 			}
-			if t := htmlText(a); t != "" && !slices.Contains(list, t) && !heldText(d, t) && !d.urls[normURL(u)] {
+			if t := htmlText(a); t != "" && !slices.Contains(list, t) && !heldText(d, t) && !d.URLs[txt.NormURL(u)] {
 				list = append(list, t)
 			}
 		}
@@ -69,7 +71,7 @@ func (c *checker) rules(p *pageFacts, d *draftIndex) {
 	for i, s := range list {
 		quoted[i] = fmt.Sprintf("%q", s)
 	}
-	c.add(pagePath, Warning, "the page cites the rules %s: add a Legislation for each (name, legislationIdentifier, legislationJurisdiction, legislationType, url, legislationLegalForce https://schema.org/InForce, legislationLegalValue https://schema.org/UnofficialLegalValue for an unofficial rendering such as eCFR; a LegislationObject for a rule's own text) and list it as the WebPage's citation, or its about when a section is about it", examples(quoted))
+	c.add(pagePath, Warning, "the page cites the rules %s: add a Legislation for each (name, legislationIdentifier, legislationJurisdiction, legislationType, url, legislationLegalForce https://schema.org/InForce, legislationLegalValue https://schema.org/UnofficialLegalValue for an unofficial rendering such as eCFR; a LegislationObject for a rule's own text) and list it as the WebPage's citation, or its about when a section is about it", txt.Examples(quoted))
 }
 
 // govLink is a link to a government site, outside the page's chrome.
@@ -84,7 +86,7 @@ func govLink(a *xhtml.Node) (*url.URL, bool) {
 
 // permits warn on a section that explains a permit or licence a government
 // issues, by a link to its site, when no Permit is in the draft.
-func (c *checker) permits(all []located, p *pageFacts) {
+func (c *checker) permits(all []jsonld.Node, p *pageFacts) {
 	if p.doc == nil || c.has(all, "Permit") {
 		return
 	}
@@ -126,12 +128,12 @@ func (c *checker) permits(all []located, p *pageFacts) {
 
 // agencies warn on the government agencies the page links that no value in
 // the draft names: their sites, by host.
-func (c *checker) agencies(p *pageFacts, d *draftIndex) {
+func (c *checker) agencies(p *pageFacts, d *jsonld.Index) {
 	if p.doc == nil {
 		return
 	}
 	hosts := map[string]bool{}
-	for k := range d.urls {
+	for k := range d.URLs {
 		if u, err := url.Parse(k); err == nil {
 			hosts[strings.TrimPrefix(u.Hostname(), "www.")] = true
 		}
@@ -159,17 +161,17 @@ func (c *checker) agencies(p *pageFacts, d *draftIndex) {
 		list = append(list, fmt.Sprintf("%q (%s)", name, u.Hostname()))
 	}
 	if len(list) > 0 {
-		c.add(pagePath, Warning, "the page links the agencies %s: add each as a GovernmentOrganization (name, url) in the WebPage's mentions, or as the publisher of a citation from it", examples(list))
+		c.add(pagePath, Warning, "the page links the agencies %s: add each as a GovernmentOrganization (name, url) in the WebPage's mentions, or as the publisher of a citation from it", txt.Examples(list))
 	}
 }
 
 // documents warn on the documents the page links (PDFs) that no node names.
-func (c *checker) documents(p *pageFacts, d *draftIndex) {
+func (c *checker) documents(p *pageFacts, d *jsonld.Index) {
 	var list []string
 	for _, a := range queryAll(p.doc, "a[href]") {
 		h, _ := attr(a, "href")
 		u, err := url.Parse(strings.TrimSpace(h))
-		if err != nil || chrome(a) || !strings.HasSuffix(strings.ToLower(u.Path), ".pdf") || d.urls[p.abs(h)] {
+		if err != nil || chrome(a) || !strings.HasSuffix(strings.ToLower(u.Path), ".pdf") || d.URLs[p.abs(h)] {
 			continue
 		}
 		if t := htmlText(a); t != "" && !heldText(d, t) {
@@ -177,14 +179,14 @@ func (c *checker) documents(p *pageFacts, d *draftIndex) {
 		}
 	}
 	if len(list) > 0 {
-		c.add(pagePath, Warning, "the page links documents (%s) that no node names: add each as a DigitalDocument (name, url, encodingFormat application/pdf, publisher) in the WebPage's citation or mentions", examples(list))
+		c.add(pagePath, Warning, "the page links documents (%s) that no node names: add each as a DigitalDocument (name, url, encodingFormat application/pdf, publisher) in the WebPage's citation or mentions", txt.Examples(list))
 	}
 }
 
 // citations warn on the sources the page credits, in cite elements and
 // "Source:" lines, that no value in the draft names. A quote's cite names its
 // author, which the quote checks read.
-func (c *checker) citations(p *pageFacts, d *draftIndex) {
+func (c *checker) citations(p *pageFacts, d *jsonld.Index) {
 	if p.doc == nil {
 		return
 	}
@@ -192,11 +194,11 @@ func (c *checker) citations(p *pageFacts, d *draftIndex) {
 	add := func(s string) {
 		s = strings.TrimSpace(s)
 		if s == "" || ruleCite.MatchString(s) || heldText(d, s) || slices.ContainsFunc(list, func(o string) bool {
-			return strings.HasPrefix(normWords(o), normWords(s)) || strings.HasPrefix(normWords(s), normWords(o))
+			return strings.HasPrefix(txt.NormWords(o), txt.NormWords(s)) || strings.HasPrefix(txt.NormWords(s), txt.NormWords(o))
 		}) {
 			return
 		}
-		list = append(list, clip(s, 60))
+		list = append(list, txt.Clip(s, 60))
 	}
 	for _, n := range queryAll(p.doc, "cite") {
 		if chrome(n) || !shown(n) || slices.ContainsFunc(ancestors(n), func(e *xhtml.Node) bool {
@@ -225,7 +227,7 @@ func (c *checker) citations(p *pageFacts, d *draftIndex) {
 		if slices.ContainsFunc(list, rentalSource.MatchString) {
 			rental = ", an AutoRental for a vehicle rental company"
 		}
-		c.add(pagePath, Warning, "the page credits %d sources (%s) that no citation names: list each as a citation of the WebPage, Article or Dataset (a CreativeWork with name, url when linked, and publisher the Organization behind it, a NewsMediaOrganization for a news publisher%s)", len(list), examples(list), rental)
+		c.add(pagePath, Warning, "the page credits %d sources (%s) that no citation names: list each as a citation of the WebPage, Article or Dataset (a CreativeWork with name, url when linked, and publisher the Organization behind it, a NewsMediaOrganization for a news publisher%s)", len(list), txt.Examples(list), rental)
 	}
 	c.documents(p, d)
 }

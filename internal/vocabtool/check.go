@@ -1,7 +1,6 @@
 package vocabtool
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"net/url"
@@ -12,6 +11,7 @@ import (
 
 	"golang.org/x/net/html"
 
+	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/vocab"
 )
 
@@ -70,28 +70,28 @@ type CheckOptions struct {
 // (https://schema.org/docs/datamodel.html), so it is kept. Bare enum member
 // names such as InStock are expanded to their schema.org URL.
 func (t *Tool) Check(draft json.RawMessage, opts CheckOptions) (Report, error) {
-	root, err := decodeOrdered(draft)
+	root, err := jsonld.Decode(draft)
 	if err != nil {
 		return Report{}, fmt.Errorf("draft is not valid JSON: %w", err)
 	}
-	var doc *object
+	var doc *jsonld.Object
 	switch r := root.(type) {
-	case *object:
+	case *jsonld.Object:
 		doc = r
-		if _, ok := doc.get("@context"); !ok {
-			doc.prepend("@context", "https://schema.org")
+		if _, ok := doc.Get("@context"); !ok {
+			doc.Prepend("@context", "https://schema.org")
 		}
 	case []any:
-		doc = &object{}
-		doc.set("@context", "https://schema.org")
-		doc.set("@graph", r)
+		doc = &jsonld.Object{}
+		doc.Set("@context", "https://schema.org")
+		doc.Set("@graph", r)
 	default:
 		return Report{}, fmt.Errorf("draft must be a JSON object or array")
 	}
-	c := checker{v: t.Vocab, suggested: map[*object]bool{}}
+	c := checker{v: t.Vocab, suggested: map[*jsonld.Object]bool{}}
 	c.walk("$", doc)
 	c.repeats(doc)
-	all := nodes("$", doc)
+	all := jsonld.Nodes("$", doc)
 	c.classTypes(all)
 	c.namedTypes(all)
 	c.webPageElements(all)
@@ -146,7 +146,7 @@ func (t *Tool) Check(draft json.RawMessage, opts CheckOptions) (Report, error) {
 			rep.Warnings++
 		}
 	}
-	body, err := encode(doc, opts.Pretty)
+	body, err := jsonld.Encode(doc, opts.Pretty)
 	if err != nil {
 		return Report{}, err
 	}
@@ -161,16 +161,16 @@ func (t *Tool) Check(draft json.RawMessage, opts CheckOptions) (Report, error) {
 // untyped node with properties and a property only a subtype takes are
 // warnings; a property outside its listed domains is info.
 func (t *Tool) Vocabulary(draft json.RawMessage) ([]Issue, error) {
-	root, err := decodeOrdered(draft)
+	root, err := jsonld.Decode(draft)
 	if err != nil {
 		return nil, fmt.Errorf("draft is not valid JSON: %w", err)
 	}
 	switch root.(type) {
-	case *object, []any:
+	case *jsonld.Object, []any:
 	default:
 		return nil, fmt.Errorf("draft must be a JSON object or array")
 	}
-	c := checker{v: t.Vocab, suggested: map[*object]bool{}}
+	c := checker{v: t.Vocab, suggested: map[*jsonld.Object]bool{}}
 	c.walk("$", root)
 	return c.issues, nil
 }
@@ -178,7 +178,7 @@ func (t *Tool) Vocabulary(draft json.RawMessage) ([]Issue, error) {
 type checker struct {
 	v         *vocab.Vocab
 	issues    []Issue
-	suggested map[*object]bool // nodes already told to take a more specific type
+	suggested map[*jsonld.Object]bool // nodes already told to take a more specific type
 }
 
 func (c *checker) add(path, severity, format string, args ...any) {
@@ -193,20 +193,20 @@ func (c *checker) walk(path string, v any) {
 		for i, item := range x {
 			c.walk(fmt.Sprintf("%s[%d]", path, i), item)
 		}
-	case *object:
+	case *jsonld.Object:
 		types := c.types(path, x)
 		hasProps := false
-		for _, k := range x.keys {
+		for _, k := range x.Keys {
 			if strings.HasPrefix(k, "@") {
 				if k == "@graph" {
-					c.walk(path+".@graph", x.vals[k])
+					c.walk(path+".@graph", x.Vals[k])
 				}
 				continue
 			}
 			hasProps = true
 			c.property(path+"."+k, k, types, x)
 		}
-		if _, typed := x.get("@type"); !typed && hasProps {
+		if _, typed := x.Get("@type"); !typed && hasProps {
 			c.add(path, Warning, "node has properties but no @type")
 		}
 	}
@@ -216,33 +216,10 @@ func (c *checker) walk(path string, v any) {
 // markup adds beside a schema.org Action.
 var googleAnnotation = regexp.MustCompile(`^[a-z]+-(?:input|output)$`)
 
-var wikidataItem = regexp.MustCompile(`^https?://(?:www\.)?wikidata\.org/(?:wiki|entity)/(Q[0-9]+)$`)
-
-// wikidataItems are the Wikidata items a node's sameAs names.
-func wikidataItems(n *object) []string {
-	raw, ok := n.get("sameAs")
-	if !ok {
-		return nil
-	}
-	vals, isList := raw.([]any)
-	if !isList {
-		vals = []any{raw}
-	}
-	var out []string
-	for _, v := range vals {
-		if s, ok := v.(string); ok {
-			if m := wikidataItem.FindStringSubmatch(s); m != nil {
-				out = append(out, m[1])
-			}
-		}
-	}
-	return out
-}
-
 // repeats warns about a node without an @id that names the same Wikidata
 // item as a node with one: it repeats that node, which a {"@id"} reference
 // says once.
-func (c *checker) repeats(doc *object) {
+func (c *checker) repeats(doc *jsonld.Object) {
 	byItem := map[string]string{}
 	var collect func(v any)
 	collect = func(v any) {
@@ -251,18 +228,18 @@ func (c *checker) repeats(doc *object) {
 			for _, item := range x {
 				collect(item)
 			}
-		case *object:
-			if id, ok := x.get("@id"); ok && len(x.keys) > 1 {
+		case *jsonld.Object:
+			if id, ok := x.Get("@id"); ok && len(x.Keys) > 1 {
 				if s, ok := id.(string); ok {
-					for _, q := range wikidataItems(x) {
+					for _, q := range jsonld.WikidataItems(x) {
 						if _, seen := byItem[q]; !seen {
 							byItem[q] = s
 						}
 					}
 				}
 			}
-			for _, k := range x.keys {
-				collect(x.vals[k])
+			for _, k := range x.Keys {
+				collect(x.Vals[k])
 			}
 		}
 	}
@@ -277,18 +254,18 @@ func (c *checker) repeats(doc *object) {
 			for i, item := range x {
 				check(fmt.Sprintf("%s[%d]", path, i), item)
 			}
-		case *object:
-			if _, ok := x.get("@id"); !ok {
-				for _, q := range wikidataItems(x) {
+		case *jsonld.Object:
+			if _, ok := x.Get("@id"); !ok {
+				for _, q := range jsonld.WikidataItems(x) {
 					if id, ok := byItem[q]; ok {
 						c.add(path, Warning, "same Wikidata item (%s) as the node %s: put {\"@id\": %q} here instead of repeating it", q, id, id)
 						break
 					}
 				}
 			}
-			for _, k := range x.keys {
+			for _, k := range x.Keys {
 				if k != "@context" {
-					check(path+"."+k, x.vals[k])
+					check(path+"."+k, x.Vals[k])
 				}
 			}
 		}
@@ -297,8 +274,8 @@ func (c *checker) repeats(doc *object) {
 }
 
 // types returns the node's known schema.org types, reporting unknown ones.
-func (c *checker) types(path string, n *object) []string {
-	raw, ok := n.get("@type")
+func (c *checker) types(path string, n *jsonld.Object) []string {
+	raw, ok := n.Get("@type")
 	if !ok {
 		return nil
 	}
@@ -315,7 +292,7 @@ func (c *checker) types(path string, n *object) []string {
 	}
 	var known []string
 	for _, name := range names {
-		term := stripPrefix(name)
+		term := jsonld.StripPrefix(name)
 		cl, ok := c.v.V.Classes[term]
 		if !ok {
 			c.unknown(path, vocab.KindType, name)
@@ -330,15 +307,15 @@ func (c *checker) types(path string, n *object) []string {
 }
 
 func (c *checker) unknown(path, kind, name string) {
-	if s := c.v.Suggest(kind, stripPrefix(name)); s != "" {
+	if s := c.v.Suggest(kind, jsonld.StripPrefix(name)); s != "" {
 		c.add(path, Error, "unknown %s %q; did you mean %s?", kind, name, s)
 		return
 	}
 	c.add(path, Error, "unknown %s %q", kind, name)
 }
 
-func (c *checker) property(path, key string, types []string, n *object) {
-	term := stripPrefix(key)
+func (c *checker) property(path, key string, types []string, n *jsonld.Object) {
+	term := jsonld.StripPrefix(key)
 	if googleAnnotation.MatchString(term) {
 		c.add(path, Info, "%s is Google's action annotation, not a schema.org property; kept", key)
 		return
@@ -356,7 +333,7 @@ func (c *checker) property(path, key string, types []string, n *object) {
 		c.add(path, Warning, "property %s is superseded by %s", term, strings.Join(p.SupersededBy, ", "))
 	}
 	if numericOnly(p.Ranges) {
-		for _, v := range values(n.vals[key]) {
+		for _, v := range jsonld.Values(n.Vals[key]) {
 			if s, ok := v.(string); ok {
 				if _, err := strconv.ParseFloat(strings.TrimSpace(s), 64); err == nil {
 					c.add(path, Warning, "%s takes a number: write %s, not %q", term, strings.TrimSpace(s), s)
@@ -377,14 +354,14 @@ func (c *checker) property(path, key string, types []string, n *object) {
 			c.add(path, Info, "%s is not listed for %s (domains: %s); kept, since schema.org domains are guidelines rather than rules", term, strings.Join(types, ", "), strings.Join(p.Domains, ", "))
 		}
 	}
-	val := n.vals[key]
+	val := n.Vals[key]
 	switch x := val.(type) {
 	case []any:
 		for i, item := range x {
 			x[i] = c.value(fmt.Sprintf("%s[%d]", path, i), term, item)
 		}
 	default:
-		n.vals[key] = c.value(path, term, val)
+		n.Vals[key] = c.value(path, term, val)
 	}
 }
 
@@ -397,7 +374,7 @@ func (c *checker) value(path, prop string, v any) any {
 		return v
 	}
 	if enum, only := c.v.EnumOnly(prop); only {
-		name := stripPrefix(s)
+		name := jsonld.StripPrefix(s)
 		if slices.Contains(c.v.Members(enum), name) {
 			return baseURL + name
 		}
@@ -410,145 +387,10 @@ func (c *checker) value(path, prop string, v any) any {
 	}
 	// Mixed ranges such as Text|ItemListOrderType: only a schema.org URL
 	// claims to be a member, so only that is checked.
-	if name, isURL := cutSchemaURL(s); isURL {
+	if name, isURL := jsonld.CutSchemaURL(s); isURL {
 		if _, isMember := c.v.V.Members[name]; !isMember && c.v.RangesEnum(prop) {
 			c.add(path, Warning, "%q names no schema.org enumeration member", s)
 		}
 	}
 	return v
-}
-
-func cutSchemaURL(s string) (string, bool) {
-	for _, p := range []string{"https://schema.org/", "http://schema.org/", "schema:"} {
-		if name, ok := strings.CutPrefix(s, p); ok {
-			return name, true
-		}
-	}
-	return s, false
-}
-
-func stripPrefix(s string) string {
-	name, _ := cutSchemaURL(s)
-	return name
-}
-
-// object is a JSON object that keeps its key order.
-type object struct {
-	keys []string
-	vals map[string]any
-}
-
-func (o *object) get(k string) (any, bool) {
-	v, ok := o.vals[k]
-	return v, ok
-}
-
-func (o *object) set(k string, v any) {
-	if o.vals == nil {
-		o.vals = map[string]any{}
-	}
-	if _, ok := o.vals[k]; !ok {
-		o.keys = append(o.keys, k)
-	}
-	o.vals[k] = v
-}
-
-func (o *object) prepend(k string, v any) {
-	o.set(k, v)
-	o.keys = append([]string{k}, slices.DeleteFunc(o.keys, func(s string) bool { return s == k })...)
-}
-
-func (o *object) MarshalJSON() ([]byte, error) {
-	var buf bytes.Buffer
-	buf.WriteByte('{')
-	for i, k := range o.keys {
-		if i > 0 {
-			buf.WriteByte(',')
-		}
-		kb, err := encode(k, false)
-		if err != nil {
-			return nil, err
-		}
-		vb, err := encode(o.vals[k], false)
-		if err != nil {
-			return nil, err
-		}
-		buf.Write(kb)
-		buf.WriteByte(':')
-		buf.Write(vb)
-	}
-	buf.WriteByte('}')
-	return buf.Bytes(), nil
-}
-
-// decodeOrdered parses JSON, keeping object key order and exact numbers.
-func decodeOrdered(data []byte) (any, error) {
-	dec := json.NewDecoder(bytes.NewReader(data))
-	dec.UseNumber()
-	v, err := decodeValue(dec)
-	if err != nil {
-		return nil, err
-	}
-	if _, err := dec.Token(); err == nil {
-		return nil, fmt.Errorf("trailing data after JSON value")
-	}
-	return v, nil
-}
-
-func decodeValue(dec *json.Decoder) (any, error) {
-	tok, err := dec.Token()
-	if err != nil {
-		return nil, err
-	}
-	switch d := tok.(type) {
-	case json.Delim:
-		switch d {
-		case '{':
-			o := &object{vals: map[string]any{}}
-			for dec.More() {
-				kt, err := dec.Token()
-				if err != nil {
-					return nil, err
-				}
-				v, err := decodeValue(dec)
-				if err != nil {
-					return nil, err
-				}
-				o.set(kt.(string), v)
-			}
-			_, err := dec.Token()
-			return o, err
-		case '[':
-			arr := []any{}
-			for dec.More() {
-				v, err := decodeValue(dec)
-				if err != nil {
-					return nil, err
-				}
-				arr = append(arr, v)
-			}
-			_, err := dec.Token()
-			return arr, err
-		}
-	}
-	return tok, nil
-}
-
-// encode marshals without HTML escaping, optionally indented.
-func encode(v any, pretty bool) ([]byte, error) {
-	var buf bytes.Buffer
-	enc := json.NewEncoder(&buf)
-	enc.SetEscapeHTML(false)
-	if err := enc.Encode(v); err != nil {
-		return nil, err
-	}
-	out := bytes.TrimRight(buf.Bytes(), "\n")
-	if !pretty {
-		return out, nil
-	}
-	var ind bytes.Buffer
-	if err := json.Indent(&ind, out, "", "  "); err != nil {
-		return nil, err
-	}
-	return ind.Bytes(), nil
 }

@@ -5,6 +5,8 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
+	"github.com/dazamate/go-json-schema/internal/vocabtool/txt"
 	xhtml "golang.org/x/net/html"
 	"golang.org/x/net/html/atom"
 )
@@ -67,14 +69,14 @@ func (p *pageFacts) dataBlocks() []dataBlock {
 // data warns on the page's data blocks that no Dataset describes, their lead
 // figures that no Observation carries, and a pay table that no Occupation's
 // estimatedSalary carries. A pay table's amounts are wages, not prices.
-func (c *checker) data(all []located, p *pageFacts, d *draftIndex) {
+func (c *checker) data(all []jsonld.Node, p *pageFacts, d *jsonld.Index) {
 	var observed, stated []string
 	for _, l := range all {
-		if c.is(l.n, "Observation") {
-			observed = append(observed, scalars(l.n, "value")...)
+		if c.is(l.N, "Observation") {
+			observed = append(observed, jsonld.Scalars(l.N, "value")...)
 			// An Observation named by the sentence carries it: "1 in 6 people
 			// moved" leads with 1, which is no figure of its own.
-			for _, n := range scalars(l.n, "name") {
+			for _, n := range jsonld.Scalars(l.N, "name") {
 				stated = append(stated, strings.Join(strings.Fields(n), " "))
 			}
 		}
@@ -85,7 +87,7 @@ func (c *checker) data(all []located, p *pageFacts, d *draftIndex) {
 		pay := payWords.MatchString(b.caption) && percentile.MatchString(text)
 		if pay {
 			p.claim(text)
-			if !hasKey(all, "estimatedSalary") {
+			if !jsonld.HasKey(all, "estimatedSalary") {
 				job := "the occupation"
 				if m := payFor.FindStringSubmatch(b.caption); m != nil {
 					job = strings.TrimSpace(m[1])
@@ -104,7 +106,7 @@ func (c *checker) data(all []located, p *pageFacts, d *draftIndex) {
 			continue
 		}
 		if !heldText(d, b.caption) {
-			c.add(at, Warning, "the page shows data from %s (%q) but no Dataset describes it: add one (name and description from the caption and its note, creator or publisher the source, isBasedOn its URL, temporalCoverage from the years, spatialCoverage from the places, variableMeasured from the column headers)", clip(b.source, 100), clip(b.caption, 80))
+			c.add(at, Warning, "the page shows data from %s (%q) but no Dataset describes it: add one (name and description from the caption and its note, creator or publisher the source, isBasedOn its URL, temporalCoverage from the years, spatialCoverage from the places, variableMeasured from the column headers)", txt.Clip(b.source, 100), txt.Clip(b.caption, 80))
 		}
 		if pay {
 			continue
@@ -113,7 +115,7 @@ func (c *checker) data(all []located, p *pageFacts, d *draftIndex) {
 		for _, para := range queryAll(b.n, "p") {
 			t := htmlText(para)
 			// a price is an estimate, not the data's figure
-			if inside(para, atom.Figure, atom.Details, atom.Small) || strings.Contains(t, "Source") || len(strings.Fields(t)) > 30 || priceAmount.MatchString(t) {
+			if inside(para, atom.Figure, atom.Details, atom.Small) || strings.Contains(t, "Source") || len(strings.Fields(t)) > 30 || txt.PriceAmount.MatchString(t) {
 				continue
 			}
 			n := firstCount.FindString(t)
@@ -125,7 +127,7 @@ func (c *checker) data(all []located, p *pageFacts, d *draftIndex) {
 				if bedrooms.MatchString(t) {
 					home = "; a FloorPlan (numberOfBedrooms, numberOfRooms) describes the home it counts"
 				}
-				c.add(at, Warning, "the page states %q from %s: add an Observation (observationAbout the place, variableMeasured a StatisticalVariable with measuredProperty and statType, value, observationDate) to the Dataset%s", t, clip(b.source, 80), home)
+				c.add(at, Warning, "the page states %q from %s: add an Observation (observationAbout the place, variableMeasured a StatisticalVariable with measuredProperty and statType, value, observationDate) to the Dataset%s", t, txt.Clip(b.source, 80), home)
 			}
 			break
 		}

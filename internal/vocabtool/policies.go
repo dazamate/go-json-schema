@@ -7,6 +7,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
+	"github.com/dazamate/go-json-schema/internal/vocabtool/txt"
 	xhtml "golang.org/x/net/html"
 	"golang.org/x/net/html/atom"
 )
@@ -30,12 +32,12 @@ var (
 )
 
 // shippingNodes are the scalars under the draft's shipping nodes.
-func (c *checker) shippingScalars(all []located) []string {
+func (c *checker) shippingScalars(all []jsonld.Node) []string {
 	var out []string
 	for _, l := range all {
 		for _, ty := range []string{"ShippingConditions", "OfferShippingDetails", "ShippingRateSettings", "ShippingService", "DeliveryChargeSpecification"} {
-			if c.is(l.n, ty) {
-				out = append(out, deepScalars(l.n)...)
+			if c.is(l.N, ty) {
+				out = append(out, jsonld.DeepScalars(l.N)...)
 				break
 			}
 		}
@@ -45,7 +47,7 @@ func (c *checker) shippingScalars(all []located) []string {
 
 // shipping warns on a shipping rate, free-shipping threshold, handling time
 // or transit time the page states that no shipping node carries.
-func (c *checker) shipping(all []located, p *pageFacts) {
+func (c *checker) shipping(all []jsonld.Node, p *pageFacts) {
 	text := p.text
 	ship := c.shippingScalars(all)
 	country := "its country"
@@ -57,20 +59,20 @@ func (c *checker) shipping(all []located, p *pageFacts) {
 	}
 	if m := shippingRate.FindStringSubmatch(text); m != nil {
 		v := firstNonEmpty(m[1:]...)
-		f, _ := amount(v)
+		f, _ := txt.Amount(v)
 		p.claimed[f] = true
 		if !holdsNumber(ship, f) {
 			c.add(pagePath, Warning, "the page gives a shipping rate of $%s that no node carries: add a ShippingService to the business's hasShippingService (fulfillmentType https://schema.org/FulfillmentTypeDelivery) with shippingConditions, a ShippingConditions with shippingDestination (a DefinedRegion with addressCountry %s) and shippingRate (a MonetaryAmount of %s); on a product page give its Offer the same as shippingDetails, an OfferShippingDetails", v, country, v)
 		}
 	}
 	if m := freeShipping.FindStringSubmatch(text); m != nil {
-		f, _ := amount(m[1])
+		f, _ := txt.Amount(m[1])
 		p.claimed[f] = true
 		if !holdsNumber(ship, f) {
 			c.add(pagePath, Warning, "the page offers free shipping over $%s but no ShippingConditions has an orderValue of %s: add a ShippingConditions with orderValue (a MonetaryAmount with minValue %s) and shippingRate 0 to the business's ShippingService, or a ShippingRateSettings whose freeShippingThreshold is a DeliveryChargeSpecification of %s", m[1], m[1], m[1], m[1])
 		}
 	}
-	handlingVals := under(all, "handlingTime")
+	handlingVals := jsonld.Under(all, "handlingTime")
 	var said []string
 	days := 0
 	for _, m := range handling.FindAllStringSubmatch(text, -1) {
@@ -90,10 +92,10 @@ func (c *checker) shipping(all []located, p *pageFacts) {
 	if len(said) > 0 {
 		c.add(pagePath, Warning, "the page says %s but no handlingTime carries it: set handlingTime on the ShippingService (a ServicePeriod, or a QuantitativeValue with maxValue %d and unitCode DAY) or, on a product page, in its OfferShippingDetails's deliveryTime (a ShippingDeliveryTime with handlingTime a QuantitativeValue)", quoteAll(said), days)
 	}
-	transitVals := under(all, "transitTime")
+	transitVals := jsonld.Under(all, "transitTime")
 	if m := transit.FindStringSubmatch(text); m != nil {
-		lo, _ := amount(m[1])
-		hi, _ := amount(m[2])
+		lo, _ := txt.Amount(m[1])
+		hi, _ := txt.Amount(m[2])
 		if !holdsNumber(transitVals, lo) || !holdsNumber(transitVals, hi) {
 			c.add(pagePath, Warning, "the page says %q but no transitTime carries it: set transitTime on the ShippingConditions (a ServicePeriod with businessDays and a duration of %s to %s days) or in the Offer's ShippingDeliveryTime (a QuantitativeValue with minValue %s, maxValue %s and unitCode DAY)", m[0], m[1], m[2], m[1], m[2])
 		}
@@ -132,7 +134,7 @@ var (
 // returns warns on the return policy terms the page states that no
 // MerchantReturnPolicy carries, and on a link to the policy page no
 // MerchantReturnPolicy names as its merchantReturnLink.
-func (c *checker) returns(all []located, p *pageFacts) {
+func (c *checker) returns(all []jsonld.Node, p *pageFacts) {
 	var facts []returnFact
 	if m := returnWindow.FindStringSubmatch(p.text); m != nil {
 		days := firstNonEmpty(m[1:]...)
@@ -151,15 +153,15 @@ func (c *checker) returns(all []located, p *pageFacts) {
 	if m := seasonal.FindString(p.main); m != "" {
 		facts = append(facts, returnFact{m, "returnPolicySeasonalOverride", "MerchantReturnPolicySeasonalOverride"})
 	}
-	var policies []located
+	var policies []jsonld.Node
 	for _, l := range all {
-		if c.is(l.n, "MerchantReturnPolicy") && len(l.n.keys) > 1 {
+		if c.is(l.N, "MerchantReturnPolicy") && len(l.N.Keys) > 1 {
 			policies = append(policies, l)
 		}
 	}
 	link := ""
 	if p.kind == kindReturns && p.url != nil {
-		link = normURL(p.url)
+		link = txt.NormURL(p.url)
 	} else if p.doc != nil {
 		for _, a := range queryAll(p.doc, "a[href]") {
 			if u, ok := p.siteLink(a); ok && returnsLink.MatchString(htmlText(a)) && len(strings.Fields(htmlText(a))) <= 3 {
@@ -190,24 +192,24 @@ func (c *checker) returns(all []located, p *pageFacts) {
 		return
 	}
 	for _, f := range facts {
-		ok := slices.ContainsFunc(policies, func(l located) bool {
+		ok := slices.ContainsFunc(policies, func(l jsonld.Node) bool {
 			if f.prop == "returnPolicySeasonalOverride" {
-				_, has := l.n.get(f.prop)
+				_, has := l.N.Get(f.prop)
 				return has
 			}
 			if f.prop == "merchantReturnDays" {
-				return slices.Contains(scalars(l.n, f.prop), f.member)
+				return slices.Contains(jsonld.Scalars(l.N, f.prop), f.member)
 			}
-			return slices.ContainsFunc(strs(l.n, f.prop), func(s string) bool { return stripPrefix(s) == f.member })
+			return slices.ContainsFunc(jsonld.Strs(l.N, f.prop), func(s string) bool { return jsonld.StripPrefix(s) == f.member })
 		})
 		if !ok {
-			c.add(policies[0].path, Warning, "the page says %q but this MerchantReturnPolicy does not: set %s", f.said, describeReturnFact(f))
+			c.add(policies[0].Path, Warning, "the page says %q but this MerchantReturnPolicy does not: set %s", f.said, describeReturnFact(f))
 		}
 	}
-	if link != "" && !slices.ContainsFunc(policies, func(l located) bool {
-		return slices.ContainsFunc(strs(l.n, "merchantReturnLink"), func(s string) bool { return normLink(s) == link })
+	if link != "" && !slices.ContainsFunc(policies, func(l jsonld.Node) bool {
+		return slices.ContainsFunc(jsonld.Strs(l.N, "merchantReturnLink"), func(s string) bool { return txt.NormLink(s) == link })
 	}) {
-		c.add(policies[0].path, Warning, "the page links the return policy (%s): set merchantReturnLink %s on the MerchantReturnPolicy", link, link)
+		c.add(policies[0].Path, Warning, "the page links the return policy (%s): set merchantReturnLink %s on the MerchantReturnPolicy", link, link)
 	}
 }
 
@@ -239,19 +241,19 @@ var (
 // whereAndWhen warns on the business's address, location, opening hours and
 // map that the page shows and the markup lacks, and on a contact page whose
 // business has no ContactPoint.
-func (c *checker) whereAndWhen(all []located, p *pageFacts) {
-	hasAddress := hasKey(all, "address") || c.has(all, "PostalAddress")
+func (c *checker) whereAndWhen(all []jsonld.Node, p *pageFacts) {
+	hasAddress := jsonld.HasKey(all, "address") || c.has(all, "PostalAddress")
 	if addr := p.address(); addr != "" && !hasAddress {
-		c.add(pagePath, Warning, "the page shows the address %q: set the business's address, a PostalAddress (streetAddress, addressLocality, addressRegion, postalCode, addressCountry)", clip(addr, 80))
+		c.add(pagePath, Warning, "the page shows the address %q: set the business's address, a PostalAddress (streetAddress, addressLocality, addressRegion, postalCode, addressCountry)", txt.Clip(addr, 80))
 	} else if m := basedIn.FindStringSubmatch(p.main); m != nil && !hasAddress && (p.kind == kindContact || p.kind == kindAbout) {
 		// elsewhere "based in" is about someone else: movers based in Queens
 		code := orDefault(countryCodes[strings.ToLower(m[1])], "its two-letter code")
 		c.add(pagePath, Warning, "the page says the business is based in %s: set its address, a PostalAddress with addressCountry %s", m[1], code)
 	}
-	if m := openingTime.FindString(p.main); m != "" && !hasKey(all, "openingHoursSpecification") && !hasKey(all, "openingHours") && !hasKey(all, "hoursAvailable") {
+	if m := openingTime.FindString(p.main); m != "" && !jsonld.HasKey(all, "openingHoursSpecification") && !jsonld.HasKey(all, "openingHours") && !jsonld.HasKey(all, "hoursAvailable") {
 		c.add(pagePath, Warning, "the page gives opening hours (%q): set the store's openingHoursSpecification, an OpeningHoursSpecification for each run of days (dayOfWeek, DayOfWeek members such as https://schema.org/Monday, opens, closes); an online shop's hours go on its ContactPoint as hoursAvailable", m)
 	}
-	if p.doc != nil && !hasKey(all, "geo") {
+	if p.doc != nil && !jsonld.HasKey(all, "geo") {
 		for _, f := range queryAll(p.doc, "iframe[src]") {
 			if src, _ := attr(f, "src"); mapSrc.MatchString(src) {
 				c.add("html:"+selectorFor(p.doc, f), Warning, "the page embeds a map of the business: set its hasMap (the map's URL) and geo, GeoCoordinates (latitude, longitude)")
@@ -279,8 +281,8 @@ var (
 
 // payments warns on the payment methods the page shows that no node lists as
 // an acceptedPaymentMethod.
-func (c *checker) payments(all []located, p *pageFacts) {
-	if hasKey(all, "acceptedPaymentMethod") {
+func (c *checker) payments(all []jsonld.Node, p *pageFacts) {
+	if jsonld.HasKey(all, "acceptedPaymentMethod") {
 		return
 	}
 	var names []string
@@ -429,19 +431,19 @@ func nextElement(n *xhtml.Node) *xhtml.Node {
 }
 
 // faq warns on questions the page answers that no Question carries.
-func (c *checker) faq(all []located, p *pageFacts) {
+func (c *checker) faq(all []jsonld.Node, p *pageFacts) {
 	var asked []string
 	for _, l := range all {
-		if c.is(l.n, "Question") {
-			for _, s := range strs(l.n, "name") {
-				asked = append(asked, normWords(s))
+		if c.is(l.N, "Question") {
+			for _, s := range jsonld.Strs(l.N, "name") {
+				asked = append(asked, txt.NormWords(s))
 			}
 		}
 	}
 	qs := p.questions()
 	var missing []string
 	for _, q := range qs {
-		if !slices.Contains(asked, normWords(q.q)) {
+		if !slices.Contains(asked, txt.NormWords(q.q)) {
 			missing = append(missing, q.q)
 		}
 	}
@@ -457,7 +459,7 @@ func (c *checker) faq(all []located, p *pageFacts) {
 		if p.kind == kindFAQ {
 			where = "the page itself as an FAQPage"
 		}
-		c.add(pagePath, Warning, "the page has an FAQ section (%q, %d questions: %s) but no FAQPage: add %s with a Question for each under mainEntity (name, acceptedAnswer an Answer with the answer's text word for word)", clip(qs[0].section, 80), len(missing), strings.Join(list, " "), where)
+		c.add(pagePath, Warning, "the page has an FAQ section (%q, %d questions: %s) but no FAQPage: add %s with a Question for each under mainEntity (name, acceptedAnswer an Answer with the answer's text word for word)", txt.Clip(qs[0].section, 80), len(missing), strings.Join(list, " "), where)
 		return
 	}
 	c.add(pagePath, Warning, "the page answers %d questions (%s) that no Question carries: add a Question for each to the FAQPage's mainEntity (name, acceptedAnswer an Answer with the answer's text word for word)", len(missing), strings.Join(list, " "))

@@ -6,6 +6,8 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
+	"github.com/dazamate/go-json-schema/internal/vocabtool/txt"
 	xhtml "golang.org/x/net/html"
 )
 
@@ -14,7 +16,7 @@ import (
 // measure.
 
 // figures runs the figure checks.
-func (c *checker) figures(all []located, p *pageFacts, d *draftIndex) {
+func (c *checker) figures(all []jsonld.Node, p *pageFacts, d *jsonld.Index) {
 	if p.doc == nil {
 		return
 	}
@@ -28,7 +30,7 @@ func (c *checker) figures(all []located, p *pageFacts, d *draftIndex) {
 
 // charts warn on figures drawn in SVG, with a caption, that no ImageObject
 // carries: images reads only img elements.
-func (c *checker) charts(all []located, p *pageFacts, d *draftIndex) {
+func (c *checker) charts(all []jsonld.Node, p *pageFacts, d *jsonld.Index) {
 	var first *xhtml.Node
 	var caps []string
 	for _, f := range queryAll(p.doc, "figure") {
@@ -43,22 +45,22 @@ func (c *checker) charts(all []located, p *pageFacts, d *draftIndex) {
 		if first == nil {
 			first = f
 		}
-		caps = append(caps, fmt.Sprintf("%q", clip(cp, 80)))
+		caps = append(caps, fmt.Sprintf("%q", txt.Clip(cp, 80)))
 	}
 	if first == nil {
 		return
 	}
 	what := "the chart " + caps[0]
 	if len(caps) > 1 {
-		what = fmt.Sprintf("%d charts (%s)", len(caps), examples(caps))
+		what = fmt.Sprintf("%d charts (%s)", len(caps), txt.Examples(caps))
 	}
 	c.add("html:"+selectorFor(p.doc, first), Warning, "the page draws %s with no ImageObject: add one for each (caption word for word, encodingFormat image/svg+xml, about the Dataset it draws) as the image of the WebPage or the Dataset", what)
 }
 
 // summary warns on a block that sums the page up (Key takeaways, TL;DR, At
 // a glance) when the markup has no abstract and no speakable part.
-func (c *checker) summary(all []located, p *pageFacts) {
-	if hasKey(all, "abstract") || hasKey(all, "speakable") || p.sells() {
+func (c *checker) summary(all []jsonld.Node, p *pageFacts) {
+	if jsonld.HasKey(all, "abstract") || jsonld.HasKey(all, "speakable") || p.sells() {
 		return
 	}
 	for _, n := range queryAll(p.doc, "aside, section, div, ul, ol") {
@@ -87,7 +89,7 @@ var (
 // vehicles warn on a table that lists vehicles with their capacity (truck
 // sizes and what each holds) when no node names them. A table whose caption
 // or header names vehicles lists one in each row (10 ft, 15 ft).
-func (c *checker) vehicles(p *pageFacts, d *draftIndex) {
+func (c *checker) vehicles(p *pageFacts, d *jsonld.Index) {
 	for _, tbl := range queryAll(p.doc, "table") {
 		if chrome(tbl) || !capacity.MatchString(htmlText(tbl)) {
 			continue
@@ -118,7 +120,7 @@ func (c *checker) vehicles(p *pageFacts, d *draftIndex) {
 		if b := idBox(tbl); b != nil && b.DataAtom != 0 && slices.Contains([]string{"section", "article", "div", "figure"}, b.Data) {
 			at = b
 		}
-		c.add("html:"+selectorFor(p.doc, at), Warning, "the page's table %q lists vehicles (%s) with their capacity: add a Vehicle for each (name, cargoVolume, payload, vehicleConfiguration), in an ItemList or as the items of the Offer or Service they are for. A Vehicle is a kind of Product, and Search Console's Product snippets report marks one without offers, review or aggregateRating invalid: give each offers with the rental or sale price the page shows for it (an AggregateOffer for a range: lowPrice, highPrice, priceCurrency, offerCount)", name, examples(names))
+		c.add("html:"+selectorFor(p.doc, at), Warning, "the page's table %q lists vehicles (%s) with their capacity: add a Vehicle for each (name, cargoVolume, payload, vehicleConfiguration), in an ItemList or as the items of the Offer or Service they are for. A Vehicle is a kind of Product, and Search Console's Product snippets report marks one without offers, review or aggregateRating invalid: give each offers with the rental or sale price the page shows for it (an AggregateOffer for a range: lowPrice, highPrice, priceCurrency, offerCount)", name, txt.Examples(names))
 		return
 	}
 }
@@ -131,12 +133,12 @@ var (
 // definitions warn on terms the copy defines ("Released value, the basic
 // cover a mover includes, pays …", "A binding estimate means …") and uses
 // again, when no DefinedTerm names them.
-func (c *checker) definitions(all []located, p *pageFacts) {
+func (c *checker) definitions(all []jsonld.Node, p *pageFacts) {
 	var named []string
 	for _, l := range all {
-		if c.is(l.n, "DefinedTerm") {
-			for _, s := range strs(l.n, "name") {
-				named = append(named, normWords(s))
+		if c.is(l.N, "DefinedTerm") {
+			for _, s := range jsonld.Strs(l.N, "name") {
+				named = append(named, txt.NormWords(s))
 			}
 		}
 	}
@@ -145,7 +147,7 @@ func (c *checker) definitions(all []located, p *pageFacts) {
 	for _, re := range []*regexp.Regexp{appositive, meansDef} {
 		for _, m := range re.FindAllStringSubmatch(p.main, -1) {
 			t := m[1]
-			if strings.Count(lower, strings.ToLower(t)) < 3 || slices.Contains(named, normWords(t)) || slices.Contains(terms, t) {
+			if strings.Count(lower, strings.ToLower(t)) < 3 || slices.Contains(named, txt.NormWords(t)) || slices.Contains(terms, t) {
 				continue
 			}
 			terms = append(terms, t)
@@ -158,7 +160,7 @@ func (c *checker) definitions(all []located, p *pageFacts) {
 	for i, t := range terms {
 		quoted[i] = fmt.Sprintf("%q", t)
 	}
-	c.add(pagePath, Warning, "the page defines %s but no DefinedTerm names it: add a DefinedTermSet to the WebPage's hasPart with a DefinedTerm for each (name, description from the page's definition)", examples(quoted))
+	c.add(pagePath, Warning, "the page defines %s but no DefinedTerm names it: add a DefinedTermSet to the WebPage's hasPart with a DefinedTerm for each (name, description from the page's definition)", txt.Examples(quoted))
 }
 
 var quantity = regexp.MustCompile(`(?i)(?:^|[^$\d.,])(\d[\d,]*(?:\.\d+)?(?:\s*(?:–|-|to)\s*\d[\d,]*(?:\.\d+)?)?)\s*(hours?|hrs?|minutes?|mins?|days?|weeks?|months?|years?|miles?|mi|km|lbs?|pounds?|kg|cu\.? ?ft|cubic feet|sq\.? ?ft|square feet|ft|feet|°F|°C)\b`)
@@ -166,16 +168,16 @@ var quantity = regexp.MustCompile(`(?i)(?:^|[^$\d.,])(\d[\d,]*(?:\.\d+)?(?:\s*(?
 // quantities warn on measured quantities a tool's output or a data element
 // gives (4–6.5 hours, 4,500–6,500 lb) whose numbers the markup does not hold.
 // A shop's sizes are the product checks'.
-func (c *checker) quantities(all []located, p *pageFacts) {
+func (c *checker) quantities(all []jsonld.Node, p *pageFacts) {
 	if p.sells() {
 		return
 	}
 	held := map[float64]bool{}
 	for _, l := range all {
-		for _, k := range l.n.keys {
-			for _, s := range scalars(l.n, k) {
+		for _, k := range l.N.Keys {
+			for _, s := range jsonld.Scalars(l.N, k) {
 				for _, n := range numberIn.FindAllString(strings.ReplaceAll(s, ",", ""), -1) {
-					if f, ok := amount(n); ok {
+					if f, ok := txt.Amount(n); ok {
 						held[f] = true
 					}
 				}
@@ -191,7 +193,7 @@ func (c *checker) quantities(all []located, p *pageFacts) {
 			q := strings.TrimSpace(m[1] + " " + m[2])
 			all := true
 			for _, s := range numberIn.FindAllString(strings.ReplaceAll(m[1], ",", ""), -1) {
-				if f, _ := amount(s); !held[f] {
+				if f, _ := txt.Amount(s); !held[f] {
 					all = false
 				}
 			}
@@ -201,7 +203,7 @@ func (c *checker) quantities(all []located, p *pageFacts) {
 		}
 	}
 	if len(list) > 0 {
-		c.add(pagePath, Warning, "the page's tools and figures give quantities (%s): mark each up as a QuantitativeValue (value, or minValue and maxValue, unitCode such as HUR, DAY, MON, SMI, LBR or FTQ) on the thing it measures; a property whose range is a Duration, Distance or Mass takes it as that type's text (PT4H, \"10 mi\", \"6500 lb\")", examples(list))
+		c.add(pagePath, Warning, "the page's tools and figures give quantities (%s): mark each up as a QuantitativeValue (value, or minValue and maxValue, unitCode such as HUR, DAY, MON, SMI, LBR or FTQ) on the thing it measures; a property whose range is a Duration, Distance or Mass takes it as that type's text (PT4H, \"10 mi\", \"6500 lb\")", txt.Examples(list))
 	}
 }
 
@@ -209,7 +211,7 @@ var proCon = regexp.MustCompile(`(?i)^(?:for it|against it|pros|cons|advantages|
 
 // options warn on a section that weighs options against each other, two or
 // more cards each with pros and cons headings, when no Guide carries it.
-func (c *checker) options(all []located, p *pageFacts) {
+func (c *checker) options(all []jsonld.Node, p *pageFacts) {
 	if c.has(all, "Guide") {
 		return
 	}
@@ -231,7 +233,7 @@ func (c *checker) options(all []located, p *pageFacts) {
 			}
 		}
 		if len(names) >= 2 {
-			c.add("html:"+selectorFor(p.doc, s), Warning, "the page weighs options (%s) with their pros and cons: make the Article a Guide (about each option, reviewAspect for each criterion it weighs)", examples(names))
+			c.add("html:"+selectorFor(p.doc, s), Warning, "the page weighs options (%s) with their pros and cons: make the Article a Guide (about each option, reviewAspect for each criterion it weighs)", txt.Examples(names))
 			return
 		}
 	}

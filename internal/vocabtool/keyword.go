@@ -6,6 +6,9 @@ import (
 	"regexp"
 	"slices"
 	"strings"
+
+	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
+	"github.com/dazamate/go-json-schema/internal/vocabtool/txt"
 )
 
 // DefaultKeywordDensity is the share of the markup's words, in percent, that
@@ -44,7 +47,7 @@ var descriptionProps = []string{"description", "disambiguatingDescription"}
 // keywordText measures the keyword in s: how many times it appears as whole
 // words (case, hyphens and punctuation ignored) and how many words s has.
 func keywordText(s, kw string) (hits, words int) {
-	n := normWords(s)
+	n := txt.NormWords(s)
 	if n == "" || kw == "" {
 		return 0, 0
 	}
@@ -64,8 +67,8 @@ func density(hits, words, kwWords int) float64 {
 // headline and description properties must carry it, every description on the
 // page's own content nodes must reach the target density, and so must the
 // markup's text as a whole.
-func (c *checker) keyword(all []located, doc *object, keyword string, target float64, p *pageFacts) {
-	kw := normWords(keyword)
+func (c *checker) keyword(all []jsonld.Node, doc *jsonld.Object, keyword string, target float64, p *pageFacts) {
+	kw := txt.NormWords(keyword)
 	if kw == "" {
 		return
 	}
@@ -79,23 +82,23 @@ func (c *checker) keyword(all []located, doc *object, keyword string, target flo
 	page, hasPage := c.mainWebPage(all, p)
 	pageURL := ""
 	if hasPage {
-		pageURL = ownURL(page.n, p)
+		pageURL = ownURL(page.N, p)
 	}
-	owned := func(l located) bool {
-		if hasPage && l.n == page.n {
+	owned := func(l jsonld.Node) bool {
+		if hasPage && l.N == page.N {
 			return true
 		}
-		if !slices.ContainsFunc(contentTypes, func(t string) bool { return c.is(l.n, t) }) {
+		if !slices.ContainsFunc(contentTypes, func(t string) bool { return c.is(l.N, t) }) {
 			return false
 		}
-		if m := notOwned.FindAllStringSubmatchIndex(l.path, -1); len(m) > 0 {
-			last := l.path[m[len(m)-1][0]:]
-			if !(strings.HasPrefix(last, ".about") && c.is(l.n, "Service")) {
+		if m := notOwned.FindAllStringSubmatchIndex(l.Path, -1); len(m) > 0 {
+			last := l.Path[m[len(m)-1][0]:]
+			if !(strings.HasPrefix(last, ".about") && c.is(l.N, "Service")) {
 				return false
 			}
 		}
 		if pageURL != "" {
-			for _, id := range strs(l.n, "@id") {
+			for _, id := range jsonld.Strs(l.N, "@id") {
 				if !strings.HasPrefix(id, pageURL) {
 					return false // a node several pages share can't carry one page's keyword
 				}
@@ -105,42 +108,42 @@ func (c *checker) keyword(all []located, doc *object, keyword string, target flo
 	}
 
 	for _, l := range all {
-		if len(l.n.keys) < 2 || !owned(l) {
+		if len(l.N.Keys) < 2 || !owned(l) {
 			continue
 		}
 		for _, kp := range keywordProps {
-			if !c.is(l.n, kp.of) || (kp.of == "WebPage" && (!hasPage || l.n != page.n)) {
+			if !c.is(l.N, kp.of) || (kp.of == "WebPage" && (!hasPage || l.N != page.N)) {
 				continue
 			}
 			for _, prop := range kp.props {
-				vals := strs(l.n, prop)
+				vals := jsonld.Strs(l.N, prop)
 				if len(vals) == 0 {
-					c.add(l.path, Warning, "no %s: add one that carries the keyword %q", prop, keyword)
+					c.add(l.Path, Warning, "no %s: add one that carries the keyword %q", prop, keyword)
 					continue
 				}
 				if !slices.Contains(descriptionProps, prop) && !slices.ContainsFunc(vals, func(v string) bool { h, _ := keywordText(v, kw); return h > 0 }) {
-					c.add(l.path+"."+prop, Warning, "%s %q lacks the keyword %q", prop, clip(vals[0], 80), keyword)
+					c.add(l.Path+"."+prop, Warning, "%s %q lacks the keyword %q", prop, txt.Clip(vals[0], 80), keyword)
 				}
 			}
 		}
-		if hasPage && l.n == page.n {
-			if kws := strs(l.n, "keywords"); !slices.ContainsFunc(kws, func(v string) bool { h, _ := keywordText(v, kw); return h > 0 }) {
-				c.add(l.path, Warning, "keywords lacks the target keyword %q: put it first", keyword)
+		if hasPage && l.N == page.N {
+			if kws := jsonld.Strs(l.N, "keywords"); !slices.ContainsFunc(kws, func(v string) bool { h, _ := keywordText(v, kw); return h > 0 }) {
+				c.add(l.Path, Warning, "keywords lacks the target keyword %q: put it first", keyword)
 			}
 		}
-		if c.is(l.n, "FAQPage") && (!hasPage || l.n != page.n) {
-			if nm := strs(l.n, "name"); len(nm) == 0 || !slices.ContainsFunc(nm, func(v string) bool { h, _ := keywordText(v, kw); return h > 0 }) {
-				c.add(l.path, Warning, "the FAQ's name lacks the keyword %q: name it for the keyword, as its heading on the page", keyword)
+		if c.is(l.N, "FAQPage") && (!hasPage || l.N != page.N) {
+			if nm := jsonld.Strs(l.N, "name"); len(nm) == 0 || !slices.ContainsFunc(nm, func(v string) bool { h, _ := keywordText(v, kw); return h > 0 }) {
+				c.add(l.Path, Warning, "the FAQ's name lacks the keyword %q: name it for the keyword, as its heading on the page", keyword)
 			}
 		}
 		for _, prop := range descriptionProps {
-			for _, v := range strs(l.n, prop) {
+			for _, v := range jsonld.Strs(l.N, prop) {
 				h, w := keywordText(v, kw)
 				switch d := density(h, w, kwWords); {
 				case h == 0:
-					c.add(l.path+"."+prop, Warning, "%s %q lacks the keyword %q", prop, clip(v, 80), keyword)
+					c.add(l.Path+"."+prop, Warning, "%s %q lacks the keyword %q", prop, txt.Clip(v, 80), keyword)
 				case d < target:
-					c.add(l.path+"."+prop, Warning, "%s gives the keyword %q %.1f%% of its words (%d use in %d words), under the %.1f%% target: use it more, or say less", prop, keyword, d, h, w, target)
+					c.add(l.Path+"."+prop, Warning, "%s gives the keyword %q %.1f%% of its words (%d use in %d words), under the %.1f%% target: use it more, or say less", prop, keyword, d, h, w, target)
 				}
 			}
 		}
@@ -150,10 +153,10 @@ func (c *checker) keyword(all []located, doc *object, keyword string, target flo
 	var count func(v any)
 	count = func(v any) {
 		switch x := v.(type) {
-		case *object:
-			for _, k := range x.keys {
+		case *jsonld.Object:
+			for _, k := range x.Keys {
 				if !strings.HasPrefix(k, "@") || k == "@graph" {
-					count(x.vals[k])
+					count(x.Vals[k])
 				}
 			}
 		case []any:
@@ -176,8 +179,8 @@ func (c *checker) keyword(all []located, doc *object, keyword string, target flo
 
 // ownURL is the page's URL as its nodes' @ids start with it: its url, else
 // its @id without the fragment, else the page's address.
-func ownURL(n *object, p *pageFacts) string {
-	for _, s := range append(strs(n, "url"), strs(n, "@id")...) {
+func ownURL(n *jsonld.Object, p *pageFacts) string {
+	for _, s := range append(jsonld.Strs(n, "url"), jsonld.Strs(n, "@id")...) {
 		if u, err := url.Parse(s); err == nil && u.IsAbs() {
 			u.Fragment = ""
 			return u.String()
@@ -198,15 +201,15 @@ var businessClasses = []string{"Q4830453", "Q783794", "Q891723", "Q6881511", "Q1
 // isCompany reports whether a node is a business: a Corporation,
 // LocalBusiness, OnlineBusiness or Brand, or an Organization whose Wikidata
 // class is a business. Agencies, schools, charities and news media are not.
-func (c *checker) isCompany(n *object) bool {
+func (c *checker) isCompany(n *jsonld.Object) bool {
 	if c.is(n, "Corporation") || c.is(n, "LocalBusiness") || c.is(n, "OnlineBusiness") || c.is(n, "Brand") {
 		return true
 	}
-	if !slices.Equal(typeNames(n), []string{"Organization"}) {
+	if !slices.Equal(jsonld.TypeNames(n), []string{"Organization"}) {
 		return false
 	}
-	for _, t := range strs(n, "additionalType") {
-		if m := wikidataItem.FindStringSubmatch(t); m != nil && slices.Contains(businessClasses, m[1]) {
+	for _, t := range jsonld.Strs(n, "additionalType") {
+		if m := jsonld.WikidataItem.FindStringSubmatch(t); m != nil && slices.Contains(businessClasses, m[1]) {
 			return true
 		}
 	}
@@ -215,40 +218,40 @@ func (c *checker) isCompany(n *object) bool {
 
 // entityRefs are the nodes a node's about and mentions point to, inline or by
 // @id, with the property and the path of each value.
-func entityRefs(all []located, l located) []struct {
+func entityRefs(all []jsonld.Node, l jsonld.Node) []struct {
 	prop, path string
-	n          *object
+	n          *jsonld.Object
 } {
 	var out []struct {
 		prop, path string
-		n          *object
+		n          *jsonld.Object
 	}
 	for _, prop := range pageEntityProps {
-		raw, ok := l.n.get(prop)
+		raw, ok := l.N.Get(prop)
 		if !ok {
 			continue
 		}
 		_, isList := raw.([]any)
-		for i, v := range values(raw) {
-			o, ok := v.(*object)
+		for i, v := range jsonld.Values(raw) {
+			o, ok := v.(*jsonld.Object)
 			if !ok {
 				continue
 			}
-			if id, ok := o.get("@id"); ok && len(o.keys) == 1 {
+			if id, ok := o.Get("@id"); ok && len(o.Keys) == 1 {
 				s, _ := id.(string)
-				r, found := byID(all, s)
+				r, found := jsonld.ByID(all, s)
 				if !found {
 					continue
 				}
-				o = r.n
+				o = r.N
 			}
-			path := l.path + "." + prop
+			path := l.Path + "." + prop
 			if isList {
 				path = fmt.Sprintf("%s[%d]", path, i)
 			}
 			out = append(out, struct {
 				prop, path string
-				n          *object
+				n          *jsonld.Object
 			}{prop, path, o})
 		}
 	}
@@ -262,25 +265,25 @@ func entityRefs(all []located, l located) []struct {
 // business, which for a competitor is the opposite of what the page wants.
 // The site's own business is exempt, and so is an organization the keyword
 // itself names.
-func (c *checker) organizations(all []located, keyword string) {
-	own := map[*object]bool{}
-	for _, l := range publishers(all) {
-		own[l.n] = true
+func (c *checker) organizations(all []jsonld.Node, keyword string) {
+	own := map[*jsonld.Object]bool{}
+	for _, l := range jsonld.Publishers(all) {
+		own[l.N] = true
 	}
-	kw := " " + normWords(keyword) + " "
+	kw := " " + txt.NormWords(keyword) + " "
 	for _, l := range all {
-		if slices.Contains(typeNames(l.n), "WebSite") {
+		if slices.Contains(jsonld.TypeNames(l.N), "WebSite") {
 			continue
 		}
 		for _, r := range entityRefs(all, l) {
 			if own[r.n] || !c.is(r.n, "Organization") && !c.is(r.n, "Brand") {
 				continue
 			}
-			name := strings.Join(strs(r.n, "name"), " ")
+			name := strings.Join(jsonld.Strs(r.n, "name"), " ")
 			if name == "" {
 				name = "an organization"
 			}
-			if base := normWords(disambiguation.ReplaceAllString(name, "")); base != "" && strings.Contains(kw, " "+base+" ") {
+			if base := txt.NormWords(disambiguation.ReplaceAllString(name, "")); base != "" && strings.Contains(kw, " "+base+" ") {
 				continue
 			}
 			company := c.isCompany(r.n)
@@ -309,25 +312,25 @@ var looseProps = []string{"about", "mentions", "knowsAbout", "areaServed", "spat
 // own, so the page's entities read as loose things with no parent. Nesting
 // each where it is first referenced, keeping its @id, makes the graph one
 // tree.
-func (c *checker) looseNodes(all []located, p *pageFacts) {
+func (c *checker) looseNodes(all []jsonld.Node, p *pageFacts) {
 	if p == nil {
 		p = &pageFacts{}
 	}
 	page, _ := c.mainWebPage(all, p)
-	own := map[*object]bool{page.n: true}
-	for _, l := range publishers(all) {
-		own[l.n] = true
+	own := map[*jsonld.Object]bool{page.N: true}
+	for _, l := range jsonld.Publishers(all) {
+		own[l.N] = true
 	}
 	referenced := map[string]bool{}
 	for _, l := range all {
 		for _, k := range looseProps {
-			raw, ok := l.n.get(k)
+			raw, ok := l.N.Get(k)
 			if !ok {
 				continue
 			}
-			for _, v := range values(raw) {
-				if o, ok := v.(*object); ok && len(o.keys) == 1 {
-					if id, ok := o.get("@id"); ok {
+			for _, v := range jsonld.Values(raw) {
+				if o, ok := v.(*jsonld.Object); ok && len(o.Keys) == 1 {
+					if id, ok := o.Get("@id"); ok {
 						s, _ := id.(string)
 						referenced[s] = true
 					}
@@ -337,14 +340,14 @@ func (c *checker) looseNodes(all []located, p *pageFacts) {
 	}
 	var loose []string
 	for _, l := range all {
-		if !topPath.MatchString(l.path) || own[l.n] || slices.Contains(typeNames(l.n), "WebSite") || len(l.n.keys) < 2 {
+		if !topPath.MatchString(l.Path) || own[l.N] || slices.Contains(jsonld.TypeNames(l.N), "WebSite") || len(l.N.Keys) < 2 {
 			continue
 		}
-		ids := strs(l.n, "@id")
+		ids := jsonld.Strs(l.N, "@id")
 		if len(ids) == 0 || !referenced[ids[0]] {
 			continue
 		}
-		name := strings.Join(append(strs(l.n, "name"), strs(l.n, "headline")...), " ")
+		name := strings.Join(append(jsonld.Strs(l.N, "name"), jsonld.Strs(l.N, "headline")...), " ")
 		if name == "" {
 			name = ids[0]
 		}

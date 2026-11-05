@@ -1,11 +1,12 @@
 package vocabtool
 
 import (
-	"fmt"
 	"regexp"
 	"slices"
 	"strings"
 
+	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
+	"github.com/dazamate/go-json-schema/internal/vocabtool/txt"
 	xhtml "golang.org/x/net/html"
 	"golang.org/x/net/html/atom"
 )
@@ -35,16 +36,16 @@ var (
 )
 
 // amounts are the amounts the draft carries as a price or a monetary value.
-func (c *checker) amounts(all []located) map[float64]bool {
+func (c *checker) amounts(all []jsonld.Node) map[float64]bool {
 	out := map[float64]bool{}
 	for _, l := range all {
 		keys := []string{"price", "lowPrice", "highPrice", "minPrice", "maxPrice"}
-		if c.is(l.n, "MonetaryAmount") || c.is(l.n, "PriceSpecification") {
+		if c.is(l.N, "MonetaryAmount") || c.is(l.N, "PriceSpecification") {
 			keys = append(keys, "value", "minValue", "maxValue")
 		}
 		for _, k := range keys {
-			for _, s := range scalars(l.n, k) {
-				if f, ok := amount(s); ok {
+			for _, s := range jsonld.Scalars(l.N, k) {
+				if f, ok := txt.Amount(s); ok {
 					out[f] = true
 				}
 			}
@@ -54,15 +55,15 @@ func (c *checker) amounts(all []located) map[float64]bool {
 }
 
 // costs runs the cost checks on a site that sells nothing.
-func (c *checker) costs(all []located, p *pageFacts) {
+func (c *checker) costs(all []jsonld.Node, p *pageFacts) {
 	if p.sells() {
 		return
 	}
 	marked := c.amounts(all)
 	// fresh reports text holding an amount neither marked up nor reported
 	fresh := func(text string) bool {
-		return slices.ContainsFunc(priceAmount.FindAllStringSubmatch(text, -1), func(m []string) bool {
-			f, ok := priceOf(m)
+		return slices.ContainsFunc(txt.PriceAmount.FindAllStringSubmatch(text, -1), func(m []string) bool {
+			f, ok := txt.PriceOf(m)
 			return ok && !marked[f] && !p.claimed[f]
 		})
 	}
@@ -84,14 +85,6 @@ func clause(s string, i, n int) string {
 	return t
 }
 
-// examples joins up to four examples, and says how many more there are.
-func examples(list []string) string {
-	if len(list) > 4 {
-		return strings.Join(list[:4], ", ") + fmt.Sprintf(" and %d more", len(list)-4)
-	}
-	return strings.Join(list, ", ")
-}
-
 // breakdowns warn on a total the page breaks into priced parts: a list,
 // definition list or table of two or more priced lines beside the total (an
 // output or data element, or a line labelled total).
@@ -107,19 +100,19 @@ func (c *checker) breakdowns(p *pageFacts, fresh func(string) bool) {
 		switch list.DataAtom {
 		case atom.Dl:
 			for _, d := range pairs(list) {
-				if priceAmount.MatchString(d.value) {
+				if txt.PriceAmount.MatchString(d.value) {
 					parts = append(parts, d.value)
 				}
 			}
 		case atom.Table:
 			for _, tr := range queryAll(list, "tr") {
-				if t := htmlText(tr); priceAmount.MatchString(t) && len(queryAll(tr, "td")) > 0 {
+				if t := htmlText(tr); txt.PriceAmount.MatchString(t) && len(queryAll(tr, "td")) > 0 {
 					parts = append(parts, t)
 				}
 			}
 		default:
 			for _, li := range queryAll(list, "li") {
-				if t := htmlText(li); priceAmount.MatchString(t) {
+				if t := htmlText(li); txt.PriceAmount.MatchString(t) {
 					parts = append(parts, t)
 				}
 			}
@@ -139,7 +132,7 @@ func (c *checker) breakdowns(p *pageFacts, fresh func(string) bool) {
 		var box, total *xhtml.Node
 		for e, up := list.Parent, 0; e != nil && up < 3 && total == nil && e.DataAtom != atom.Main && e.DataAtom != atom.Body; e, up = e.Parent, up+1 {
 			for _, o := range queryAll(e, "output, data[value]") {
-				if !slices.Contains(ancestors(o), list) && priceAmount.MatchString(htmlText(o)) {
+				if !slices.Contains(ancestors(o), list) && txt.PriceAmount.MatchString(htmlText(o)) {
 					box, total = e, o
 					break
 				}
@@ -189,7 +182,7 @@ func (c *checker) rates(p *pageFacts, fresh func(string) bool) {
 	if perPerson {
 		ref = `, and referenceQuantity for a "per mover" rate`
 	}
-	c.add(pagePath, Warning, "the page prices %s: mark each up as a UnitPriceSpecification (price, or minPrice and maxPrice, priceCurrency, unitCode %s%s) on the Service or Offer it is the rate of", examples(list), strings.Join(codes, " or "), ref)
+	c.add(pagePath, Warning, "the page prices %s: mark each up as a UnitPriceSpecification (price, or minPrice and maxPrice, priceCurrency, unitCode %s%s) on the Service or Offer it is the rate of", txt.Examples(list), strings.Join(codes, " or "), ref)
 }
 
 // goods warn on goods the page prices across sellers: boxes, tape, packing
@@ -206,7 +199,7 @@ func (c *checker) goods(p *pageFacts, fresh func(string) bool) {
 		list = append(list, p.main[m[2]:m[3]]+" "+span)
 	}
 	if len(list) > 0 {
-		c.add(pagePath, Warning, "the page prices goods (%s): add a Product for each with an AggregateOffer (lowPrice, highPrice, priceCurrency, and offerCount: how many sellers or sources the range spans)", examples(list))
+		c.add(pagePath, Warning, "the page prices goods (%s): add a Product for each with an AggregateOffer (lowPrice, highPrice, priceCurrency, and offerCount: how many sellers or sources the range spans)", txt.Examples(list))
 	}
 }
 
@@ -223,13 +216,13 @@ func (c *checker) estimates(p *pageFacts, fresh func(string) bool) {
 		list = append(list, span)
 	}
 	if len(list) > 0 {
-		c.add(pagePath, Warning, "the page estimates costs (%s): mark each up as a MonetaryAmount (value, or minValue and maxValue, currency) on the thing whose cost it is, such as a Service's offers priceSpecification or a PropertyValue, when it is what others charge; give the business's own price as an Offer with seller the business", examples(list))
+		c.add(pagePath, Warning, "the page estimates costs (%s): mark each up as a MonetaryAmount (value, or minValue and maxValue, currency) on the thing whose cost it is, such as a Service's offers priceSpecification or a PropertyValue, when it is what others charge; give the business's own price as an Offer with seller the business", txt.Examples(list))
 	}
 }
 
 // service warns on a content page about what a service costs ("Cost to move
 // a piano", "How much do movers cost?") when no Service describes it.
-func (c *checker) service(all []located, p *pageFacts) {
+func (c *checker) service(all []jsonld.Node, p *pageFacts) {
 	if p.kind != "" || c.has(all, "Service") {
 		return
 	}

@@ -7,6 +7,8 @@ import (
 	"unicode"
 
 	"github.com/dazamate/go-json-schema/internal/classtype"
+	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
+	"github.com/dazamate/go-json-schema/internal/vocabtool/txt"
 )
 
 // A node can be typed more specifically than it is. Three signals say so,
@@ -23,8 +25,8 @@ import (
 // a data type or an enumeration.
 
 // single is the node's one known type, or "" when it has none or several.
-func (c *checker) single(n *object) string {
-	types := typeNames(n)
+func (c *checker) single(n *jsonld.Object) string {
+	types := jsonld.TypeNames(n)
 	if len(types) != 1 {
 		return ""
 	}
@@ -43,56 +45,38 @@ func (c *checker) single(n *object) string {
 // warning to weigh, not an error. A node whose own item, in sameAs or a
 // Wikidata identifier, is a class in the table is a kind of thing for sure,
 // and only the types whose items are always classes apply to it.
-func (c *checker) classTypes(all []located) {
+func (c *checker) classTypes(all []jsonld.Node) {
 	for _, l := range all {
-		ty := c.single(l.n)
+		ty := c.single(l.N)
 		if ty == "" {
 			continue
 		}
-		classes := strs(l.n, "additionalType")
+		classes := jsonld.Strs(l.N, "additionalType")
 		if len(classes) == 0 {
 			continue
 		}
-		m := wikidataItem.FindStringSubmatch(classes[0])
+		m := jsonld.WikidataItem.FindStringSubmatch(classes[0])
 		if m == nil {
 			continue
 		}
 		// another class that gives the node its type backs it: the Blue
 		// Mountains are a mountain range and a region, so a Place
 		if slices.ContainsFunc(classes[1:], func(cl string) bool {
-			o := wikidataItem.FindStringSubmatch(cl)
+			o := jsonld.WikidataItem.FindStringSubmatch(cl)
 			return o != nil && classtype.Of([]string{o[1]}, false) == ty
 		}) {
 			continue
 		}
-		kind := slices.ContainsFunc(ownItems(l.n), func(q string) bool { return classtype.Of([]string{q}, false) != "" })
+		kind := slices.ContainsFunc(jsonld.OwnItems(l.N), func(q string) bool { return classtype.Of([]string{q}, false) != "" })
 		if want := classtype.Of([]string{m[1]}, kind); want != "" && want != ty && slices.Contains(c.v.V.Ancestors(want), ty) {
 			also := ""
 			if want == "LandmarksOrHistoricalBuildings" {
 				also = ", with TouristAttraction too when visitors go to see it"
 			}
-			c.add(l.path, Warning, "%s with the Wikidata class %s: type it %s%s, unless the item is a kind of thing rather than one", ty, m[1], want, also)
-			c.suggested[l.n] = true
+			c.add(l.Path, Warning, "%s with the Wikidata class %s: type it %s%s, unless the item is a kind of thing rather than one", ty, m[1], want, also)
+			c.suggested[l.N] = true
 		}
 	}
-}
-
-// ownItems are the Wikidata items a node is: its sameAs links and its
-// identifiers whose propertyID is Wikidata.
-func ownItems(n *object) []string {
-	var out []string
-	for _, s := range strs(n, "sameAs") {
-		if m := wikidataItem.FindStringSubmatch(s); m != nil {
-			out = append(out, m[1])
-		}
-	}
-	raw, _ := n.get("identifier")
-	for _, v := range values(raw) {
-		if pv, ok := v.(*object); ok && slices.ContainsFunc(strs(pv, "propertyID"), func(s string) bool { return strings.EqualFold(s, "Wikidata") }) {
-			out = append(out, strs(pv, "value")...)
-		}
-	}
-	return out
 }
 
 // namedTypes warns about a node whose name, headline or URL path names a
@@ -103,27 +87,27 @@ func ownItems(n *object) []string {
 // WebPageElement (webPageElements checks those) are left out, as is a node
 // another signal already retyped. A breadcrumb's items name the pages they
 // link, not what the items are.
-func (c *checker) namedTypes(all []located) {
-	crumbs := map[*object]bool{}
+func (c *checker) namedTypes(all []jsonld.Node) {
+	crumbs := map[*jsonld.Object]bool{}
 	for _, l := range all {
-		if c.is(l.n, "BreadcrumbList") {
-			raw, _ := l.n.get("itemListElement")
-			for _, v := range values(raw) {
-				if o, ok := v.(*object); ok {
+		if c.is(l.N, "BreadcrumbList") {
+			raw, _ := l.N.Get("itemListElement")
+			for _, v := range jsonld.Values(raw) {
+				if o, ok := v.(*jsonld.Object); ok {
 					crumbs[o] = true
 				}
 			}
 		}
 	}
 	for _, l := range all {
-		ty := c.single(l.n)
-		if ty == "" || ty == "Thing" || c.suggested[l.n] || crumbs[l.n] || len(wikidataItems(l.n)) > 0 || hasWikidataClass(l.n) || slices.Contains(c.v.V.Ancestors(ty), "WebPageElement") {
+		ty := c.single(l.N)
+		if ty == "" || ty == "Thing" || c.suggested[l.N] || crumbs[l.N] || len(jsonld.WikidataItems(l.N)) > 0 || jsonld.HasWikidataClass(l.N) || slices.Contains(c.v.V.Ancestors(ty), "WebPageElement") {
 			continue
 		}
-		label := strings.Join(append(strs(l.n, "name"), strs(l.n, "headline")...), " ")
+		label := strings.Join(append(jsonld.Strs(l.N, "name"), jsonld.Strs(l.N, "headline")...), " ")
 		words := label
 		for _, k := range []string{"url", "@id"} {
-			for _, s := range strs(l.n, k) {
+			for _, s := range jsonld.Strs(l.N, k) {
 				if u, err := url.Parse(s); err == nil {
 					words += " " + u.Path
 					if label == "" {
@@ -132,7 +116,7 @@ func (c *checker) namedTypes(all []located) {
 				}
 			}
 		}
-		text := " " + normWords(words) + " "
+		text := " " + txt.NormWords(words) + " "
 		if strings.TrimSpace(text) == "" {
 			continue
 		}
@@ -150,20 +134,9 @@ func (c *checker) namedTypes(all []located) {
 			}
 		}
 		if len(best) > 0 {
-			c.add(l.path, Warning, "%s %q: its name or URL names the subtype %s; type it %s", ty, label, strings.Join(best, " or "), strings.Join(best, " or "))
+			c.add(l.Path, Warning, "%s %q: its name or URL names the subtype %s; type it %s", ty, label, strings.Join(best, " or "), strings.Join(best, " or "))
 		}
 	}
-}
-
-// hasWikidataClass reports a Wikidata class in the node's additionalType that
-// the classtype table maps: classTypes types such a node, not its name (the
-// Blue Mountains are a region, not a Mountain). A topic class the table does
-// not map, such as wedding on a WebPage, leaves the name signal on.
-func hasWikidataClass(n *object) bool {
-	return slices.ContainsFunc(strs(n, "additionalType"), func(cl string) bool {
-		m := wikidataItem.FindStringSubmatch(cl)
-		return m != nil && classtype.Of([]string{m[1]}, false) != ""
-	})
 }
 
 // typeStopWords are not distinguishing words of a type name; "WP" abbreviates

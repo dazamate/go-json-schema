@@ -5,69 +5,10 @@ import (
 	"regexp"
 	"slices"
 	"strings"
-	"unicode"
+
+	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
+	"github.com/dazamate/go-json-schema/internal/vocabtool/txt"
 )
-
-// located is a node and its path in the draft.
-type located struct {
-	path string
-	n    *object
-}
-
-// nodes lists every object in the draft with its path, outermost first.
-func nodes(path string, v any) []located {
-	var out []located
-	switch x := v.(type) {
-	case []any:
-		for i, item := range x {
-			out = append(out, nodes(fmt.Sprintf("%s[%d]", path, i), item)...)
-		}
-	case *object:
-		out = append(out, located{path, x})
-		for _, k := range x.keys {
-			if k != "@context" {
-				out = append(out, nodes(path+"."+k, x.vals[k])...)
-			}
-		}
-	}
-	return out
-}
-
-// typeNames are the node's @type values without a schema: prefix.
-func typeNames(n *object) []string {
-	raw, _ := n.get("@type")
-	var out []string
-	for _, v := range values(raw) {
-		if s, ok := v.(string); ok {
-			out = append(out, stripPrefix(s))
-		}
-	}
-	return out
-}
-
-// values is a property's value as a list: a single value is a list of one.
-func values(raw any) []any {
-	switch x := raw.(type) {
-	case nil:
-		return nil
-	case []any:
-		return x
-	default:
-		return []any{x}
-	}
-}
-
-// strs are a property's string values.
-func strs(n *object, key string) []string {
-	raw, _ := n.get(key)
-	var out []string
-	for _, v := range values(raw) {
-		if s, ok := v.(string); ok {
-			out = append(out, s)
-		}
-	}
-	return out
-}
 
 // pageEntityProps are the properties whose entities must be named on the page.
 // knowsAbout, and the WebSite's about, describe the whole site, not one page.
@@ -76,36 +17,36 @@ var pageEntityProps = []string{"about", "mentions"}
 // pageEntities warns about an about or mentions entity that the page text
 // does not name by its name or an alternateName. A reference is held to the
 // name of the node it refers to; one to a node outside the draft is skipped.
-func (c *checker) pageEntities(all []located, text string) {
+func (c *checker) pageEntities(all []jsonld.Node, text string) {
 	if strings.TrimSpace(text) == "" {
 		return
 	}
-	page := " " + normWords(text) + " "
-	byID := map[string]*object{}
+	page := " " + txt.NormWords(text) + " "
+	byID := map[string]*jsonld.Object{}
 	for _, l := range all {
-		if id, ok := l.n.get("@id"); ok && len(l.n.keys) > 1 {
+		if id, ok := l.N.Get("@id"); ok && len(l.N.Keys) > 1 {
 			if s, ok := id.(string); ok {
-				byID[s] = l.n
+				byID[s] = l.N
 			}
 		}
 	}
 	for _, l := range all {
-		if slices.Contains(typeNames(l.n), "WebSite") {
+		if slices.Contains(jsonld.TypeNames(l.N), "WebSite") {
 			continue
 		}
 		for _, prop := range pageEntityProps {
-			raw, ok := l.n.get(prop)
+			raw, ok := l.N.Get(prop)
 			if !ok {
 				continue
 			}
 			_, isList := raw.([]any)
-			for i, v := range values(raw) {
-				path := l.path + "." + prop
+			for i, v := range jsonld.Values(raw) {
+				path := l.Path + "." + prop
 				if isList {
 					path = fmt.Sprintf("%s[%d]", path, i)
 				}
 				name, forms := entityForms(v, byID)
-				if name == "" || slices.ContainsFunc(forms, func(f string) bool { return names(page, f) }) {
+				if name == "" || slices.ContainsFunc(forms, func(f string) bool { return txt.Names(page, f) }) {
 					continue
 				}
 				c.add(path, Warning, "%s is not named on the page: only what the page shows goes in %s", name, prop)
@@ -119,14 +60,14 @@ var disambiguation = regexp.MustCompile(`\s*\([^)]*\)\s*$`)
 // entityForms are an entity's display name and the forms the page may name
 // it by: its name without a Wikipedia disambiguation, and its alternateNames.
 // A string value is its own name; a reference uses its node's names.
-func entityForms(v any, byID map[string]*object) (string, []string) {
-	var n *object
+func entityForms(v any, byID map[string]*jsonld.Object) (string, []string) {
+	var n *jsonld.Object
 	switch x := v.(type) {
 	case string:
 		return x, []string{x}
-	case *object:
+	case *jsonld.Object:
 		n = x
-		if id, ok := x.get("@id"); ok && len(x.keys) == 1 {
+		if id, ok := x.Get("@id"); ok && len(x.Keys) == 1 {
 			s, _ := id.(string)
 			if n = byID[s]; n == nil {
 				return "", nil
@@ -135,40 +76,12 @@ func entityForms(v any, byID map[string]*object) (string, []string) {
 	default:
 		return "", nil
 	}
-	nm := strs(n, "name")
+	nm := jsonld.Strs(n, "name")
 	if len(nm) == 0 {
 		return "", nil
 	}
 	forms := []string{disambiguation.ReplaceAllString(nm[0], "")}
-	return nm[0], append(forms, strs(n, "alternateName")...)
-}
-
-// normWords lowercases s and turns every run of non-letters and non-digits
-// into one space, so "Pre-wedding" and "pre wedding" match.
-func normWords(s string) string {
-	return strings.Join(strings.FieldsFunc(strings.ToLower(s), func(r rune) bool {
-		return !unicode.IsLetter(r) && !unicode.IsDigit(r)
-	}), " ")
-}
-
-// names reports whether the padded, normalized page text has the form as
-// whole words, in the singular or the plural: "Bride" names "brides", and
-// "Chinese Australians" names "Chinese-Australian".
-func names(page, form string) bool {
-	f := normWords(form)
-	if f == "" {
-		return false
-	}
-	stem := f
-	if s, ok := strings.CutSuffix(f, "s"); ok && s != "" {
-		stem = s
-	}
-	for _, v := range []string{f, stem, stem + "s", stem + "es"} {
-		if strings.Contains(page, " "+v+" ") {
-			return true
-		}
-	}
-	return false
+	return nm[0], append(forms, jsonld.Strs(n, "alternateName")...)
 }
 
 // elementTypes are the WebPageElement subtypes a section's name points to,
@@ -192,23 +105,23 @@ const faqHint = "FAQPage, as a part of the page (isPartOf the WebPage, in its ha
 // type fits: a section holding Questions, or one named like an FAQ, is an
 // FAQPage; one named like a menu, header, footer, sidebar, table or ad block
 // is that WebPageElement subtype.
-func (c *checker) webPageElements(all []located) {
+func (c *checker) webPageElements(all []jsonld.Node) {
 	for _, l := range all {
-		if !slices.Equal(typeNames(l.n), []string{"WebPageElement"}) {
+		if !slices.Equal(jsonld.TypeNames(l.N), []string{"WebPageElement"}) {
 			continue
 		}
-		if holdsQuestions(l.n) {
-			c.add(l.path, Warning, "WebPageElement is generic: use %s", faqHint)
+		if holdsQuestions(l.N) {
+			c.add(l.Path, Warning, "WebPageElement is generic: use %s", faqHint)
 			continue
 		}
-		label := " " + normWords(strings.Join(append(strs(l.n, "name"), strs(l.n, "headline")...), " ")) + " "
+		label := " " + txt.NormWords(strings.Join(append(jsonld.Strs(l.N, "name"), jsonld.Strs(l.N, "headline")...), " ")) + " "
 		for _, e := range elementTypes {
 			if slices.ContainsFunc(e.words, func(w string) bool { return strings.Contains(label, " "+w+" ") }) {
 				use := e.use
 				if use == "FAQPage" {
 					use = faqHint
 				}
-				c.add(l.path, Warning, "WebPageElement is generic: use %s", use)
+				c.add(l.Path, Warning, "WebPageElement is generic: use %s", use)
 				break
 			}
 		}
@@ -216,10 +129,10 @@ func (c *checker) webPageElements(all []located) {
 }
 
 // holdsQuestions reports whether one of the node's own values is a Question.
-func holdsQuestions(n *object) bool {
-	for _, k := range n.keys {
-		for _, v := range values(n.vals[k]) {
-			if o, ok := v.(*object); ok && slices.Contains(typeNames(o), "Question") {
+func holdsQuestions(n *jsonld.Object) bool {
+	for _, k := range n.Keys {
+		for _, v := range jsonld.Values(n.Vals[k]) {
+			if o, ok := v.(*jsonld.Object); ok && slices.Contains(jsonld.TypeNames(o), "Question") {
 				return true
 			}
 		}
