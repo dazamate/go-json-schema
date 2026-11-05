@@ -46,6 +46,13 @@ func TestTaxUnset(t *testing.T) {
 		{"Price includes GST", audittest.Input{Draft: priced, PageHTML: strings.Replace(productPage, "GST included", "Price includes GST", 1), PageURL: productURL}, []audit.Issue{
 			{Path: "html:body", Severity: audit.Warning, Message: `the page's prices are "includes GST" but no PriceSpecification sets valueAddedTaxIncluded: set it true`},
 		}},
+		{"shipping rates exclusive of taxes and duties, then no word of tax on prices", audittest.Input{Draft: priced, PageHTML: strings.Replace(productPage, "GST included", "Rates are exclusive of taxes, duties, and customs fees. DHL also requires that the recipient is responsible for customs duties and taxes.", 1), PageURL: productURL}, nil},
+		{"inclusive of all taxes", audittest.Input{Draft: priced, PageHTML: strings.Replace(productPage, "GST included", "MRP (Inclusive of all taxes)", 1), PageURL: productURL}, []audit.Issue{
+			{Path: "html:body", Severity: audit.Warning, Message: `the page's prices are "Inclusive of all taxes" but no PriceSpecification sets valueAddedTaxIncluded: set it true`},
+		}},
+		{"shipping rates exclusive of taxes, then prices include GST", audittest.Input{Draft: priced, PageHTML: strings.Replace(productPage, "GST included", "Rates are exclusive of taxes, duties, and customs fees. Prices shown include GST.", 1), PageURL: productURL}, []audit.Issue{
+			{Path: "html:body", Severity: audit.Warning, Message: `the page's prices are "include GST" but no PriceSpecification sets valueAddedTaxIncluded: set it true`},
+		}},
 		{"the markup sets it", audittest.Input{Draft: taxed("320", "true"), PageHTML: productPage, PageURL: productURL}, nil},
 		{"no word of tax", audittest.Input{Draft: priced, PageHTML: strings.Replace(productPage, "GST included", "", 1), PageURL: productURL}, nil},
 		{"no price the draft sells is shown", audittest.Input{Draft: noDraft, PageHTML: productPage, PageURL: productURL}, nil},

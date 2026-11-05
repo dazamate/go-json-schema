@@ -16,7 +16,7 @@ func init() { audit.Register(Checklists{}) }
 
 var (
 	checklistTitle = regexp.MustCompile(`(?i)\bcheck ?list\b|\bto-?do list\b|\bstep[- ]by[- ]step\b|^how to\b`)
-	phaseHeading   = regexp.MustCompile(`(?i)\b(?:\d+|one|two|three|four|six|eight)\s+(?:weeks?|days?|months?|hours?)\s+(?:before|after|out|ahead)\b|\bthe (?:day|night|week|month) (?:before|after)\b|\bmoving day\b|\bon the day\b|\bafter (?:the|your) move\b`)
+	phaseHeading   = regexp.MustCompile(`(?i)\b(?:\d+\+?|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)\s+(?:weeks?|days?|months?|hours?|years?)\s+(?:before|after|out|ahead|prior)\b|\bthe (?:day|night|week|month) (?:before|after)\b|\b(?:moving|wedding|closing|surgery|big) day\b|\bon the day\b|\bday of\b|\bafter (?:the|your) (?:move|wedding|surgery|procedure|treatment|closing)\b`)
 )
 
 // phase is a checklist's phase: its heading and the tasks listed under it.
@@ -43,8 +43,17 @@ func taskName(li *xhtml.Node) string {
 func phases(box, head *xhtml.Node) []phase {
 	level := webpage.HeadingLevel(head)
 	var out []phase
-	for _, h := range webpage.QueryAll(box, "h2, h3, h4, h5") {
-		if webpage.HeadingLevel(h) <= level || webpage.Chrome(h) {
+	// Only the headings after head, up to the next one as high: a page that
+	// wraps every section in one article has other sections' lists in box.
+	hs := webpage.QueryAll(box, "h1, h2, h3, h4, h5")
+	if i := slices.Index(hs, head); i >= 0 {
+		hs = hs[i+1:]
+	}
+	for _, h := range hs {
+		if webpage.HeadingLevel(h) <= level {
+			break
+		}
+		if webpage.Chrome(h) {
 			continue
 		}
 		var list *xhtml.Node
@@ -125,7 +134,54 @@ func (Checklists) Run(c *audit.Context) []audit.Issue {
 		if slices.ContainsFunc(d.Strs, func(s string) bool { return strings.Contains(txt.NormWords(s), first) }) {
 			continue
 		}
-		out = append(out, audit.Issuef("html:"+webpage.SelectorFor(p.Doc, box), audit.Warning, "the page's checklist %q has %d phases and %d tasks: add a HowTo (name, step: a HowToSection for each phase with a HowToStep for each task, name and text word for word, a HowToTip for a task's note, a HowToSupply or HowToTool where a task names one, and itemListOrder https://schema.org/ItemListOrderAscending) in the WebPage's hasPart", webpage.HTMLText(h), len(phs), tasks))
+		out = append(out, checklistIssue("html:"+webpage.SelectorFor(p.Doc, box), webpage.HTMLText(h), len(phs), tasks))
+	}
+	if len(out) == 0 {
+		out = headedChecklist(c)
 	}
 	return out
+}
+
+// checklistIssue is the finding for a checklist of the given phases and tasks.
+func checklistIssue(path, name string, phases, tasks int) audit.Issue {
+	return audit.Issuef(path, audit.Warning, "the page's checklist %q has %d phases and %d tasks: add a HowTo (name, step: a HowToSection for each phase with a HowToStep for each task, name and text word for word, a HowToTip for a task's note, a HowToSupply or HowToTool where a task names one, and itemListOrder https://schema.org/ItemListOrderAscending) in the WebPage's hasPart", name, phases, tasks)
+}
+
+// headedChecklist reads a checklist a page builder lays out without sections
+// or lists: an h2 for each timed phase ("9-11 Months Before Wedding") and an
+// h3 or h4 for each task under it.
+func headedChecklist(c *audit.Context) []audit.Issue {
+	p, d := c.Page, c.Index()
+	var firstPhase *xhtml.Node
+	var firstTask string
+	phases, tasks := 0, 0
+	inPhase := false
+	for _, h := range webpage.QueryAll(p.Doc, "h1, h2, h3, h4") {
+		if webpage.Chrome(h) || !webpage.Shown(h) {
+			continue
+		}
+		switch lv := webpage.HeadingLevel(h); {
+		case lv <= 2:
+			inPhase = lv == 2 && phaseHeading.MatchString(webpage.HTMLText(h))
+			if inPhase {
+				phases++
+				if firstPhase == nil {
+					firstPhase = h
+				}
+			}
+		case inPhase:
+			tasks++
+			if firstTask == "" {
+				firstTask = webpage.HTMLText(h)
+			}
+		}
+	}
+	if phases < 2 || tasks < 3 {
+		return nil
+	}
+	first := txt.NormWords(firstTask)
+	if slices.ContainsFunc(d.Strs, func(s string) bool { return strings.Contains(txt.NormWords(s), first) }) {
+		return nil
+	}
+	return []audit.Issue{checklistIssue("html:"+webpage.SelectorFor(p.Doc, firstPhase), webpage.HTMLText(firstPhase), phases, tasks)}
 }

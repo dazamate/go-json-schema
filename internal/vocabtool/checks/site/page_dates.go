@@ -14,10 +14,10 @@ func init() { audit.Register(PageDates{}) }
 
 var (
 	months   = `(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|june?|july?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)`
-	pageDate = regexp.MustCompile(`(?i)\b(last updated|last reviewed|last modified|updated|published|reviewed|checked)\b:?\s*(?:on\s+)?` +
-		`(\d{4}-\d{2}-\d{2}|\d{1,2}\s+` + months + `\.?\s+\d{4}|` + months + `\.?\s+\d{1,2},?\s+\d{4}|` + months + `\.?\s+\d{4})\b`)
+	pageDate = regexp.MustCompile(`(?i)\b(last updated|last reviewed|last modified|last edited|last revised|medically reviewed|fact[- ]checked|updated|published|posted|reviewed|checked|modified|edited|revised)\b\s*:?\s*(?:on\s+)?` +
+		`(\d{4}-\d{2}-\d{2}|\d{1,2}[/.]\d{1,2}[/.]\d{4}|\d{1,2}(?:st|nd|rd|th)?\s+` + months + `\.?,?\s+\d{4}|` + months + `\.?\s+\d{1,2}(?:st|nd|rd|th)?,?\s+\d{4}|` + months + `\.?\s+\d{4})\b`)
 	monthNumbers = map[string]string{"jan": "01", "feb": "02", "mar": "03", "apr": "04", "may": "05", "jun": "06", "jul": "07", "aug": "08", "sep": "09", "oct": "10", "nov": "11", "dec": "12"}
-	dateParts    = regexp.MustCompile(`(?i)^(?:(\d{4})-(\d{2})-(\d{2})|(\d{1,2})\s+([a-z]+)\.?\s+(\d{4})|([a-z]+)\.?\s+(\d{1,2}),?\s+(\d{4})|([a-z]+)\.?\s+(\d{4}))$`)
+	dateParts    = regexp.MustCompile(`(?i)^(?:(\d{4})-(\d{2})-(\d{2})|(\d{1,2})(?:st|nd|rd|th)?\s+([a-z]+)\.?,?\s+(\d{4})|([a-z]+)\.?\s+(\d{1,2})(?:st|nd|rd|th)?,?\s+(\d{4})|([a-z]+)\.?\s+(\d{4})|(\d{1,2})[/.](\d{1,2})[/.](\d{4}))$`)
 )
 
 // isoDate is a written date as YYYY-MM-DD, or YYYY-MM when it gives no day.
@@ -35,8 +35,19 @@ func isoDate(s string) string {
 		return m[6] + "-" + month(m[5]) + "-" + day(m[4])
 	case m[7] != "":
 		return m[9] + "-" + month(m[7]) + "-" + day(m[8])
-	default:
+	case m[10] != "":
 		return m[11] + "-" + month(m[10])
+	default:
+		// 14/03/2024 is the 14th of March, 03/14/2024 the same day; 03/04/2024 could be
+		// either of two, and is not guessed
+		a, b := day(m[12]), day(m[13])
+		switch {
+		case a == b || a > "12":
+			return m[14] + "-" + b + "-" + a
+		case b > "12":
+			return m[14] + "-" + a + "-" + b
+		}
+		return ""
 	}
 }
 
@@ -70,9 +81,9 @@ func (PageDates) Run(c *audit.Context) []audit.Issue {
 		seen[iso] = true
 		prop := "dateModified"
 		switch strings.ToLower(m[1]) {
-		case "published":
+		case "published", "posted":
 			prop = "datePublished"
-		case "reviewed", "last reviewed", "checked":
+		case "reviewed", "last reviewed", "checked", "medically reviewed", "fact checked", "fact-checked":
 			prop = "lastReviewed"
 		}
 		out = append(out, audit.Issuef(audit.PagePath, audit.Warning, "the page dates itself (%q) but no node has that date: set %s %s on the WebPage or Article (dateModified for an update, datePublished for publication, lastReviewed for a review or check)", m[0], prop, iso))

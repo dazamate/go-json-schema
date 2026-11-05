@@ -66,3 +66,14 @@ func TestOnlineBusiness(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) { audittest.Expect(t, site.OnlineBusiness{}, tc.in, tc.want) })
 	}
 }
+
+// A government's or university's site works through its website too, but it
+// is no online business (www.gov.uk).
+func TestOnlineBusinessSkipsPublicBodies(t *testing.T) {
+	gov := `{"@context":"https://schema.org","@graph":[
+{"@type":"WebSite","@id":"https://www.gov.uk/#website","url":"https://www.gov.uk/","name":"GOV.UK","publisher":{"@id":"https://www.gov.uk/#org"}},
+{"@type":"Organization","@id":"https://www.gov.uk/#org","name":"GOV.UK","url":"https://www.gov.uk/"}]}`
+	audittest.Expect(t, site.OnlineBusiness{}, audittest.Input{Draft: gov, PageHTML: guidePage, PageURL: "https://www.gov.uk/evicting-tenants/section-21-and-section-8-notices"}, nil)
+	uni := strings.NewReplacer("www.gov.uk", "www.ox.ac.uk", "GOV.UK", "University of Oxford").Replace(gov)
+	audittest.Expect(t, site.OnlineBusiness{}, audittest.Input{Draft: uni, PageHTML: guidePage, PageURL: "https://www.ox.ac.uk/admissions"}, nil)
+}

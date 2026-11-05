@@ -27,3 +27,16 @@ func TestSummary(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) { audittest.Expect(t, figures.Summary{}, tc.in, tc.want) })
 	}
 }
+
+// A shaded callout labels its list with a styled paragraph, not a heading
+// (instaelectricians.com).
+func TestSummaryStyledLabel(t *testing.T) {
+	page := `<!doctype html><html><body><main><h1>Electrical Panel Upgrade Cost</h1>
+<p>An upgraded panel handles modern demand.</p>
+<div style="background:#f0f7ff;padding:18px 22px;"><p style="font-weight:700"><img src="/bolt.svg" alt=""> Key Takeaways</p>
+<ul><li>An upgrade replaces the main panel.</li><li>Most homes cost $1,500 to $4,000.</li><li>A permit is usual.</li></ul></div>
+<h2>Why Upgrade?</h2><p>A newer panel is safer.</p></main></body></html>`
+	audittest.Expect(t, figures.Summary{}, audittest.Input{Draft: figuresBare, PageHTML: page, PageURL: figuresURL}, []audit.Issue{
+		{Path: "html:body > main > div", Severity: audit.Warning, Message: `the page's "Key Takeaways" block sums the page up: set its text as the Article's abstract, or point a SpeakableSpecification's cssSelector at it (the WebPage's speakable), or give each line as a Statement (text) in the WebPage's hasPart`},
+	})
+}

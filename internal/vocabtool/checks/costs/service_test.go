@@ -44,6 +44,19 @@ func TestService(t *testing.T) {
 		{"what movers cost", audittest.Input{Draft: bareDraft, PageHTML: guideTitled("How Much Do Movers Cost?"), PageURL: costGuideURL}, []audit.Issue{
 			{Path: "html:body", Severity: audit.Warning, Message: `the page is about the cost of the service "Movers" but no Service describes it: add one (name, serviceType, areaServed, offers or priceSpecification for the prices shown, provider when it is the business's own) and make it the WebPage's about or mainEntity`},
 		}},
+		{"a job and its cost, in a title", audittest.Input{Draft: bareDraft, PageHTML: guideTitled("Electrical Panel Upgrade Cost: What Homeowners Should Expect"), PageURL: costGuideURL}, []audit.Issue{
+			{Path: "html:body", Severity: audit.Warning, Message: `the page is about the cost of the service "Electrical Panel Upgrade" but no Service describes it: add one (name, serviceType, areaServed, offers or priceSpecification for the prices shown, provider when it is the business's own) and make it the WebPage's about or mainEntity`},
+		}},
+		{"a treatment and its costs", audittest.Input{Draft: bareDraft, PageHTML: guideTitled("Private dental care treatment costs"), PageURL: costGuideURL}, []audit.Issue{
+			{Path: "html:body", Severity: audit.Warning, Message: `the page is about the cost of the service "Private dental care treatment" but no Service describes it: add one (name, serviceType, areaServed, offers or priceSpecification for the prices shown, provider when it is the business's own) and make it the WebPage's about or mainEntity`},
+		}},
+		{"a question on a job", audittest.Input{Draft: bareDraft, PageHTML: guideTitled("How Much Do Home Extensions Cost?"), PageURL: costGuideURL}, nil},
+		{"a fee page", audittest.Input{Draft: bareDraft, PageHTML: guideTitled("Office Fees"), PageURL: costGuideURL}, nil},
+		{"a price list", audittest.Input{Draft: bareDraft, PageHTML: guideTitled("Treatment Price List"), PageURL: costGuideURL}, nil},
+		{"transparent pricing", audittest.Input{Draft: bareDraft, PageHTML: guideTitled("Transparent Pricing"), PageURL: costGuideURL}, nil},
+		{"average wedding prices", audittest.Input{Draft: bareDraft, PageHTML: guideTitled("Average Wedding Prices"), PageURL: costGuideURL}, nil},
+		{"shipping fees", audittest.Input{Draft: bareDraft, PageHTML: guideTitled("Standard Shipping Fees"), PageURL: costGuideURL}, nil},
+		{"our pricing plans", audittest.Input{Draft: bareDraft, PageHTML: guideTitled("Our Monthly Pricing"), PageURL: costGuideURL}, nil},
 		{"a Service describes it", audittest.Input{Draft: served, PageHTML: costGuide, PageURL: costGuideURL}, nil},
 		{"a page of another kind", audittest.Input{Draft: bareDraft, PageHTML: costGuide, PageURL: "https://movers.test/faq/"}, nil},
 		{"a shop's page", audittest.Input{Draft: bareDraft, PageHTML: audittest.Selling(costGuide), PageURL: costGuideURL}, nil},

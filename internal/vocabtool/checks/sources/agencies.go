@@ -40,7 +40,7 @@ func (Agencies) Run(c *audit.Context) []audit.Issue {
 		if ok {
 			host = strings.TrimPrefix(u.Hostname(), "www.")
 		}
-		if !ok || seen[host] || hosts[host] {
+		if !ok || seen[host] || hosts[host] || ownSite(c, host) {
 			continue
 		}
 		seen[host] = true
@@ -58,4 +58,14 @@ func (Agencies) Run(c *audit.Context) []audit.Issue {
 		return nil
 	}
 	return []audit.Issue{audit.Issuef(audit.PagePath, audit.Warning, "the page links the agencies %s: add each as a GovernmentOrganization (name, url) in the WebPage's mentions, or as the publisher of a citation from it", txt.Examples(list))}
+}
+
+// ownSite reports a host that is the page's own site or one of its
+// subdomains: a government site's portals are no other agency.
+func ownSite(c *audit.Context, host string) bool {
+	if c.Page.Base == nil {
+		return false
+	}
+	own := strings.TrimPrefix(c.Page.Base.Hostname(), "www.")
+	return host == own || strings.HasSuffix(host, "."+own)
 }
