@@ -153,6 +153,26 @@ func (t *Tool) Check(draft json.RawMessage, opts CheckOptions) (Report, error) {
 	return rep, nil
 }
 
+// Vocabulary checks a draft against the vocabulary alone: the walk Check
+// starts with, without its page, site and naming checks. Unknown types,
+// properties and enumeration members are errors; superseded terms, an
+// untyped node with properties and a property only a subtype takes are
+// warnings; a property outside its listed domains is info.
+func (t *Tool) Vocabulary(draft json.RawMessage) ([]Issue, error) {
+	root, err := decodeOrdered(draft)
+	if err != nil {
+		return nil, fmt.Errorf("draft is not valid JSON: %w", err)
+	}
+	switch root.(type) {
+	case *object, []any:
+	default:
+		return nil, fmt.Errorf("draft must be a JSON object or array")
+	}
+	c := checker{t: t, suggested: map[*object]bool{}}
+	c.walk("$", root)
+	return c.issues, nil
+}
+
 type checker struct {
 	t         *Tool
 	issues    []Issue

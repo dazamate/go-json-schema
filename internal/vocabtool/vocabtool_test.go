@@ -151,6 +151,32 @@ func TestCheckAcceptsPrefixedTermsAndReferences(t *testing.T) {
 	}
 }
 
+// Vocabulary runs the vocabulary walk alone: a draft the page checks would
+// fault, such as a WebPage with no WebSite, has no issues of its own.
+func TestVocabularyChecksTermsOnly(t *testing.T) {
+	tool := newTool(t)
+	issues, err := tool.Vocabulary(json.RawMessage(`[{"@type":"Offer","availability":"InStok","pricee":"0"},{"@type":"Persn"}]`))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var errs []string
+	for _, i := range issues {
+		if i.Severity == Error {
+			errs = append(errs, i.Path)
+		}
+	}
+	if want := []string{"$[0].availability", "$[0].pricee", "$[1]"}; !slices.Equal(errs, want) {
+		t.Fatalf("error paths = %v, want %v (issues %+v)", errs, want, issues)
+	}
+	issues, err = tool.Vocabulary(json.RawMessage(`{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://x.example/#p","name":"x"}]}`))
+	if err != nil || len(issues) != 0 {
+		t.Fatalf("issues = %+v, err %v", issues, err)
+	}
+	if _, err := tool.Vocabulary(json.RawMessage(`"x"`)); err == nil {
+		t.Fatal("a string draft was accepted")
+	}
+}
+
 func TestCheckWarnsOnUntypedNodeWithProperties(t *testing.T) {
 	r := check(t, `{"@type":"Recipe","author":{"name":"Jane"}}`)
 	if !issueAt(r, Warning, "$.author", "no @type") {
