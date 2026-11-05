@@ -42,7 +42,7 @@ func (QuoteActions) Run(c *audit.Context) []audit.Issue {
 			return slices.ContainsFunc(jsonld.Strs(l.N, "target"), func(s string) bool { return strings.HasSuffix(s, "#"+t.id) })
 		})
 		if !hit {
-			out = append(out, audit.Issuef("html:#"+t.id, audit.Warning, "the page's quote tool (#%s) has no QuoteAction: add one to the WebApplication's or WebPage's potentialAction, with an EntryPoint target (urlTemplate the page's URL + #%s, actionPlatform https://schema.org/DesktopWebPlatform and https://schema.org/MobileWebPlatform)", t.id, t.id))
+			out = append(out, audit.Issuef(t.path, audit.Warning, "the page's quote tool (#%s) has no QuoteAction: add one to the WebApplication's or WebPage's potentialAction, with an EntryPoint target (urlTemplate the page's URL + #%s, actionPlatform https://schema.org/DesktopWebPlatform and https://schema.org/MobileWebPlatform)", t.id, t.id))
 		}
 	}
 	return out

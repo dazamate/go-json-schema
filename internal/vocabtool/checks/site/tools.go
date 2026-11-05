@@ -50,7 +50,11 @@ func (Tools) Run(c *audit.Context) []audit.Issue {
 	var missing []string
 	for _, t := range tools {
 		if !named(t.id) {
-			missing = append(missing, fmt.Sprintf("%q #%s", t.name, t.id))
+			item := fmt.Sprintf("%q #%s", t.name, t.id)
+			if t.bare {
+				item += " [add this id to its form]"
+			}
+			missing = append(missing, item)
 		}
 	}
 	if len(missing) == 0 {
