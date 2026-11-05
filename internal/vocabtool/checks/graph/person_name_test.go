@@ -42,6 +42,40 @@ func TestPersonName(t *testing.T) {
 		{"one word", `{"@type":"Person","name":"Ann"}`, audittest.Input{PageText: "Tea."}, nil},
 		{"not capitalised", `{"@type":"Person","name":"ann lee"}`, audittest.Input{PageText: "Tea."}, nil},
 		{"no page", draft, audittest.Input{}, nil},
+		// loveitlandscaping.com.au: the business typed Person and
+		// Organization, and its posts' author named as the business
+		{"a business typed Person too", `{"@context":"https://schema.org","@graph":[
+			{"@type":["Person","Organization"],"@id":"https://loveitlandscaping.com.au/#person","name":"Love It Landscaping"},
+			{"@type":"WebSite","@id":"https://loveitlandscaping.com.au/#website","name":"Love It Landscaping","publisher":{"@id":"https://loveitlandscaping.com.au/#person"}},
+			{"@type":"Person","@id":"https://loveitlandscaping.com.au/author/dyonloveitlandscaping-com-au/","name":"Love It Landscaping"}]}`,
+			audittest.Input{PageText: "Landscaping Costs in Melbourne."}, nil},
+		// allrecipes.com: the publisher's own test kitchen reviews the recipe
+		{"a Person named for the publisher", `{"@context":"https://schema.org","@type":"Recipe","name":"Best Chocolate Chip Cookies",
+			"publisher":{"@type":"Organization","name":"Allrecipes"},
+			"mainEntityOfPage":{"@type":"WebPage","reviewedBy":{"@type":"Person","name":"Allrecipes Test Kitchen"}},
+			"author":{"@type":"Person","name":"Dora"}}`,
+			audittest.Input{PageText: "Best Chocolate Chip Cookies."}, nil},
+		// jamieoliver.com: a person the site is named after is still a person
+		{"a person the site is named after", `{"@context":"https://schema.org","@type":"Recipe","name":"Easy chicken curry",
+			"author":{"@type":"Person","name":"Jamie Oliver"}}`,
+			audittest.Input{PageText: "Easy chicken curry.", PageURL: "https://www.jamieoliver.com/recipes/chicken/easy-chicken-curry/"}, []audit.Issue{
+				{Path: "$.author", Severity: audit.Warning, Message: `this Person is named "Jamie Oliver": set givenName Jamie and familyName Oliver`},
+			}},
+		// a personal site: the WebSite is named after the person who runs it
+		{"a WebSite named after its person", `{"@context":"https://schema.org","@graph":[
+			{"@type":"WebSite","@id":"https://janesmith.test/#website","name":"Jane Smith","publisher":{"@id":"https://janesmith.test/#person"}},
+			{"@type":"Person","@id":"https://janesmith.test/#person","name":"Jane Smith"}]}`,
+			audittest.Input{PageText: "Jane Smith, illustrator."}, []audit.Issue{
+				{Path: "$.@graph[1]", Severity: audit.Warning, Message: `this Person is named "Jane Smith": set givenName Jane and familyName Smith`},
+			}},
+		// Yoast and Rank Math type the site's person Person and Organization
+		{"a person typed Organization too", `{"@context":"https://schema.org","@graph":[
+			{"@type":["Person","Organization"],"@id":"https://janesmith.test/#person","name":"Jane Smith"}]}`,
+			audittest.Input{PageText: "Jane Smith, illustrator."}, []audit.Issue{
+				{Path: "$.@graph[0]", Severity: audit.Warning, Message: `this Person is named "Jane Smith": set givenName Jane and familyName Smith`},
+			}},
+		// a business's name holds words no person's name does
+		{"a business name typed Person", `{"@type":"Person","name":"The Bread Kitchen"}`, audittest.Input{PageText: "Sourdough."}, nil},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			tc.in.Draft = tc.draft

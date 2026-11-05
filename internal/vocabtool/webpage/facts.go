@@ -83,7 +83,7 @@ func MainLines(doc *html.Node) []string {
 	var walk func(*html.Node)
 	walk = func(n *html.Node) {
 		for ch := n.FirstChild; ch != nil; ch = ch.NextSibling {
-			if Skipped(ch) || ch.DataAtom == atom.Nav || ((ch.DataAtom == atom.Header || ch.DataAtom == atom.Footer) && !scoped(ch)) {
+			if l := landmark(ch); Skipped(ch) || l == atom.Nav || ((l == atom.Header || l == atom.Footer) && !scoped(ch)) {
 				continue
 			}
 			if ch.Type == html.TextNode {
@@ -135,16 +135,47 @@ func (p *Facts) Abs(ref string) string {
 
 // Address is a street address the page shows: an address element that holds
 // a street address (an author's byline in an address element holds a name or
-// an email), or a number and street name.
+// an email), or a number and street name in its main copy, else in the
+// site's footer, where a business gives its own.
 func (p *Facts) Address() string {
-	if p.Doc != nil {
-		for _, n := range QueryAll(p.Doc, "address") {
-			if t := HTMLText(n); t != "" && Shown(n) && addressShape.MatchString(t) {
-				return t
-			}
+	if p.Doc == nil {
+		return strings.TrimSpace(StreetAddress.FindString(p.Main))
+	}
+	for _, n := range QueryAll(p.Doc, "address") {
+		if t := HTMLText(n); t != "" && Shown(n) && addressShape.MatchString(t) {
+			return t
 		}
 	}
-	return strings.TrimSpace(StreetAddress.FindString(p.Main))
+	if a := strings.TrimSpace(StreetAddress.FindString(p.Main)); a != "" {
+		return a
+	}
+	return p.inFooter(StreetAddress)
+}
+
+// Hours are the first opening hours the page gives: in its main copy, else
+// in the site's footer, where a restaurant or a dealer gives its own.
+func (p *Facts) Hours() string {
+	if h := OpeningTime.FindString(p.Main); h != "" || p.Doc == nil {
+		return h
+	}
+	return p.inFooter(OpeningTime)
+}
+
+// inFooter is the first match of re on a line of the site's footer, by its
+// element or its contentinfo role.
+func (p *Facts) inFooter(re *regexp.Regexp) string {
+	found := ""
+	Visit(p.Doc, func(n *html.Node) {
+		if found != "" || landmark(n) != atom.Footer || scoped(n) {
+			return
+		}
+		for _, l := range MainLines(n) {
+			if found = strings.TrimSpace(re.FindString(l)); found != "" {
+				return
+			}
+		}
+	})
+	return found
 }
 
 // addressShape is what an address element must hold: a number and a street

@@ -41,6 +41,59 @@ func TestNewPrivateNoindex(t *testing.T) {
 	}
 }
 
+// TestMainSkipsLandmarkRoles checks that a div the page calls its navigation,
+// banner or footer is its chrome, like the elements: officeworks.com.au's
+// mobile menu, smithpartners.co.nz's header and footer.
+func TestMainSkipsLandmarkRoles(t *testing.T) {
+	doc := parse(t, `<html><body><div id="header"><div id="mobile-menu" class="ow-mobile-menu ow-drawer ow-drawer--left" role="navigation">
+		<ul class="ow-mobile-menu__item"><li> <a href="/shop/officeworks/c/gifting/gifts-by-price/gifts-under--10">Gifts $10 and Under</a> </li></ul></div></div>
+		<div id="flex-header" data-sticky="true" role="banner"><a href="/">Smith and Partners</a> Contact Us Today</div>
+		<main><h1>Contact us</h1><p>Call us on 13 00 OFFICE.</p></main>
+		<div id="flex-footer" role="contentinfo">Lincoln Manor 293 Lincoln Road, Henderson, Auckland 0610</div></body></html>`)
+	p := New(doc, HTMLText(doc), "https://www.officeworks.com.au/contact-us")
+	for _, s := range []string{"Gifts $10", "Contact Us Today", "Lincoln Manor"} {
+		if strings.Contains(p.Main, s) {
+			t.Errorf("Main holds the chrome %q: %q", s, p.Main)
+		}
+	}
+	if !strings.Contains(p.Main, "Call us on") {
+		t.Errorf("Main = %q", p.Main)
+	}
+	if a := QueryAll(doc, "#mobile-menu a")[0]; !Chrome(a) {
+		t.Error("a link in a navigation landmark should be chrome")
+	}
+}
+
+// TestAddressInFooter checks that a business's address in its site footer
+// is the page's: loveitlandscaping.com.au, vicisouthbank.com.au and
+// smithpartners.co.nz give theirs only there.
+func TestAddressInFooter(t *testing.T) {
+	for src, want := range map[string]string{
+		`<html><body><main><h1>Landscaping costs in Melbourne</h1></main><footer><div class="col-contact contact-footer"><h2 class="contact-title contact-top">Melbourne, Australia</h2> <p class="contact-address text-muted"><strong>11 Frederick St, Sunbury, VIC 3429</strong></p></div><ul><li><a href="/">Home</a></li></ul></footer></body></html>`: "11 Frederick St, Sunbury, VIC 3429",
+		`<html><body><main><h1>Menu</h1></main><footer><div class="elementor-widget-container"> <p>174 Grey St, South Brisbane 4101</p> </div><p>Trading Open 7 Days</p></footer></body></html>`:                                                                                                                                                           "174 Grey St, South Brisbane 4101",
+		`<html><body><main><h1>Property lawyers</h1></main><div id="flex-footer" role="contentinfo"><p>Lincoln Manor</p><p>293 Lincoln Road, Henderson, Auckland 0610</p></div></body></html>`:                                                                                                                                                             "293 Lincoln Road, Henderson, Auckland 0610",
+	} {
+		doc := parse(t, src)
+		if got := New(doc, HTMLText(doc), "https://site.test/page").Address(); got != want {
+			t.Errorf("Address() = %q, want %q", got, want)
+		}
+	}
+}
+
+// TestHoursInFooter checks that a business's hours in its site footer are
+// the page's: autodiscount.co.nz gives its yard's only there.
+func TestHoursInFooter(t *testing.T) {
+	doc := parse(t, `<html><body><main><h2>2015 Toyota Aqua</h2><p>$14,450</p></main>
+		<footer><h4>Opening hours</h4><p>Monday 9.30am - 5.30pm</p><p>Sunday Closed</p><p>©2018 - 2026 Auto Discount</p></footer></body></html>`)
+	if got, want := New(doc, HTMLText(doc), "https://www.autodiscount.co.nz/vehicle/2015-Toyota-Aqua/12434").Hours(), "Monday 9.30am - 5.30pm"; got != want {
+		t.Errorf("Hours() = %q, want %q", got, want)
+	}
+	doc = parse(t, `<html><body><main><h1>Fees</h1><p>Mon: 8AM - 4PM</p></main><footer><p>Sunday Closed</p></footer></body></html>`)
+	if got, want := New(doc, HTMLText(doc), "https://www.mooreheaddentistry.com/financial/office-fees/").Hours(), "Mon: 8AM - 4PM"; got != want {
+		t.Errorf("Hours() = %q, want %q", got, want)
+	}
+}
+
 func TestMainSkipsChrome(t *testing.T) {
 	doc := parse(t, `<html><body><header><a href="/">Acme Shop</a></header>
 		<main><h1>Lockets</h1><p>Hand made.</p></main></body></html>`)

@@ -2,10 +2,12 @@ package graph
 
 import (
 	"regexp"
+	"slices"
 	"strings"
 
 	"github.com/dazamate/go-json-schema/internal/vocabtool/audit"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
+	"github.com/dazamate/go-json-schema/internal/vocabtool/txt"
 )
 
 func init() { audit.Register(PersonName{}) }
@@ -40,10 +42,29 @@ func bareName(s string) string {
 	}
 }
 
+// businessWord is a word a business's name holds and a person's does not:
+// "Love It Landscaping", "The Bread Kitchen", "Made For You".
+var businessWord = regexp.MustCompile(`\b(?:The|It|Of|And|For|At|With|Our|Your)\b`)
+
 // Run reports each Person whose name splits in two and who has neither part.
+// A Person named for an organization or brand of the graph ("Allrecipes Test
+// Kitchen"), or whose name holds a word no person's name holds ("Love It
+// Landscaping"), is the business, not a person with a given name. A site
+// named after its person ("Jane Smith"), and the site's person that Yoast and
+// Rank Math type Person and Organization, still are people.
 func (PersonName) Run(c *audit.Context) []audit.Issue {
 	if c.Page == nil {
 		return nil
+	}
+	var orgs []string
+	for _, l := range c.Nodes {
+		if !c.Is(l.N, "Person") && (c.Is(l.N, "Organization") || c.Is(l.N, "Brand")) {
+			for _, s := range jsonld.Strs(l.N, "name") {
+				if w := txt.NormWords(s); w != "" {
+					orgs = append(orgs, " "+w+" ")
+				}
+			}
+		}
 	}
 	var out []audit.Issue
 	for _, l := range c.Nodes {
@@ -53,6 +74,10 @@ func (PersonName) Run(c *audit.Context) []audit.Issue {
 		_, g := l.N.Get("givenName")
 		_, f := l.N.Get("familyName")
 		for _, s := range jsonld.Strs(l.N, "name") {
+			name := " " + txt.NormWords(s) + " "
+			if businessWord.MatchString(s) || slices.ContainsFunc(orgs, func(o string) bool { return strings.Contains(name, o) }) {
+				break
+			}
 			if m := personName.FindStringSubmatch(bareName(s)); m != nil && !g && !f {
 				out = append(out, audit.Issuef(l.Path, audit.Warning, "this Person is named %q: set givenName %s and familyName %s", s, m[1], m[2]))
 			}

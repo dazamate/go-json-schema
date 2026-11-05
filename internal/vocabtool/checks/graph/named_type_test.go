@@ -50,6 +50,28 @@ func TestNamedType(t *testing.T) {
 		{"a node another signal told", `{"@type":"Organization","name":"University of Sydney","openingHours":"Mo-Fr 09:00-17:00"}`, nil},
 		{"a node with a Wikidata class", `{"@type":"Organization","name":"University of Sydney",` + wikidata("Q3918") + `}`, nil},
 		{"a WebPageElement", `{"@type":"WebPageElement","name":"Site navigation"}`, nil},
+		// headings and titles from real pages: a type word that only
+		// qualifies another word, or sits in a place's name or a
+		// prepositional phrase, names no subtype
+		{"a type word that is not the head", `{"@context":"https://schema.org","@graph":[
+			{"@type":"LocalBusiness","name":"Enjoy Italian Food at Vici South Bank | Pizza & Pasta Brisbane"},
+			{"@type":"Article","headline":"LIM Reports NZ: What Property Buyers Need to Know"},
+			{"@type":"WebPage","name":"Find out about legal and business responsibilities in your industry."},
+			{"@type":"Service","name":"Payment Offers"},
+			{"@type":"WebPage","name":"How to Choose the Right Real Estate Agent in 10 Steps","url":"https://www.redfin.com/blog/how-to-choose-a-real-estate-agent/"}]}`, nil},
+		// the same pages' names whose head is the type
+		{"a type word that is the head", `{"@context":"https://schema.org","@graph":[
+			{"@type":"LocalBusiness","name":"Opus Vancouver Boutique Hotel in Yaletown"},
+			{"@type":"LocalBusiness","name":"The Willows Beauty Salon"},
+			{"@type":"Service","name":"Personal loans"},
+			{"@type":"WebPage","name":"Pricing Page FAQs"},
+			{"@type":"WebPage","name":"Frequently Asked Questions","url":"https://royalcanadiancollective.com/pages/faq"}]}`, []audit.Issue{
+			{Path: "$.@graph[0]", Severity: audit.Warning, Message: `LocalBusiness "Opus Vancouver Boutique Hotel in Yaletown": its name or URL names the subtype Hotel; type it Hotel`},
+			{Path: "$.@graph[1]", Severity: audit.Warning, Message: `LocalBusiness "The Willows Beauty Salon": its name or URL names the subtype BeautySalon; type it BeautySalon`},
+			{Path: "$.@graph[2]", Severity: audit.Warning, Message: `Service "Personal loans": its name or URL names the subtype LoanOrCredit; type it LoanOrCredit`},
+			{Path: "$.@graph[3]", Severity: audit.Warning, Message: `WebPage "Pricing Page FAQs": its name or URL names the subtype FAQPage; type it FAQPage`},
+			{Path: "$.@graph[4]", Severity: audit.Warning, Message: `WebPage "Frequently Asked Questions": its name or URL names the subtype FAQPage; type it FAQPage`},
+		}},
 	} {
 		t.Run(tc.name, func(t *testing.T) { audittest.Expect(t, graph.NamedType{}, audittest.Input{Draft: tc.draft}, tc.want) })
 	}

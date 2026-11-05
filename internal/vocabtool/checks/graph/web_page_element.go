@@ -1,6 +1,7 @@
 package graph
 
 import (
+	"regexp"
 	"slices"
 	"strings"
 
@@ -22,19 +23,28 @@ type WebPageElement struct{}
 func (WebPageElement) ID() string { return "graph/web-page-element" }
 
 // elementTypes are the WebPageElement subtypes a section's name points to,
-// checked in order against its normalized name as whole words.
+// checked in order against its normalized name. Menu, table and questions
+// name content too, so they count only in the words that make them chrome
+// or data: a main or site menu (a restaurant's kids menu is food), a table
+// as the name's head noun (not a table plan, table stakes or a whole
+// table), and questions with their answers or as an FAQ (not questions to
+// ask, or "Still have questions?").
 var elementTypes = []struct {
-	words []string
-	use   string
+	re  *regexp.Regexp
+	use string
 }{
-	{[]string{"faq", "faqs", "frequently asked", "questions"}, "FAQPage"},
-	{[]string{"navigation", "nav", "menu"}, "SiteNavigationElement"},
-	{[]string{"header"}, "WPHeader"},
-	{[]string{"footer"}, "WPFooter"},
-	{[]string{"sidebar", "side bar"}, "WPSideBar"},
-	{[]string{"table"}, "Table"},
-	{[]string{"advert", "advertisement", "ad block"}, "WPAdBlock"},
+	{regexp.MustCompile(` (?:faqs?|frequently asked|q a|questions (?:and )?answers|questions answered|(?:common|popular|top|general|commonly asked) questions) `), "FAQPage"},
+	{regexp.MustCompile(` (?:navigation|nav|(?:main|primary|secondary|site|mobile|header|footer|top|dropdown|mega|hamburger|side|utility|global|toggle|open|close) menu|menu (?:toggle|list|bar|button|icon)) `), "SiteNavigationElement"},
+	{regexp.MustCompile(` header `), "WPHeader"},
+	{regexp.MustCompile(` footer `), "WPFooter"},
+	{regexp.MustCompile(` (?:sidebar|side bar) `), "WPSideBar"},
+	{regexp.MustCompile(` table $| table of (?:[^c]|c[^o]|co[^n])`), "Table"},
+	{regexp.MustCompile(` (?:advert|advertisement|ad block) `), "WPAdBlock"},
 }
+
+// articleTable is a table a name holds as a thing, not data: "a table",
+// "your table", "the whole table".
+var articleTable = regexp.MustCompile(` (?:a|your|whole) table `)
 
 // faqHint is how the FAQPage is made: a part of the page, holding the
 // Questions.
@@ -53,7 +63,7 @@ func (WebPageElement) Run(c *audit.Context) []audit.Issue {
 		}
 		label := " " + txt.NormWords(strings.Join(append(jsonld.Strs(l.N, "name"), jsonld.Strs(l.N, "headline")...), " ")) + " "
 		for _, e := range elementTypes {
-			if slices.ContainsFunc(e.words, func(w string) bool { return strings.Contains(label, " "+w+" ") }) {
+			if e.re.MatchString(label) && !(e.use == "Table" && articleTable.MatchString(label)) {
 				use := e.use
 				if use == "FAQPage" {
 					use = faqHint

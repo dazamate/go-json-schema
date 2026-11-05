@@ -2,6 +2,7 @@ package graph
 
 import (
 	"net/url"
+	"regexp"
 	"slices"
 	"strings"
 	"unicode"
@@ -56,26 +57,28 @@ func (NamedType) find(c *audit.Context, before audit.Retyped) []named {
 		if ty == "" || ty == "Thing" || before.Told[l.N] || crumbs[l.N] || len(jsonld.WikidataItems(l.N)) > 0 || jsonld.HasWikidataClass(l.N) || slices.Contains(c.Vocab.V.Ancestors(ty), "WebPageElement") {
 			continue
 		}
-		label := strings.Join(append(jsonld.Strs(l.N, "name"), jsonld.Strs(l.N, "headline")...), " ")
-		words := label
+		names := append(jsonld.Strs(l.N, "name"), jsonld.Strs(l.N, "headline")...)
+		label := strings.Join(names, " ")
+		var paths []string
 		for _, k := range []string{"url", "@id"} {
 			for _, s := range jsonld.Strs(l.N, k) {
 				if u, err := url.Parse(s); err == nil {
-					words += " " + u.Path
+					paths = append(paths, u.Path)
 					if label == "" {
 						label = s // a node without a name is named by its URL
 					}
 				}
 			}
 		}
-		text := " " + txt.NormWords(words) + " "
-		if strings.TrimSpace(text) == "" {
+		phrases := phrasesOf(names, paths)
+		if len(phrases) == 0 {
 			continue
 		}
+		lead := ty == "WebPage" || slices.Contains(c.Vocab.V.Ancestors(ty), "WebPage")
 		var best []string
 		depth := 0
 		for _, d := range c.Vocab.Descendants(ty) {
-			if unnamedTypes[d] || !namesType(text, typeAlternatives(d, ty)) {
+			if unnamedTypes[d] || !namesType(phrases, typeAlternatives(d, ty), lead) {
 				continue
 			}
 			switch n := len(c.Vocab.V.Ancestors(d)); {
@@ -147,16 +150,74 @@ func typeAlternatives(sub, of string) [][]string {
 	return slices.DeleteFunc(alts, func(a []string) bool { return len(a) == 0 })
 }
 
-// namesType reports whether the padded text has every word of one
-// alternative, each as written or in the plural. A type word is never
-// stemmed the way names stems page words: News would become "new".
-func namesType(text string, alts [][]string) bool {
-	has := func(w string) bool {
-		return slices.ContainsFunc([]string{w, w + "s", w + "es"}, func(f string) bool { return strings.Contains(text, " "+f+" ") })
+// namesType reports whether one of the phrases names one alternative: its
+// words end the phrase, the last as written or in the plural, as the head of
+// an English name does (Opus Boutique Hotel, The Willows Beauty Salon,
+// Personal loans). A type word that only qualifies the head names nothing
+// (Hotel Chocolat, Car Phone Mount, LIM Reports NZ). A page's name may lead
+// with its kind too (Contact us, About Acme, FAQs on delivery), so with lead
+// the words may also open the phrase. A type word is never stemmed the way
+// names stems page words: News would become "new".
+func namesType(phrases [][]string, alts [][]string, lead bool) bool {
+	same := func(got []string, want []string) bool {
+		for i, w := range want {
+			g := got[i]
+			if g != w && (i < len(want)-1 || (g != w+"s" && g != w+"es")) {
+				return false
+			}
+		}
+		return true
 	}
 	return slices.ContainsFunc(alts, func(words []string) bool {
-		return !slices.ContainsFunc(words, func(w string) bool { return !has(w) })
+		n := len(words)
+		return slices.ContainsFunc(phrases, func(p []string) bool {
+			if len(p) >= n && same(p[len(p)-n:], words) {
+				return true
+			}
+			for len(p) > 0 && determiners[p[0]] {
+				p = p[1:]
+			}
+			return lead && len(p) >= n && same(p[:n], words)
+		})
 	})
+}
+
+var (
+	// nameBreak parts a name or title: a site's name after a bar or dash,
+	// a subtitle after a colon, list items between commas.
+	nameBreak = regexp.MustCompile(`\s[-–—|]\s|[|:;,()\[\]/–—]`)
+	// prepositions start the phrase after a name's head: University of
+	// Sydney, Hotel in Yaletown, Food at Vici South Bank.
+	prepositions = map[string]bool{"of": true, "in": true, "at": true, "on": true, "by": true, "for": true, "from": true, "with": true, "near": true, "about": true}
+	determiners  = map[string]bool{"the": true, "our": true, "your": true, "my": true, "a": true, "an": true}
+)
+
+// phrasesOf are the phrases of a node's names and of its URLs' path
+// segments, each as its words up to the first preposition that follows a
+// word, without a possessive's lone s.
+func phrasesOf(names, paths []string) [][]string {
+	var parts []string
+	for _, s := range names {
+		parts = append(parts, nameBreak.Split(s, -1)...)
+	}
+	for _, s := range paths {
+		parts = append(parts, strings.Split(s, "/")...)
+	}
+	var out [][]string
+	for _, part := range parts {
+		words := strings.Fields(txt.NormWords(part))
+		for i, w := range words {
+			if i > 0 && prepositions[w] {
+				words = words[:i]
+				break
+			}
+		}
+		words = slices.DeleteFunc(words, func(w string) bool { return w == "s" })
+		if len(words) > 0 {
+			out = append(out, words)
+		}
+	}
+	return out
 }
 
 // splitCamel splits a type name into its words: FAQPage is FAQ and Page,

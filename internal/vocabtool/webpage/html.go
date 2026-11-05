@@ -81,14 +81,17 @@ func HTMLText(doc *html.Node) string {
 	return strings.Join(strings.Fields(b.String()), " ")
 }
 
-// scoped reports a header or footer that belongs to a part of the page. One
-// inside main is the site's own when the page wraps everything in main: a
-// header that links to the home page and holds no h1, or a footer with a
-// copyright line.
+// scoped reports a header or footer that belongs to a part of the page, or to
+// the site's header or footer around it. One inside main is the site's own
+// when the page wraps everything in main: a header that links to the home
+// page and holds no h1, or a footer with a copyright line.
 func scoped(n *html.Node) bool {
 	for p := n.Parent; p != nil; p = p.Parent {
+		if landmark(p) != 0 {
+			return true
+		}
 		switch p.DataAtom {
-		case atom.Article, atom.Aside, atom.Nav, atom.Section:
+		case atom.Article, atom.Aside, atom.Section:
 			return true
 		case atom.Main:
 			return !siteChrome(n)
@@ -99,7 +102,7 @@ func scoped(n *html.Node) bool {
 
 // siteChrome reports a header or footer that is the site's, not its section's.
 func siteChrome(n *html.Node) bool {
-	switch n.DataAtom {
+	switch landmark(n) {
 	case atom.Header:
 		if len(cascadia.QueryAll(n, cascadia.MustCompile("h1"))) > 0 {
 			return false
@@ -114,6 +117,62 @@ func siteChrome(n *html.Node) bool {
 		}
 	case atom.Footer:
 		return CopyrightLine.MatchString(HTMLText(n))
+	}
+	return false
+}
+
+// overlayWord is a word of a tag, class or id that names an overlay the page
+// opens over itself: a drawer, modal, dialog or popup.
+var overlayWord = regexp.MustCompile(`^(?:drawers?|modal|dialog|popup|popover|lightbox|flyout)$`)
+
+// Overlay reports an element in a drawer, modal or dialog the page opens over
+// itself (a cart drawer, a help modal): a dialog element or role, an
+// aria-modal, or a tag, class or id that names one. An element that holds
+// the page's main is the page, whatever its class says.
+func Overlay(n *html.Node) bool {
+	for e := n; e != nil && e.Type == html.ElementNode; e = e.Parent {
+		switch e.DataAtom {
+		case atom.Body, atom.Html, atom.Main:
+			return false
+		case atom.Dialog:
+			return true
+		}
+		role, _ := Attr(e, "role")
+		modal, _ := Attr(e, "aria-modal")
+		if role == "dialog" || role == "alertdialog" || modal == "true" || (namesOverlay(e) && !holds(e, atom.Main)) {
+			return true
+		}
+	}
+	return false
+}
+
+// namesOverlay reports an element whose tag, class or id names an overlay
+// (site-drawer, "drw-Drawer", "modal fade", "oddit-cart-drawer").
+func namesOverlay(e *html.Node) bool {
+	id, _ := Attr(e, "id")
+	class, _ := Attr(e, "class")
+	for _, s := range append(strings.Fields(class), e.Data, id) {
+		for _, w := range strings.FieldsFunc(strings.ToLower(s), func(r rune) bool { return r == '-' || r == '_' }) {
+			if overlayWord.MatchString(w) {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+// hiddenStyle matches an inline style that hides its element.
+var hiddenStyle = regexp.MustCompile(`(?i)(?:^|;)\s*(?:display\s*:\s*none|visibility\s*:\s*hidden)\b`)
+
+// StyleHidden reports an element that its own or an ancestor's inline style
+// hides (display: none): a closed drawer, a helper frame. Its text still
+// counts as the page's (a closed accordion's answer), but it is no section
+// of the page.
+func StyleHidden(n *html.Node) bool {
+	for e := n; e != nil; e = e.Parent {
+		if s, _ := Attr(e, "style"); hiddenStyle.MatchString(s) {
+			return true
+		}
 	}
 	return false
 }
@@ -225,10 +284,30 @@ func MustParse(s string) *url.URL {
 // CopyrightLine matches a copyright line and captures its last year.
 var CopyrightLine = regexp.MustCompile(`(?i)(?:©|\(c\)|copyright)\s*(?:\d{4}\s*[-–]\s*)?(\d{4})`)
 
-// Chrome reports an element in the page's own header, footer or a nav.
+// landmark is the chrome an element is by its tag or its ARIA landmark role:
+// atom.Nav for a nav or role navigation, atom.Header for a header or role
+// banner, atom.Footer for a footer or role contentinfo, else 0.
+func landmark(n *html.Node) atom.Atom {
+	switch n.DataAtom {
+	case atom.Nav, atom.Header, atom.Footer:
+		return n.DataAtom
+	}
+	switch role, _ := Attr(n, "role"); role {
+	case "navigation":
+		return atom.Nav
+	case "banner":
+		return atom.Header
+	case "contentinfo":
+		return atom.Footer
+	}
+	return 0
+}
+
+// Chrome reports an element in the page's own header, footer or a nav, by
+// their tags or their landmark roles.
 func Chrome(n *html.Node) bool {
 	for e := n.Parent; e != nil; e = e.Parent {
-		switch e.DataAtom {
+		switch landmark(e) {
 		case atom.Nav:
 			return true
 		case atom.Header, atom.Footer:
@@ -243,7 +322,7 @@ func Chrome(n *html.Node) bool {
 // siteChromeAround reports an element in the site's own header or footer.
 func siteChromeAround(n *html.Node) bool {
 	for e := n.Parent; e != nil; e = e.Parent {
-		if (e.DataAtom == atom.Header || e.DataAtom == atom.Footer) && !scoped(e) {
+		if l := landmark(e); (l == atom.Header || l == atom.Footer) && !scoped(e) {
 			return true
 		}
 	}
