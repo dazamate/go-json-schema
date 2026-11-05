@@ -9,6 +9,21 @@ var sellsRows = []struct {
 	want           bool
 }{
 	{
+		// asda.com: the product's add button names the product, and the cart
+		// is no link
+		name: "add button naming the product",
+		url:  "https://www.asda.com/groceries/product/indian-asian-rice/trophy-basmati-rice-10kg/1000383160467",
+		src:  `<html><body><main><h1>Trophy Basmati Rice 10kg</h1><p>£13.00 £1.30/kg</p><button type="button" aria-label="Add item Trophy Trophy Basmati Rice 10kg to cart" class="asda-btn">Add</button></main></body></html>`,
+		want: true,
+	},
+	{
+		// an affiliate review links out to buy: a link, not the site's button
+		name: "affiliate buy link",
+		url:  "https://reviews.test/best-cordless-drills/",
+		src:  `<html><body><main><h1>Best cordless drills</h1><p>Our pick: £89.</p><a href="https://www.amazon.co.uk/dp/B0123">Add to basket at Amazon</a> <a href="https://www.screwfix.com/p/123">Buy now</a></main></body></html>`,
+		want: false,
+	},
+	{
 		// autodiscount.co.nz: a dealer with no cart; its cards lead to other
 		// vehicles' pages, which a shop's product cards do
 		name: "vehicle cards",

@@ -281,14 +281,17 @@ func (p *Facts) RelatedBoxes() []RelatedBox {
 		t := strings.TrimSpace(HTMLText(n))
 		// a guide's own nav of its pages sits in the content, not the site's
 		// chrome
-		if len(strings.Fields(t)) > 6 || !relatedLabel.MatchString(t) || (Chrome(n) && !(GuideLabel.MatchString(t) && !siteChromeAround(n))) {
+		// a button's or link's text ("Read more" on a description's toggle)
+		// labels the control, not a box of links
+		if len(strings.Fields(t)) > 6 || !relatedLabel.MatchString(t) || (Chrome(n) && !(GuideLabel.MatchString(t) && !siteChromeAround(n))) || inControl(n) || rowKey(n) {
 			return
 		}
 		for e := n.Parent; e != nil && e.DataAtom != atom.Body && e.DataAtom != atom.Main; e = e.Parent {
 			switch e.DataAtom {
 			case atom.Section, atom.Aside, atom.Nav, atom.Article:
 			default:
-				if len(p.SiteLinks(e)) == 0 {
+				// a box of links, not a header row with its one "View all"
+				if len(p.SiteLinks(e)) < 2 {
 					continue
 				}
 			}
@@ -327,11 +330,43 @@ func (p *Facts) Sells() bool {
 			return true
 		}
 	}
+	// the site's own add button; a link that adds to a cart is another
+	// site's (an affiliate review's "Add to basket at Amazon")
+	for _, b := range QueryAll(p.Doc, "button, input[type=submit], input[type=button]") {
+		name, _ := Attr(b, "aria-label")
+		if strings.TrimSpace(name) == "" {
+			name = HTMLText(b)
+		}
+		if strings.TrimSpace(name) == "" {
+			name, _ = Attr(b, "value")
+		}
+		if addButton.MatchString(name) {
+			return true
+		}
+	}
+	return false
+}
+
+// rowKey reports a short text that keys a row of a list or table, not a
+// heading over a box: a spec's name ("Recommended For Gaming" before "Yes").
+func rowKey(n *html.Node) bool {
+	if n.DataAtom != atom.Span && n.DataAtom != atom.P {
+		return false
+	}
+	for e, up := n.Parent, 0; e != nil && up < 2; e, up = e.Parent, up+1 {
+		switch e.DataAtom {
+		case atom.Li, atom.Td, atom.Th, atom.Dt, atom.Dd:
+			return true
+		}
+	}
 	return false
 }
 
 var (
 	checkoutPath = regexp.MustCompile(`/checkouts?$`)
+	// addButton is the name of a button that adds to the cart: "Add to
+	// trolley", "Add item Trophy Basmati Rice 10kg to cart".
+	addButton = regexp.MustCompile(`(?i)^\s*add\b.{0,120}?\bto\s+(?:the\s+|your\s+|my\s+)?(?:cart|basket|bag|trolley)\s*$`)
 	// cartWord is a word that names the cart; controlFiller the words a cart
 	// button's name wraps it in ("Open cart", "Basket quantity 0", "Shopping
 	// Cart Menu 0 items in the cart").

@@ -34,6 +34,34 @@ func TestPlanPrices(t *testing.T) {
 	}
 }
 
+// TestRelatedBoxesSkipControls checks that a button's text is no related
+// label: jackweirandsons.com's collection description toggle reads "Read
+// more", and its box would make every card on the listing related.
+func TestRelatedBoxesSkipControls(t *testing.T) {
+	doc := parse(t, `<html><body><main><div class="collection"><div class="collection-description"><p>GIA certified diamonds.</p>
+		<button type="button" class="collection-description-toggle__button" aria-expanded="false"><span class="more-text">Read more</span><span class="less-text">Read less</span></button></div>
+		<div class="grid"><a href="/products/oval-ring">Oval ring $4,200</a><a href="/products/pear-ring">Pear ring $3,900</a></div></div>
+		<section><h3>Read more</h3><a href="/blogs/news/ring-guide">Ring guide</a><a href="/blogs/news/gia">What GIA means</a></section></main></body></html>`)
+	boxes := New(doc, HTMLText(doc), "https://jackweirandsons.com/collections/gia-certified-diamond-engagement-rings").RelatedBoxes()
+	if len(boxes) != 1 || boxes[0].N.DataAtom.String() != "section" {
+		t.Errorf("RelatedBoxes() = %v, want the section only", boxes)
+	}
+}
+
+// TestRelatedBoxesReachTheLinks checks that a heading's box is the block of
+// links it heads, not its header row with one "View all" link
+// (totallyirishgifts.com's "More from this maker"), and that a spec row's
+// key is no heading (reliancedigital.in's "Recommended For Gaming: Yes").
+func TestRelatedBoxesReachTheLinks(t *testing.T) {
+	doc := parse(t, `<html><body><main><section class="space-y-4"><div class="flex"><div><h2>More from this maker</h2></div><a href="/irish-gifts">View all</a></div>
+		<div class="grid"><a href="/product/nativity-set/">Nativity set</a><a href="/product/celtic-chess-set/">Celtic chess set</a></div></section>
+		<ul><li class="specifications-list"><span>Recommended For Gaming</span><ul><li>Yes</li></ul></li><li><a href="/c/returns">Returns</a> <a href="/c/warranty">Warranty</a></li></ul></main></body></html>`)
+	boxes := New(doc, HTMLText(doc), "https://totallyirishgifts.com/product/celtic-legends-chess-set/").RelatedBoxes()
+	if len(boxes) != 1 || boxes[0].N.DataAtom.String() != "section" {
+		t.Errorf("RelatedBoxes() = %v, want the section only", boxes)
+	}
+}
+
 func TestRelatedLabel(t *testing.T) {
 	for label, want := range map[string]bool{
 		"Recommendations For You": true,  // taylorstitch.com
