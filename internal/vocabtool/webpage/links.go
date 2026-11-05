@@ -24,6 +24,13 @@ var (
 	socialPages     = []string{"watch", "playlist", "results", "shorts", "feed", "home", "explore", "search", "hashtag", "p", "reel", "reels", "tv", "stories", "status", "i", "pin", "posts", "videos", "live", "groups", "events", "marketplace", "gaming", "login", "signup", "business", "ads", "pulse", "jobs", "messaging", "notifications", "watch.php", "photo.php", "photo", "story.php", "permalink.php"}
 )
 
+// SocialLink is a link to a social network: a profile, a post, a video or a
+// share button.
+func SocialLink(href string) bool {
+	u, err := url.Parse(strings.TrimSpace(href))
+	return err == nil && u.IsAbs() && socialHost.MatchString(u.Hostname())
+}
+
 // SocialProfile is a link to one of the business's social profiles: a single
 // path segment (/@name, /name), or a profile prefix and its name (/company/name,
 // /channel/id, /c/name, /user/name). A video, a post, a tweet or a pin is not.

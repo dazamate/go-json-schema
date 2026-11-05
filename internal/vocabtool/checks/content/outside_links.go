@@ -42,8 +42,9 @@ func (OutsideLinks) Run(c *audit.Context) []audit.Issue {
 		if err != nil || (u.Scheme != "http" && u.Scheme != "https") || strings.EqualFold(u.Hostname(), p.Base.Hostname()) {
 			return
 		}
-		// the business's profiles and share buttons have checks of their own
-		if webpage.SocialProfile(h) || webpage.ShareLink.MatchString(h) {
+		// the business's profiles and share buttons have checks of their own,
+		// and a feed of its posts features no outside business
+		if webpage.SocialLink(h) || webpage.ShareLink.MatchString(h) {
 			return
 		}
 		key := txt.NormURL(u)

@@ -21,6 +21,7 @@ func TestOutsideLinks(t *testing.T) {
 		{"two links", at(webPage, `<section id="friends"><a href="https://florist.test/">Florist</a> <a href="https://cake.test/">Cake</a></section>`), nil},
 		{"links to the site itself", at(webPage, `<section id="more"><a href="/a/">A</a> <a href="/b/">B</a> <a href="https://x.test/c/">C</a></section>`), nil},
 		{"links to social profiles", at(webPage, `<section id="follow"><a href="https://www.facebook.com/ann">Facebook</a> <a href="https://www.instagram.com/ann">Instagram</a> <a href="https://www.tiktok.com/@ann">TikTok</a></section>`), nil},
+		{"a social feed and share links", at(webPage, `<section id="feed"><a href="https://www.instagram.com/p/C9nT0D3xDBK/"><img src="/a.jpg" alt=""></a> <a href="https://www.instagram.com/reel/C91FjaURGZw/">Reel</a> <a href="https://twitter.com/home?status=https://ann.test/">Twitter</a> <a href="https://www.youtube.com/watch?v=abc">Video</a></section>`), nil},
 		{"a page with no address", noBase, nil},
 		textOnly(webPage, "Friends Florist Cake Band"),
 	}, hidden(webPage, body)...))
