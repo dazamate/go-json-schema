@@ -5,6 +5,8 @@ import (
 	"slices"
 	"strings"
 	"testing"
+
+	"github.com/dazamate/go-json-schema/internal/vocabtool/vocab"
 )
 
 func newTool(t *testing.T) *Tool {
@@ -151,6 +153,32 @@ func TestCheckAcceptsPrefixedTermsAndReferences(t *testing.T) {
 	}
 }
 
+// Vocabulary runs the vocabulary walk alone: a draft the page checks would
+// fault, such as a WebPage with no WebSite, has no issues of its own.
+func TestVocabularyChecksTermsOnly(t *testing.T) {
+	tool := newTool(t)
+	issues, err := tool.Vocabulary(json.RawMessage(`[{"@type":"Offer","availability":"InStok","pricee":"0"},{"@type":"Persn"}]`))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var errs []string
+	for _, i := range issues {
+		if i.Severity == Error {
+			errs = append(errs, i.Path)
+		}
+	}
+	if want := []string{"$[0].availability", "$[0].pricee", "$[1]"}; !slices.Equal(errs, want) {
+		t.Fatalf("error paths = %v, want %v (issues %+v)", errs, want, issues)
+	}
+	issues, err = tool.Vocabulary(json.RawMessage(`{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://x.example/#p","name":"x"}]}`))
+	if err != nil || len(issues) != 0 {
+		t.Fatalf("issues = %+v, err %v", issues, err)
+	}
+	if _, err := tool.Vocabulary(json.RawMessage(`"x"`)); err == nil {
+		t.Fatal("a string draft was accepted")
+	}
+}
+
 func TestCheckWarnsOnUntypedNodeWithProperties(t *testing.T) {
 	r := check(t, `{"@type":"Recipe","author":{"name":"Jane"}}`)
 	if !issueAt(r, Warning, "$.author", "no @type") {
@@ -158,22 +186,47 @@ func TestCheckWarnsOnUntypedNodeWithProperties(t *testing.T) {
 	}
 }
 
+// A draft string that holds a closing script tag must not end the script tag
+// early: the body escapes < and > as JSON does, and still parses back to the
+// string.
 func TestCheckKeepsKeyOrderAndEscapesScript(t *testing.T) {
-	r := check(t, `{"@type":"Recipe","name":"</script><b>","description":"d","about":[]}`)
-	want := `<script type="application/ld+json">{"@context":"https://schema.org","@type":"Recipe","name":"</script><b>","description":"d","about":[]}</script>`
-	if r.ScriptTag != want {
-		t.Fatalf("got  %s\nwant %s", r.ScriptTag, want)
+	const name = `</script><script>alert(1)</script>`
+	draft, err := json.Marshal(name)
+	if err != nil {
+		t.Fatal(err)
+	}
+	r := check(t, `{"@type":"Recipe","name":`+string(draft)+`,"description":"d","about":[]}`)
+	const open, shut = `<script type="application/ld+json">`, `</script>`
+	if !strings.HasPrefix(r.ScriptTag, open) || !strings.HasSuffix(r.ScriptTag, shut) {
+		t.Fatalf("not a script tag: %s", r.ScriptTag)
+	}
+	body := strings.TrimSuffix(strings.TrimPrefix(r.ScriptTag, open), shut)
+	if strings.Contains(strings.ToLower(body), "</script") || strings.ContainsAny(body, "<>") {
+		t.Fatalf("raw angle bracket in the body: %s", body)
+	}
+	want := `{"@context":"https://schema.org","@type":"Recipe","name":"\u003c/script\u003e\u003cscript\u003ealert(1)\u003c/script\u003e","description":"d","about":[]}`
+	if body != want {
+		t.Fatalf("got  %s\nwant %s", body, want)
+	}
+	var got struct {
+		Name string `json:"name"`
+	}
+	if err := json.Unmarshal([]byte(body), &got); err != nil {
+		t.Fatalf("body is not JSON: %v", err)
+	}
+	if got.Name != name {
+		t.Errorf("name = %q, want %q", got.Name, name)
 	}
 }
 
 func TestSuggestPicksClosestTerm(t *testing.T) {
 	tool := newTool(t)
 	for in, want := range map[string]string{"Persn": "Person", "Recipee": "Recipe", "recipeingredient": "recipeIngredient"} {
-		kind := kindType
+		kind := vocab.KindType
 		if in == "recipeingredient" {
-			kind = kindProperty
+			kind = vocab.KindProperty
 		}
-		if got := tool.suggest(kind, in); got != want {
+		if got := tool.Suggest(kind, in); got != want {
 			t.Errorf("suggest(%q) = %q, want %q", in, got, want)
 		}
 	}
