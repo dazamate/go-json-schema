@@ -337,8 +337,8 @@ func (p *Facts) RelatedBoxes() []RelatedBox {
 }
 
 // Sells reports a page of a shop: an add-to-cart form, a link to its cart or
-// checkout, a cart button, a shop platform's page, or product cards that
-// lead to product pages. Cards alone are no shop: a SaaS plan, a service or
+// checkout, a cart button, a shop platform's page, an empty mini-cart, or
+// product cards that lead to product pages. Cards alone are no shop: a SaaS plan, a service or
 // a home for sale has a price and a link too.
 func (p *Facts) Sells() bool {
 	if p.Doc == nil {
@@ -376,7 +376,8 @@ func (p *Facts) Sells() bool {
 			return true
 		}
 	}
-	return false
+	// the mini-cart an icon-only basket link opens
+	return emptyCart.MatchString(p.Text)
 }
 
 // rowKey reports a short text that keys a row of a list or table, not a
@@ -399,6 +400,9 @@ var (
 	// addButton is the name of a button that adds to the cart: "Add to
 	// trolley", "Add item Trophy Basmati Rice 10kg to cart".
 	addButton = regexp.MustCompile(`(?i)^\s*add\b.{0,120}?\bto\s+(?:the\s+|your\s+|my\s+)?(?:cart|basket|bag|trolley)\s*$`)
+	// emptyCart is what a shop's mini-cart says before anything is in it:
+	// "Your shopping basket is empty", "Your cart is currently empty".
+	emptyCart = regexp.MustCompile(`(?i)\byour (?:shopping )?(?:cart|basket|bag|trolley) is (?:currently )?empty\b`)
 	// cartWord is a word that names the cart; controlFiller the words a cart
 	// button's name wraps it in ("Open cart", "Basket quantity 0", "Shopping
 	// Cart Menu 0 items in the cart").

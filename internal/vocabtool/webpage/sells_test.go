@@ -140,6 +140,26 @@ var sellsRows = []struct {
 			</body></html>`,
 		want: true,
 	},
+	{
+		// gardenbuildingsdirect.co.uk/cheap-sheds: an icon-only basket link
+		// that opens a mini-cart, and cards that lead to /wooden-sheds/<shed>
+		name: "an empty mini-cart",
+		url:  "https://www.gardenbuildingsdirect.co.uk/cheap-sheds",
+		src: `<html><body><div id="header"><a href="#nav-minicart" data-bs-toggle="collapse" class="position-relative btn bg-white rounded-circle text-red p-0"><span class="d-flex align-items-center justify-content-center"><svg viewBox="0 0 20 18"><path d="M4.57 7H15.39"></path></svg></span></a>
+			<div id="nav-minicart" data-bs-parent="#header" class="bg-white position-absolute shadow mt-2 rounded end-0 collapse" aria-expanded="false"><div class="p-3 text-center"> Your shopping basket is empty. </div></div></div>
+			<h1>Cheap Sheds</h1>
+			<div class="card"><a href="https://www.gardenbuildingsdirect.co.uk/wooden-sheds/switch-pent-overlap">BillyOh Switch Overlap Pent Shed</a><span>From £829.00</span> <span>from £414</span></div>
+			<div class="card"><a href="https://www.gardenbuildingsdirect.co.uk/wooden-sheds/pent-shed">BillyOh Pent Shed</a><span>from £300</span></div>
+			</body></html>`,
+		want: true,
+	},
+	{
+		// a blog post that says a basket is empty is no shop
+		name: "an empty basket in prose",
+		url:  "https://example.test/blog/picnic-ideas",
+		src:  `<html><body><article><h1>Picnic ideas</h1><p>Nothing is sadder than finding your picnic basket is empty.</p></article></body></html>`,
+		want: false,
+	},
 }
 
 func TestSells(t *testing.T) {
