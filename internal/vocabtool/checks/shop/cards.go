@@ -9,6 +9,7 @@ import (
 	"regexp"
 
 	"github.com/dazamate/go-json-schema/internal/vocabtool/audit"
+	"github.com/dazamate/go-json-schema/internal/vocabtool/txt"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/webpage"
 )
 
@@ -33,7 +34,9 @@ func listed(c *audit.Context) []*webpage.Card {
 	return out
 }
 
-var fromPrice = regexp.MustCompile(`(?i)\b(?:prices? (?:start|starting) (?:at|from)|starting (?:at|from)|from only)\s+((?:A\$|AU\$|\$|£|€)\s?\d+(?:\.\d{1,2})?)`)
+// fromPrice is a starting price in any currency, as its country writes it:
+// "from £1,137.00", "at ₹1,49,999", "from 1.299 €".
+var fromPrice = regexp.MustCompile(`(?i)\b(?:prices? (?:start|starting) (?:at|from)|starting (?:at|from)|from only)\s+(` + txt.PriceText + `)`)
 
 // startingPrice is what a listing says its prices start from ("Prices start
 // from $99.00") and that price, or nil.
