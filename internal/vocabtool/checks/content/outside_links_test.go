@@ -16,7 +16,7 @@ func TestOutsideLinks(t *testing.T) {
 	// no canonical link and no address: the page has no site to be outside of
 	noBase := audittest.Input{Draft: webPage, PageHTML: `<!doctype html><html><head><title>Tea</title></head><body>` + body + `</body></html>`}
 	run(t, content.OutsideLinks{}, append([]tc{
-		{"three links to other sites", at(webPage, body), warn("html:#friends", "3 links to outside sites here (Florist, Cake, Band) name no node: when they are businesses or people the page features, add an ItemList of them to the WebPage's hasPart, each with url and sameAs; when they are sources, list them as citation")},
+		{"three links to other sites", at(webPage, body), warn("html:#friends", "3 links to outside sites here (Florist, Cake, Band) name no node: when they are businesses or people the page features, add an ItemList of them, each with url and sameAs, as the mainEntity of the block's WebPageElement in the WebPage's hasPart; when they are sources, list them as citation")},
 		{"links the draft names", at(named, body), nil},
 		{"two links", at(webPage, `<section id="friends"><a href="https://florist.test/">Florist</a> <a href="https://cake.test/">Cake</a></section>`), nil},
 		{"links to the site itself", at(webPage, `<section id="more"><a href="/a/">A</a> <a href="/b/">B</a> <a href="https://x.test/c/">C</a></section>`), nil},
@@ -29,7 +29,7 @@ func TestOutsideLinks(t *testing.T) {
 		{"links to the business's own other sites", at(webPage, `<section id="more"><a href="https://shop.x.co.uk/">Shop</a> <a href="https://help.x.com/">Help</a> <a href="https://www.x.org/about">About</a></section>`), nil},
 		{"links to the account, jobs and help", at(webPage, `<section id="acct"><a href="https://my.other.test/login">Log in</a> <a href="https://jobs.other.test/">Careers</a> <a href="https://help.other.test/">Help Centre</a> <a href="https://other.test/register">Register</a></section>`), nil},
 		{"links to the app stores", at(webPage, `<div id="apps"><a href="https://apps.apple.com/us/app/x/id1">Download on the App Store</a> <a href="https://play.google.com/store/apps/details?id=x">Get it on Google Play</a> <a href="https://itunes.apple.com/x">iTunes</a></div>`), nil},
-		{"citations in a body whose class names a menu", at(webPage, `<article id="post"><a href="https://rocket.test/learn/28-36-rule">28/36 rule</a> <a href="https://fha.test/loans">FHA loans</a> <a href="https://cfpb.test/pmi">Private Mortgage Insurance</a></article>`), warn("html:#post", "3 links to outside sites here (28/36 rule, FHA loans, Private Mortgage Insurance) name no node: when they are businesses or people the page features, add an ItemList of them to the WebPage's hasPart, each with url and sameAs; when they are sources, list them as citation")},
+		{"citations in a body whose class names a menu", at(webPage, `<article id="post"><a href="https://rocket.test/learn/28-36-rule">28/36 rule</a> <a href="https://fha.test/loans">FHA loans</a> <a href="https://cfpb.test/pmi">Private Mortgage Insurance</a></article>`), warn("html:#post", "3 links to outside sites here (28/36 rule, FHA loans, Private Mortgage Insurance) name no node: when they are businesses or people the page features, add an ItemList of them, each with url and sameAs, as the mainEntity of the block's WebPageElement in the WebPage's hasPart; when they are sources, list them as citation")},
 		{"a page with no address", noBase, nil},
 		textOnly(webPage, "Friends Florist Cake Band"),
 	}, hidden(webPage, body)...))

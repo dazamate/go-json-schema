@@ -133,7 +133,7 @@ func (OutsideLinks) Run(c *audit.Context) []audit.Issue {
 		if len(labels) > 8 {
 			labels = append(labels[:8:8], "…")
 		}
-		out = append(out, audit.Issuef("html:"+webpage.SelectorFor(p.Doc, box), audit.Warning, "%d links to outside sites here (%s) name no node: when they are businesses or people the page features, add an ItemList of them to the WebPage's hasPart, each with url and sameAs; when they are sources, list them as citation", len(g.urls), strings.Join(labels, ", ")))
+		out = append(out, audit.Issuef("html:"+webpage.SelectorFor(p.Doc, box), audit.Warning, "%d links to outside sites here (%s) name no node: when they are businesses or people the page features, add an ItemList of them, each with url and sameAs, as the mainEntity of the block's WebPageElement in the WebPage's hasPart; when they are sources, list them as citation", len(g.urls), strings.Join(labels, ", ")))
 	}
 	return out
 }
