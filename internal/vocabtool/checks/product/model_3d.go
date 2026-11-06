@@ -25,8 +25,9 @@ var (
 	// included: /ring.glb, /chair.usdz?v=17.
 	modelFile = regexp.MustCompile(`(?i)\.(?:glb|gltf|usdz)(?:[?#]\S*)?$`)
 	// viewControl names a control that shows the model: "View in 3D", "Show
-	// 3D modal", "View in your space", "See it in your room", "View in AR".
-	viewControl = regexp.MustCompile(`(?i)^\s*(?:view|see|show)(?: (?:it|this|item|product|model))?(?: (?:in|on))?(?: (?:your|my|a))? (?:3d|ar|augmented reality|space|room|home)\b`)
+	// 3D modal", "View in your space", "See it in your room", "View in AR";
+	// a room is the model's only after "in" ("See room ideas" is a link).
+	viewControl = regexp.MustCompile(`(?i)^\s*(?:view|see|show)(?: (?:it|this|item|product|model))?(?: (?:3d|ar|augmented reality)\b| (?:in|on)(?: (?:your|my|a))? (?:3d|ar|augmented reality|space|room|home)\b)`)
 )
 
 // Run reports the first 3D model the page shows: the model's file, a viewer

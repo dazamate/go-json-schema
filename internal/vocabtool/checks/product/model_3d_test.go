@@ -35,6 +35,7 @@ func TestModel3D(t *testing.T) {
 			{Path: "html:body > main > div > iframe", Severity: audit.Warning, Message: `the page shows a 3D model (https://boho.swiftxr.site/tubi-diy-table-boho): add a 3DModel (the model file's contentUrl and encodingFormat, or its viewer's embedUrl) as the Product's subjectOf`},
 		}},
 		{"a video frame", audittest.Input{Draft: noDraft, PageHTML: productPageWith("Art Deco ring", "Harbour Jewellers", `<iframe src="https://www.youtube.com/embed/abc" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>`), PageURL: productURL}, nil},
+		{"a link to room ideas", audittest.Input{Draft: noDraft, PageHTML: productPageWith("Art Deco ring", "Harbour Jewellers", `<a href="/pages/inspiration">See room ideas</a>`), PageURL: productURL}, nil},
 		{"a 3D printing note", audittest.Input{Draft: noDraft, PageHTML: productPageWith("Art Deco ring", "Harbour Jewellers", `<a href="/pages/how-we-make-it">See how we 3D print the wax</a>`), PageURL: productURL}, nil},
 		{"a 3DModel is there", audittest.Input{Draft: carried, PageHTML: page, PageURL: productURL}, nil},
 		{"no 3D model", audittest.Input{Draft: noDraft, PageHTML: productPageWith("Art Deco ring", "Harbour Jewellers", ""), PageURL: productURL}, nil},
