@@ -21,6 +21,8 @@ func TestDiscountPromoBanner(t *testing.T) {
 	}{
 		{"a code banner", page(`<p>Extra 25% off everything with <strong>BLACK25</strong> | Extra 30% off Cult Classics with BLACK30</p>`), nil},
 		{"a first-order offer", page(`<p>GET 15% OFF + FREE SHIPPING ON YOUR FIRST ORDER!*</p>`), nil},
+		// gardenbuildingsdirect.co.uk: the code sits in another span
+		{"a code banner in parts", page(`<div style="text-align:center" class="carousel-item active"><span style="color:#FFFFFF">BLACK FRIDAY! UP TO </span><span style="color:#FFFF00"><strong>55% OFF</strong></span><span style="color:#FFFFFF"> WHEN YOU USE CODE </span><span style="color:#FFFF00"><strong>BF50</strong></span></div>`), nil},
 		{"a product's discount", page(`<p>Save 15% on the Belrose Cushion</p>`), []audit.Issue{
 			{Path: "html:body", Severity: audit.Warning, Message: `the page shows a discount ("Save 15%") but no was price the markup can carry: show the was price, and mark it up as a UnitPriceSpecification with priceType https://schema.org/StrikethroughPrice`},
 		}},

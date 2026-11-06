@@ -2,6 +2,7 @@ package product
 
 import (
 	"regexp"
+	"slices"
 	"strings"
 
 	"github.com/dazamate/go-json-schema/internal/vocabtool/audit"
@@ -60,12 +61,19 @@ func pageDiscount(c *audit.Context) string {
 		return productDiscount(c.Page.Main)
 	}
 	found := ""
+	var promos []*xhtml.Node
 	webpage.Visit(c.Page.Doc, func(n *xhtml.Node) {
 		if found != "" || n.Type != xhtml.ElementNode || webpage.Chrome(n) {
 			return
 		}
-		if t := textOutsideChrome(n); len(t) <= 160 && strings.Contains(t, "%") {
-			found = productDiscount(t)
+		t := textOutsideChrome(n)
+		if len(t) > 160 || !strings.Contains(t, "%") || slices.ContainsFunc(webpage.Ancestors(n), func(a *xhtml.Node) bool { return slices.Contains(promos, a) }) {
+			return
+		}
+		// a banner's parts are the banner's: its "55% OFF" span is no
+		// product's discount once the banner names a code
+		if found = productDiscount(t); found == "" && discount.MatchString(t) {
+			promos = append(promos, n)
 		}
 	})
 	return found
