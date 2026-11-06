@@ -128,11 +128,11 @@ func TestCheckPassesAPageWhoseMarkupShowsWhatThePageShows(t *testing.T) {
 			"hasPart":[
 				{"@type":"WPHeader","cssSelector":"#site-header"},
 				{"@type":"WPFooter","cssSelector":"#site-footer"},
-				{"@type":"ItemList","name":"Four ways to say thanks","numberOfItems":4},
-				{"@type":"ItemList","name":"Friends","itemListElement":[
+				{"@type":"WebPageElement","mainEntity":{"@type":"ItemList","name":"Four ways to say thanks","numberOfItems":4}},
+				{"@type":"WebPageElement","mainEntity":{"@type":"ItemList","name":"Friends","itemListElement":[
 					{"@type":"ListItem","position":1,"item":{"@type":"Florist","name":"Florist","url":"https://florist.test/"}},
 					{"@type":"ListItem","position":2,"item":{"@type":"Bakery","name":"Cake","url":"https://cake.test/"}},
-					{"@type":"ListItem","position":3,"item":{"@type":"MusicGroup","name":"Band","url":"https://band.test/"}}]},
+					{"@type":"ListItem","position":3,"item":{"@type":"MusicGroup","name":"Band","url":"https://band.test/"}}]}},
 				{"@type":"DefinedTermSet","name":"Tea ceremony terms","hasDefinedTerm":[
 					{"@type":"DefinedTerm","name":"敬茶","alternateName":"ging3 caa4"},
 					{"@type":"DefinedTerm","name":"飲勝","alternateName":"jam2 sing3"},

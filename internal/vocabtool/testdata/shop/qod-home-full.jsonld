@@ -318,270 +318,273 @@
      "cssSelector": "body > main > footer"
     },
     {
-     "@type": "ItemList",
-     "name": "Best sellers",
-     "itemListElement": [
-      {
-       "@type": "ListItem",
-       "position": 1,
-       "url": "http://localhost:8001/au/products/blue-fire-opal-black-ring",
-       "item": {
-        "@type": "Product",
-        "name": "Blue Fire Opal Black Ring",
+     "@type": "WebPageElement",
+     "mainEntity": {
+      "@type": "ItemList",
+      "name": "Best sellers",
+      "itemListElement": [
+       {
+        "@type": "ListItem",
+        "position": 1,
         "url": "http://localhost:8001/au/products/blue-fire-opal-black-ring",
-        "image": "https://isteam.wsimg.com/ip/6b858395-ba12-481e-a912-553919a178cd/ols/2918_original/:/rs=w:600,h:600",
-        "offers": {
-         "@type": "Offer",
-         "price": "12.95",
-         "priceCurrency": "AUD",
-         "availability": "https://schema.org/InStock",
-         "seller": {
-          "@id": "http://localhost:8001/#store"
+        "item": {
+         "@type": "Product",
+         "name": "Blue Fire Opal Black Ring",
+         "url": "http://localhost:8001/au/products/blue-fire-opal-black-ring",
+         "image": "https://isteam.wsimg.com/ip/6b858395-ba12-481e-a912-553919a178cd/ols/2918_original/:/rs=w:600,h:600",
+         "offers": {
+          "@type": "Offer",
+          "price": "12.95",
+          "priceCurrency": "AUD",
+          "availability": "https://schema.org/InStock",
+          "seller": {
+           "@id": "http://localhost:8001/#store"
+          },
+          "priceSpecification": [
+           {
+            "@type": "UnitPriceSpecification",
+            "price": "12.95",
+            "priceCurrency": "AUD",
+            "valueAddedTaxIncluded": true
+           }
+          ]
          },
-         "priceSpecification": [
-          {
-           "@type": "UnitPriceSpecification",
-           "price": "12.95",
-           "priceCurrency": "AUD",
-           "valueAddedTaxIncluded": true
-          }
-         ]
-        },
-        "potentialAction": {
-         "@type": "WantAction",
-         "target": "http://localhost:8001/au/wishlist"
-        }
-       }
-      },
-      {
-       "@type": "ListItem",
-       "position": 2,
-       "url": "http://localhost:8001/au/products/butterfly-fire-opal-ring",
-       "item": {
-        "@type": "Product",
-        "name": "Butterfly Fire Opal Ring",
-        "url": "http://localhost:8001/au/products/butterfly-fire-opal-ring",
-        "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/E70F4BF4-401A-479E-BE30-7DECBF029244.jpeg/:/rs=w:600,h:600",
-        "offers": {
-         "@type": "Offer",
-         "price": "11.95",
-         "priceCurrency": "AUD",
-         "availability": "https://schema.org/InStock",
-         "seller": {
-          "@id": "http://localhost:8001/#store"
-         },
-         "priceSpecification": [
-          {
-           "@type": "UnitPriceSpecification",
-           "price": "11.95",
-           "priceCurrency": "AUD",
-           "valueAddedTaxIncluded": true
-          }
-         ]
-        },
-        "potentialAction": {
-         "@type": "WantAction",
-         "target": "http://localhost:8001/au/wishlist"
-        }
-       }
-      },
-      {
-       "@type": "ListItem",
-       "position": 3,
-       "url": "http://localhost:8001/au/products/moonstone-crescent-moon-necklace",
-       "item": {
-        "@type": "Product",
-        "name": "Moonstone Crescent Moon Necklace",
-        "url": "http://localhost:8001/au/products/moonstone-crescent-moon-necklace",
-        "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/IMG_1263.jpeg/:/rs=w:600,h:600",
-        "offers": {
-         "@type": "Offer",
-         "price": "14.95",
-         "priceCurrency": "AUD",
-         "availability": "https://schema.org/InStock",
-         "seller": {
-          "@id": "http://localhost:8001/#store"
-         },
-         "priceSpecification": [
-          {
-           "@type": "UnitPriceSpecification",
-           "price": "14.95",
-           "priceCurrency": "AUD",
-           "valueAddedTaxIncluded": true
-          }
-         ]
-        },
-        "potentialAction": {
-         "@type": "WantAction",
-         "target": "http://localhost:8001/au/wishlist"
-        }
-       }
-      },
-      {
-       "@type": "ListItem",
-       "position": 4,
-       "url": "http://localhost:8001/au/products/fire-opal-heart-celtic-ring",
-       "item": {
-        "@type": "Product",
-        "name": "Fire Opal Heart Celtic Ring",
-        "url": "http://localhost:8001/au/products/fire-opal-heart-celtic-ring",
-        "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/IMG_0278.jpeg/:/rs=w:600,h:600",
-        "offers": {
-         "@type": "Offer",
-         "price": "14.95",
-         "priceCurrency": "AUD",
-         "availability": "https://schema.org/InStock",
-         "seller": {
-          "@id": "http://localhost:8001/#store"
-         },
-         "priceSpecification": [
-          {
-           "@type": "UnitPriceSpecification",
-           "price": "14.95",
-           "priceCurrency": "AUD",
-           "valueAddedTaxIncluded": true
-          }
-         ]
-        },
-        "potentialAction": {
-         "@type": "WantAction",
-         "target": "http://localhost:8001/au/wishlist"
-        }
-       }
-      },
-      {
-       "@type": "ListItem",
-       "position": 5,
-       "url": "http://localhost:8001/au/products/purple-topaz-celtic-ring",
-       "item": {
-        "@type": "Product",
-        "name": "Purple Topaz Celtic Ring",
-        "url": "http://localhost:8001/au/products/purple-topaz-celtic-ring",
-        "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/2B4D752F-1AEC-4271-844B-41920341FC10.jpeg/:/rs=w:600,h:600",
-        "offers": {
-         "@type": "Offer",
-         "price": "14.50",
-         "priceCurrency": "AUD",
-         "availability": "https://schema.org/InStock",
-         "seller": {
-          "@id": "http://localhost:8001/#store"
-         },
-         "priceSpecification": [
-          {
-           "@type": "UnitPriceSpecification",
-           "price": "14.50",
-           "priceCurrency": "AUD",
-           "valueAddedTaxIncluded": true
-          }
-         ]
-        },
-        "potentialAction": {
-         "@type": "WantAction",
-         "target": "http://localhost:8001/au/wishlist"
-        }
-       }
-      },
-      {
-       "@type": "ListItem",
-       "position": 6,
-       "url": "http://localhost:8001/au/products/iridescent-teardrop-earrings",
-       "item": {
-        "@type": "Product",
-        "name": "Iridescent Teardrop Earrings",
-        "url": "http://localhost:8001/au/products/iridescent-teardrop-earrings",
-        "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/D0214A75-8920-466F-8075-A5C531E08505.jpeg/:/rs=w:600,h:600",
-        "offers": {
-         "@type": "Offer",
-         "price": "12.95",
-         "priceCurrency": "AUD",
-         "availability": "https://schema.org/LimitedAvailability",
-         "seller": {
-          "@id": "http://localhost:8001/#store"
-         },
-         "priceSpecification": [
-          {
-           "@type": "UnitPriceSpecification",
-           "price": "12.95",
-           "priceCurrency": "AUD",
-           "valueAddedTaxIncluded": true
-          }
-         ],
-         "inventoryLevel": {
-          "@type": "QuantitativeValue",
-          "value": 2
+         "potentialAction": {
+          "@type": "WantAction",
+          "target": "http://localhost:8001/au/wishlist"
          }
-        },
-        "potentialAction": {
-         "@type": "WantAction",
-         "target": "http://localhost:8001/au/wishlist"
         }
-       }
-      },
-      {
-       "@type": "ListItem",
-       "position": 7,
-       "url": "http://localhost:8001/au/products/amethyst-heart-necklace",
-       "item": {
-        "@type": "Product",
-        "name": "Amethyst Heart Necklace",
+       },
+       {
+        "@type": "ListItem",
+        "position": 2,
+        "url": "http://localhost:8001/au/products/butterfly-fire-opal-ring",
+        "item": {
+         "@type": "Product",
+         "name": "Butterfly Fire Opal Ring",
+         "url": "http://localhost:8001/au/products/butterfly-fire-opal-ring",
+         "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/E70F4BF4-401A-479E-BE30-7DECBF029244.jpeg/:/rs=w:600,h:600",
+         "offers": {
+          "@type": "Offer",
+          "price": "11.95",
+          "priceCurrency": "AUD",
+          "availability": "https://schema.org/InStock",
+          "seller": {
+           "@id": "http://localhost:8001/#store"
+          },
+          "priceSpecification": [
+           {
+            "@type": "UnitPriceSpecification",
+            "price": "11.95",
+            "priceCurrency": "AUD",
+            "valueAddedTaxIncluded": true
+           }
+          ]
+         },
+         "potentialAction": {
+          "@type": "WantAction",
+          "target": "http://localhost:8001/au/wishlist"
+         }
+        }
+       },
+       {
+        "@type": "ListItem",
+        "position": 3,
+        "url": "http://localhost:8001/au/products/moonstone-crescent-moon-necklace",
+        "item": {
+         "@type": "Product",
+         "name": "Moonstone Crescent Moon Necklace",
+         "url": "http://localhost:8001/au/products/moonstone-crescent-moon-necklace",
+         "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/IMG_1263.jpeg/:/rs=w:600,h:600",
+         "offers": {
+          "@type": "Offer",
+          "price": "14.95",
+          "priceCurrency": "AUD",
+          "availability": "https://schema.org/InStock",
+          "seller": {
+           "@id": "http://localhost:8001/#store"
+          },
+          "priceSpecification": [
+           {
+            "@type": "UnitPriceSpecification",
+            "price": "14.95",
+            "priceCurrency": "AUD",
+            "valueAddedTaxIncluded": true
+           }
+          ]
+         },
+         "potentialAction": {
+          "@type": "WantAction",
+          "target": "http://localhost:8001/au/wishlist"
+         }
+        }
+       },
+       {
+        "@type": "ListItem",
+        "position": 4,
+        "url": "http://localhost:8001/au/products/fire-opal-heart-celtic-ring",
+        "item": {
+         "@type": "Product",
+         "name": "Fire Opal Heart Celtic Ring",
+         "url": "http://localhost:8001/au/products/fire-opal-heart-celtic-ring",
+         "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/IMG_0278.jpeg/:/rs=w:600,h:600",
+         "offers": {
+          "@type": "Offer",
+          "price": "14.95",
+          "priceCurrency": "AUD",
+          "availability": "https://schema.org/InStock",
+          "seller": {
+           "@id": "http://localhost:8001/#store"
+          },
+          "priceSpecification": [
+           {
+            "@type": "UnitPriceSpecification",
+            "price": "14.95",
+            "priceCurrency": "AUD",
+            "valueAddedTaxIncluded": true
+           }
+          ]
+         },
+         "potentialAction": {
+          "@type": "WantAction",
+          "target": "http://localhost:8001/au/wishlist"
+         }
+        }
+       },
+       {
+        "@type": "ListItem",
+        "position": 5,
+        "url": "http://localhost:8001/au/products/purple-topaz-celtic-ring",
+        "item": {
+         "@type": "Product",
+         "name": "Purple Topaz Celtic Ring",
+         "url": "http://localhost:8001/au/products/purple-topaz-celtic-ring",
+         "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/2B4D752F-1AEC-4271-844B-41920341FC10.jpeg/:/rs=w:600,h:600",
+         "offers": {
+          "@type": "Offer",
+          "price": "14.50",
+          "priceCurrency": "AUD",
+          "availability": "https://schema.org/InStock",
+          "seller": {
+           "@id": "http://localhost:8001/#store"
+          },
+          "priceSpecification": [
+           {
+            "@type": "UnitPriceSpecification",
+            "price": "14.50",
+            "priceCurrency": "AUD",
+            "valueAddedTaxIncluded": true
+           }
+          ]
+         },
+         "potentialAction": {
+          "@type": "WantAction",
+          "target": "http://localhost:8001/au/wishlist"
+         }
+        }
+       },
+       {
+        "@type": "ListItem",
+        "position": 6,
+        "url": "http://localhost:8001/au/products/iridescent-teardrop-earrings",
+        "item": {
+         "@type": "Product",
+         "name": "Iridescent Teardrop Earrings",
+         "url": "http://localhost:8001/au/products/iridescent-teardrop-earrings",
+         "image": "https://img1.wsimg.com/isteam/ip/6b858395-ba12-481e-a912-553919a178cd/ols/D0214A75-8920-466F-8075-A5C531E08505.jpeg/:/rs=w:600,h:600",
+         "offers": {
+          "@type": "Offer",
+          "price": "12.95",
+          "priceCurrency": "AUD",
+          "availability": "https://schema.org/LimitedAvailability",
+          "seller": {
+           "@id": "http://localhost:8001/#store"
+          },
+          "priceSpecification": [
+           {
+            "@type": "UnitPriceSpecification",
+            "price": "12.95",
+            "priceCurrency": "AUD",
+            "valueAddedTaxIncluded": true
+           }
+          ],
+          "inventoryLevel": {
+           "@type": "QuantitativeValue",
+           "value": 2
+          }
+         },
+         "potentialAction": {
+          "@type": "WantAction",
+          "target": "http://localhost:8001/au/wishlist"
+         }
+        }
+       },
+       {
+        "@type": "ListItem",
+        "position": 7,
         "url": "http://localhost:8001/au/products/amethyst-heart-necklace",
-        "image": "https://isteam.wsimg.com/ip/6b858395-ba12-481e-a912-553919a178cd/ols/359_original/:/rs=w:600,h:600",
-        "offers": {
-         "@type": "Offer",
-         "price": "14.95",
-         "priceCurrency": "AUD",
-         "availability": "https://schema.org/InStock",
-         "seller": {
-          "@id": "http://localhost:8001/#store"
+        "item": {
+         "@type": "Product",
+         "name": "Amethyst Heart Necklace",
+         "url": "http://localhost:8001/au/products/amethyst-heart-necklace",
+         "image": "https://isteam.wsimg.com/ip/6b858395-ba12-481e-a912-553919a178cd/ols/359_original/:/rs=w:600,h:600",
+         "offers": {
+          "@type": "Offer",
+          "price": "14.95",
+          "priceCurrency": "AUD",
+          "availability": "https://schema.org/InStock",
+          "seller": {
+           "@id": "http://localhost:8001/#store"
+          },
+          "priceSpecification": [
+           {
+            "@type": "UnitPriceSpecification",
+            "price": "14.95",
+            "priceCurrency": "AUD",
+            "valueAddedTaxIncluded": true
+           }
+          ]
          },
-         "priceSpecification": [
-          {
-           "@type": "UnitPriceSpecification",
-           "price": "14.95",
-           "priceCurrency": "AUD",
-           "valueAddedTaxIncluded": true
-          }
-         ]
-        },
-        "potentialAction": {
-         "@type": "WantAction",
-         "target": "http://localhost:8001/au/wishlist"
+         "potentialAction": {
+          "@type": "WantAction",
+          "target": "http://localhost:8001/au/wishlist"
+         }
         }
-       }
-      },
-      {
-       "@type": "ListItem",
-       "position": 8,
-       "url": "http://localhost:8001/au/products/tree-of-life-stone-necklace",
-       "item": {
-        "@type": "Product",
-        "name": "Tree of Life Stone Necklace",
+       },
+       {
+        "@type": "ListItem",
+        "position": 8,
         "url": "http://localhost:8001/au/products/tree-of-life-stone-necklace",
-        "image": "https://isteam.wsimg.com/ip/6b858395-ba12-481e-a912-553919a178cd/ols/1038_original/:/rs=w:600,h:600",
-        "offers": {
-         "@type": "Offer",
-         "price": "14.95",
-         "priceCurrency": "AUD",
-         "availability": "https://schema.org/InStock",
-         "seller": {
-          "@id": "http://localhost:8001/#store"
+        "item": {
+         "@type": "Product",
+         "name": "Tree of Life Stone Necklace",
+         "url": "http://localhost:8001/au/products/tree-of-life-stone-necklace",
+         "image": "https://isteam.wsimg.com/ip/6b858395-ba12-481e-a912-553919a178cd/ols/1038_original/:/rs=w:600,h:600",
+         "offers": {
+          "@type": "Offer",
+          "price": "14.95",
+          "priceCurrency": "AUD",
+          "availability": "https://schema.org/InStock",
+          "seller": {
+           "@id": "http://localhost:8001/#store"
+          },
+          "priceSpecification": [
+           {
+            "@type": "UnitPriceSpecification",
+            "price": "14.95",
+            "priceCurrency": "AUD",
+            "valueAddedTaxIncluded": true
+           }
+          ]
          },
-         "priceSpecification": [
-          {
-           "@type": "UnitPriceSpecification",
-           "price": "14.95",
-           "priceCurrency": "AUD",
-           "valueAddedTaxIncluded": true
-          }
-         ]
-        },
-        "potentialAction": {
-         "@type": "WantAction",
-         "target": "http://localhost:8001/au/wishlist"
+         "potentialAction": {
+          "@type": "WantAction",
+          "target": "http://localhost:8001/au/wishlist"
+         }
         }
        }
-      }
-     ]
+      ]
+     }
     }
    ]
   }
