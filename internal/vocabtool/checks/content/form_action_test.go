@@ -13,6 +13,7 @@ func TestFormAction(t *testing.T) {
 		{"a form in a section with an id", at(webPage, body), warn("html:#enquire > form", msg+"with an EntryPoint target whose urlTemplate is the page URL plus #enquire")},
 		{"a form with an id of its own", at(webPage, `<form id="contact" method="POST"><input name="name"></form>`), warn("html:#contact", msg+"with an EntryPoint target whose urlTemplate is the page URL plus #contact")},
 		{"a form with no id around it", bare(`<form method="POST"><input name="name"></form>`), warn("html:body > form", msg+"give the form or its section an id and point the target's urlTemplate at it")},
+		{"an enquiry form beside a no mailing list line", at(webPage, enquiry(`<textarea name="details"></textarea>`)), warn("html:#enquire > form", msg+"with an EntryPoint target whose urlTemplate is the page URL plus #enquire")},
 		// forms that send no message to the business: the page's own widgets
 		{"a country switcher", at(webPage, `<form action="/localization" method="post" id="localization_form"><input type="hidden" name="country_code" value="GB"><button type="submit">United Kingdom (GBP)</button></form>`), nil},
 		{"a login form", at(webPage, `<form action="/account/login" method="post" id="customer_login"><input type="email" name="customer[email]"><input type="password" name="customer[password]"><input type="submit" value="Sign in"></form>`), nil},

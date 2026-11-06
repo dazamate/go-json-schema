@@ -72,10 +72,11 @@ func entryControls(n *xhtml.Node) []*xhtml.Node {
 }
 
 // signsUp reports a form whose words, or whose names, say it signs a visitor
-// up for the business's emails. It has an email field.
+// up for the business's emails. It has an email field, and no message box,
+// which makes it an enquiry or a comment whatever its words say.
 func signsUp(n *xhtml.Node, text string, ids map[string]bool) bool {
 	email := webpage.QueryAll(n, `input[type="email"], input[name*="email"]`)
-	if len(email) == 0 {
+	if len(email) == 0 || takesMessage(n) {
 		return false
 	}
 	if subscribeForm.MatchString(text + " " + webpage.HTMLText(n.Parent)) {
@@ -100,6 +101,17 @@ func signsUp(n *xhtml.Node, text string, ids map[string]bool) bool {
 		}
 	}
 	return subscribeName.MatchString(strings.Join(names, " "))
+}
+
+// takesMessage reports a form with a message box the visitor sees: not the
+// textarea a captcha or a spam trap hides in a sign-up.
+func takesMessage(n *xhtml.Node) bool {
+	for _, t := range webpage.QueryAll(n, "textarea") {
+		if !webpage.StyleHidden(t) {
+			return true
+		}
+	}
+	return false
 }
 
 // cartAction reports an action that is the cart page, whatever its query.
