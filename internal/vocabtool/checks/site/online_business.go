@@ -1,6 +1,7 @@
 package site
 
 import (
+	"regexp"
 	"slices"
 	"strings"
 
@@ -16,7 +17,9 @@ var _ audit.Retyper = OnlineBusiness{}
 
 // OnlineBusiness warns on a site's publishing Organization, typed no more
 // specifically, that shows no premises: no address, location or hours in the
-// markup, and none anywhere on the page, its footer included. It works
+// markup, and none anywhere on the page, its footer included, nor copy of a
+// trade that works at its clients' premises (service areas, call-out fees).
+// It works
 // through its website, so it is an OnlineBusiness. A shop's business checks
 // type a shop. It leaves be a node an earlier source in the retype ledger
 // told. It needs the page's document, on a page search engines index.
@@ -24,6 +27,15 @@ type OnlineBusiness struct{}
 
 // ID is the check's ID.
 func (OnlineBusiness) ID() string { return "site/online-business" }
+
+// publicBody is the host of a government, health service, police, school or
+// university site, which is no business whatever its markup says.
+var publicBody = regexp.MustCompile(`(?i)(?:^|\.)(?:gov|mil|edu)$|(?:^|\.)(?:gov|govt|gc|ac|edu|sch|nhs|police|parliament)\.[a-z]{2}$`)
+
+// atClients matches copy of a business that works at its clients' premises, a
+// trade that comes to you (pest control, plumbing, cleaning, locksmith): its
+// service areas, call-out fees, and "we come to you".
+var atClients = regexp.MustCompile(`(?i)\b(?:service\s+areas?|areas?\s+(?:that\s+)?(?:we\s+)?(?:service[sd]?|serve[sd]?|cover(?:ed)?)|(?:we\s+)?(?:service|serve|cover)\s+(?:the\s+)?(?:following\s+)?areas|call[- ]?outs?\s+(?:fees?|charges?)|we\s+(?:come|travel|drive|attend)\s+(?:out\s+)?to\s+(?:you|your)\b)`)
 
 // premises are the properties that place a business.
 var premises = []string{"address", "location", "geo", "openingHours", "openingHoursSpecification", "hasMap"}
@@ -35,7 +47,10 @@ func (OnlineBusiness) find(c *audit.Context, before audit.Retyped) []jsonld.Node
 	if !c.Indexed() || c.Page.Doc == nil {
 		return nil
 	}
-	if c.Page.Sells() || webpage.StreetAddress.MatchString(c.Page.Text) || webpage.OpeningTime.MatchString(c.Page.Text) {
+	if c.Page.Base != nil && publicBody.MatchString(c.Page.Base.Hostname()) {
+		return nil
+	}
+	if c.Page.Sells() || webpage.StreetAddress.MatchString(c.Page.Text) || webpage.OpeningTime.MatchString(c.Page.Text) || atClients.MatchString(c.Page.Text) {
 		return nil
 	}
 	var out []jsonld.Node

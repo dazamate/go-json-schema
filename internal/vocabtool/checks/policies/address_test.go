@@ -1,6 +1,7 @@
 package policies_test
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/dazamate/go-json-schema/internal/vocabtool/audit"
@@ -18,6 +19,10 @@ func TestAddress(t *testing.T) {
 		{"a street address on the page", audittest.Input{Draft: noDraft, PageHTML: contactPage, PageURL: contactURL}, []audit.Issue{
 			{Path: "html:body", Severity: audit.Warning, Message: `the page shows the address "12 Wharf Street, Fremantle": set the business's address, a PostalAddress (streetAddress, addressLocality, addressRegion, postalCode, addressCountry)`},
 		}},
+		{"an address element", audittest.Input{Draft: noDraft, PageHTML: strings.Replace(aboutPage, "<p>We are", `<address>Unit 4, 12 Wharf St, Fremantle WA 6160</address><p>We are`, 1), PageURL: aboutURL}, []audit.Issue{
+			{Path: "html:body", Severity: audit.Warning, Message: `the page shows the address "Unit 4, 12 Wharf St, Fremantle WA 6160": set the business's address, a PostalAddress (streetAddress, addressLocality, addressRegion, postalCode, addressCountry)`},
+		}},
+		{"an author's byline in an address element", audittest.Input{Draft: noDraft, PageHTML: strings.Replace(aboutPage, "<p>We are", `<address>By <a href="mailto:ann@harbour.test">Ann Lee</a></address><address>Ann Lee, ann@harbour.test</address><p>We are`, 1), PageURL: aboutURL}, nil},
 		{"an address in the draft", audittest.Input{Draft: carried, PageHTML: contactPage, PageURL: contactURL}, nil},
 		{"a page that shows no address", audittest.Input{Draft: noDraft, PageHTML: aboutPage, PageURL: aboutURL}, nil},
 		{"a noindex page", audittest.Input{Draft: noDraft, PageHTML: audittest.Noindex(contactPage), PageURL: contactURL}, nil},

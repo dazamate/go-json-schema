@@ -8,6 +8,7 @@ import (
 	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/webpage"
 	xhtml "golang.org/x/net/html"
+	"golang.org/x/net/html/atom"
 )
 
 // searched is what the page shows of a search that the draft has no
@@ -32,6 +33,20 @@ func searchOf(c *audit.Context) searched {
 		}
 		for _, n := range webpage.QueryAll(p.Doc, `input[type="search"], [role="search"] input, input[role="searchbox"]`) {
 			if webpage.Shown(n) {
+				return searched{box: n}
+			}
+		}
+		// a text field named like a search, alone in its form, is a search box too
+		for _, n := range webpage.QueryAll(p.Doc, `input[name="q" i], input[name="s" i], input[name="search" i], input[name="query" i], input[name="keyword" i], input[name="keywords" i], input[name="search_query" i], input[name="searchterm" i]`) {
+			t, _ := webpage.Attr(n, "type")
+			if !webpage.Shown(n) || (t != "" && !strings.EqualFold(t, "text")) {
+				continue
+			}
+			form := n.Parent
+			for form != nil && form.DataAtom != atom.Form {
+				form = form.Parent
+			}
+			if form != nil && len(entryControls(form)) <= 1 && len(webpage.QueryAll(form, "textarea")) == 0 {
 				return searched{box: n}
 			}
 		}

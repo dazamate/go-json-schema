@@ -9,8 +9,8 @@ import (
 func TestCounts(t *testing.T) {
 	const body = `<h2>Four ways to say thanks</h2><ol><li>Bow</li><li>Smile</li><li>Toast</li><li>Hug</li></ol>`
 	run(t, content.Counts{}, append([]tc{
-		{"a heading that counts a list", at(webPage, body), warn("html:#main > h2", `the heading "Four ways to say thanks" counts 4 items: add an ItemList of them (numberOfItems 4, a ListItem each) or a HowTo with 4 steps, in the WebPage's hasPart`)},
-		{"a digit", at(webPage, `<h2>3 ideas</h2><ul><li>One</li><li>Two</li><li>Three</li></ul>`), warn("html:#main > h2", `the heading "3 ideas" counts 3 items: add an ItemList of them (numberOfItems 3, a ListItem each) or a HowTo with 3 steps, in the WebPage's hasPart`)},
+		{"a heading that counts a list", at(webPage, body), warn("html:#main > h2", `the heading "Four ways to say thanks" counts 4 items: add an ItemList of them (numberOfItems 4, a ListItem each) as the mainEntity of the section's WebPageElement in the WebPage's hasPart, or a HowTo with 4 steps in the hasPart`)},
+		{"a digit", at(webPage, `<h2>3 ideas</h2><ul><li>One</li><li>Two</li><li>Three</li></ul>`), warn("html:#main > h2", `the heading "3 ideas" counts 3 items: add an ItemList of them (numberOfItems 3, a ListItem each) as the mainEntity of the section's WebPageElement in the WebPage's hasPart, or a HowTo with 3 steps in the hasPart`)},
 		{"an ItemList of that many", at(graph(`{"@type":"ItemList","name":"Thanks","numberOfItems":4}`), body), nil},
 		{"a HowTo of that many steps", at(graph(`{"@type":"HowTo","name":"Thanks","step":[{"@type":"HowToStep","name":"a"},{"@type":"HowToStep","name":"b"},{"@type":"HowToStep","name":"c"},{"@type":"HowToStep","name":"d"}]}`), body), nil},
 		{"a heading that counts minutes", at(webPage, `<h2>Plan 30 minutes</h2><ul><li>One</li><li>Two</li></ul>`), nil},

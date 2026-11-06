@@ -40,3 +40,43 @@ func TestTollFree(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) { audittest.Expect(t, site.TollFree{}, tc.in, tc.want) })
 	}
 }
+
+// TestTollFreeOutsideNorthAmerica pins numbers read off real pages: the UK
+// freephone 0800 on a bank contact page and a dentist, the NZ 0800 of a pest
+// controller, the 1800 of Indian and Australian free lines, and the 13 and
+// 1300 numbers an Australian shop prints, which cost the caller a local call.
+func TestTollFreeOutsideNorthAmerica(t *testing.T) {
+	ask := ` is toll-free: set contactOption TollFree (https://schema.org/TollFree) on its ContactPoint`
+	page := func(tel string) string {
+		return `<!doctype html><html><body><main><h1>Contact us</h1><p>Call <a href="tel:` + tel + `">us</a></p></main></body></html>`
+	}
+	for _, tc := range []struct {
+		name, tel string
+		free      bool
+	}{
+		{"UK 0800 (dentistryforyou.co.uk)", "08001588000", true},
+		{"UK 0800 (nationwide.co.uk)", "08000556622", true},
+		{"UK 0808", "0808 123 4567", true},
+		{"UK in international form", "+44 800 158 8000", true},
+		{"NZ 0800 (pestproof.co.nz)", "0800776633", true},
+		{"NZ in international form", "+64 800 776 633", true},
+		{"AU 1800", "1800 123 456", true},
+		{"AU in international form", "+61 1800 123 456", true},
+		{"IE 1800", "1800 123 456", true},
+		{"IN 1800 (reliancedigital.in)", "1800-889-1055", true},
+		{"AU 1300, a local-rate number (officeworks.com.au)", "1300633423", false},
+		{"AU 13 number (business.gov.au)", "132846", false},
+		{"UK 0845, a charged number", "08451234567", false},
+		{"UK geographic number (jamesplumbingheating.com)", "02080508928", false},
+		{"NZ mobile (autodiscount.co.nz)", "0212165153", false},
+		{"US local number", "+15132826200", false},
+	} {
+		var want []audit.Issue
+		if tc.free {
+			want = []audit.Issue{{Path: "html:body > main > p > a", Severity: audit.Warning, Message: "telephone " + tc.tel + ask}}
+		}
+		t.Run(tc.name, func(t *testing.T) {
+			audittest.Expect(t, site.TollFree{}, audittest.Input{Draft: bareDraft, PageHTML: page(tc.tel), PageURL: movingURL}, want)
+		})
+	}
+}

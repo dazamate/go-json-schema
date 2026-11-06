@@ -2,6 +2,7 @@ package content
 
 import (
 	"net/url"
+	"regexp"
 	"slices"
 	"strings"
 
@@ -12,6 +13,9 @@ import (
 	xhtml "golang.org/x/net/html"
 	"golang.org/x/net/html/atom"
 )
+
+// readMore is the call to action closing a card or an excerpt.
+var readMore = regexp.MustCompile(`(?i)^read more\b`)
 
 // relatedKind is what a related-reading block holds that the draft lacks.
 type relatedKind int
@@ -57,6 +61,11 @@ func relatedOf(c *audit.Context) []relatedFind {
 		var out []relatedFind
 		for _, b := range p.RelatedBoxes() {
 			t, box := b.Label, b.N
+			// "Read more" is the link at the end of an excerpt or a card, not the
+			// heading of a block of related reading
+			if readMore.MatchString(t) {
+				continue
+			}
 			path := "html:" + webpage.SelectorFor(p.Doc, box)
 			var cards []*webpage.Card
 			for _, cd := range p.ProductCards() {

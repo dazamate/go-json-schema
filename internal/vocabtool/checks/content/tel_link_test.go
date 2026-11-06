@@ -13,6 +13,8 @@ func TestTelLink(t *testing.T) {
 		{"a number no node has", at(webPage, body), warn("html:#main > p > a", "the page links tel:+61400111222 but no node has that telephone: set telephone on the business or a ContactPoint")},
 		{"a number in another form", at(org, body), nil},
 		{"another number", at(graph(`{"@type":"Organization","name":"Ann","telephone":"02 9999 0000"}`), body), warn("html:#main > p > a", "the page links tel:+61400111222 but no node has that telephone: set telephone on the business or a ContactPoint")},
+		{"a number with a percent-encoded space", at(graph(`{"@type":"Organization","name":"Ann","telephone":"0800 77 66 33"}`), `<a href="tel:0800%2077%2066%2033">Call us</a>`), nil},
+		{"a number with an extension", at(graph(`{"@type":"Organization","name":"Ann","telephone":"+61 2 9999 0000"}`), `<a href="tel:+61299990000;ext=123">Call</a>`), nil},
 		textOnly(webPage, "Call 0400 111 222"),
 	}, hidden(webPage, body)...))
 }

@@ -1,6 +1,7 @@
 package costs_test
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/dazamate/go-json-schema/internal/vocabtool/audit"
@@ -22,6 +23,9 @@ func TestTaxMismatch(t *testing.T) {
 	}{
 		{"tax included, the markup says not", audittest.Input{Draft: taxed("320", "false"), PageHTML: productPage, PageURL: productURL}, []audit.Issue{
 			{Path: "$.priceSpecification.valueAddedTaxIncluded", Severity: audit.Warning, Message: `valueAddedTaxIncluded is false but the page says "GST included"`},
+		}},
+		{"tax included, in the verb form", audittest.Input{Draft: taxed("320", "false"), PageHTML: strings.Replace(productPage, "GST included", "All prices include GST", 1), PageURL: productURL}, []audit.Issue{
+			{Path: "$.priceSpecification.valueAddedTaxIncluded", Severity: audit.Warning, Message: `valueAddedTaxIncluded is false but the page says "include GST"`},
 		}},
 		{"the markup agrees", audittest.Input{Draft: taxed("320", "true"), PageHTML: productPage, PageURL: productURL}, nil},
 		{"no price the draft sells is shown", audittest.Input{Draft: taxed("999", "false"), PageHTML: productPage, PageURL: productURL}, nil},

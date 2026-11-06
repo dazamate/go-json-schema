@@ -37,6 +37,15 @@ const (
 	barePage = `{"@context":"https://schema.org","@type":"WebPage","url":"https://movers.test/san-diego/","name":"Moving to San Diego"}`
 )
 
+// percentilePage is electriciansalary.com's state table (trimmed): P10 to P90
+// heads, no caption, no source line, areas in plain cells.
+const percentilePage = `<!doctype html><html><body><main><h1>Where Does Your Electrician Pay Rank?</h1>
+<section class="py-8"><h2>Published percentile anchors, state by state</h2><p>The five values the tool reads.</p>
+<div class="schematic-table"><table><thead><tr><th>Area</th><th>P10</th><th>P25</th><th>Median</th><th>P75</th><th>P90</th><th>P90 minus P10</th></tr></thead><tbody>
+<tr><td>United States</td><td>$42,640</td><td>$49,430</td><td>$63,190</td><td>$83,940</td><td>$108,510</td><td>$65,870</td></tr>
+<tr><td>Oregon</td><td>$59,550</td><td>$79,110</td><td>$101,310</td><td>$121,680</td><td>$131,530</td><td>$71,980</td></tr></tbody></table></div></section>
+<section><h2>Plans</h2><table><thead><tr><th>Plan</th><th>Basic</th><th>Median</th></tr></thead><tbody><tr><td>Solo</td><td>$9</td><td>$19</td></tr></tbody></table></section></main></body></html>`
+
 func TestPayPercentiles(t *testing.T) {
 	paid := `{"@context":"https://schema.org","@type":"Occupation","name":"Hand laborers and material movers","estimatedSalary":{"@type":"MonetaryAmountDistribution","median":20.83,"currency":"USD"}}`
 	for _, tc := range []struct {
@@ -46,6 +55,9 @@ func TestPayPercentiles(t *testing.T) {
 	}{
 		{"a pay table", audittest.Input{Draft: barePage, PageHTML: dataPage, PageURL: dataURL}, []audit.Issue{
 			{Path: "html:#mover-pay", Severity: audit.Warning, Message: `the page shows pay percentiles for "hand laborers and material movers" in San Diego-Chula Vista-Carlsbad, CA metro area: add an Occupation (name, occupationLocation) with estimatedSalary as a MonetaryAmountDistribution (percentile10, percentile25, median, percentile75, percentile90, currency, unitText HOUR or YEAR)`},
+		}},
+		{"a table headed by percentiles", audittest.Input{Draft: barePage, PageHTML: percentilePage, PageURL: "https://pay.test/electrician/"}, []audit.Issue{
+			{Path: "html:body > main > section:nth-of-type(1) > div > table", Severity: audit.Warning, Message: `the page shows pay percentiles for "the occupation" in United States: add an Occupation (name, occupationLocation) with estimatedSalary as a MonetaryAmountDistribution (percentile10, percentile25, median, percentile75, percentile90, currency, unitText HOUR or YEAR)`},
 		}},
 		{"an estimatedSalary carries it", audittest.Input{Draft: paid, PageHTML: dataPage, PageURL: dataURL}, nil},
 		{"a noindex page", audittest.Input{Draft: barePage, PageHTML: audittest.Noindex(dataPage), PageURL: dataURL}, nil},

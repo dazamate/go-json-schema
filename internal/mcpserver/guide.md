@@ -233,7 +233,9 @@ them (the site origin plus #name), and every later use of it is a
     mainEntity, each a ListItem holding a Product with an Offer, with
     numberOfItems for the count it shows, itemListOrder for its sort, and a
     "from" price as an AggregateOffer. A row of products on another page
-    (the home page's best sellers) is an ItemList in its hasPart.
+    (the home page's best sellers) is an ItemList, the mainEntity of the
+    row's WebPageElement in the WebPage's hasPart: hasPart takes only a
+    CreativeWork, and an ItemList is not one.
   - Policies, wherever the page states them: a shipping rate and a
     free-shipping threshold as a ShippingService's ShippingConditions
     (orderValue, shippingRate), handling and transit times, a return window,
@@ -257,7 +259,8 @@ them (the site origin plus #name), and every later use of it is a
   itself sells. A page about what a service costs needs the Service.
   - An FAQ section is an FAQPage in the WebPage's hasPart; a checklist of
     timed phases a HowTo with a HowToSection for each phase; a guide's "In
-    this guide" list an ItemList in hasPart.
+    this guide" list an ItemList, the mainEntity of its nav's
+    SiteNavigationElement in hasPart.
   - A calculator or estimator is a WebApplication (url the page's URL +
     its #id), and a quote tool's flow a QuoteAction targeting it.
   - Sources: each cite and "Source:" credit is a citation, a rule cited

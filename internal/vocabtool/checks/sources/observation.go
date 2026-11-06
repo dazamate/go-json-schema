@@ -3,6 +3,7 @@ package sources
 import (
 	"regexp"
 	"slices"
+	"strconv"
 	"strings"
 
 	"github.com/dazamate/go-json-schema/internal/vocabtool/audit"
@@ -53,7 +54,7 @@ func (Observation) Run(c *audit.Context) []audit.Issue {
 			if inside(para, atom.Figure, atom.Details, atom.Small) || strings.Contains(t, "Source") || len(strings.Fields(t)) > 30 || txt.PriceAmount.MatchString(t) {
 				continue
 			}
-			n := firstCount.FindString(t)
+			n := leadFigure(t)
 			if n == "" {
 				continue
 			}
@@ -69,6 +70,35 @@ func (Observation) Run(c *audit.Context) []audit.Issue {
 	}
 	return out
 }
+
+// leadFigure is the first number in a sentence, leaving out a year that
+// stands alone: 1900 to 2100 after "in", "since" or "by", or opening the
+// sentence before a comma ("In 2023, 4.2 million households moved").
+func leadFigure(t string) string {
+	for _, loc := range firstCount.FindAllStringIndex(t, -1) {
+		// the number's pattern takes a comma after it: "2023,"
+		if rangeEnd.MatchString(t[:loc[0]]) {
+			continue // the 35 of "2025–35"
+		}
+		n := strings.TrimRight(t[loc[0]:loc[1]], ",")
+		loc[1] = loc[0] + len(n)
+		if y, err := strconv.Atoi(n); err == nil && len(n) == 4 && y >= 1900 && y <= 2100 &&
+			(yearLead.MatchString(t[:loc[0]]) || yearRange.MatchString(t[loc[1]:]) || (sentenceStart.MatchString(t[:loc[0]]) && strings.HasPrefix(t[loc[1]:], ","))) {
+			continue
+		}
+		return t[loc[0]:loc[1]]
+	}
+	return ""
+}
+
+var (
+	yearLead = regexp.MustCompile(`(?i)\b(?:in|since|by|from|until|through|between|and|or|to)\s+$`)
+	// yearRange follows the first year of a range: "2025–35", "2020-2024".
+	yearRange = regexp.MustCompile(`^\s*[–—-]\s*(?:19|20)?\d\d\b`)
+	// rangeEnd ends the text before the last year of a range.
+	rangeEnd      = regexp.MustCompile(`(?:19|20)\d\d\s*[–—-]\s*$`)
+	sentenceStart = regexp.MustCompile(`(?:^|[.!?]\s+)$`)
+)
 
 // inside reports an element under one of the tags.
 func inside(n *html.Node, tags ...atom.Atom) bool {

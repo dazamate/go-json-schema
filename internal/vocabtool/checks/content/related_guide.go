@@ -17,7 +17,7 @@ func (RelatedGuide) ID() string { return "content/related-guide" }
 func (RelatedGuide) Run(c *audit.Context) []audit.Issue {
 	var out []audit.Issue
 	for _, f := range relatedOfKind(c, relatedGuide) {
-		out = append(out, audit.Issuef(f.path, audit.Warning, "the page's %q block lists %d pages of the site: add an ItemList of them (a ListItem for each with position, url and name) to the WebPage's hasPart; a hub page whose purpose is the list is a CollectionPage with the ItemList as its mainEntity", f.label, f.count))
+		out = append(out, audit.Issuef(f.path, audit.Warning, "the page's %q block lists %d pages of the site: add an ItemList of them (a ListItem for each with position, url and name) as the mainEntity of the block's WebPageElement (a SiteNavigationElement for a nav) in the WebPage's hasPart; a hub page whose purpose is the list is a CollectionPage with the ItemList as its mainEntity", f.label, f.count))
 	}
 	return out
 }

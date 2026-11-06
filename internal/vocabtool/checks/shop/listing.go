@@ -40,7 +40,8 @@ func (Listing) Run(c *audit.Context) []audit.Issue {
 	if len(missing) == 0 {
 		return nil
 	}
-	where := "the WebPage's hasPart (name its heading)"
+	// hasPart takes a CreativeWork, so a row elsewhere hangs off its block
+	where := "the mainEntity of the row's WebPageElement in the WebPage's hasPart (name its heading)"
 	if c.Page.Kind == webpage.KindListing {
 		where = "the CollectionPage's mainEntity (numberOfItems, itemListOrder)"
 	}

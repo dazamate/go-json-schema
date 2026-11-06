@@ -19,5 +19,5 @@ func (Product) Run(c *audit.Context) []audit.Issue {
 	if !onProductPage(c) || len(productsOf(c)) > 0 {
 		return nil
 	}
-	return []audit.Issue{audit.Issuef(audit.PagePath, audit.Warning, "the page sells %q but no Product describes it: add a Product as the ItemPage's mainEntity (name, image, description, sku, brand a Brand, offers an Offer with url, price, priceCurrency, availability, itemCondition and seller the business)", txt.Clip(c.Page.H1(), 80))}
+	return []audit.Issue{audit.Issuef(audit.PagePath, audit.Warning, "the page sells %q but no Product describes it: add a Product as the ItemPage's mainEntity (name, image, description, sku, brand a Brand, offers an Offer with url, price, priceCurrency, availability, itemCondition and seller the business)", txt.Clip(nameOf(c.Page), 80))}
 }

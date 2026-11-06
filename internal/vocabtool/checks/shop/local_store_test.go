@@ -10,7 +10,7 @@ import (
 
 func TestLocalStore(t *testing.T) {
 	jewellers := []audit.Issue{
-		{Path: "html:body", Severity: audit.Warning, Message: `the page shows the street address "12 Harbour Street, Sydney NSW 2000" but no business node: add the business as a JewelryStore (the Store subtype for its trade, a LocalBusiness: name, address, geo, openingHoursSpecification, telephone)`},
+		{Path: "html:body", Severity: audit.Warning, Message: `the page shows the street address "12 Harbour Street, Sydney NSW 2000" but no business node: add the business as a JewelryStore (the LocalBusiness subtype for its trade, a Store subtype for a shop: name, address, geo, openingHoursSpecification, telephone)`},
 	}
 	for _, tc := range []struct {
 		name string

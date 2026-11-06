@@ -49,6 +49,15 @@ func TestOnlineBusiness(t *testing.T) {
 		{"a street address in the footer", audittest.Input{Draft: draft, PageHTML: inFooter("12 Harbour Street, Sydney NSW 2000"), PageURL: guideURL}, nil},
 		{"opening hours in the footer", audittest.Input{Draft: draft, PageHTML: inFooter("Mon–Fri 8am–5pm"), PageURL: guideURL}, nil},
 		{"an address in the markup", audittest.Input{Draft: published(`"url":"https://movers.test/","address":{"@type":"PostalAddress","addressCountry":"US"}`), PageHTML: guidePage, PageURL: guideURL}, nil},
+		// a trade that works at its clients' premises is no online business
+		{"areas covered", audittest.Input{Draft: draft, PageHTML: inFooter("Prices shown exclude Rural charges that may apply for addresses outside the urban areas covered – please enquire."), PageURL: guideURL}, nil},
+		{"areas we cover", audittest.Input{Draft: draft, PageHTML: inFooter("Areas We Cover West London & Surrey"), PageURL: guideURL}, nil},
+		{"a service area", audittest.Input{Draft: draft, PageHTML: inFooter("Our service area is Auckland and Waikato."), PageURL: guideURL}, nil},
+		{"a call out fee", audittest.Input{Draft: draft, PageHTML: inFooter("$140 for a call out fee or for false alerts"), PageURL: guideURL}, nil},
+		{"we come to you", audittest.Input{Draft: draft, PageHTML: inFooter("We come to you, whenever suits."), PageURL: guideURL}, nil},
+		{"a guide that says movers come to you", audittest.Input{Draft: draft, PageHTML: inFooter("Most movers come to your home to quote and the areas they cover vary."), PageURL: guideURL}, []audit.Issue{
+			{Path: "$.@graph[1]", Severity: audit.Warning, Message: `Organization "Movers Guide" shows no premises and works through its website: type it OnlineBusiness`},
+		}},
 		{"no url", audittest.Input{Draft: published(`"telephone":"+18334990939"`), PageHTML: guidePage, PageURL: guideURL}, nil},
 		// an Organization the page only mentions is not the business
 		{"a mentioned agency", audittest.Input{Draft: `{"@context":"https://schema.org","@graph":[
@@ -65,4 +74,15 @@ func TestOnlineBusiness(t *testing.T) {
 	} {
 		t.Run(tc.name, func(t *testing.T) { audittest.Expect(t, site.OnlineBusiness{}, tc.in, tc.want) })
 	}
+}
+
+// A government's or university's site works through its website too, but it
+// is no online business (www.gov.uk).
+func TestOnlineBusinessSkipsPublicBodies(t *testing.T) {
+	gov := `{"@context":"https://schema.org","@graph":[
+{"@type":"WebSite","@id":"https://www.gov.uk/#website","url":"https://www.gov.uk/","name":"GOV.UK","publisher":{"@id":"https://www.gov.uk/#org"}},
+{"@type":"Organization","@id":"https://www.gov.uk/#org","name":"GOV.UK","url":"https://www.gov.uk/"}]}`
+	audittest.Expect(t, site.OnlineBusiness{}, audittest.Input{Draft: gov, PageHTML: guidePage, PageURL: "https://www.gov.uk/evicting-tenants/section-21-and-section-8-notices"}, nil)
+	uni := strings.NewReplacer("www.gov.uk", "www.ox.ac.uk", "GOV.UK", "University of Oxford").Replace(gov)
+	audittest.Expect(t, site.OnlineBusiness{}, audittest.Input{Draft: uni, PageHTML: guidePage, PageURL: "https://www.ox.ac.uk/admissions"}, nil)
 }

@@ -147,7 +147,7 @@ func (Counts) Run(c *audit.Context) []audit.Issue {
 			if k < 2 || have[k] || !slices.Contains(sectionCounts(n), k) {
 				continue
 			}
-			out = append(out, audit.Issuef("html:"+webpage.SelectorFor(p.Doc, n), audit.Warning, "the heading %q counts %d items: add an ItemList of them (numberOfItems %d, a ListItem each) or a HowTo with %d steps, in the WebPage's hasPart", txt.Clip(t, 60), k, k, k))
+			out = append(out, audit.Issuef("html:"+webpage.SelectorFor(p.Doc, n), audit.Warning, "the heading %q counts %d items: add an ItemList of them (numberOfItems %d, a ListItem each) as the mainEntity of the section's WebPageElement in the WebPage's hasPart, or a HowTo with %d steps in the hasPart", txt.Clip(t, 60), k, k, k))
 			return
 		}
 	})

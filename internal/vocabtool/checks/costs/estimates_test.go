@@ -31,3 +31,11 @@ func TestEstimates(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) { audittest.Expect(t, costs.Estimates{}, tc.in, tc.want) })
 	}
 }
+
+// A salon's price list notes beside a treatment that lashes cost extra; the
+// note is not an estimate of the next treatment's price (willowsbeautysalon.co.uk).
+func TestEstimatesSkipSurchargeNotes(t *testing.T) {
+	list := `<!doctype html><html><body><main><h1>Treatment price list</h1>
+<p>Makeup for Brides £60.00 without lashes extra cost and time is added to apply lashes Make-up To Go without lashes £40.00 Makeup for a prom £40.00 without lashes extra cost and time is added to apply lashes Makeup Trial £45.00</p></main></body></html>`
+	audittest.Expect(t, costs.Estimates{}, audittest.Input{Draft: bareDraft, PageHTML: list, PageURL: costGuideURL}, nil)
+}

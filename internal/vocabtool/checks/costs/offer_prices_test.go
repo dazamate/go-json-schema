@@ -91,3 +91,22 @@ func TestOfferPricesLedger(t *testing.T) {
 		audittest.Expect(t, costs.OfferPrices{}, in, []audit.Issue{offerPricesMsg("$320.00, $4.50")})
 	})
 }
+
+// TestOfferPricesIgnoreThresholds pins wording read off other shops' pages: a
+// free-shipping threshold and the shipping fee below it (royalcanadiancollective.com),
+// "orders over $750" (taylorstitch.com), "Orders Over EUR75"
+// (totallyirishgifts.com) and a finance calculator's estimated payment
+// (autodiscount.co.nz). Only the add-on's $10 is a price of something sold.
+func TestOfferPricesIgnoreThresholds(t *testing.T) {
+	page := `<!doctype html><html><head><link rel="canonical" href="https://boots.test/pages/faq"></head><body>
+<header><a href="/">Boots</a><nav><a href="/cart">Cart</a></nav></header>
+<main><h1>FAQ</h1>
+<p>Is shipping free? Shipping is free on orders of $34.99 and up; orders under $34.99 ship for $9.</p>
+<p>We require a signature upon delivery for orders over $750 for your security and ours.</p>
+<p>Free Shipping to Ireland on Orders Over EUR75.</p>
+<p>Estimated weekly payment: $112.20 Apply for Finance</p>
+<p>Package Protection plan, added at checkout for $10.</p></main></body></html>`
+	audittest.Expect(t, costs.OfferPrices{}, audittest.Input{Draft: noDraft, PageHTML: page, PageURL: "https://boots.test/pages/faq"}, []audit.Issue{
+		{Path: "html:body", Severity: audit.Warning, Message: "the page shows prices ($10) that no price property carries: mark each up on the item it is the price of, as an Offer's price or, for a range, an AggregateOffer's lowPrice and highPrice, with priceCurrency and offerCount"},
+	})
+}

@@ -8,7 +8,10 @@ import (
 
 func init() { audit.Register(WantAction{}) }
 
-var wishWords = regexp.MustCompile(`(?i)wish ?list|save for later|favourites?|favorites?`)
+// wishWords is a wishlist control's text: a wishlist, "save for later", or
+// favourites named as a place to put the product, not as a collection
+// ("Family favourites", "Bestsellers & Favourites").
+var wishWords = regexp.MustCompile(`(?i)wish ?list|save for later|\badd(?:ed)? to (?:my )?favou?rites?\b|\bsave (?:to|as) (?:my )?favou?rites?\b|^(?:my |view )?favou?rites?$`)
 
 // WantAction warns when a page lets a visitor save products to a wishlist and
 // the draft has no WantAction: saving is an action on each Product. A link in

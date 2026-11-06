@@ -1,7 +1,6 @@
 package content
 
 import (
-	"slices"
 	"strings"
 
 	"github.com/dazamate/go-json-schema/internal/vocabtool/audit"
@@ -25,12 +24,24 @@ func (Copyright) Run(c *audit.Context) []audit.Issue {
 		return nil
 	}
 	m := webpage.CopyrightLine.FindStringSubmatch(c.Page.Text)
-	if m == nil {
-		return nil
+	first, year, shown := "", "", ""
+	switch {
+	case m != nil:
+		first, year, shown = m[1], m[2], m[0]
+	default:
+		// the year before the mark
+		if m = webpage.CopyrightYearFirst.FindStringSubmatch(c.Page.Text); m == nil {
+			return nil
+		}
+		year, shown = m[1], m[0]
 	}
 	hasYear, hasHolder := false, false
 	for _, l := range c.Nodes {
-		hasYear = hasYear || slices.Contains(jsonld.Scalars(l.N, "copyrightYear"), m[1])
+		// a range shows the year the page began and the year it is now: the
+		// markup names either
+		for _, y := range jsonld.Scalars(l.N, "copyrightYear") {
+			hasYear = hasYear || y == year || (first != "" && y == first)
+		}
 		if _, ok := l.N.Get("copyrightHolder"); ok {
 			hasHolder = true
 		}
@@ -38,5 +49,5 @@ func (Copyright) Run(c *audit.Context) []audit.Issue {
 	if hasYear && hasHolder {
 		return nil
 	}
-	return []audit.Issue{audit.Issuef(pageNode(c), audit.Warning, "the page shows %q but the markup has no copyrightYear %s and copyrightHolder: set both on the WebPage or the WebSite", strings.TrimSpace(m[0]), m[1])}
+	return []audit.Issue{audit.Issuef(pageNode(c), audit.Warning, "the page shows %q but the markup has no copyrightYear %s and copyrightHolder: set both on the WebPage or the WebSite", strings.TrimSpace(shown), year)}
 }

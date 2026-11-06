@@ -3,6 +3,9 @@ package figures
 import (
 	"strings"
 
+	"golang.org/x/net/html"
+	"golang.org/x/net/html/atom"
+
 	"github.com/dazamate/go-json-schema/internal/vocabtool/audit"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/webpage"
@@ -35,12 +38,32 @@ func (Summary) Run(c *audit.Context) []audit.Issue {
 		label, _ := webpage.Attr(n, "aria-label")
 		if !webpage.SummaryLabel.MatchString(label) {
 			h := webpage.QueryAll(n, "h2, h3")
-			if len(h) == 0 || len(strings.Fields(webpage.HTMLText(h[0]))) > 4 || !webpage.SummaryLabel.MatchString(webpage.HTMLText(h[0])) {
+			if len(h) > 0 && len(strings.Fields(webpage.HTMLText(h[0]))) <= 4 && webpage.SummaryLabel.MatchString(webpage.HTMLText(h[0])) {
+				label = webpage.HTMLText(h[0])
+			} else if label = styledLabel(n); label == "" {
 				continue
 			}
-			label = webpage.HTMLText(h[0])
 		}
 		return []audit.Issue{audit.Issuef("html:"+webpage.SelectorFor(p.Doc, n), audit.Warning, "the page's %q block sums the page up: set its text as the Article's abstract, or point a SpeakableSpecification's cssSelector at it (the WebPage's speakable), or give each line as a Statement (text) in the WebPage's hasPart", label)}
 	}
 	return nil
+}
+
+// styledLabel is the label of a short block whose first child is a styled
+// paragraph or span rather than a heading, over a list: "Key Takeaways" in a
+// shaded callout. It is "" for any other block.
+func styledLabel(n *html.Node) string {
+	if len(strings.Fields(webpage.HTMLText(n))) > 120 || len(webpage.QueryAll(n, "ul, ol")) == 0 {
+		return ""
+	}
+	for f := n.FirstChild; f != nil; f = f.NextSibling {
+		if f.Type != html.ElementNode {
+			continue
+		}
+		if t := webpage.HTMLText(f); len(strings.Fields(t)) <= 4 && webpage.SummaryLabel.MatchString(t) && f.DataAtom != atom.Ul && f.DataAtom != atom.Ol {
+			return t
+		}
+		return ""
+	}
+	return ""
 }

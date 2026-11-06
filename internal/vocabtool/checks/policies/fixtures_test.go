@@ -48,7 +48,20 @@ const helpPage = `<!doctype html><html><head></head><body><header><a href="/">Ha
 <h3>What metals do you use?</h3><p>All our rings are cast in recycled sterling silver or gold.</p>
 <h3>How long does a resize take?</h3><p>A resize takes about a week once we have your ring.</p></main></body></html>`
 
+// dialogTermsPage is a shop's product page whose return terms are in the
+// shipping dialog it opens over itself.
+const dialogTermsPage = `<!doctype html><html><head></head><body><header><a href="/">Harbour Jewellers</a>` + cartLink + `</header>
+<main><h1>Silver ring</h1><p>Handmade in recycled silver.</p><button>Shipping and returns</button></main>
+<dialog id="shipping-dialog" class="dialog dialog--shipping"><div class="dialog-body"><p>You can return an item for a full refund within 21 days of the delivery date.</p></div></dialog></body></html>`
+
+// wishlistDrawerPage is a shop's product page with a wishlist drawer that
+// names the account's store credit, no return term.
+const wishlistDrawerPage = `<!doctype html><html><head></head><body><header><a href="/">Harbour Jewellers</a>` + cartLink + `</header>
+<main><h1>Silver ring</h1><p>Handmade in recycled silver.</p></main>
+<fw2-drawer class="fw2-drawer"><div class="fw2-panel" role="dialog" aria-modal="true" aria-label="My wishlists"><p>Track orders, view store credit, and manage your saved lists.</p></div></fw2-drawer></body></html>`
+
 const (
+	shirtURL    = "https://harbour.test/products/silver-ring"
 	returnsURL  = "https://harbour.test/pages/returns"
 	paymentsURL = "https://harbour.test/pages/payment"
 	contactURL  = "https://harbour.test/pages/contact"

@@ -23,23 +23,62 @@ func NormWords(s string) string {
 }
 
 // Names reports whether the padded, normalized page text has the form as
-// whole words, in the singular or the plural: "Bride" names "brides", and
-// "Chinese Australians" names "Chinese-Australian".
+// whole words, in the singular or the plural: "Bride" names "brides",
+// "Chinese Australians" names "Chinese-Australian", "Battery" names
+// "batteries" and "Knife" names "knives". An "and" in the form matches an
+// ampersand on the page, and the other way round: "Ceramics and vases" names
+// "Ceramics & Vases".
 func Names(paddedNormPage, form string) bool {
-	f := NormWords(form)
-	if f == "" {
-		return false
+	forms := []string{form}
+	if strings.Contains(form, "&") {
+		forms = append(forms, strings.ReplaceAll(form, "&", " and "))
 	}
+	if andWord.MatchString(form) {
+		forms = append(forms, andWord.ReplaceAllString(form, " "))
+	}
+	for _, form := range forms {
+		f := NormWords(form)
+		if f == "" {
+			continue
+		}
+		for _, v := range plurals(f) {
+			if strings.Contains(paddedNormPage, " "+v+" ") {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+// andWord is the word "and", which a page may write as "&".
+var andWord = regexp.MustCompile(`(?i)\band\b`)
+
+// pluralEnd matches the end of a word the regular English plurals change:
+// a consonant and y (battery, batteries), f or fe (knife, knives), or their
+// plurals.
+var pluralEnd = regexp.MustCompile(`([^aeiou])y$|([^aeiou])ies$|(?:fe|f)$|ves$`)
+
+// plurals are the forms of a normalized phrase whose last word is in the
+// singular or the plural.
+func plurals(f string) []string {
 	stem := f
 	if s, ok := strings.CutSuffix(f, "s"); ok && s != "" {
 		stem = s
 	}
-	for _, v := range []string{f, stem, stem + "s", stem + "es"} {
-		if strings.Contains(paddedNormPage, " "+v+" ") {
-			return true
-		}
+	out := []string{f, stem, stem + "s", stem + "es", f + "es"}
+	switch m := pluralEnd.FindStringSubmatch(f); {
+	case m == nil:
+	case strings.HasSuffix(f, "ies") && m[2] != "":
+		out = append(out, strings.TrimSuffix(f, "ies")+"y")
+	case strings.HasSuffix(f, "y") && m[1] != "":
+		out = append(out, strings.TrimSuffix(f, "y")+"ies")
+	case strings.HasSuffix(f, "ves"):
+		b := strings.TrimSuffix(f, "ves")
+		out = append(out, b+"f", b+"fe")
+	default:
+		out = append(out, strings.TrimSuffix(strings.TrimSuffix(f, "e"), "f")+"ves")
 	}
-	return false
+	return out
 }
 
 var tags = regexp.MustCompile(`<[^>]*>`)

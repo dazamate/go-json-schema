@@ -20,6 +20,12 @@ func TestReturnTerm(t *testing.T) {
 			{Path: "$", Severity: audit.Warning, Message: `the page says "Return any item within 14 days" but this MerchantReturnPolicy does not: set merchantReturnDays 14`},
 			{Path: "$", Severity: audit.Warning, Message: `the page says "full refund" but this MerchantReturnPolicy does not: set refundType https://schema.org/FullRefund`},
 		}},
+		// taylorstitch.com's product page states its terms in a shipping dialog
+		{"terms in a shipping dialog", audittest.Input{Draft: category, PageHTML: dialogTermsPage, PageURL: shirtURL}, []audit.Issue{
+			{Path: "$", Severity: audit.Warning, Message: `the page says "full refund" but this MerchantReturnPolicy does not: set refundType https://schema.org/FullRefund`},
+		}},
+		// kasaustralia.com.au's wishlist drawer: "store credit" is the account's
+		{"a wishlist drawer's words", audittest.Input{Draft: category, PageHTML: wishlistDrawerPage, PageURL: shirtURL}, nil},
 		{"the policy carries every term", audittest.Input{Draft: full, PageHTML: returnsPage, PageURL: returnsURL}, nil},
 		{"no MerchantReturnPolicy", audittest.Input{Draft: noDraft, PageHTML: returnsPage, PageURL: returnsURL}, nil},
 		{"a page that sells nothing", audittest.Input{Draft: category, PageHTML: sellingNoMore(returnsPage), PageURL: returnsURL}, nil},

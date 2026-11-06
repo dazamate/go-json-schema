@@ -12,7 +12,11 @@ func init() { audit.Register(Estimates{}) }
 var _ audit.PriceTaker = Estimates{}
 
 var (
-	spanRe    = regexp.MustCompile(priceSpan)
+	spanRe = regexp.MustCompile(priceSpan)
+	// extraCost is a cost word that names a surcharge, not an estimate: on a
+	// price list the note after one treatment ("extra cost and time is added")
+	// sits in front of the next treatment's price.
+	extraCost = regexp.MustCompile(`(?i)\b(?:extra|additional|added|further)\s+costs?\b`)
 	costWords = regexp.MustCompile(`(?i)\b(?:costs?|estimates?|estimated|typical(?:ly)?|average|on average|ranges?|runs?|expect|roughly)\b`)
 )
 
@@ -35,7 +39,7 @@ func (Estimates) find(c *audit.Context, before audit.Taken) (found []string, too
 	main := c.Page.Main
 	for _, m := range spanRe.FindAllStringSubmatchIndex(main, -1) {
 		span := main[m[2]:m[3]]
-		if !fresh(c, span, before, took) || !costWords.MatchString(clause(main, m[0], 80)) {
+		if !fresh(c, span, before, took) || !costWords.MatchString(extraCost.ReplaceAllString(clause(main, m[0], 80), " ")) {
 			continue
 		}
 		took.Take(span)

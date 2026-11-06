@@ -39,6 +39,9 @@ func TestShippingRate(t *testing.T) {
 		{"a flat rate within a country", audittest.Input{Draft: noDraft, PageHTML: shippingPage, PageURL: shippingURL}, []audit.Issue{
 			{Path: "html:body", Severity: audit.Warning, Message: "the page gives a shipping rate of $7.95 that no node carries: add a ShippingService to the business's hasShippingService (fulfillmentType https://schema.org/FulfillmentTypeDelivery) with shippingConditions, a ShippingConditions with shippingDestination (a DefinedRegion with addressCountry AU) and shippingRate (a MonetaryAmount of 7.95); on a product page give its Offer the same as shippingDetails, an OfferShippingDetails"},
 		}},
+		{"a flat rate in pounds", audittest.Input{Draft: noDraft, PageHTML: strings.NewReplacer("$", "£").Replace(shippingPage), PageURL: shippingURL}, []audit.Issue{
+			{Path: "html:body", Severity: audit.Warning, Message: "the page gives a shipping rate of £7.95 that no node carries: add a ShippingService to the business's hasShippingService (fulfillmentType https://schema.org/FulfillmentTypeDelivery) with shippingConditions, a ShippingConditions with shippingDestination (a DefinedRegion with addressCountry AU) and shippingRate (a MonetaryAmount of 7.95); on a product page give its Offer the same as shippingDetails, an OfferShippingDetails"},
+		}},
 		{"free over a threshold, otherwise a rate", audittest.Input{Draft: noDraft, PageHTML: banner, PageURL: "https://harbour.test/"}, []audit.Issue{
 			{Path: "html:body", Severity: audit.Warning, Message: "the page gives a shipping rate of $7.95 that no node carries: add a ShippingService to the business's hasShippingService (fulfillmentType https://schema.org/FulfillmentTypeDelivery) with shippingConditions, a ShippingConditions with shippingDestination (a DefinedRegion with addressCountry its country) and shippingRate (a MonetaryAmount of 7.95); on a product page give its Offer the same as shippingDetails, an OfferShippingDetails"},
 		}},

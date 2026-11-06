@@ -51,8 +51,10 @@ func TestListing(t *testing.T) {
 			{Path: "html:body > main > ul", Severity: audit.Warning, Message: "the page lists 3 products (Opal ring, Garnet ring, Pearl ring) that no ItemList carries: add an ItemList as the CollectionPage's mainEntity (numberOfItems, itemListOrder), with a ListItem for each product (position, url) holding its Product (name, url, image, offers an Offer with price and priceCurrency)"},
 		}},
 		{"a row of products on the home page", audittest.Input{Draft: noDraft, PageHTML: listing, PageURL: homeURL}, []audit.Issue{
-			{Path: "html:body > main > ul", Severity: audit.Warning, Message: "the page lists 3 products (Opal ring, Garnet ring, Pearl ring) that no ItemList carries: add an ItemList as the WebPage's hasPart (name its heading), with a ListItem for each product (position, url) holding its Product (name, url, image, offers an Offer with price and priceCurrency)"},
+			{Path: "html:body > main > ul", Severity: audit.Warning, Message: "the page lists 3 products (Opal ring, Garnet ring, Pearl ring) that no ItemList carries: add an ItemList as the mainEntity of the row's WebPageElement in the WebPage's hasPart (name its heading), with a ListItem for each product (position, url) holding its Product (name, url, image, offers an Offer with price and priceCurrency)"},
 		}},
+		// plans, services and example homes are cards of no shop's listing (the page kind needs a shop)
+		{"a price list of a site that sells nothing", audittest.Input{Draft: noDraft, PageHTML: strings.NewReplacer(` <a href="/cart">Cart</a>`, "", "/products/", "/services/").Replace(listing), PageURL: "https://harbour.test/pricing/"}, nil},
 		{"an ItemList carries the cards", audittest.Input{Draft: carried, PageHTML: listing, PageURL: listingURL}, nil},
 		{"one card is no listing", audittest.Input{Draft: noDraft, PageHTML: listingPage(opalCard), PageURL: listingURL}, nil},
 		{"a noindex page", audittest.Input{Draft: noDraft, PageHTML: audittest.Noindex(listing), PageURL: listingURL}, nil},

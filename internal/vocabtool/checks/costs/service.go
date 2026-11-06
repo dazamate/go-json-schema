@@ -10,10 +10,27 @@ import (
 
 func init() { audit.Register(Service{}) }
 
+// serviceCost reads what an h1 says a service costs, capturing the service
+// and its head word: the cost to do a job ("Cost to tile a bathroom"), of
+// doing it ("The cost of plastering a room"), or what its provider or the job
+// charges ("How much do plumbers charge?", "Landscaping costs", "Kitchen
+// renovation costs"). notService drops the heads that name no service.
 var serviceCost = []*regexp.Regexp{
-	regexp.MustCompile(`(?i)\bcosts?\s+(?:of|to)\s+((?:move|moving|hire|hiring|install|installing|repair|repairing|clean|cleaning|replace|replacing|remove|removing|fix|fixing|build|building|paint|painting|ship|shipping|store|storing|haul|hauling|pack|packing|deliver|delivering)\b[^,:?(]*)`),
-	regexp.MustCompile(`(?i)^(?:how much (?:do|does|is|are) |what (?:do|does|is|are) )?(?:the |an? |\d+ )?((?:\w+ )?(?:\w+ers|\w+ing|company|companies|crew|services?|labou?r))\s+(?:cost|costs|charge)\b`),
+	regexp.MustCompile(`(?i)\bcosts?\s+to\s+((\w+)\b[^,:?(]*)`),
+	regexp.MustCompile(`(?i)\bcosts?\s+of\s+((\w+ing)\b[^,:?(]*)`),
+	regexp.MustCompile(`(?i)^(?:how much (?:do|does|is|are) |what (?:do|does|is|are) )?(?:the |an? |\d+ )?((?:\w+ )?(\w+ers|\w+ing|\w+ations?|company|companies|crew|services?|labou?r))\s+(?:cost|costs|charge)\b`),
+	// a job or treatment of two or more words and its cost, price or fee
+	regexp.MustCompile(`(?i)^((?:[\p{L}'-]+\s+){1,5}([\p{L}'-]+))\s+(?:costs?|prices?|pricing|fees?)\b`),
 }
+
+// notService are the head words that follow "cost to" or come before "costs"
+// without naming a service: whom it costs ("The cost to your business"), or
+// an expense ("Heating costs", "The cost of living", "Car running costs").
+var notService = regexp.MustCompile(`(?i)^(?:the|a|an|you|your|us|our|them|their|me|my|him|her|it|its|consumers|customers|users|others|owners|taxpayers|business|businesses|own|live|run|operate|buy|park|living|heating|cooling|running|housing|operating|closing|parking|lighting|funding|financing|borrowing|wedding|clothing|schooling|dining|eating|commuting|spending|owning|buying|selling|nothing|something|anything|everything|thing|ceiling|morning|evening|inflation|taxation|office|shipping|delivery|handling|admin|administration|booking|hidden|extra|additional|total|average|typical|estimated|monthly|annual|weekly|daily|hourly|plans?|packages?|pricing|price|prices|cost|costs|fees?|rates?|list)$`)
+
+// notTitled are the first words of an h1 that is no job and its cost: a
+// question, a possessive, a qualifier ("Average wedding prices").
+var notTitled = regexp.MustCompile(`(?i)^(?:how|what|why|when|are|is|do|does|our|your|the|my|average|typical|total|estimated|current|latest|standard|monthly|annual|weekly|daily|hourly|transparent|simple|fixed|flat|hidden|extra|additional)\b`)
 
 // Service warns on a content page of a site that sells nothing whose h1 is
 // about what a service costs ("Cost to move a piano", "How much do movers
@@ -30,7 +47,7 @@ func (Service) Run(c *audit.Context) []audit.Issue {
 	}
 	h := c.Page.H1()
 	for _, re := range serviceCost {
-		if m := re.FindStringSubmatch(h); m != nil {
+		if m := re.FindStringSubmatch(h); m != nil && !notService.MatchString(m[2]) && (re != serviceCost[len(serviceCost)-1] || !notTitled.MatchString(h)) {
 			return []audit.Issue{audit.Issuef(audit.PagePath, audit.Warning, "the page is about the cost of the service %q but no Service describes it: add one (name, serviceType, areaServed, offers or priceSpecification for the prices shown, provider when it is the business's own) and make it the WebPage's about or mainEntity", strings.TrimSpace(m[1]))}
 		}
 	}

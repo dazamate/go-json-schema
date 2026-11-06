@@ -56,6 +56,10 @@ func TestBreakdowns(t *testing.T) {
 		// the second breakdown's amounts are the first's, which it took
 		{"the same breakdown twice", audittest.Input{Draft: bareDraft, PageHTML: strings.Replace(costGuide, truckArticle, truckArticle+"\n"+truckArticle, 1), PageURL: costGuideURL}, broken},
 		{"the markup carries it", audittest.Input{Draft: markedDraft, PageHTML: costGuide, PageURL: costGuideURL}, nil},
+		// a kit list's retail prices are the goods check's, whatever the goods
+		{"goods at retail prices and their total", audittest.Input{Draft: bareDraft, PageURL: "https://camp.test/first-camping-kit/", PageHTML: `<!doctype html><html lang="en-CA"><body><main><h1>Your first camping kit</h1><article><h2>The kit</h2>
+<ul><li>Two-person tent: RRP $199</li><li>Sleeping bag: RRP $89</li><li>Camp stove: RRP $49</li></ul>
+<p>Kit total: <output>$337</output></p></article></main></body></html>`}, nil},
 		{"only the page's text", audittest.Input{Draft: bareDraft, PageText: "Rent a truck: $58–$103. A 20 ft truck, one day in town: $39–$40. Mileage, 20 miles round trip: $13–$50.", PageURL: costGuideURL}, nil},
 		{"a shop's page", audittest.Input{Draft: bareDraft, PageHTML: audittest.Selling(costGuide), PageURL: costGuideURL}, nil},
 		{"a noindex page", audittest.Input{Draft: bareDraft, PageHTML: audittest.Noindex(costGuide), PageURL: costGuideURL}, nil},

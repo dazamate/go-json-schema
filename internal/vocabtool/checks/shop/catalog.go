@@ -9,15 +9,17 @@ import (
 	"github.com/dazamate/go-json-schema/internal/vocabtool/audit"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/jsonld"
 	"github.com/dazamate/go-json-schema/internal/vocabtool/webpage"
+	xhtml "golang.org/x/net/html"
 )
 
 func init() { audit.Register(Catalog{}) }
 
-var categorySegment = regexp.MustCompile(`^(categor(y|ies)|collections?|c|departments?)$`)
+var categorySegment = regexp.MustCompile(`^((product-)?categor(y|ies)|collections?|c|departments?)$`)
 
 // Catalog warns when the site's menus list its categories and no node has an
 // OfferCatalog of them: the business's hasOfferCatalog names the categories
-// it sells in. It needs the page's document and at least three categories.
+// it sells in. It needs the page's document, a shop's page and at least three
+// categories.
 type Catalog struct{}
 
 // ID is the check's ID.
@@ -25,7 +27,7 @@ func (Catalog) ID() string { return "shop/catalog" }
 
 // Run reports the categories the menus link, once, up to six.
 func (Catalog) Run(c *audit.Context) []audit.Issue {
-	if !c.Indexed() || c.Page.Doc == nil || jsonld.HasKey(c.Nodes, "hasOfferCatalog") {
+	if !c.Indexed() || c.Page.Doc == nil || !c.Page.Sells() || jsonld.HasKey(c.Nodes, "hasOfferCatalog") {
 		return nil
 	}
 	p := c.Page
@@ -40,7 +42,7 @@ func (Catalog) Run(c *audit.Context) []audit.Issue {
 			segs := webpage.Segments(pu)
 			if i := slices.IndexFunc(segs, categorySegment.MatchString); i >= 0 && i < len(segs)-1 && pu.RawQuery == "" {
 				seen = append(seen, u)
-				names = append(names, strings.TrimSpace(webpage.HTMLText(a)))
+				names = append(names, linkText(a))
 			}
 		}
 	}
@@ -52,4 +54,24 @@ func (Catalog) Run(c *audit.Context) []audit.Issue {
 		list = append(list[:6:6], "…")
 	}
 	return []audit.Issue{audit.Issuef(audit.PagePath, audit.Warning, "the site's menu lists %d categories (%s): set the business's hasOfferCatalog, an OfferCatalog with a ListItem for each category naming its CollectionPage", len(seen), strings.Join(list, ", "))}
+}
+
+// linkText is a link's words without those of an icon: an svg's title
+// ("Nav chevron") is no part of the category's name.
+func linkText(a *xhtml.Node) string {
+	var words []string
+	var walk func(n *xhtml.Node)
+	walk = func(n *xhtml.Node) {
+		if n.Type == xhtml.ElementNode && (n.Data == "svg" || n.Data == "script" || n.Data == "style") {
+			return
+		}
+		if n.Type == xhtml.TextNode {
+			words = append(words, strings.Fields(n.Data)...)
+		}
+		for c := n.FirstChild; c != nil; c = c.NextSibling {
+			walk(c)
+		}
+	}
+	walk(a)
+	return strings.Join(words, " ")
 }

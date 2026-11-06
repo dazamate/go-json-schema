@@ -13,7 +13,22 @@ import (
 
 func init() { audit.Register(HandlingTime{}) }
 
-var handling = regexp.MustCompile(`(?i)\b(?:posted|dispatched|shipped|ships|sent|processed)(?: out)? within (\d+)(?:\s*(?:-|–|to)\s*(\d+))? (hours?|business days?|working days?|days?)\b|\bprocessing time:?\s*(\d+)\s*(?:-|–|to)\s*(\d+) (business days?|working days?|days?)\b`)
+// A handling time's span and unit: "1-2 business days", "3 weeks", "24 hours".
+const (
+	handleNum  = `(\d+)(?:\s*(?:-|–|to)\s*(\d+))?`
+	handleUnit = `(hours?|business days?|working days?|days?|weeks?)\b`
+)
+
+// handling finds a handling time, in three groups of low, high and unit per
+// way to say it: "dispatched within 1-2 business days", "ships in 3-6 days"
+// (not "processed in", which is also how a refund is said), "processing time:
+// 1-3 days", "allow up to 2 business days to fulfill an order", "takes 1-2
+// days to process".
+var handling = regexp.MustCompile(`(?i)\b(?:posted|dispatch(?:ed|es)?|despatch(?:ed|es)?|shipped|ships?|sent|processed)(?: out)?(?:\s+(?:typically|usually|normally|generally))?\s+within\s+` + handleNum + `\s*` + handleUnit +
+	`|\b(?:posted|dispatch(?:ed|es)?|despatch(?:ed|es)?|shipped|ships?|sent)(?: out)?(?:\s+(?:typically|usually|normally|generally))?\s+in\s+` + handleNum + `\s*` + handleUnit +
+	`|\bprocessing time(?: is| of)?:?\s*(?:up to\s+)?` + handleNum + `\s*` + handleUnit +
+	`|\ballow(?:ing)?(?: up to)?\s+` + handleNum + `\s*` + handleUnit + `\s+(?:for|to)\s+(?:\w+\s+){0,3}?(?:process\w*|dispatch\w*|despatch\w*|fulfil\w*|ship\b)` +
+	`|\btakes?(?: up to)?\s+` + handleNum + `\s*` + handleUnit + `\s+to\s+(?:process|dispatch|despatch|fulfil|fulfill|prepare|ship)\b`)
 
 // HandlingTime warns on the handling times a shop's page states ("dispatched
 // within 1-2 business days") that no handlingTime carries.
@@ -33,14 +48,20 @@ func (HandlingTime) Run(c *audit.Context) []audit.Issue {
 	var said []string
 	days := 0
 	for _, m := range handling.FindAllStringSubmatch(s.text, -1) {
-		lo, hi, unit := m[1], m[2], m[3]
-		if m[4] != "" {
-			lo, hi, unit = m[4], m[5], m[6]
+		var lo, hi, unit string
+		for i := 1; i+2 < len(m); i += 3 {
+			if m[i] != "" {
+				lo, hi, unit = m[i], m[i+1], m[i+2]
+				break
+			}
 		}
 		maxV, _ := strconv.Atoi(txt.OrDefault(hi, lo))
 		d := maxV
-		if strings.HasPrefix(strings.ToLower(unit), "hour") {
+		switch u := strings.ToLower(unit); {
+		case strings.HasPrefix(u, "hour"):
 			d = (maxV + 23) / 24
+		case strings.HasPrefix(u, "week"):
+			d = maxV * 7
 		}
 		if !txt.HoldsNumber(vals, float64(maxV)) && !txt.HoldsNumber(vals, float64(d)) && !slices.Contains(said, m[0]) {
 			said, days = append(said, m[0]), max(days, d)

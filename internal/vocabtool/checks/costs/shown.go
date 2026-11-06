@@ -8,7 +8,10 @@ import (
 	"github.com/dazamate/go-json-schema/internal/vocabtool/txt"
 )
 
-var notPrices = regexp.MustCompile(`(?i)\b(?:save|payments? of|under|below|less than)\s+(?:A\$|AU\$|\$|£|€)\s?\d[\d,]*(?:\.\d{1,2})?`)
+// notPrices are amounts that bound or surround a price: a saving, an
+// instalment or finance estimate, a bound ("under $20", "over $750"), a
+// spending threshold ("orders of $35 and up") and the shipping fee under it.
+var notPrices = regexp.MustCompile(`(?i)\b(?:save|payments? of|payments?:?|under|below|less than|over|above|more than|at least|minimum|spend|spending|orders? (?:of|over|above)|ships? (?:for|from|at)|shipping (?:is|costs?|from))\s*` + txt.PriceText)
 
 // shownPrice is a price the page shows: its amount, and the text that shows
 // it first.
